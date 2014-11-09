@@ -3,5 +3,5 @@
 *.xml
 *.tex
 
-typescript-book.pdf
-typescript-book.epub
+*.pdf
+*.epub
