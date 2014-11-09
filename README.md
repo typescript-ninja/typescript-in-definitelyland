@@ -33,3 +33,8 @@
     * TypeScriptとの実装上との違い
   * Flow
     * 噂しかない
+* TypeScriptと開発環境
+  * ここまで手がまわらないと思う…
+  * WebStorm
+    * File Watcherちゃんと設定しような！とかそのくらい
+  * tsdとdtsm
