@@ -77,9 +77,7 @@ module.exports = function (grunt) {
                     var files = [
                         "articles"
                     ];
-                    var exec = command + " -r --tabwidth=2 " + files.map(function (file) {
-                            return file + ".re";
-                        }).join(" ");
+                    var exec = command + " -r --tabwidth=2 *.re";
                     console.log(exec);
                     return exec;
                 }

@@ -1,6 +1,11 @@
 PREDEF:
+  - preface.re
 
 CHAPS:
-  - articles.re
+  - about.re
+  - with-types.re
+  - definition-file.re
+  - es6.re
+  - another-transpiler.re
 
 POSTDEF:
