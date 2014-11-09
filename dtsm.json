@@ -1,0 +1,7 @@
+{
+  "baseRepo": "https://github.com/borisyankov/DefinitelyTyped.git",
+  "baseRef": "master",
+  "path": "code/typings",
+  "bundle": "code/typings/bundle.d.ts",
+  "dependencies": {}
+}
