@@ -19,6 +19,10 @@
 @<chapref>{es6}では、TypeScriptのOOPの基礎であるECMAScript 6の概要と、TypeScriptに取り込まれつつあるstring templatesなどの仕様について簡単に解説します。
 @<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
 
+なお、本解説ではMac OS X + WebStorm での利用を前提に解説します。
+Visual StudioやNuGetの扱いについては言及しませんのでご了承ください。
+#@# NOTE 誰かが書いてpull requestしてくれてもいいけどその部分の文責は負わない＞＜
+
 == なぜTypeScriptを選ぶべきなのか
 
 TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript(JavaScript)に静的な型付けによる検証を導入したものです。
