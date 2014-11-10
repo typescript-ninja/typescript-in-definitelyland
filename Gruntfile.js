@@ -8,7 +8,8 @@ module.exports = function (grunt) {
             var task = tasks[file] = {
                 src: file,
                 options: {
-                    target: 'es5',
+                    compiler: './typescript/bin/tsc',
+                    target: 'es6',
                     module: 'commonjs',
                     noImplicitAny: true,
                     sourceMap: false,

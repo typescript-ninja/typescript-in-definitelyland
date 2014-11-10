@@ -3,5 +3,7 @@
 *.xml
 *.tex
 
+*-pdf/
+
 *.pdf
 *.epub
