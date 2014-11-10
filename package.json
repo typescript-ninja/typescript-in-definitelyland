@@ -7,7 +7,7 @@
     "npm": "1.4.28"
   },
   "scripts": {
-    "preinstall": "git submodule init",
+    "preinstall": "git submodule init && git submodule update",
     "update": "git submodule update"
   },
   "devDependencies": {
