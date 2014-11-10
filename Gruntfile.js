@@ -65,12 +65,21 @@ module.exports = function (grunt) {
                 }
             }
         },
-        exec: {
-            clean: {
-                cmd: function () {
-                    return "git clean -x -f";
-                }
+        clean: {
+            ts: {
+                src: [
+                    'code/**/*.js',
+                    'code/**/*.js.map'
+                ]
             },
+            review: {
+                src: [
+                    'articles/c87-typescript-pdf/',
+                    'articles/*.pdf'
+                ]
+            }
+        },
+        exec: {
             preprocess: {
                 cwd: "./articles",
                 cmd: function () {
@@ -136,11 +145,6 @@ module.exports = function (grunt) {
         'default',
         "原稿をコンパイルしてPDFファイルにする",
         "pdf");
-
-    grunt.registerTask(
-        'clean',
-        "git clean -x -f を使っていらないファイルを全部消す",
-        "exec:clean");
 
     grunt.registerTask(
         'check',
