@@ -9,3 +9,4 @@ CHAPS:
   - another-transpiler.re
 
 POSTDEF:
+  - antipattern.re
