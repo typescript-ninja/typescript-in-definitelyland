@@ -35,12 +35,69 @@ TBD
 
 TBD
 
-== 共通最適型 (Best Common Types)
+== 共通最適型 (Best Common Type)
 
-TBD
-BCTの略のexpandを一回確認すること
+#@# [1.3.0での仕様](https://github.com/Microsoft/TypeScript/blob/release-1.3/doc/spec.md#3.10)
 
 @<strong>{導入されたバージョン 1.0.0より前}
+
+@<strong>{消滅したバージョン 1.4.0}
+
+後述の tuple types, 及び union types が導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。
+現在の最新仕様ではBCTという概念そのものが消滅してますね…。
+こぇー…。
+本書執筆時点では1.3.0しかリリースされていないため、一応現行では生きてる仕様なのですが。
+まぁ、そりゃunion typesに置き換えられてしまいますよね…。
+
+#@# TODO 最新の記述にあわせる
+#@# TODO 本校執筆時 https://github.com/Microsoft/TypeScript/blob/9a5df8585bdb46427074b53fc0e46bc4f52dd261/doc/spec.md#4.12.2
+
+まぁ、消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
+
+Best Common Type の名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムの元に型が決定されていました。
+例えば、@<list>{bct-basic-1.3.0}のような感じ。
+
+//list[bct-basic-1.3.0][基本的な例]{
+#@mapfile(../code/with-types/bct-basic-1.3.0.ts)
+// {}[] でございます。
+var array = [1, true];
+
+// No best common type exists among return expressions. と怒られます。
+// つまり 返り値が {} に推論されたので怒られた。
+function test() {
+    if (Math.random() < 0.5) {
+        return 1;
+    } else {
+        return true;
+    }
+}
+#@end
+//}
+
+1つ目は配列の要素の型が一致しないため、BCTを求めた結果、共通のsuper typeがなかったので {} になっています。
+2つ目は関数のreturnステートメントが2つありますが、両者で型が一致しなかったので {} になり、結果コンパイルエラーとして怒られています。
+
+本当に共通の要素がある場合、それに収束したりします。
+例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります。
+
+//list[bct-class-1.3.0][あまり見かけないBCTが役に立つ例]{
+#@mapfile(../code/with-types/bct-class-1.3.0.ts)
+class A { }
+class B extends A {
+    str: string;
+}
+class C extends A {
+    num: number;
+}
+
+// array: A[] だ！
+var array = [new A(), new B(), new C()];
+#@end
+//}
+
+#@# TODO なお、master/HEADでもarrayは A[] になる模様。 (A | B | C)[] ではない。仕様をよく読むこと。
+
+以上、解散！
 
 == 直和型 (union types)
 
@@ -50,6 +107,10 @@ TBD
 https://twitter.com/k_matsuzaki/statuses/533873787444285442
 
 @<strong>{導入されるバージョン 1.4.0}
+
+#@# TODO https://twitter.com/zipperpull/statuses/533921617496125441
+
+#@# TODO function test<T>(...args: T[]): T[] で test(1, true) とかやったときのTが何になるか見る
 
 == タプル型 (tuple types)
 
@@ -154,7 +215,6 @@ var value = tuple[2];
 
 //list[tuple-unshift][絶望に身をよじれ…！]{
 #@mapfile(../code/with-types/tuple-unshift.ts)
-// 1.3.0 限定！！
 var tuple: [string, number] = ["str", 1];
 
 // 先頭を number に…
@@ -166,8 +226,10 @@ tuple[0].charAt(0);
 #@end
 //}
 
-…悲しい結果になりましたね。
-unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptでは全てをフォローすることは不可能です。
+…悲しい結果になりました。
+@<code>{[1, true]}のような配列のリテラルをtuple typesに推論しないのはおそらくこういった事情でしょう。
+
+unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをフォローすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
 TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(@<list>{tuple-unshift-1.3.0})。
@@ -190,10 +252,22 @@ tuple[0].charAt(0);
 
 結論：タプル型を過信するのはやめろ繰り返すタプル型を過信するのはやめろ！
 
+== type guards
+
+@<strong>{導入されるバージョン 1.4.0}
+
+TBD
+
+なんかunion types関係ないinstanceofでもイケそうなので分離した
+
 == 型の別名 (type alias)
+
+@<strong>{導入されるバージョン 1.4.0}
 
 TBD
 
 == その他取りこぼし
 
 随時追加すること
+
+ * オーバーロードの選択アルゴリズム

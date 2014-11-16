@@ -1,8 +1,8 @@
 function concat<T1, T2>(v1: T1[], v2: T2[]): (T1 | T2)[] {
-  var result: (T1 | T2)[] = [];
-  v1.forEach(v => result.push(v));
-  v2.forEach(v => result.push(v));
-  return result;
+    var result: (T1 | T2)[] = [];
+    v1.forEach(v => result.push(v));
+    v2.forEach(v => result.push(v));
+    return result;
 };
 
 var array = concat([1, "str"], [true]);
