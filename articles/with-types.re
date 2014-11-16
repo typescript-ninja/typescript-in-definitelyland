@@ -40,6 +40,17 @@ TBD
 TBD
 BCTの略のexpandを一回確認すること
 
+@<strong>{導入されたバージョン 1.0.0より前}
+
+== 直和型 (union types)
+
+TBD
+本当によく語られる直和型と一緒なのかよくよく確認する
+多相が入ったのか！という反応もされたのでその辺りも調べる… variant types という用語ではないんだよなぁ…
+https://twitter.com/k_matsuzaki/statuses/533873787444285442
+
+@<strong>{導入されるバージョン 1.4.0}
+
 == タプル型 (tuple types)
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
@@ -47,6 +58,8 @@ BCTの略のexpandを一回確認すること
 #@# [作業場所](https://github.com/Microsoft/TypeScript/pull/428)
 #@# [仕様1](https://github.com/Microsoft/TypeScript/blob/release-1.3/doc/spec.md#3.3.3)
 #@# [仕様2](https://github.com/Microsoft/TypeScript/blob/release-1.3/doc/spec.md#3.6.5)
+
+@<strong>{導入されたバージョン 1.3.0}
 
 tuple(たぷる)は、任意の数の要素の組です。
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleはただのArrayです。
@@ -176,13 +189,6 @@ tuple[0].charAt(0);
 //}
 
 結論：タプル型を過信するのはやめろ繰り返すタプル型を過信するのはやめろ！
-
-== 直和型 (union types)
-
-TBD
-本当によく語られる直和型と一緒なのかよくよく確認する
-多相が入ったのか！という反応もされたのでその辺りも調べる… variant types という用語ではないんだよなぁ…
-https://twitter.com/k_matsuzaki/statuses/533873787444285442
 
 == 型の別名 (type alias)
 
