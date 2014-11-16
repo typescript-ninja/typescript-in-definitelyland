@@ -1,7 +1,8 @@
 module.exports = function (grunt) {
     function generateTypeScriptCompileSettings() {
         var srcFileList = grunt.file.expand([
-            'code/**/*.ts'
+            'code/**/*.ts',
+            '!code/**/*-1.3.0.ts' // 1.3.0 限定コード
         ]);
         var tasks = {};
         srcFileList.forEach(function (file) {
