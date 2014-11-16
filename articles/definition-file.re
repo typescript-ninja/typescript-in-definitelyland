@@ -168,11 +168,123 @@ array.find(v => v % 2 === 1);
 
 === なんでもかんでもインタフェースにしてはならない
 
-TODO 関数とモジュールの合わせ技とか
+おうお前一個前であんだけ書いといていきなりこれかぁ！？
+と、思われたかと思いますが、なんでもかんでも使っていいわけねぇだルルォ！？
+
+具体的に、モジュール様の構造をインタフェースを使って作ってはいけません(@<list>{module-by-interface-bad})。
+
+//list[module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
+#@mapfile(../code/definition-file/module-by-interface-bad.d.ts)
+interface Foo {
+    bar: FooBar;
+}
+
+interface FooBar {
+    buzz: FooBarBuzz;
+}
+
+interface FooBarBuzz {
+    str: string;
+}
+
+declare var foo: Foo;
+
+// foo.bar.buzz.str という使い方ができる。わかりにくくてユーザは死ぬ。
+#@end
+//}
+
+この型定義ファイルを読み解いて一瞬で使える人は、元のJavaScriptコードを熟知している人だけでしょう。
+少なくとも、この型定義ファイルをヒントに実際のコードを書くことは大いなる苦痛が伴うでしょう。
+普通に、@<list>{module-by-interface-good}のように書くのだ！
+
+//list[module-by-interface-good][素直にこうしよう]{
+#@mapfile(../code/definition-file/module-by-interface-good.d.ts)
+// 普通にコレでいいだろ！！
+declare module foo.bar.buzz {
+    var str: string;
+}
+#@end
+//}
+
+普通、こんな型定義ファイルを書こうとは思わないと思いますが、こういうコードを書きたくなってしまう時が稀にあります。
+具体的には、@<list>{callable-module-usage}のように関数としても呼べるし、内部モジュールのようにも振る舞うオブジェクトです。
+
+//list[callable-module-usage][関数・内部モジュール どっちなの？]{
+#@mapfile(../code/definition-file/callable-module-usage-invalid.ts)
+// 関数としても呼べるしモジュールにもなってる
+assert(foo === "foo");
+assert.ok(value);
+#@end
+//}
+
+呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{callable-module-bad}だ！
+
+//list[callable-module-bad][こうしてしまいたい、気持ち]{
+#@mapfile(../code/definition-file/callable-module-bad.d.ts)
+declare var assert: Assert;
+
+interface Assert {
+    (value: any): void;
+    ok(value: any): void;
+}
+#@end
+//}
+
+正直、これだけの定義だとこのままでもいい気がします。
+ですが、もう一つ、別のやり方があるのです(@<list>{callable-module-good})。
+
+//list[callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
+#@mapfile(../code/definition-file/callable-module-good.d.ts)
+declare function assert(value: any): void;
+declare module assert {
+    function ok(value: any): void;
+}
+#@end
+//}
+
+実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます(@<list>{callable-module-ts})。
+
+//list[callable-module-ts][関数が先、内部モジュールは後！絶対！]{
+#@mapfile(../code/definition-file/callable-module.ts)
+function test() {
+    return "test!";
+}
+module test {
+    export function func() {
+        return "function!";
+    }
+}
+#@end
+//}
+
+コンパイル結果の@<list>{callable-module-js}を見ると、内部モジュールが先、関数が後、がダメな理由がわかりますね。
+
+//list[callable-module-js][コンパイル結果を見れば、理由がわかる。これ、正しいJSだ！]{
+#@mapfile(../code/definition-file/callable-module.js)
+function test() {
+    return "test!";
+}
+var test;
+(function (test) {
+    function func() {
+        return "function!";
+    }
+    test.func = func;
+})(test || (test = {}));
+#@end
+//}
+
+=== 幽霊モジュール
+
+TBD
 
 === クラスを定義するには？
 
+TBD
 
+=== その他なんか
+
+TBD ガイドライン見て書き足して、どうぞ。
 
 === 最終チェック！
 

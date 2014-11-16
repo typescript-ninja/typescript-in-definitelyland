@@ -2,6 +2,7 @@ module.exports = function (grunt) {
     function generateTypeScriptCompileSettings() {
         var srcFileList = grunt.file.expand([
             'code/**/*.ts',
+            '!code/**/*-invalid.ts', // コンパイルが通らないコード
             '!code/**/*-1.3.0.ts' // 1.3.0 限定コード
         ]);
         var tasks = {};
