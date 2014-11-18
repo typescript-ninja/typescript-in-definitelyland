@@ -1,5 +1,7 @@
 # C87 TypeScript本 予定地
 
+[griflet(要権限)](https://tcb.mowa-net.jp/griflet/github/TechBooster/C87-TypeScript/)
+
 ## 取らぬ狸の皮算用
 
 前提：頒布後、リポジトリは公開する(紙の本はおまけ感) 以下のどれか1つ
