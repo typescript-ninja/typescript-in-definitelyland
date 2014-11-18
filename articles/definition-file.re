@@ -1,5 +1,7 @@
 = 型定義ファイルとは
 
+TODO .d.ts にすると実装が書けなくて便利
+
 == JavaScriptの資産が使いたい！
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものかもしれません。
@@ -166,9 +168,16 @@ array.find(v => v % 2 === 1);
 
 あとは、実装側を@<href>{https://github.com/paulmillr/es6-shim/,es6-shim}などで埋めてやれば古いブラウザでも利用可能になるでしょう。
 
+この手法は、他人が作った型定義ファイルを拡張する場合にも活用することができます。
+全部自分で書いて、自分でメンテするのは、悲しいもんな…。
+
+=== 幽霊モジュール
+
+TBD
+
 === なんでもかんでもインタフェースにしてはならない
 
-おうお前一個前であんだけ書いといていきなりこれかぁ！？
+おうお前少し前であんだけインタフェースを持ち上げといてこれかぁ！？
 と、思われたかと思いますが、なんでもかんでも使っていいわけねぇだルルォ！？
 
 具体的に、モジュール様の構造をインタフェースを使って作ってはいけません(@<list>{module-by-interface-bad})。
@@ -194,7 +203,8 @@ declare var foo: Foo;
 //}
 
 この型定義ファイルを読み解いて一瞬で使える人は、元のJavaScriptコードを熟知している人だけでしょう。
-少なくとも、この型定義ファイルをヒントに実際のコードを書くことは大いなる苦痛が伴うでしょう。
+少なくとも、この型定義ファイルをヒントに実際のコードを書くことは大いなる苦痛が伴います。
+俺は絶対使わんぞ！
 普通に、@<list>{module-by-interface-good}のように書くのだ！
 
 //list[module-by-interface-good][素直にこうしよう]{
@@ -217,10 +227,19 @@ assert.ok(value);
 #@end
 //}
 
-呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{callable-module-bad}だ！
+呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{callable-module-bad1}か、@<list>{callable-module-bad2}だ！
 
-//list[callable-module-bad][こうしてしまいたい、気持ち]{
-#@mapfile(../code/definition-file/callable-module-bad.d.ts)
+//list[callable-module-bad1][こうしてしまいたい、気持ち]{
+#@mapfile(../code/definition-file/callable-module-bad1.d.ts)
+declare var assert: {
+    (value: any): void;
+    ok(value: any): void;
+}
+#@end
+//}
+
+//list[callable-module-bad2][匿名型注釈よりはマシ]{
+#@mapfile(../code/definition-file/callable-module-bad2.d.ts)
 declare var assert: Assert;
 
 interface Assert {
@@ -230,8 +249,10 @@ interface Assert {
 #@end
 //}
 
+たしかに、この定義でも動きます。
 正直、これだけの定義だとこのままでもいい気がします。
-ですが、もう一つ、別のやり方があるのです(@<list>{callable-module-good})。
+
+ですが、もう一つ、別の良いやり方があるのです(@<list>{callable-module-good})。
 
 //list[callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
 #@mapfile(../code/definition-file/callable-module-good.d.ts)
@@ -241,6 +262,35 @@ declare module assert {
 }
 #@end
 //}
+
+関数と内部モジュールを同名で宣言できるのです。
+これの効能は、層構造を素直に表現できることと、前項で説明した幽霊モジュールの書き方を併用できるところです。
+
+この手法は、実際に@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}でも利用されています。
+@<list>{power-assert-abst}に抜粋&改変したものを示します。
+
+//list[power-assert-abst][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
+#@mapfile(../code/definition-file/power-assert-abst.d.ts)
+declare function assert(value: any, message?: string): void;
+declare module assert {
+
+    export function deepEqual(actual: any, expected: any, message?: string): void;
+    export function notDeepEqual(acutal: any, expected: any, message?: string): void;
+
+    export interface Options {
+        assertion?: any;
+        output?: any;
+    }
+
+    export function customize(options: Options): typeof assert;
+}
+#@end
+//}
+
+外部に公開されている関数は@<code>{assert}のみで、そこに追加でプロパティが生えている形式です。
+実体のある要素(関数)があるため、幽霊モジュールにはなりませんが、Optionsインタフェースが上手く取り込まれています。
+余計な名前を階層の浅いところにバラ撒かず、厳密さも残っていません。
+この書き方は、案外よく利用するパターンなので覚えておくと良いでしょう。
 
 実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます(@<list>{callable-module-ts})。
 
@@ -273,10 +323,6 @@ var test;
 })(test || (test = {}));
 #@end
 //}
-
-=== 幽霊モジュール
-
-TBD
 
 === クラスを定義するには？
 
