@@ -40,11 +40,11 @@ urnid: https://github.com/TechBooster/C87-TypeScript
 # CSSファイル (yamlファイルおよびReVIEWファイルを置いたディレクトリにあること
 stylesheet: stylesheet.css
 # LaTeX用のスタイルファイル(styディレクトリ以下に置くこと)
-texstyle: tatsumacro
+texstyle: techbooster-doujin
 # LaTeX用のdocumentclassを指定する
-texdocumentclass: ["jsbook", "oneside,14pt"]
+texdocumentclass: ["jsbook", "b5j,twoside,openany"]
 # 目次として抽出するレベル
-toclevel: 3
+toclevel: 2
 # セクション番号を表示するレベル
 secnolevel: 2
 # EPUBのバージョン(現時点では2または3。デフォルトは2)
@@ -58,7 +58,7 @@ toc: true
 # EPUB標準の目次以外に目次を作成するか
 mytoc: null
 # 奥付を作成するか。デフォルトでは作成されない。trueを指定するとデフォルトの奥付、ファイル名を指定するとそれがcolophon.htmlとしてコピーされる
-colophon: null
+colophon: true
 # XHTML生成後に実行するプログラム。$1:HTMLの生成されたディレクトリ $2:ReVIEWファイルのあるディレクトリ $3:起動時指定のyamlファイル名
 # posthook: hook.sh
 # EPUBで表紙をコンテンツに含めるか。デフォルトでは作成されない。yesにするとiBooks等でも最初に表紙が表示されるようになる
@@ -69,3 +69,6 @@ params: --stylesheet=sample.css
 debug: null
 # 子ビルダに渡すパラメータ
 params:
+
+pubhistory: |
+  2014年12月30日  初版発行 v1.0.0
