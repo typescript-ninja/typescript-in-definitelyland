@@ -215,7 +215,134 @@ array.find(v => v % 2 === 1);
 
 === 幽霊モジュール
 
-TBD
+幽霊モジュール@<fn>{ghost-module}という考え方があります。
+
+内部モジュールを作ったとしても、即座に実体が生成されるとは限りません。
+内部モジュールが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです@<list>{ghost-module-invalid}。
+
+//list[ghost-module-invalid][幽霊モジュール]{
+#@mapfile(../code/definition-file/ghost-module-invalid.ts)
+declare module ghost {
+    interface Test {
+        str: string;
+    }
+}
+
+// 型としては普通にアクセスできる
+var test: ghost.Test;
+test.str;
+
+// 実体としては存在していない！
+// ghost-module-invalid.ts(13,17): error TS2304: Cannot find name 'ghost'.
+var notExists = ghost;
+#@end
+//}
+
+これを活用して、大量のインタフェースを持つようなライブラリの定義をひとまとまりにできます。
+
+実際の例を見てみましょう。
+@<list>{jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋(&一部改変)です。
+
+//list[jquery-without-ghost-module][実際のjQueryの型定義の例]{
+#@mapfile(../code/definition-file/jquery-without-ghost-module.d.ts)
+interface JQuery {
+    addClass(className: string): JQuery;
+    html(htmlString: string): JQuery;
+    val(): any;
+    empty(): JQuery;
+    append(content1: JQuery, ...content2: any[]): JQuery;
+    appendTo(target: JQuery): JQuery;
+}
+
+interface JQueryStatic {
+    ajax(settings: JQueryAjaxSettings): any;
+    (selector: string, context?: Element): JQuery;
+    (element: Element): JQuery;
+}
+
+interface JQueryAjaxSettings {
+    data?: any;
+    type?: string;
+    url?: string;
+}
+
+interface JQueryPromise<T> {
+    state(): string;
+    then<U>(doneFilter: (value: T) => U, failFilter?: (...reasons: any[]) => U, progressFilter?: (...progression: any[]) => any): JQueryPromise<U>;
+}
+
+interface JQueryDeferred<T> extends JQueryPromise<T> {
+    reject(...args: any[]): JQueryDeferred<T>;
+    resolve(value?: T, ...args: any[]): JQueryDeferred<T>;
+}
+
+declare var $: JQueryStatic;
+#@end
+//}
+
+トップレベルに複数の型がいくつも散乱してしまうのがよくありません。
+それに、@<code>{JQuery}というprefixが連打していて、わかりにくいですね。
+ライブラリ内部のAPI同士の参照でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。
+IDE上で型注釈を手書きする時も候補がたくさんサジェストされてしまうことでしょう。
+
+これを幽霊モジュールを使って書きなおしてみます。
+
+//list[jquery-with-ghost-module][幽霊モジュールを使ってみた]{
+#@mapfile(../code/definition-file/jquery-with-ghost-module.d.ts)
+declare module jquery {
+    interface Element {
+        addClass(className: string): Element;
+        html(htmlString: string): Element;
+        val(): any;
+        empty(): Element;
+        append(content1: Element, ...content2: any[]): Element;
+        appendTo(target: Element): Element;
+    }
+
+    interface Static {
+        ajax(settings: AjaxSettings): any;
+        (selector: string, context?: Element): Element;
+        (element: Element): Element;
+    }
+
+    interface AjaxSettings {
+        data?: any;
+        type?: string;
+        url?: string;
+    }
+
+    interface Promise<T> {
+        state(): string;
+        then<U>(doneFilter: (value: T) => U, failFilter?: (...reasons: any[]) => U, progressFilter?: (...progression: any[]) => any): Promise<U>;
+    }
+
+    interface Deferred<T> extends Promise<T> {
+        reject(...args: any[]): Deferred<T>;
+        resolve(value?: T, ...args: any[]): Deferred<T>;
+    }
+}
+
+declare var $: jquery.Static;
+#@end
+//}
+
+インタフェース名が短く、かつわかりやすくなりました。
+そうそう、こういうのでいいんだよこういうので！
+
+もちろん、普通にクラスや変数、関数など実体が伴う定義が絡む場合はその限りではありません。
+通常の実体のあるモジュールに相乗りしていってしまったほうが楽でしょう。
+
+…なんでDefinitelyTyped上にある型定義ファイルでそうなってないものが多いかって？
+良い質問です。一つ目は幽霊モジュールの認知度が低いこと、もう一つは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
+先で説明しましたが、インタフェースは定義の統合ができます。
+この性質を利用して定義の拡張を行っているので、うかつに JQueryStatic から jquery.Static に変更すると色々なところが壊れてしまうのです。
+特にjQueryプラグインとかはその方法で型定義しますからね。
+魔窟ですよ…。
+
+ともあれ、過去の定義との互換性を壊す事に繋がるため、途中から幽霊モジュールに切り替えるのは難しい場合があります。
+可能であれば最初から幽霊モジュールを使うようにしましょう。
+
+//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールでした。DefnitelyTypedのbest practiceでghost moduleと表記されたのでそちらに統一。]
 
 === なんでもかんでもインタフェースにしてはならない
 
