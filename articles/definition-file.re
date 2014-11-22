@@ -561,6 +561,8 @@ declare class FooListenerImpl implements FooListener {
  * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
  * インタフェースを実装するのが(継承するだけなので)めっちゃ簡単
 
+@<list>{declare-decompose-class-invalid}みたいな感じ。
+
 //list[declare-decompose-class-invalid][インタフェース+変数で定義]{
 #@mapfile(../code/definition-file/declare-decompose-class-invalid.ts)
 var BaseA: BaseAStatic;
@@ -598,6 +600,43 @@ interface FooListenerImpl extends FooListener {
 クラスの型定義がopen endedになって定義を拡張可能にして、@<href>{https://github.com/Microsoft/TypeScript/issues/371,インタフェースのオプショナルな実装}サポートしてくれたらクラス定義で全部賄える！
 
 今のところはどうしようもないので、用途に応じて適切なほうを選びましょう。
+
+=== 外部モジュールの定義の統合
+
+@<string>{利用可能になったバージョン 1.3.0}
+
+あんまり言及される事がないのでここで触れておきます。
+1.1.0-1までの時代は、外部モジュールがopen endedじゃありませんでした。
+1.3.0からはopen endedになったので、@<list>{external-module-declaration-merging}と@<list>{external-module-declaration-merging-usage}のようなコードが書けます。
+めでたい。
+
+//list[external-module-declaration-merging][これ、1.1.0時代はできなかったのよね]{
+#@mapfile(../code/definition-file/external-module-declaration-merging.d.ts)
+// 外部モジュールの定義の統合ができます！！
+declare module "foo" {
+    var str: string;
+}
+
+declare module "foo" {
+    var num: number;
+}
+#@end
+//}
+
+//list[external-module-declaration-merging-usage][普通に使えます]{
+#@mapfile(../code/definition-file/external-module-declaration-merging-usage.ts)
+/// <reference path="./external-module-declaration-merging.d.ts" />
+
+import foo = require("foo");
+foo.str;
+foo.num;
+#@end
+//}
+
+ちなみに、それまでは内部モジュールとして拡張ポイントを@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b66f2750b10f262a698098cabbf210f7f2a/express/express.d.ts#L15,外出しして用意し}、@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b66f2750b10f262a698098cabbf210f7f2a/passport/passport.d.ts#L8,他所で拡張する}という頑張り方をしていました。
+泣けますね。
+既存ライブラリにメソッド生やすという黒魔術はNode.js上でもできてしまうのが辛いところです。
+とはいえ、1.3.0移行は多少楽になったのが嬉しいところです。
 
 === その他なんか
 
