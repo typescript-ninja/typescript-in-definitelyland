@@ -2,6 +2,19 @@
 
 [griflet(要権限)](https://tcb.mowa-net.jp/griflet/github/TechBooster/C87-TypeScript/)
 
+## この本のビルドの仕方
+
+```
+$ gem install review
+$ npm install -g grunt-cli
+$ git clone git@github.com:TechBooster/C87-TypeScript.git
+$ cd C87-TypeScript
+$ npm install
+$ grunt pdf
+```
+
+その他細かい準備(tex入れたり)は[FirstStepReVIEW](https://github.com/TechBooster/FirstStepReVIEW)に準じる。たぶん。
+
 ## 取らぬ狸の皮算用
 
 前提：頒布後、リポジトリは公開する(紙の本はおまけ感) 以下のどれか1つ
