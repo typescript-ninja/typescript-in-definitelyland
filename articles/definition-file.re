@@ -495,7 +495,109 @@ var test;
 
 === クラスを定義するには？
 
-TBD
+普通に定義すればええやろ！！と思うかもしれませんが、現在のTypeScriptにはなかなか難しい問題を抱えています。
+先に、どういう選択肢が存在するかを見てみましょう(@<list>{declare-class})。
+
+//list[declare-class][素直にクラス定義 vs インタフェース+変数]{
+#@mapfile(../code/definition-file/declare-class.d.ts)
+// A. 普通にクラスを定義する
+declare class TestA { }
+
+// B. クラスの分解定義 変数 + インタフェース2つ
+declare var TestB: TestBStatic;
+interface TestBStatic {
+    new (): TestB;
+}
+interface TestB {
+}
+#@end
+//}
+
+こんな感じです。
+ぱっと見、普通にクラス定義をするほうが素直ですね。
+
+しかし、それぞれの手法にメリット・デメリットがあるのです。
+そのライブラリのユースケースにとって、どちらが適切か見極めねばなりません。
+シビア。
+
+==== 素直にクラスのメリット・デメリット
+
+ * ライブラリ利用時に普通に継承できる
+ * 定義の拡張ができない
+ ** 別ライブラリが拡張する設計(プラグインとか)のライブラリには向かない
+ * 別途インタフェースの実装を型定義に盛り込む時めんどくさい(定義の二重記述が必要)
+
+@<list>{declare-vanilla-class-invalid}みたいな感じ。
+
+//list[declare-vanilla-class-invalid][クラスで定義]{
+#@mapfile(../code/definition-file/declare-vanilla-class-invalid.ts)
+declare class BaseA {
+    str: string;
+}
+// ○利用時に普通に継承できる！
+class Inherit extends BaseA {
+    number: number;
+}
+// ☓ クラスはopen endedじゃないので定義の拡張ができない…
+// error TS2300: Duplicate identifier 'BaseA'.
+declare class BaseA {
+    num: number;
+}
+
+interface FooListener {
+    on(eventName: string, callback: (data: any) => void): void;
+}
+declare class FooListenerImpl implements FooListener {
+    // インタフェースの要素全部書かないとコンパイル通らない…
+    on(eventName: string, callback: (data: any) => void): void;
+}
+#@end
+//}
+
+==== インタフェース+変数に分解
+
+ * ライブラリ利用時に継承できない
+ ** new するだけの利用法なら特に不便ではない
+ * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
+ * インタフェースを実装するのが(継承するだけなので)めっちゃ簡単
+
+//list[declare-decompose-class-invalid][インタフェース+変数で定義]{
+#@mapfile(../code/definition-file/declare-decompose-class-invalid.ts)
+var BaseA: BaseAStatic;
+interface BaseAStatic {
+    new (): BaseA;
+}
+interface BaseA {
+    str: string;
+}
+// ☓ 利用時に継承できない…(しょせんインタフェース
+// error TS2311: A class may only extend another class.
+class Inherit extends BaseA {
+    number: number;
+}
+// ○ インタフェースは定義の拡張ができる！！
+interface BaseA {
+    num: number;
+}
+
+interface FooListener {
+    on(eventName: string, callback: (data: any) => void): void;
+}
+var FooListenerImpl: FooListenerImplStatic;
+interface FooListenerImplStatic {
+    new (): FooListenerImpl;
+}
+interface FooListenerImpl extends FooListener {
+    // FooListenerの要素何も転記しなくて済む！
+}
+#@end
+//}
+
+==== けつ☆論
+
+クラスの型定義がopen endedになって定義を拡張可能にして、@<href>{https://github.com/Microsoft/TypeScript/issues/371,インタフェースのオプショナルな実装}サポートしてくれたらクラス定義で全部賄える！
+
+今のところはどうしようもないので、用途に応じて適切なほうを選びましょう。
 
 === その他なんか
 
