@@ -10,6 +10,7 @@ $ npm install -g grunt-cli
 $ git clone git@github.com:TechBooster/C87-TypeScript.git
 $ cd C87-TypeScript
 $ npm install
+# 裏で git submodule init && git submodule update が走る
 $ grunt pdf
 ```
 
