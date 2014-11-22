@@ -631,9 +631,31 @@ JavaScriptのライブラリという奴は1つの関数に様々な使い方を
 
 なお、普通にTypeScriptコードを書く時にオーバーロードはあまり使わん模様。
 
+union typesが使えるようになると、@<list>{overload-vs-union-types}のように書くこともできます。
+簡単な例だとunion typesのほうがよいと思いますが、このケースではどっちがいいかは、まだわからないですね。
+
+//list[overload-vs-union-types][うーん、どっちがいいかは難しい]{
+#@mapfile(../code/definition-file/overload-vs-union-types.ts)
+// union types 以前
+declare function hello(word: string): string;
+declare function hello(callback: () => string): string;
+
+hello("TypeScript");
+hello(() => "function");
+
+// union types 以後 好みの問題かもね
+declare function bye(word: string | { (): string; }): string;
+
+bye("JavaScript");
+bye(() => "function");
+#@end
+//}
+
+#@# TODO http://goo.gl/LHRXAr なぜ全部OKじゃないのか？
+
 === 外部モジュールの定義の統合
 
-@<string>{利用可能になったバージョン 1.3.0}
+@<strong>{利用可能になったバージョン 1.3.0}
 
 あんまり言及される事がないのでここで触れておきます。
 1.1.0-1までの時代は、外部モジュールがopen endedじゃありませんでした。

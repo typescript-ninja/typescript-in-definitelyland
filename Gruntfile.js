@@ -140,7 +140,7 @@ module.exports = function (grunt) {
     });
 
     function generateTask(target) {
-        return ['clean', 'typescript-formatter', 'ts', 'exec:preprocess', 'exec:compile2' + target];
+        return ['clean', /* 'typescript-formatter', */ 'ts', 'exec:preprocess', 'exec:compile2' + target];
     }
 
     grunt.registerTask(
