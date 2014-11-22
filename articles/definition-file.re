@@ -601,6 +601,36 @@ interface FooListenerImpl extends FooListener {
 
 今のところはどうしようもないので、用途に応じて適切なほうを選びましょう。
 
+=== オーバーロードを上手く使おう！
+
+正しいライブラリの使い方を導くこと。
+を心に秘めて、@<list>{use-overload}を見るのじゃ。
+どれが一番わかりやすいだろうか…？
+
+//list[use-overload][普通に使えます]{
+#@mapfile(../code/definition-file/use-overload.ts)
+// 同じ実装に対して、どの型定義が一番便利かな？
+
+// getの時 setの時 仕様が違うことがよくわかる
+declare function valueA(value: any): void;
+declare function valueA(): any;
+
+// setの時も値が取れるっぽい？
+declare function valueB(value?: any): any;
+
+// 詳細が不明だ…！
+declare var valueC: Function;
+#@end
+//}
+
+答え：一番最初のやつ。
+
+JavaScriptのライブラリという奴は1つの関数に様々な使い方をさせようとします。
+つまり、1つの関数が複数の顔を持つということです。
+その顔1つ1つに個別の型定義を割り振ってやるためのテクニックとして、オーバーロードの存在を覚えておくとよいでしょう。
+
+なお、普通にTypeScriptコードを書く時にオーバーロードはあまり使わん模様。
+
 === 外部モジュールの定義の統合
 
 @<string>{利用可能になったバージョン 1.3.0}
