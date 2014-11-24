@@ -6,6 +6,7 @@
 
 ```
 $ npm install -g grunt-cli
+$ gem install bundler
 $ git clone git@github.com:TechBooster/C87-TypeScript.git
 $ cd C87-TypeScript
 $ npm install
