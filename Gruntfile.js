@@ -85,7 +85,7 @@ module.exports = function (grunt) {
             preprocess: {
                 cwd: "./articles",
                 cmd: function () {
-                    var command = "review-preproc";
+                    var command = "bundle exec review-preproc";
                     var files = [
                         "articles"
                     ];
@@ -97,43 +97,43 @@ module.exports = function (grunt) {
             compile2text: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-compile --all --target=text";
+                    return "bundle exec review-compile --all --target=text";
                 }
             },
             compile2html: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-compile --all --target=html";
+                    return "bundle exec review-compile --all --target=html";
                 }
             },
             compile2latex: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-compile --all --target=latex";
+                    return "bundle exec review-compile --all --target=latex";
                 }
             },
             compile2idgxml: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-compile --all --target=idgxml";
+                    return "bundle exec review-compile --all --target=idgxml";
                 }
             },
             compile2pdf: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-pdfmaker config.yml";
+                    return "bundle exec review-pdfmaker config.yml";
                 }
             },
             compile2epub: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-epubmaker config.yml";
+                    return "bundle exec review-epubmaker config.yml";
                 }
             },
             checkWithTsc: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "review-compile --all --target=html tsc-check";
+                    return "bundle exec review-compile --all --target=html tsc-check";
                 }
             }
         }
