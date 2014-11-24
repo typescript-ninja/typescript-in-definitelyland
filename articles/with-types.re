@@ -16,6 +16,7 @@
 #@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.10.7
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO || 演算子あたりのだるさ
+#@# TODO 関数 アロー関数式
 
 == 型宣言空間と変数宣言空間
 

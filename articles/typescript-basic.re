@@ -209,10 +209,159 @@ console.log(obj.greeting("TypeScript"));
 TypeScript以外のオブジェクト指向の世界でも言えることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
 
-== 関数定義
+#@# TODO 引数プロパティ宣言はES6に入らないよなぁ？
 
-#@# TODO クラスの後に関数定義の説明したーーーい！したくない？
-TBD
+== 関数
+
+#@# NOTE クラスの後に関数定義の説明したーーーい！したくない？
+
+=== 普通の関数
+
+おう普通だよ(@<list>{function})。
+型注釈の与え方や、引数をオプショナルにする方法だけJavaScriptと違いますね。
+デフォルト値付き引数はECMAScript 6で入ります。
+
+//list[function][色々な関数定義]{
+#@mapfile(../code/typescript-basic/function.ts)
+function hello(word:string):string {
+    return "Hello, " + word;
+}
+hello("TypeScript");
+
+// 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある。
+function bye(word:string) {
+    return "Bye, " + word;
+}
+bye("TypeScript");
+
+// ? をつけると呼び出し時に引数が省略可能になる
+function hey(word?:string) {
+    return "Hey, " + (word || "TypeScript");
+}
+hey();
+
+// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+function ahoy(word = "TypeScript") {
+    return "Ahoy! " + word;
+}
+ahoy();
+#@end
+//}
+
+可変長引数もあるよ(@<list>{function-args})！
+
+//list[function-args][可変長引数もあるよ]{
+#@mapfile(../code/typescript-basic/function-args.ts)
+function hello(...args:string[]) {
+    return "Hello, " + args.join(" & ");
+}
+// Hello, TS & JS と表示される
+console.log(hello("TS", "JS"));
+#@end
+//}
+
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです(@<list>{function-invalid})。
+
+//list[function-invalid][こういうのはアカン]{
+#@mapfile(../code/typescript-basic/function-invalid.ts)
+// オプショナルな引数の後に省略不可な引数がきてはいけない
+// error TS1016: A required parameter cannot follow an optional parameter.
+function funcA(arg1?:string, arg2:string) {
+    return "Hello, " + arg1 + ", " + arg2;
+}
+
+// 可変長引数は必ず最後じゃないといけない
+// error TS1014: A rest parameter must be last in a parameter list.
+function funcB(...args:string, rest:string) {
+    return "Hello, " + args.join(", ") + " and " + rest;
+}
+#@end
+//}
+
+ここまで見てきたオプショナルな引数とかデフォルト値付き引数とか可変長引数とかは全てクラスのコンストラクタやメソッドでもそのまま使えます。
+
+=== アロー関数式
+
+ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function expression}を見ていきましょう(@<list>{arrow-function-expression})。
+
+//list[arrow-function-expression][アロー関数式 短くてかっこいい]{
+#@mapfile(../code/typescript-basic/arrow-function-expression.ts)
+// 以下2つは(thisが絡まない限り)等価！
+var funcA = () => true;
+var funcB = function () {
+    return true;
+};
+
+// NOTE ここのcallbackの型注釈の意味は別の章で解説！
+// 引数を1つ取って返り値無し の関数を表します。
+function asyncModoki(callback:(value:string)=>void) {
+    callback("TypeScript");
+}
+// 旧来の書き方
+asyncModoki(function (value:string) {
+    console.log("Hello, " + value);
+});
+// アロー関数式だと楽やで
+asyncModoki(value => console.log("Hello, " + value));
+#@end
+//}
+
+短くてかっこいいですね。
+将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう(なんせ、楽だし)。
+早くNode.jsでも使えるようになって、Gruntfile.jsとかで使わせてほしいものです。
+
+アロー関数式は1つの文しか持たない時、その文の値を返り値として使ってくれます(@<list>{arrow-function-expression-short})。
+
+//list[arrow-function-expression-short][1つの文しか持たない時の便利な振る舞い]{
+#@mapfile(../code/typescript-basic/arrow-function-expression-short.ts)
+// 名前付き関数は定義できないので変数に入れる
+var funcA = () => {
+};
+funcA();
+
+// 以下の2つは等価
+// アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
+var funcB = (word = "TypeScript") => "Hello, " + word;
+var funcC = (word = "TypeScript") => {
+    return "Hello, " + word;
+};
+console.log(funcB());
+console.log(funcC());
+#@end
+//}
+
+もう一つの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。
+この仕組のおかげでクラスのメソッドなどでコールバック関数を使う時に、不要な混乱をおこさずに済みます。
+例を見てみましょう(@<list>{arrow-function-expression-this})。
+
+//list[arrow-function-expression-this][受け継がれるthisの値…！]{
+#@mapfile(../code/typescript-basic/arrow-function-expression-this.ts)
+"use strict";
+
+class Sample {
+    test():void {
+        var funcA = () => {
+            // ここでの this は元のまま(Sampleのインスタンス)
+            console.log(typeof this);
+        };
+        var funcB = function () {
+            // ここでの this は undefined (ECMAScriptの仕様)
+            console.log(typeof this);
+        };
+        // object と表示される
+        funcA();
+        // undefined と表示される
+        funcB();
+    }
+}
+
+new Sample().test();
+#@end
+//}
+
+うーん、アロー関数式は期待通りの挙動ですね。
+旧来の関数では値が undefined になっています。
+JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式使っとけばいいんだよｵﾗｧﾝ！
 
 == 内部モジュール (internal modules)
 
