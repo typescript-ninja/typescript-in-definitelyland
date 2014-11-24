@@ -1,6 +1,5 @@
 = 型定義ファイルとは
 
-TODO .d.ts にすると実装が書けなくて便利
 TODO any と {} と Object
 
 == JavaScriptの資産が使いたい！
@@ -9,6 +8,8 @@ TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換える�
 とはいえ、現時点のWebアプリの世界はJavaScriptで成り立っていますし、TypeScriptでコードを書いてそのまま公開している人は圧倒的少数です。
 そこで、TypeScriptは既存のJavaScript用資産をTypeScriptで活用するための仕組みを持っています。
 それが、型定義ファイルです。
+通常のTypeScriptのコードの拡張子が .ts なのに対して、型定義ファイルは拡張子を .d.ts とします。
+拡張子を .d.ts とすると、実装を含むようなコードを書くとtscがエラーにしてくれますので、必ず .d.ts にします。
 
 JavaScriptの、自由奔放(かつ、危険がてんこ盛り)の世界に後付で型を与えます。
 元からTypeScriptで書かれている場合、実装と型定義を同時に書いているようなものなので、実装と型がズレて(つまりバグって)しまうことはありません。
@@ -80,7 +81,7 @@ typings
 あとは、これら型定義ファイルを自分の使うコードから参照するだけでコンパイルが可能になります。
 残念ながらライブラリの実体は含まれていないため、npmやbowerなどで別途取得する必要があるでしょう。
 
-TODO mochaも入れて、簡単なテストを書く例(型定義ファイルを使う例)を示す
+#@# TODO mochaも入れて、簡単なテストを書く例(型定義ファイルを使う例)を示す
 
 //footnote[dtsm][dtsmは筆者(vvakame)が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
 //footnote[NuGet][WindowsユーザにはNuGetというツールもあるのですが、全然知らないため割愛します。]
@@ -131,13 +132,9 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 
 == 型定義ファイルのベストプラクティス
 
-TBD
-
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
 基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practives}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式のHandbookのWriting .d.ts files}に従っておけばよいです。
 そこに書かれていることや筆者の経験則を交えて説明します。
-
-TODO external module でも declaration merging について
 
 === テキトーに、やろー！
 
@@ -797,6 +794,21 @@ TypeScriptでコードを書く上では、1ファイル1インタフェースor
 
 TBD
 tslintと--noImplicitAnyについては必ず書く
+
+やった！型定義ファイルが書けたぞ！
+己の出来高に満足する前に、もう少しだけやっておきたいことがあります。
+それが、tslintによるチェックと、--noImplicitAnyをつけてのコンパイルです。
+
+==== tslint
+
+lint、というプログラムの種類があります。
+ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくれます。
+
+TBD
+
+==== --noImplitictAny
+
+TBD
 
 == Let's contribution!
 
