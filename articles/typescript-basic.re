@@ -71,14 +71,148 @@ var obj = {};
 楽 + コンパイルによる型チェック = TypeScriptサイキョー。
 お分かりいただけただろうか？
 
-== 関数定義
-
-TBD
-
 == クラス
 
+TypeScriptには一般的な構文でのクラスの定義が備わっています@<list>{class-basic}。
+
+//list[class-basic][クラスの要素様々]{
+#@mapfile(../code/typescript-basic/class-basic.ts)
+class Base {
+    // インスタンス変数
+    numA: number;
+    strA = "string";
+
+    public numB: number;
+    private numC: number;
+    // TypeScript 1.3.0 から protected 利用可
+    protected numD: number;
+
+    // クラス変数
+    static numA: number;
+    public static numB: number;
+    private static numC: number;
+    protected static numD: number;
+
+    // コンストラクタ
+    constructor(boolA: boolean, public boolB: boolean, private boolC: boolean, protected boolD: boolean) {
+    }
+
+    // メソッド
+    hello(word: string): string {
+        return "Hello, " + word;
+    }
+
+    // get, setアクセサ
+    // コンパイル時に --target es5 以上が必要
+    _date: Date;
+    get dateA(): Date {
+        return this._date;
+    }
+    set dateA(value: Date) {
+        this._date = value;
+    }
+}
+
+var obj = new Base(true, false, true, false);
+obj.numA;
+obj.strA;
+obj.numB;
+// obj.numC; // private はダメ
+// obj.numD; // protected もダメ
+obj.boolB;
+// obj.boolC; // private はダメ
+// obj.boolD; // protected もダメ
+obj.hello("TypeScript");
+obj.dateA = new Date();
+obj.dateA;
+#@end
+//}
+
+上から順に見て行きましょう。
+
+まずはクラス変数、インスタンス変数です。
+クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。
+
+アクセス修飾子として、private, public, protected(TypeScript 1.3.0より)などの可視性を制御するアクセス修飾子が利用可能です。
+何も指定していない時のデフォルトの可視性はpublicになります。
+しかしまぁコンパイル後のJSを見るとわかりますが、@<code>{<any>}とかを使うと簡単にそれら要素にアクセスできてしまうので過信は禁物です。
+筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの(JavaScriptでもよく見られた)運用をしています。
+privateやprotectedは使わないほうが良いと思うんだよなぁ…。
+
+次はコンストラクタです。
+引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
+これを@<kw>{引数プロパティ宣言,parameter property declaration}と呼びます。
+@<list>{class-constructor.ts}のようなコードを書くと@<list>{class-constructor.js}のようなJavaScriptが出てきます。
+
+//list[class-constructor.ts][引数プロパティ宣言！]{
+#@mapfile(../code/typescript-basic/class-constructor.ts)
+class Sample {
+    constructor(public str:string) {
+    }
+}
+
+var obj = new Sample("TypeScript");
+// TypeScript と表示される
+console.log(obj.str);
+#@end
+//}
+
+//list[class-constructor.js][コンパイルするとこんなの]{
+#@mapfile(../code/typescript-basic/class-constructor.js)
+var Sample = (function () {
+    function Sample(str) {
+        this.str = str;
+    }
+    return Sample;
+})();
+var obj = new Sample("TypeScript");
+console.log(obj.str);
+#@end
+//}
+
+@<list>{class-basic}に戻りまして。
+次はメソッドです。
+これも特に特筆すべき要素はありませんね。
+
+最後に、get, setアクセサです。
+これはtscでコンパイルする時に@<code>{--target es5}が必要になるやつです。
+なかなかめんどくさいJavaScriptコードが生成されるようになりますが、ECMAScript 6で仕様に盛り込まれています。
+#@# TODO 仕様に盛り込まれてるよな！？(不安)
+これを使うと、getterしか定義してなくてもプログラム上値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
+
+これら構文はECMAScript 6の文法を概ね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラス定義ができるようになります。
+
+次に、クラスの継承も見て行きましょう。
+継承も普通にできます@<list>{class-inherit}。
+superを使っての親クラスのメソッドの参照も一応普通に使えます。
+
+//list[class-inherit][普通に継承もあるよ]{
+#@mapfile(../code/typescript-basic/class-inherit.ts)
+class Base {
+    greeting(name:string) {
+        return "Hi! " + name;
+    }
+}
+
+class Inherit extends Base {
+    greeting(name:string) {
+        return super.greeting(name) + ". How are you?";
+    }
+}
+
+var obj = new Inherit();
+// Hi! TypeScript. How are you? と出力される
+console.log(obj.greeting("TypeScript"));
+#@end
+//}
+
+TypeScript以外のオブジェクト指向の世界でも言えることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
+頑張ってオブジェクト指向に適した設計を行いましょう。
+
+== 関数定義
+
+#@# TODO クラスの後に関数定義の説明したーーーい！したくない？
 TBD
-TODO super
 
 == 内部モジュール (internal modules)
 
