@@ -2,7 +2,8 @@ PREDEF:
   - preface.re
 
 CHAPS:
-  - about.re
+  - prepared-to-typescript.re
+  - typescript-basic.re
   - with-types.re
   - definition-file.re
   - es6.re

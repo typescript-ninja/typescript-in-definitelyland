@@ -1,8 +1,4 @@
-= なぜなに！TypeScript！
-
-== TypeScriptって何？
-
-TBD
+= 戦闘準備だ！TypeScript！
 
 == まずはインストールしてみよう
 
@@ -17,7 +13,9 @@ TypeScriptをインストールすると、tscというコマンドが利用可�
 $ npm install -g typescript
 省略
 $ tsc -v
-message TS6029: Version 1.1.0.1
+#@mapoutput(../node_modules/.bin/tsc -v)
+message TS6029: Version 1.3.0.0
+#@end
 $ echo "class Sample {}" > sample.ts
 $ tsc --noImplicitAny sample.ts
 $ cat sample.js
@@ -82,7 +80,3 @@ Microsoftの開発速度に対して明らかについていけてないんで�
 ここでは、WebStormを使う上で便利な設定項目をいくつか解説します。
 
 TODO
-
-== 基本構文を確認しよう
-
-TBD
