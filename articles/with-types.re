@@ -8,30 +8,25 @@
  * union types
  * type alias
 
+#@# TODO 構造的部分型
+#@# TODO 文脈依存型
+#@# TODO 文字列により特殊化されたオーバーロード
+#@# TODO Generics
+#@# TODO 型クエリ
+#@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.10.7
+#@# TODO プロパティの文字列定数によるアクセス
+#@# TODO || 演算子あたりのだるさ
+
 == 型宣言空間と変数宣言空間
 
 TBD
 訳語がアレな気がするので一回specを確認する
-
-== クラス
-
-TBD
 
 == インタフェース
 
 TBD
 
 == オブジェクト型リテラル (object type literal)
-
-TBD
-
-== モジュール
-
-=== 内部モジュール (internal modules)
-
-TBD
-
-=== 外部モジュール (external modules)
 
 TBD
 
