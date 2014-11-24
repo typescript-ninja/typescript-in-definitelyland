@@ -1,6 +1,7 @@
 = 型定義ファイルとは
 
 TODO .d.ts にすると実装が書けなくて便利
+TODO any と {} と Object
 
 == JavaScriptの資産が使いたい！
 
@@ -720,9 +721,77 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 
 そんなこんなで、まだ微妙に古いスタイルが残ってたりするのでTypeScriptコンパイラのコードを見てTypeScriptのコードスタイルを勉強してはいけないゾ☆
 
-=== export 句の使い方
+=== ちょっと小難しい export 句の使い方
 
-TBD 型をexportしようとするとコンパイル通るんだけど期待通りじゃないから気をつけろテスト書け
+インタフェースやクラスのインスタンス単体を外部モジュールの外側に見せたい場合、@<list>{export-sample1}のように書きます。
+
+//list[export-sample1][実はインタフェースFooも外から見えない]{
+#@mapfile(../code/definition-file/export-sample1.d.ts)
+declare module "foo" {
+    interface Foo {
+        num: number;
+    }
+
+    // この _ は外部からは参照できない。exportしてないので。
+    var _:Foo;
+    export = _;
+}
+#@end
+//}
+
+呼び出し側では@<list>{export-sample1-usage}のように使います。
+importした値がインタフェースFooのインスタンスになっていることがわかります。
+
+//list[export-sample1-usage][使う時。インタフェースFooのインスタンスが得られる。]{
+#@mapfile(../code/definition-file/export-sample1-usage.ts)
+/// <reference path="./export-sample1.d.ts" />
+
+// f は "foo" の Fooのインスタンス だよ！
+import f = require("foo");
+f.num;
+#@end
+//}
+
+で、よくやりがちなのが@<list>{export-sample2}みたいな書き方。
+インタフェースのインスタンスをexportしたつもりが型がexportされちゃうんですねコレ。
+そんで@<list>{export-sample2-usage-invalid}みたいなエラーになっちゃう。
+
+//list[export-sample2][それは値ではなくて型だけ輸出しているぞ！]{
+#@mapfile(../code/definition-file/export-sample2.d.ts)
+declare module "foo" {
+    interface Foo {
+        num: number;
+    }
+
+    // よくやりがちな過ち
+    export = Foo;
+}
+#@end
+//}
+
+//list[export-sample2-usage-invalid][ｱｰｯ! らめぇ！]{
+#@mapfile(../code/definition-file/export-sample2-usage-invalid.ts)
+/// <reference path="./export-sample2.d.ts" />
+
+// f は "foo" の Fooそのもの だよ！
+import f = require("foo");
+
+// export-sample2-usage-invalid.ts(7,1): error TS2304: Cannot find name 'f'.
+f.num;
+
+// この書き方は正しい
+import Foo = require("foo");
+var foo: Foo;
+foo.num;
+#@end
+//}
+
+こういう悲しい目を回避するには、型定義ファイルのテストが有効です。
+とりあえず型定義ファイル書いたら適当なユースケースに当てはめて意図通りコンパイルできるか確かめてみよう！
+
+インタフェース単体をexportするのって、既存JavaScriptファイルに対する型定義ファイルではありえない操作なんですよね。
+TypeScriptでコードを書く上では、1ファイル1インタフェースorクラスの図式がありうるのでなくはない。あんまやらんけど。
+メモ：tslintとかで禁止したほうがいいんじゃないの？
 
 === 最終チェック！
 
