@@ -1,13 +1,5 @@
 = TypeScriptの型システム
 
- * 1.1
- ** 仕様は変わってないけどバグを直した結果breaking changeになった系
- * BCTについて
- * declaration merging for external module
- * tuple types
- * union types
- * type alias
-
 #@# TODO 構造的部分型
 #@# TODO 文脈依存型
 #@# TODO 文字列により特殊化されたオーバーロード
@@ -17,6 +9,12 @@
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO || 演算子あたりのだるさ
 #@# TODO 関数 アロー関数式
+
+っしゃオラー！
+TypeScriptの華はやはり型！
+@<chapref>{typescript-basic}など所詮児戯に過ぎぬわッ！！
+
+というわけで、TypeScriptの型周りについて解説していくよ。
 
 == 型宣言空間と変数宣言空間
 
@@ -94,19 +92,6 @@ var array = [new A(), new B(), new C()];
 #@# TODO なお、master/HEADでもarrayは A[] になる模様。 (A | B | C)[] ではない。仕様をよく読むこと。
 
 以上、解散！
-
-== 直和型 (union types)
-
-TBD
-本当によく語られる直和型と一緒なのかよくよく確認する
-多相が入ったのか！という反応もされたのでその辺りも調べる… variant types という用語ではないんだよなぁ…
-https://twitter.com/k_matsuzaki/statuses/533873787444285442
-
-@<strong>{導入されるバージョン 1.4.0}
-
-#@# TODO https://twitter.com/zipperpull/statuses/533921617496125441
-
-#@# TODO function test<T>(...args: T[]): T[] で test(1, true) とかやったときのTが何になるか見る
 
 == タプル型 (tuple types)
 
@@ -248,6 +233,26 @@ tuple[0].charAt(0);
 
 結論：タプル型を過信するのはやめろ繰り返すタプル型を過信するのはやめろ！
 
+== 直和型 (union types)
+
+TBD
+本当によく語られる直和型と一緒なのかよくよく確認する
+多相が入ったのか！という反応もされたのでその辺りも調べる… variant types という用語ではないんだよなぁ…
+https://twitter.com/k_matsuzaki/statuses/533873787444285442
+
+@<strong>{導入されるバージョン 1.4.0}
+
+#@# TODO https://twitter.com/zipperpull/statuses/533921617496125441
+
+#@# TODO function test<T>(...args: T[]): T[] で test(1, true) とかやったときのTが何になるか見る
+
+#@# NOTE http://togetter.com/li/749889
+#@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと
+#@# NOTE 多相性 (a: any[], b: any) => [].concat(a).concat([b]); みたいな。a, b の型に関係なく関数が操作できる
+#@# NOTE 直和型 variant TypeScriptの union types っぽい OCamlのは値が取れたりしてもうちょっと強いので本当に同じかいまいちわからん https://twitter.com/omasanori/statuses/537256100915990529
+#@# NOTE 直積型 ??? TypeScriptのtype aliasっぽい…？ type 線 = 点1 * 点2 みたいな たかだか一種類のコンストラクタしかもたないもの(点を2つ取るもののみとか)
+#@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
+
 == type guards
 
 @<strong>{導入されるバージョン 1.4.0}
@@ -261,6 +266,8 @@ TBD
 @<strong>{導入されるバージョン 1.4.0}
 
 TBD
+TODO 再帰的な直和型
+TODO 基本union typesが絡む別名の定義以外で使う場面ないはずじゃろ？みたいな話書く
 
 == その他取りこぼし
 
