@@ -235,16 +235,157 @@ tuple[0].charAt(0);
 
 == 直和型 (union types)
 
-TBD
-本当によく語られる直和型と一緒なのかよくよく確認する
-多相が入ったのか！という反応もされたのでその辺りも調べる… variant types という用語ではないんだよなぁ…
-https://twitter.com/k_matsuzaki/statuses/533873787444285442
-
 @<strong>{導入されるバージョン 1.4.0}
 
-#@# TODO https://twitter.com/zipperpull/statuses/533921617496125441
+はい、皆様待望の機能でございます。
+言ってはならないあの界隈がよく使う用語を使って解説しないといけないのでビクビクですね。
 
-#@# TODO function test<T>(...args: T[]): T[] で test(1, true) とかやったときのTが何になるか見る
+一番最初に書いておくけど@<strong>{積極的にTypeScriptのコード書く時に使うもんじゃないぞ！！}
+
+じゃあ解説していきましょう。
+union typesはいわゆる直和型でございます。
+この変数の値は、アレか、コレか、ソレ！のどれか。
+どれかは知らん。
+みたいな感じ。
+
+なんのために入ったのか？というと、既存JavaScriptにより良い型定義を与えるために入った…！！と言ってしまっていいでしょう。
+実際、自分でTypeScriptコード書いてる時は欲しくならないしね。
+ECMAScriptさん、パターンマッチもないしー。みたいなー(@<list>{union-types-basic})。
+
+//list[union-types-basic][型A | 型B → 新食感！]{
+#@mapfile(../code/with-types/union-types-basic.ts)
+var a: string | boolean;
+// string | number なので以下はオッケー！
+a = "str";
+a = true;
+// number はアカン。
+// error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+// Type 'number' is not assignable to type 'boolean'.
+// a = 1;
+
+var b: boolean | number;
+// a と b を合体させると string | boolean | boolean | number だ！
+// 実際にはc の型は string | number | boolean となる
+var c: typeof a | typeof b;
+#@end
+//}
+
+ハイ、型注釈で複数の型を | で区切って書ける感じです。
+既存のJavaScriptライブラリだとこういう感じの困った返り値の関数、ちょいちょいありますね。
+あとは普通にTypeScriptを書いている時でもSyntaxTreeとかをコードから構築する時にはあったほうが便利かもしれません。
+
+ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)だし、union typesのunion typesとかは単純にまとめられます。
+次に見る@<list>{union-types-subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
+これも実用上問題ありません。
+というのも、@<hd>{type-guards}で紹介する仕組みがあるからです(後で読んでね！)。
+
+//list[union-types-subtype][要素Bが要素Aのサブタイプの場合Aにまとまる]{
+#@mapfile(../code/with-types/union-types-subtype.ts)
+class Base {
+    str: string;
+}
+class Inherit extends Base {
+    num: number;
+}
+
+// 明示的に指定しとくと Base | Inherit となる(今のところ
+var obj: Base | Inherit;
+
+// Base にも Inherit にも存在する要素には普通にアクセスできる
+obj.str;
+// num は Base には存在しないのでアウトー！
+// error TS2339: Property 'num' does not exist on type 'Base | Inherit'.
+// obj.num;
+
+// Base | Inherit は実質単に Base とするのと変わらないのでこんなんやると Base に丸められる
+var base: typeof obj;
+// まぁ型が Base でも子クラスだから普通に代入できるけどね
+base = new Inherit();
+#@end
+//}
+
+この辺り、仕様書上は若干小難しく書かれているのですが、単に最も少ない要素数になるように型がまとめられていくだけです。
+
+自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
+|| 演算子を使った時、条件(三項)演算子を使った時、配列リテラルを使った時です(@<list>{union-types-infered})。
+
+//list[union-types-infered][要素Bが要素Aのサブタイプの場合Aにまとまる]{
+#@mapfile(../code/with-types/union-types-infered.ts)
+// and の型は string | boolean
+var and = "str" || true;
+// cond の型は string | number
+var cond = true ? 1 : "str";
+// array の型は (string | number | boolean)[]
+var array = [1, true, "str"];
+#@end
+//}
+
+一番よくお目にかかるのは配列リテラルでしょうか。
+TypeScript一般のベストプラクティスとして1つの配列に複数の型の値をツッコまないほうが堅牢なコードになるため、そこをしっかり守るとあんま見ないかもしんない。
+
+型注釈として関数を与える時は記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types-syntax})。
+
+//list[union-types-syntax][型名をカッコで囲うんです？]{
+#@mapfile(../code/with-types/union-types-syntax.ts)
+// 引数無しの返り値stringな関数 な型注釈
+var func: () => string;
+
+// 素直に考えるとこう書けてもいいっしょ！でもダメ！
+// var a: () => string | () => boolean;
+
+// 型名をカッコでくくる必要がある。これならOK
+var b: (() => string) | (() => boolean);
+// もしくはオブジェクト型リテラル使う
+var c: { (): string; } | { (): boolean; };
+
+// union typesじゃない時でも使えるけど見づらいな！
+var d: (() => string);
+#@end
+//}
+
+ぶっちゃけ見づらいですよね。
+仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}りするので、頑張って気をつけましょう。
+まぁ、コンパイルすればわかるしー…みたいなー。
+
+union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けて通りましょう(@<list>{union-types-type-assertion})。
+次に説明する@<hd>{type-guards}を使おう！まずはそっちだ！
+
+//list[union-types-type-assertion][一応使えるよ こうすれば]{
+#@mapfile(../code/with-types/union-types-type-assertion.ts)
+// 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
+// 型アサーションは悪い。常に悪い。なるべく使わないこと。
+
+var obj: string | number | Date;
+
+// string 扱いしてみる
+(<string>obj).charAt(0);
+
+// number 扱いしてみる
+(<number>obj).toFixed(2);
+
+// Date 扱いしてみる
+(<Date>obj).getTime();
+
+// 値の集合に含まれない型にしてみると普通に怒られる
+// error TS2352: Neither type 'string | number | Date' nor type 'RegExp' is assignable to the other.
+// (<RegExp>obj).test("test");
+#@end
+//}
+
+色々試してみるが、期待以上に頭がよかったりはしない(@<list>{union-types-cant-infered-invalid})。
+
+//list[union-types-cant-infered-invalid][こういうのは型推論できない]{
+#@mapfile(../code/with-types/union-types-cant-infered-invalid.ts)
+function test<T>(...args:T[]):T[] {
+    return args;
+}
+// (number | boolean)[] にはならなかった。残念。
+// error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+var v = test(1, true);
+#@end
+//}
+
+TODO https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
 #@# NOTE http://togetter.com/li/749889
 #@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと
@@ -253,7 +394,7 @@ https://twitter.com/k_matsuzaki/statuses/533873787444285442
 #@# NOTE 直積型 ??? TypeScriptのtype aliasっぽい…？ type 線 = 点1 * 点2 みたいな たかだか一種類のコンストラクタしかもたないもの(点を2つ取るもののみとか)
 #@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
 
-== type guards
+=={type-guards} type guards
 
 @<strong>{導入されるバージョン 1.4.0}
 
