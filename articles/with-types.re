@@ -505,18 +505,178 @@ if (typeof obj === "string") {
 
 === instanceof による type guards
 
-TBD
+primitive typesだけtype guardsが使えてもあんまり嬉しくないっすからね。
+instanceof を使った type guards、もちろんあります！！
+でも、仕様が完璧とはちょっと言い難いんですよね。
+
+JavaScriptにおける instanceof は、ある値が指定した関数のインスタンスであるかを調べる演算子です。
+プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。
+
+動作例を確認しておきます(@<list>{instanceof})。
+
+//list[instanceof][instanceof の挙動]{
+#@mapfile(../code/with-types/instanceof.ts)
+class Base {
+}
+
+class InheritA extends Base {
+}
+class InheritB extends Base {
+}
+
+var obj = new InheritA();
+
+// true と表示される
+console.log(obj instanceof Base);
+// true と表示される
+console.log(obj instanceof InheritA);
+// false と表示される
+console.log(obj instanceof InheritB);
+
+// ｵﾗｧﾝ!!! 無理矢理親を差し替える！
+InheritA.prototype = new InheritB();
+obj = new InheritA();
+// true と表示される
+console.log(obj instanceof InheritB);
+#@end
+//}
+
+オブジェクトのprototypeと一致するか順繰り見ていくだけですね。
 
 ==== 使い方
 
-TBD
-#@# TODO narrowingが失敗した時のエラーメッセージを取り上げる
+instanceofで型を絞り込みます(@<list>{type-guards-instanceof-basic})。
+
+//list[type-guards-instanceof-basic][instanceof の挙動]{
+#@mapfile(../code/with-types/type-guards-instanceof-basic.ts)
+class A {
+    str: string;
+}
+class B {
+    num: number;
+}
+
+var obj: A | B;
+if (obj instanceof  A) {
+    // ここでは A と確定されている！
+    obj.str;
+}else if(obj instanceof B) {
+    // ここでは B と確定されている！
+    obj.num;
+}
+#@end
+//}
+
+typeof の type guards と違って、else句でもちゃんと調べないとダメです。
+自動的に後続の型が絞り込まれたりはしません。
+まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。
+仕方ないね。
 
 ==== 自分で定義した型で使うには？
 
-TBD
+TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScript上で定義したクラスだけが type guards の対象になる、そんなの悲しすぎ！
+というわけで、それを解消する方法が用意されています。
+
+最も簡単なのは、型定義上でも、クラスとして定義することです。
+クラスはデフォルトでinstanceof による type guards に対応しています。
+
+もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす(@<list>{type-guards-instanceof-prototype})！
+
+//list[type-guards-instanceof-prototype][prototype の型が参照される]{
+#@mapfile(../code/with-types/type-guards-instanceof-prototype.ts)
+interface AStatic {
+    new (): AInstance;
+    prototype: AInstance;
+}
+interface AInstance {
+    str: string;
+}
+declare var A: AStatic;
+
+var obj: AInstance | {};
+if (obj instanceof A) {
+    // ここでは AInstance と確定されている！
+    obj.str;
+}
+#@end
+//}
+
+instanceof の右側の値の、その型の、prototypeプロパティの、型！
+つまり、instanceof の右側の A の型の AStatic の prototypeプロパティの、型(AInstance)！
+…まわりくどい！
+
+そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}のクラスの分割定義の箇所でも、prototypeなんかわざわざ定義してないんだなぁ…。
+
+それどころか、執筆時点(2014/11/28)でのlib.d.tsでは組み込みオブジェクトのRegExpにprototypeプロパティが定義されてなくてコンパイルエラーになるんですよ！！@<fn>{missing-prototype-properties}
+流石にこれは草生えざるを得ない…。
+そもそも、これだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てに指摘して回るのはダルすぎんよ〜〜〜ｗｗｗ
+
+というわけで、prototype propertyの代わりに、constructor signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}を行っています。
+コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されてたら俺のことめっちゃ褒めてくれてもいいと思います( ｰ`дｰ´)ｷﾘｯ
+
+話を戻しましょう。
+prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。
+一番簡単なのは、インタフェースにconstructor signatureかcall signatureのどちらか、または両方を持たせることです。
+もし、このどちらも行わず、Function型との互換性がなくなると、以下のようなエラーになります(@<list>{type-guards-instanceof-prototype-invalid})。
+
+//list[type-guards-instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
+#@mapfile(../code/with-types/type-guards-instanceof-prototype-invalid.ts)
+interface AStatic {
+    // 以下のどちらかがないと Function との互換性が無い
+    // (): AInstance;
+    // new (): AInstance;
+    prototype: AInstance;
+}
+interface AInstance {
+    str: string;
+}
+declare var A: AStatic;
+
+var obj: any;
+// error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+if (obj instanceof A) {
+}
+#@end
+//}
+
+もう一つ、重要なコツを示しておきます。
+それは、エラーメッセージの読み方です(@<list>{type-guards-instanceof-failed-invalid})。
+
+//list[type-guards-instanceof-failed-invalid][んん？なんだこのエラーは？]{
+#@mapfile(../code/with-types/type-guards-instanceof-failed-invalid.ts)
+interface AStatic {
+    new (): AInstance;
+    // prototype: AInstance; がない！
+}
+interface AInstance {
+    str: string;
+}
+declare var A: AStatic;
+
+var obj: AInstance | Date;
+if (obj instanceof A) {
+    // ここでは AInstance に確定されていてほしかった…
+    // error TS2339: Property 'str' does not exist on type 'Date | AInstance'.
+    obj.str;
+}
+#@end
+//}
+
+instanceofを使ってtype guardsで型の絞込みをしたつもりのシチュエーションです。
+しかし、AStaticはprototypeプロパティを持っていません。
+つまり、type guardsは効力を発揮しなかったんだよ！ΩΩΩ＜な、なんだってー！
+ここでのエラー原因は、"AInstanceに型を絞ることに失敗したよ！"ということです。
+ですが、実際のエラーは"AInstance | Date だとstrプロパティにアクセスして安全かわかんなかったっすわ"というメッセージです。
+type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
+慣れていないと、このエラーとtype guardsに実は失敗している！ということが結びつきにくいので気をつけましょう。
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
+
+//footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/issues/1282 として報告済み]
+
+==== Overload や Generics と type guards
+
+TBD 辛い
 
 === 全てのtype guardsに共通の仕様
 
