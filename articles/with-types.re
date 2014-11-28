@@ -674,9 +674,79 @@ type guardsの失敗が、別のエラーとなって間接的に表れてしま
 
 //footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/issues/1282 として報告済み]
 
-==== Overload や Generics と type guards
+==== Generics と type guards
 
-TBD 辛い
+さて、ちょっと前に書いた"instanceof の右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
+
+prototypeのプロパティの型に、Genericsが絡むと、話がややこしくなります。
+話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{array-declaration})。
+
+//list[array-declaration][lib.d.tsからArrayの定義を抜粋]{
+#@mapfile(../code/with-types/array-declaration.d.ts)
+// lib.d.tsから抜粋 本当はもうちょっと色々ある
+declare var Array: {
+    new (arrayLength?: number): any[];
+    (arrayLength?: number): any[];
+    isArray(arg: any): boolean;
+    prototype: Array<any>;
+};
+
+interface Array<T> {
+    length: number;
+    push(...items:T[]): number;
+    pop(): T;
+}
+#@end
+//}
+
+instanceof で type guards で型を狭めた時、 any[] になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards-instanceof-array-invalid}、@<list>{type-guards-instanceof-array}、@<list>{type-guards-instanceof-empty-array-invalid})。
+
+//list[type-guards-instanceof-array-invalid][絞込み、失敗！]{
+#@mapfile(../code/with-types/type-guards-instanceof-array-invalid.ts)
+var array: number[] | Date;
+
+if(array instanceof Array) {
+    // Array.prototype の型は Array<any> つまりは any[] …！
+    // any[] は number[] に代入可能だな！！型を狭められたに違いない！
+    // error TS2339: Property 'length' does not exist on type 'number[] | Date'.
+    // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) !?
+    array.length;
+}
+#@end
+//}
+
+//list[type-guards-instanceof-array][any[\] に絞り込むのはできる]{
+#@mapfile(../code/with-types/type-guards-instanceof-array.ts)
+var array: any[] | Date;
+
+if(array instanceof Array) {
+    // any[] に絞り込まれる
+    array.length;
+}
+#@end
+//}
+
+//list[type-guards-instanceof-empty-array-invalid][{}[\] には絞り込めない…！]{
+#@mapfile(../code/with-types/type-guards-instanceof-empty-array-invalid.ts)
+var array: {}[] | Date;
+
+if(array instanceof Array) {
+    // error TS2339: Property 'length' does not exist on type 'Date | {}[]'.
+    array.length;
+}
+#@end
+//}
+
+うーん、これもうわかんねぇな？
+TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array<any>を更に型パラメタをインスタンス化する前に戻して、Array<T>にしてから絞り込みのチェックをしているようなのですが、その場合Array<{}>として評価されてるのかなー、と思いきや@<list>{type-guards-instanceof-empty-array-invalid}を見る限り、そうとも言えなさそうなんですよね…。
+
+この辺り、わかりやすいルールが提示されないと実用上使いにくくて困りますね。
+とりあえず、Genericsが絡む場合はtype guardsに頼らないほうが詰まらずにすむ…という認識で良いでしょう@<fn>{type-guards-with-generics}。
+
+#@# TODO Overloadは？状況に変化が生じていないか確認する
+#@# TODO だるすぎるからなんとかして
+
+//footnote[type-guards-with-generics][https://github.com/Microsoft/TypeScript/issues/1283 で議論されるかも？]
 
 === 全てのtype guardsに共通の仕様
 
