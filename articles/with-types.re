@@ -386,6 +386,7 @@ var v = test(1, true);
 //}
 
 TODO https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
+TODO https://twitter.com/mizchi/statuses/537908273865703424 このへん 親クラスがunion typesで子でnarrowsする
 
 #@# NOTE http://togetter.com/li/749889
 #@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと
@@ -398,9 +399,130 @@ TODO https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
 @<strong>{導入されるバージョン 1.4.0}
 
+type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
+type guardsは"変数Aが○○という条件を満たす時、変数Aの型は××である"というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。
+
+=== typeof による type guards
+
+JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
+ECMAScript 5の範囲では、変換ルールは以下の通り。
+
+ * string の時は "string" を返す。
+ * boolean の時は "boolean" を返す。
+ * number の時は "number" を返す。
+ * undefine の時は "undefined" を返す。
+ * 関数として呼び出し可能な場合 "function" を返す。
+ * それ以外の場合(nullを含む！)は "object" を返す。
+
+これを利用して、変数の型を狭めます。
+
+==== 使い方
+
+一番簡単な使い方から見ていきましょう(@<list>{type-guards-typeof-basic})。
+TypeScriptのtype guardsでは、typeofの結果が string, boolean, number の場合、その型に絞り込むことができます。
+
+//list[type-guards-typeof-basic][実際の型がわからないなら調べるしかないじゃない！]{
+#@mapfile(../code/with-types/type-guards-typeof-basic.ts)
+var obj: number | string;
+if (typeof obj === "string") {
+    // ここでは string と確定されている！
+    obj.charAt(0);
+} else {
+    // ここでは消去法で number と確定されている！
+    obj.toFixed(2);
+}
+#@end
+//}
+
+TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型はそのままでした。
+type guardsが導入された後は"変数objがtypeofで調べた時にstringであるという条件を満たす時、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
+なお、この時の比較は必ず@<code>{===}を使う必要があります。
+@<code>{==}ではダメです。
+
+さて、実際にtype guardsが起こっている例を見てみます。
+@<list>{type-guards-typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
+そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
+
+//list[type-guards-typeof-invalid][1.3.0ではエラーとして検出できぬ]{
+#@mapfile(../code/with-types/type-guards-typeof-invalid.ts)
+var obj:any;
+if (typeof obj === "string") {
+    // ここでは string と確定されている！
+    // number にしか存在しないメソッドを呼ぶとコンパイルエラー！
+    // error TS2339: Property 'toFixed' does not exist on type 'string'.
+    obj.toFixed(0);
+}
+#@end
+//}
+
+うーん、便利ですね。
+
+ちなみに、本当に型を"狭める"だけなので、@<list>{type-guards-typeof-cant-narrow}のような互換性のない型に狭めることはできません。
+
+//list[type-guards-typeof-cant-narrow]["狭める"だけなんだなぁ]{
+#@mapfile(../code/with-types/type-guards-typeof-cant-narrow.ts)
+var obj:number;
+if (typeof obj === "string") {
+    // number を string に"狭める"ことはできない…
+    // コンパイル通っちゃう
+    obj.toFixed(0);
+}
+#@end
+//}
+
+まぁ、指定した型通りの値が入ってくるのであればなにも問題ないな！
+
+==== 後続の型の絞込み
+
+typeof による type guards 特有の仕様として、後続の型の絞込があります(@<list>{type-guards-typeof-removes})。
+
+//list[type-guards-typeof-removes][型の絞込み！]{
+#@mapfile(../code/with-types/type-guards-typeof-removes.ts)
+var obj: number | string | boolean;
+
+if (typeof obj === "string") {
+    // ここでは string と確定されている！
+    obj.charAt(0);
+} else {
+    // ここでは string が引かれ number | boolean;
+    obj;
+}
+
+if (typeof obj === "string") {
+    // ここでは string と確定されている！
+    obj.charAt(0);
+} else if(typeof obj === "number") {
+    // ここでは number と確定されている！
+    obj.toFixed(2);
+} else {
+    // ここでは string, number が引かれ boolean となる！
+    obj;
+}
+#@end
+//}
+
+最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないって、はっきり分かるんだね。
+
+=== instanceof による type guards
+
 TBD
 
-なんかunion types関係ないinstanceofでもイケそうなので分離した
+==== 使い方
+
+TBD
+#@# TODO narrowingが失敗した時のエラーメッセージを取り上げる
+
+==== 自分で定義した型で使うには？
+
+TBD
+
+#@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
+
+=== 全てのtype guardsに共通の仕様
+
+TBD || とか && とか ? とか
+
+#@# TODO 仕様書 4.20 の "A type guard of the form x instanceof C, where C is of a subtype of the global type 'Function' and C has a property named 'prototype'" て嘘じゃね？constructor signature 持ってれば Function の subtype だっけ…？
 
 == 型の別名 (type alias)
 
@@ -409,6 +531,7 @@ TBD
 TBD
 TODO 再帰的な直和型
 TODO 基本union typesが絡む別名の定義以外で使う場面ないはずじゃろ？みたいな話書く
+TODO Genericsを含んだ type alias https://twitter.com/mizchi/statuses/537908273865703424
 
 == その他取りこぼし
 
