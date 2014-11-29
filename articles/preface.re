@@ -10,14 +10,14 @@
  1. @<chapref>{typescript-basic}
  2. @<chapref>{with-types}
  3. @<chapref>{definition-file}
- 4. @<chapref>{es6}
- 5. @<chapref>{another-transpiler}
+#@# TBD 4. @<chapref>{es6}
+#@# TBD 5. @<chapref>{another-transpiler}
 
 @<chap>{typescript-basic}では、コマンドライン上でのTypeScriptコンパイラの使い方と、TypeScriptの基本構文を簡単に解説し、この後の章を読み解くための基礎知識を蓄えます。
 @<chapref>{with-types}では、TypeScriptの型の使われ方について解説し、コンパイルを通し、実際に開発を行うための基礎知識を蓄えます。1.1.0-1時点では導入されていないtuple types, union types, type aliasについての解説を含みます。
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説と、その書き方、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
-@<chapref>{es6}では、TypeScriptのOOPの基礎であるECMAScript 6の概要と、TypeScriptに取り込まれつつあるstring templatesなどの仕様について簡単に解説します。
-@<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
+#@# TBD @<chapref>{es6}では、TypeScriptのOOPの基礎であるECMAScript 6の概要と、TypeScriptに取り込まれつつあるstring templatesなどの仕様について簡単に解説します。
+#@# TBD @<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
 
 なお、本解説ではMac OS X + WebStorm での利用を前提に解説します。
 Visual StudioやNuGetの扱いについては言及しませんのでご了承ください。

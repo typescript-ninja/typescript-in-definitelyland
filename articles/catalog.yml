@@ -6,8 +6,8 @@ CHAPS:
   - typescript-basic.re
   - with-types.re
   - definition-file.re
-  - es6.re
-  - another-transpiler.re
+#  - es6.re
+#  - another-transpiler.re
 
 POSTDEF:
   - antipattern.re
