@@ -683,10 +683,10 @@ type guardsの失敗が、別のエラーとなって間接的に表れてしま
 さて、ちょっと前に書いた"instanceof の右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
 
 prototypeのプロパティの型に、Genericsが絡むと、話がややこしくなります。
-話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{array-declaration})。
+話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{array-declaration-invalid})。
 
-//list[array-declaration][lib.d.tsからArrayの定義を抜粋]{
-#@mapfile(../code/with-types/array-declaration.d.ts)
+//list[array-declaration-invalid][lib.d.tsからArrayの定義を抜粋]{
+#@mapfile(../code/with-types/array-declaration-invalid.d.ts)
 // lib.d.tsから抜粋 本当はもうちょっと色々ある
 declare var Array: {
     new (arrayLength?: number): any[];
@@ -841,7 +841,7 @@ if (obj instanceof Sample) {
 
 これを回避する方法は2つあります。
 1つ目はtype guardsに頼らず、今まで通りに処理することです(@<list>{type-guards-vs-weakspot1})。
-2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards-vs-weakspot2})。
+2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards-vs-weakspot2-invalid})。
 
 //list[type-guards-vs-weakspot1][type guardsに頼らず生きる]{
 #@mapfile(../code/with-types/type-guards-vs-weakspot1.ts)
@@ -863,8 +863,8 @@ if (obj !== null) {
 #@end
 //}
 
-//list[type-guards-vs-weakspot2][privateな要素があれば構造的部分型で値を偽造できない]{
-#@mapfile(../code/with-types/type-guards-vs-weakspot2.ts)
+//list[type-guards-vs-weakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
+#@mapfile(../code/with-types/type-guards-vs-weakspot2-invalid.ts)
 class Sample {
     private _tmp: any;
     str: string;
