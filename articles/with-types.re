@@ -886,10 +886,132 @@ var obj: Sample = {
 
 @<strong>{導入されるバージョン 1.4.0}
 
-TBD
-TODO 再帰的な直和型
-TODO 基本union typesが絡む別名の定義以外で使う場面ないはずじゃろ？みたいな話書く
-TODO Genericsを含んだ type alias https://twitter.com/mizchi/statuses/537908273865703424
+最初に書いておきましょう。@<strong>{可能な限りtype aliasを使うな！interface使え！}
+筆者はtype aliasの乱用を恐れています！
+
+type aliasもunion typesの扱いを便利にするために導入された機能です。
+機能としてはただ単に、型をひとまとまりにして、それに名前が付けられるだけです。
+そんだけ。
+
+type aliasは仕様上、interfaceと同じように利用できる場面もあります。
+ですが、基本的にtype aliasはinterfaceより機能が貧弱であるためなるべく避けるほうがよいでしょう。
+
+代表例を見てみましょう(@<list>{type-alias-basic})。
+
+//list[type-alias-basic][頻出するunion typesに名前をつける]{
+#@mapfile(../code/with-types/type-alias-basic.ts)
+type FooReturns = string | number | boolean;
+
+interface Foo {
+    bar(): FooReturns;
+    buzz(): FooReturns;
+    barbuzz(): FooReturns;
+}
+#@end
+//}
+
+わかりやすいですね。
+1ヶ所変更すると、関連箇所が全て更新されるのも便利です。
+
+tuple typesに名前をつけることもできます(@<list>{type-alias-tuple})。
+
+//list[type-alias-tuple][tuple typesに名前をつける]{
+#@mapfile(../code/with-types/type-alias-tuple.ts)
+// tuple typesに名前をつける
+type Point = [number, number];
+type Circle = [Point, number];
+
+var c: Circle = [[1, 2], 3];
+
+// でも、こっちのほうがTypeScriptとしては適切よね
+module alternative {
+    class Point {
+        constructor(public x: number, public y: number) {}
+    }
+    class Circle {
+        constructor(public p: Point, public r: number) {}
+    }
+    var c: Circle = new Circle(new Point(1, 2), 3);
+}
+#@end
+//}
+
+素直にクラスでやれ！って感じですね。
+
+type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。
+そのため、@<list>{type-alias-do-not-have-instance-invalid}のようなコードは書くことができません。
+
+//list[type-alias-do-not-have-instance-invalid][import句とは違うのだよ！import句とは！]{
+#@mapfile(../code/with-types/type-alias-do-not-have-instance-invalid.ts)
+// 型の別名を作るだけで何かの値を作るわけではない…！
+type StringArray = string[];
+
+// なのでこういうことはできない
+// error TS2304: Cannot find name 'StringArray'.
+var strArray = new StringArray();
+#@end
+//}
+
+TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{type-alias-spec-example})。
+union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけ、interfaceで置き換えができません。
+
+//list[type-alias-spec-example][interfaceを使うんだ！]{
+#@mapfile(../code/with-types/type-alias-spec-example.ts)
+// これらはinterfaceで表現不可 type aliasで正解
+type StringOrNumber = string | number;
+type TextObject = string | { text: string };
+type Coord = [number, number];
+type ObjectStatics = typeof Object;
+
+// これらはinterfaceで表現可能
+type HolidayLookup = Map<string, Date>;
+interface AltHolidayLookup extends Map<string, Date> {}
+
+type Callback = (data: string) => void;
+interface AltCallback {
+    (date: string): void;
+}
+
+type RecFunc = () => RecFunc;
+interface AltRecFunc {
+    (): AltRecFunc;
+}
+#@end
+//}
+
+また、type aliasではGenericsを使った名前を定義することはできません。
+つまり、@<list>{type-alias-with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
+
+//list[type-alias-with-type-parameters-invalid][こういうコードは書けないんじゃ]{
+#@mapfile(../code/with-types/type-alias-with-type-parameters-invalid.ts)
+// "type" Identifier "=" Type ";" という文法だからダメ
+// Identifier は TypeParameters を含まない
+// type-alias-with-type-parameters-invalid.ts(4,9): error TS1005: '=' expected.
+type Foo<T> = Array<T> | T;
+
+// こういうのは書けないんだ…すまんな…
+var obj: Foo<number>;
+obj = [1, 2];
+obj = 1;
+#@end
+//}
+
+こういう場合は、名前をつけずに関係各所にコピペして頑張るしかないですね…。@<fn>{type-alias-with-generics}
+
+最後に、type aliasがいかにinterfaceに劣るかをまとめておきます。
+
+ * interface は extends や implements とあわせて使える
+ ** type aliasは無理
+ * interface は定義の統合ができるので後から自由に拡張できる
+ ** type aliasは無理
+ * interface は Genericsが使えて型パラメータが持てる
+ ** type aliasは無理
+ * interface が絡んだ時のコンパイルエラーにはinterface名が表示されてわかりやすい
+ ** type aliasは展開されて表示されちゃうので無理
+
+@<strong>{interfaceでできることをtype aliasでやるな！}
+
+//footnote[type-alias-with-generics][こういうコードをmizchi君が書きたがってた https://twitter.com/mizchi/statuses/537908273865703424]
 
 == その他取りこぼし
 
