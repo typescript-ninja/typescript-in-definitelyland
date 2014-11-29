@@ -363,10 +363,168 @@ new Sample().test();
 旧来の関数では値が undefined になっています。
 JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式使っとけばいいんだよｵﾗｧﾝ！
 
-== 内部モジュール (internal modules)
+== モジュール
 
-TBD
+プログラムの複雑さというのはクラスや関数だけではいかんともしがたく立ち向かいにくいものです。
+プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
 
-== 外部モジュール (external modules)
+そのための武器として、モジュールがあります。
+概ね、JavaのpackageやC#のnamespaceと類似のものと考えてよいでしょう。
+
+TypeScriptでは2種類のモジュールがあり、それぞれ内部モジュールと外部モジュールと呼ばれています。
+これにはJavaScript実行環境が色々とあるためです。
+
+1つは、ブラウザです。
+ブラウザ上では複数のJavaScriptのファイルが連結され、まるで1つのファイルであるかのように解釈され実行されます。
+これに対して階層構造を与えるための仕組みが内部モジュールです。
+
+もう1つは、Node.jsです。
+Node.jsでは、1つのファイルを1つの独立した構造と見なす仕組みが備わっています。
+この、1ファイル = 1モジュール と見なした仕組みが外部モジュールです。
+
+内部モジュール・外部モジュール、どっちの形式でプロジェクトを管理するかを決めるのは、非常に、非常に重要な決め事です。
+内部モジュールと外部モジュールを混在させてプロジェクトを管理するのはあまり良い決断とはいえません。
+なおかつ、プロジェクトの途中で内部モジュールと外部モジュールを切り替えるのは大変な苦痛を伴うため、最初によくよく調査・検証するようにしましょう。
+
+マジだからな！！
+
+=== 内部モジュール (internal modules)
+
+まずは簡単な例を見てみましょう(@<list>{internal-module/basic})。
+
+//list[internal-module/basic][内部モジュール！]{
+#@mapfile(../code/typescript-basic/internal-module/basic.ts)
+module a {
+    // export してないものは外部からは見えない
+    class Sample {
+        hello(word = "TypeScript") {
+            return "Hello, " + word;
+        }
+    }
+
+    export var obj = new Sample();
+}
+module a {
+    export function bye(word = "JavaScript") {
+        return "Bye, " + word;
+    }
+
+    // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
+    // error TS2304: Cannot find name 'Sample'.
+    // var tmp = new Sample();
+}
+
+module b {
+    export module c {
+        export function hello() {
+            return a.obj.hello();
+        }
+    }
+}
+module d.e {
+    export function hello() {
+        return a.obj.hello();
+    }
+}
+
+// Hello, TypeScript と表示される
+console.log(b.c.hello());
+// Hello, TypeScript と表示される
+console.log(d.e.hello());
+#@end
+//}
+
+うーん、簡単だな！！
+内部モジュール内部で定義した要素はクラスであれ関数であれなんであれ、最初に export をつけなければ外側から見えないようになります。
+
+長い名前を使うのが嫌な時は@<list>{internal-module/import}のように、import句を使うこともできます。
+このimport句の使い方は内部モジュールに限った話ではありません。
+しかし、外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
+
+//list[internal-module/import][import句で別名を作る]{
+#@mapfile(../code/typescript-basic/internal-module/import.ts)
+module a {
+    export class Sample {}
+}
+
+module b {
+    // 他のモジュールも普通に参照できる
+    var objA: a.Sample;
+    objA = new a.Sample();
+
+    // めんどくさいなら import句 を使えばいい
+    import Sample = a.Sample;
+    var objB: Sample;
+    objB = new Sample;
+
+    // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
+    import Test = a.Sample;
+    var objC: Test;
+    objC = new Test();
+
+    // 別に名前が違っても互換性が失われるわけではないのだ
+    objA = new Test();
+}
+#@end
+//}
+
+さて、内部モジュールでプログラムを組むといっても、1つのソースファイルにだらだらと全部書いていくのは現実的ではありません。
+そのため、ファイルを分割する必要があります。
+
+単にファイルを分けて、何も工夫しないとJavaScriptやCoffeeScriptならともかく、プログラム全体をあわせた時の整合性のチェックを型でおこなうTypeScriptでは型が追えなくて困ってしまう場合があります。
+そういう時のために、TypeScriptにはソースコード同士の関係性を記述するreference commentという仕組みがあります。
+
+例えば、reference-a.ts(@<list>{internal-module/reference-a})とreference-b.ts(@<list>{internal-module/reference-b})があったとします。
+reference-b.tsはreference-a.tsで定義している関数を呼び出しています。
+つまり、reference-b.tsはreference-a.tsに依存しているわけです。
+そこで、reference commentを使って@<code>{/// <reference path="./reference-a.ts" />}と記述します。
+パスは相対パスでも絶対パスでも大丈夫ですが、一般的に相対パスを利用します。
+
+//list[internal-module/reference-a][reference-a.ts]{
+#@mapfile(../code/typescript-basic/internal-module/reference-a.ts)
+module a {
+    export function hello(word = "TypeScript") {
+        return "Hello, " + word;
+    }
+}
+#@end
+//}
+
+//list[internal-module/reference-b][reference-b.ts]{
+#@mapfile(../code/typescript-basic/internal-module/reference-b.ts)
+/// <reference path="./reference-a.ts" />
+
+module b {
+    console.log(a.hello("internal module"));
+}
+#@end
+//}
+
+これをコンパイルする時、reference-b.tsだけコンパイルすればreference-a.tsも自動的に一緒にコンパイルされます。
+通常、何も指定しない場合reference-a.jsとreference-b.jsが生成されますが、--out オプションを併用することで1ファイルにまとめることも可能です。
+
+//cmd{
+$ tsc --out reference.js reference-b.ts
+$ cat reference.js
+#@mapoutput(../node_modules/.bin/tsc --out ../code/typescript-basic/internal-module/reference.js ../code/typescript-basic/internal-module/reference-b.ts && cat ../code/typescript-basic/internal-module/reference.js)
+var a;
+(function (a) {
+    function hello(word) {
+        if (word === void 0) { word = "TypeScript"; }
+        return "Hello, " + word;
+    }
+    a.hello = hello;
+})(a || (a = {}));
+/// <reference path="./reference-a.ts" />
+var b;
+(function (b) {
+    console.log(a.hello("internal module"));
+})(b || (b = {}));
+#@end
+//}
+
+ひとまとまりのファイルとして出力されていますね。
+
+=== 外部モジュール (external modules)
 
 TBD
