@@ -29,6 +29,10 @@ TBD
 
 TBD
 
+==　構造的部分型
+
+TBD
+
 == 共通最適型 (Best Common Type)
 
 #@# [1.3.0での仕様](https://github.com/Microsoft/TypeScript/blob/release-1.3/doc/spec.md#3.10)
@@ -748,11 +752,135 @@ TypeScriptコンパイラのソースコードをざっくり読んだ感じだ�
 
 //footnote[type-guards-with-generics][https://github.com/Microsoft/TypeScript/issues/1283 で議論されるかも？]
 
-=== 全てのtype guardsに共通の仕様
+=== type guardsと論理演算子
 
-TBD || とか && とか ? とか
+&& とか || とか ? とか ! とかの論理演算子にもちゃんと対応しているよ！(@<list>{type-guards-operator})
 
-#@# TODO 仕様書 4.20 の "A type guard of the form x instanceof C, where C is of a subtype of the global type 'Function' and C has a property named 'prototype'" て嘘じゃね？constructor signature 持ってれば Function の subtype だっけ…？
+//list[type-guards-operator][ブール代数みたいな演算に対応してる]{
+#@mapfile(../code/with-types/type-guards-operator.ts)
+var obj: number | boolean | string;
+
+// && 演算子で絞込み
+typeof obj === "string" && obj.charAt(0);
+// 以下のようなコードはエラーになる！
+// error TS2339: Property 'charAt' does not exist on type 'number'.
+// typeof obj === "number" && obj.charAt(0);
+
+// || 演算子でunion typesに
+if(typeof obj === "string" || typeof obj === "boolean") {
+    // string | boolean に絞り込まれる
+} else {
+    // 消去法で number ！ (typeof による type guards だけ)
+}
+
+// 三項演算子は普通にif文と一緒の挙動
+typeof obj === "string" ? obj.charAt(0) : obj;
+// 以下と等価
+if (typeof obj === "string") {
+    obj.charAt(0);
+} else {
+    obj;
+}
+
+// 一応、否定演算子にも対応している
+if (!(typeof obj !== "string")) {
+    // 否定の否定は普通にそのまんまstringだな！ちゃんと絞りこまれます
+    obj.charAt(0);
+}
+#@end
+//}
+
+あんま使わない気がするな！
+
+=== type guardsの弱点
+
+type guardsは型システム上の仕組みだということを忘れてはいけません。
+JavaScriptの実行環境とは全く関係がないのです。
+
+TypeScriptでは、構造的部分型の仕組みにより、クラスが要求されている箇所に、互換性のある別の値を代入することができます。
+
+その仕組を使って、@<list>{type-guards-weakspot}のようなコードが書けてしまいます。
+
+//list[type-guards-weakspot][構造的部分型とtype guards]{
+#@mapfile(../code/with-types/type-guards-weakspot.ts)
+class Sample {
+    str: string;
+}
+
+// 構造的部分型！
+var obj: Sample | Date = {
+    str: "Hi!"
+};
+
+if (obj instanceof Sample) {
+    // 型は Sample に絞られている が！ 絶対に到達しない！
+    // 現在の obj はプロトタイプチェーンにSampleを持たない！
+    console.log(obj.str);
+}
+#@end
+//}
+
+objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
+コンパイル後のJavaScriptコード(@<list>{type-guards-weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると勘違いしやすいです。
+
+//list[type-guards-weakspot.js][コンパイル後のJS]{
+#@mapfile(../code/with-types/type-guards-weakspot.js)
+var Sample = (function () {
+    function Sample() {
+    }
+    return Sample;
+})();
+var obj = {
+    str: "Hi!"
+};
+if (obj instanceof Sample) {
+    console.log(obj.str);
+}
+#@end
+//}
+
+これを回避する方法は2つあります。
+1つ目はtype guardsに頼らず、今まで通りに処理することです(@<list>{type-guards-vs-weakspot1})。
+2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards-vs-weakspot2})。
+
+//list[type-guards-vs-weakspot1][type guardsに頼らず生きる]{
+#@mapfile(../code/with-types/type-guards-vs-weakspot1.ts)
+class Sample {
+    str: string;
+}
+
+// 構造的部分型！
+var obj: Sample | Date = {
+    str: "Hi!"
+};
+
+if (obj !== null) {
+    var str = (<Sample>obj).str;
+    if(typeof str === "string") {
+        console.log(str);
+    }
+}
+#@end
+//}
+
+//list[type-guards-vs-weakspot2][privateな要素があれば構造的部分型で値を偽造できない]{
+#@mapfile(../code/with-types/type-guards-vs-weakspot2.ts)
+class Sample {
+    private _tmp: any;
+    str: string;
+}
+
+// privateなインスタンス変数があるクラスのインスタンスは偽造できない！
+// error TS2322: Type '{ _tmp: null; str: string; }' is not assignable to type 'Sample'.
+//     Property '_tmp' is private in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
+var obj: Sample = {
+    _tmp: null,
+    str: "Hi!"
+};
+#@end
+//}
+
+色々書きましたが、一番の解決策はunion typesやanyを多様せず、真っ当なコードを書けるよう設計することですね。
 
 == 型の別名 (type alias)
 
