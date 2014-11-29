@@ -527,4 +527,96 @@ var b;
 
 === 外部モジュール (external modules)
 
-TBD
+外部モジュールは前述の通り、1ファイル = 1モジュール としてプロジェクトを構成していく方式です。
+@<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts(./foo.js)@<fn>{require-ext} を参照することができます。
+ここでは、./foo が1つのモジュールとして扱われます。
+
+外部モジュールはTypeScriptでは2つの方式があります。
+ちなみに、両方の形式とも同じ文法で書けます。
+ただ、コンパイル時に --module commonjs とするか --module amd とするかだけの違いです。
+なので、ここでは細かいことは解説しません。
+1つ目のCommonJSという形式は、ざっくり言うとNode.jsが採用している仕組みです。
+2つ目のAMDという形式は、ブラウザ上で外部モジュールを利用するための仕組みです。
+
+さて、実際のコード例を見てみましょう。
+foo.ts(@<list>{external-module/foo})、bar.ts(@<list>{external-module/bar})、buzz.ts(@<list>{external-module/buzz})というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
+
+//list[external-module/foo][foo.ts]{
+#@mapfile(../code/typescript-basic/external-module/foo.ts)
+import bar = require("./bar");
+
+// Hello, TypeScript! と表示される
+console.log(bar.hello());
+
+// Good bye, TypeScript! と表示される
+import bye = require("./buzz");
+console.log(bye());
+#@end
+//}
+
+//list[external-module/bar][bar.ts]{
+#@mapfile(../code/typescript-basic/external-module/bar.ts)
+export function hello(word = "TypeScript") {
+    return "Hello, " + word;
+}
+#@end
+//}
+
+//list[external-module/buzz][buzz.ts]{
+#@mapfile(../code/typescript-basic/external-module/buzz.ts)
+function bye(word = "TypeScript") {
+    return "Good bye, " + word;
+}
+
+export = bye;
+#@end
+//}
+
+トップレベルの定義で export したものが別のファイルから参照された時に公開されています。
+コンパイルして結果を確かめてみましょう。
+Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることがわかるでしょう。
+
+//cmd{
+$ tsc --module commonjs foo.ts
+$ cat foo.js
+#@mapfile(../code/typescript-basic/external-module/foo.js)
+var bar = require("./bar");
+console.log(bar.hello());
+var bye = require("./buzz");
+console.log(bye());
+#@end
+$ cat bar.js
+#@mapfile(../code/typescript-basic/external-module/bar.js)
+function hello(word) {
+    if (word === void 0) { word = "TypeScript"; }
+    return "Hello, " + word;
+}
+exports.hello = hello;
+#@end
+$ cat buzz.js
+#@mapfile(../code/typescript-basic/external-module/buzz.js)
+function bye(word) {
+    if (word === void 0) { word = "TypeScript"; }
+    return "Good bye, " + word;
+}
+module.exports = bye;
+#@end
+//}
+
+Node.jsに慣れている人に不可解な仕様を1つ紹介しておきましょう。
+通常、Node.jsでは@<code>{require("./sub/")}とすると自動的に ./sub/index が参照されますが、TypeScriptではそうならないため、明示的に@<code>{require("./sub/index")}としてやる必要があります(@<list>{external-module/reference-sub})。
+
+//list[external-module/reference-sub][ディレクトリを指定してもindex.tsを見てくれない]{
+#@mapfile(../code/typescript-basic/external-module/reference-sub.ts)
+// Node.jsだと sub/ で自動的に sub/index と同じ扱いになるのだが…
+// import sub = require("sub/");
+// TypeScript上では index が省略不可になっている
+import sub = require("sub/index");
+
+console.log(sub.hello());
+#@end
+//}
+
+#@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
+
+//footnote[require-ext][細かく言うと、require("./foo")するとまず ./foo.js が探され、次に ./foo.json、./foo.node と検索されます。]
