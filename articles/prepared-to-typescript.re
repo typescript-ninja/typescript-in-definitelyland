@@ -79,6 +79,144 @@ Microsoftの開発速度に対して明らかについていけてないんで�
 
 さて、とはいえIDEとして非常に完成度の高いWebStormなので使っていきましょう。
 
-ここでは、WebStormを使う上で便利な設定項目をいくつか解説します。
+ここでは、WebStormを使う上で行うべき設定を解説します。
+なお、執筆時に利用しているWebStormのバージョンは9.0.1です。
 
-TODO
+もし、WebStormの操作に困った時はShiftキーを2回ほど連続で押すと "なんでも検索" の小窓が開くので、Preferences とかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
+WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
+
+=== File Watchers の設定
+
+WebStorm上でTypeScriptなファイルを新規作成すると、@<img>{project-open}のような表示がでます。
+
+//image[project-open][File Watcher追加のお誘い]{
+プロジェクト開いて Add watcher のバーが出てるとこ
+//}
+
+File Watcherの初期設定は@<img>{new-watcher-default}のようになります。
+設定を読み取ると以下のようになります。
+
+ * TypeScriptファイルが更新されたらコンパイル
+ * 使うコンパイラはシステムデフォルトのもの
+ * コンパイルオプションは --sourcemap のみ
+ ** --noImplicitAny なし！必須だろ！
+ ** --target es5 なし！
+ ** --out なし！
+
+//image[new-watcher-default][File Watcher初期設定]{
+File Watcherの初期設定の画面
+//}
+
+不満は色々ありますが使ってみます。
+変なコードを書くと@<img>{flymake}のように、ちゃんとエラーが引っかかってきます。
+
+//image[flymake][即座にコンパイル！]{
+flymakeっぽく動作してる画面
+//}
+
+WebStormは独自にTypeScriptコードの解析をしているのですが、精度が微妙に悪くて正しいコードにエラーだ！といったり、不正なコードを見逃したりします。
+そんな時、File Watcherが設定してあるとtscが報告するエラーのみを画面に表示してくれるため、使いやすくなります。
+WebStormで開発する場合、File Watchersは常に有効にするようにしたほうがよいでしょう。
+
+=== 設定の改良
+
+デフォルトの設定では色々と不満があります。
+
+ * 使うコンパイラはシステムデフォルトのもの
+ * コンパイルオプションは --sourcemap のみ
+ ** --noImplicitAny なし！必須だろ！
+ ** --target es5 なし！
+ ** --out なし！
+
+これを、以下のように変えたい！
+
+ * 使うコンパイラはプロジェクトローカルのもの
+ ** 具体的には ./node_modules/.bin/tsc
+ * コンパイルオプションは必要なもの全部
+ ** --noImplicitAny を追加
+ ** --target es5 を追加
+ ** コンパイルする時の対象ファイルを1ファイルに固定
+ ** 必要があれば --out を設定
+ * コンパイルの単位をメインの実装系とテストコード系に2分割したい
+
+それぞれ、理由を説明していきます。
+
+==== 使うコンパイラはプロジェクトローカルのもの
+
+これは理由は単純明快ですね。
+プロジェクト毎に更新頻度も違うので、新しいTypeScriptへの追従が遅い場合があるからです。
+足並みを揃えて全部のプロジェクトのTypeScriptコンパイラのバージョンをあげるなど、不可能です。
+なので、プロジェクトローカルにTypeScriptコンパイラをインストールしてやる必要があります。
+プロジェクトトップで以下のコマンドを実行しましょう。
+
+//cmd{
+$ npm init
+# 設問全部とりあえずEnterでOK
+$ npm install typescript --save-dev
+# 省略
+$ ./node_modules/.bin/tsc --version
+message TS6029: Version 1.3.0.0
+//}
+
+これを、File WatcherのProgram欄に指定します。
+見た目上絶対パスで指定されているように見えますが、プロジェクト内部にあるファイルを指定したら内部的には以下のように保存されるので気にしないで大丈夫です。
+
+@<code>{<option name="program" value="$PROJECT_DIR$/node_modules/.bin/tsc" />}
+
+==== コンパイルオプションは必要なもの全部
+
+1つずつ解説していきましょう。
+
+ * --noImplicitAny を追加
+
+これはTypeScript開発時の必須オプションですね。
+型注釈が漏れていたり、実は型推論にミスっていた時にエラーにしてくれるオプションです。
+かならず併用しましょう。
+
+ * --target es5 を追加
+
+get, set アクセサを使うために必要です。
+古いブラウザの事をうじうじと考えるのはやめましょう。
+
+ * コンパイルする時の対象ファイルを1ファイルに固定
+
+これは筆者の経験則によるものです。
+ファイルのコンパイル対象をデフォルトの 現在編集しているファイル($FileName$) にしていると、プロジェクト内の全てのファイルが単独でコンパイルできるようになっている必要があります。
+つまり、ある1つのファイルの中に、全ての依存関係を解決するreference commentを書いてまわらないといけないのです。
+筆者も最初はこの方針で作業していたのですが、管理がものすごくめんどくさいこと、循環依存が発生した時に--outオプションを併用した時の出力順制御が難しいこと、TypeScript 1.1.0-1 からコンパイルにかかる時間が大幅に改善したこと、上記4点を踏まえて、rootになるファイルを頂点にtree上に依存関係を定義するようにしました。
+File Watcherやgruntなどのツールでは、このrootとして設計したファイルのみを常にコンパイルするようにします。
+
+ * 必要があれば --out を設定
+
+依存関係をtree上に綺麗に定義した恩恵として、ファイルの出力結果が予想しやすくなったため、後でconcatする時に順番を手動で制御する作業をもう一回やるよりはコンパイラに任せたほうが楽です。
+
+以上を踏まえて、Arguments の所に以下を指定します。
+
+@<code>{--sourcemap --noImplicitAny --target es5 --out lib/index.js lib/index.ts}
+
+==== コンパイルの単位をメインの実装系とテストコード系に2分割したい
+
+単一のrootとなるファイルを構成する方針にした場合、本チャンの実装とテストコードはさすがに分割してコンパイルする必要がありますね。
+File Watcher 1つでは、1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
+
+==== 総括
+
+Scopeを使ってプロジェクトを2つに区切って、File Watcherをそれに対応させて2つ作って、コンパイルオプションを変える！
+こうだな！！
+(@<img>{main-and-test-structure}、@<img>{scope-main}、@<img>{scope-test}、@<img>{main-watcher}、@<img>{test-watcher})
+
+//image[main-and-test-structure][lib/ と test/ 配下にコードとテストコードを入れる]{
+プロジェクト全体図
+//}
+
+//image[scope-main][lib/ に対する Scope の設定]{
+//}
+
+//image[scope-test][tests/ に対する Scope の設定]{
+//}
+
+//image[main-watcher][mainのScope に対する Watcher の設定]{
+//}
+
+//image[test-watcher][testのScope に対する Watcher の設定]{
+//}
