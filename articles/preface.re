@@ -5,19 +5,17 @@
 本書は、ECMAScript 3レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
 また、解説するTypeScriptの内容には執筆時点(1.3.0)ではまだ導入されていないもろもろの構文についての解説も含みます。
 
-本書の全てのサンプルコードは以下のうちのどちらかのバージョンでのコンパイルを確認しております。
+本書の全てのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
+現時点で最新のTypeScriptコンパイラは以下の通り。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")
 Version 1.3.0.0
 #@end
 
-もしくは、TypeScriptリポジトリの
-
+現時点でTypeScriptリポジトリのmaster/HEADは以下の通り。
 #@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
 d1bf508a7b74d3501e46b0dd35a79f18e9dcf29c
 #@end
-
-です。
 
 本書の内容は以下の通りです。
 
