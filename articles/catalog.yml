@@ -8,6 +8,6 @@ CHAPS:
   - definition-file.re
 #  - es6.re
 #  - another-transpiler.re
+#  - antipattern.re
 
 POSTDEF:
-  - antipattern.re
