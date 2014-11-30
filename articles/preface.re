@@ -14,7 +14,7 @@ Version 1.3.0.0
 もしくは、TypeScriptリポジトリの
 
 #@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
-05fd2e9fb3db8c3af0248a9d16ca198944c91a7e
+d1bf508a7b74d3501e46b0dd35a79f18e9dcf29c
 #@end
 
 です。
