@@ -325,7 +325,51 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 
 == インタフェース
 
-TBD
+インタフェースは多くのOOPな言語に存在しているので、ご存知の型も多いでしょう。
+TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
+一番基本的な使い方は名前付きオブジェクト型リテラルを作ることでしょうか。
+インタフェースの中に書ける記法はオブジェクト型リテラルそのまんまです。
+
+TypeScriptでのインタフェースの酷使されっぷりを、@<list>{interface/basic}で確かみてみろ！！
+
+//list[interface/basic][酷使されるインタフェースさん]{
+#@mapfile(../code/with-types/interface/basic.ts)
+// 一般的な用法
+interface A {
+    str: string;
+}
+// クラスに特定の実装を強制する
+class AImpl implements A {
+    str: string;
+}
+var objA: A = new AImpl();
+
+// インタフェースは他のインタフェースを拡張できる
+interface B1 {
+    str: string;
+}
+interface B2 extends B1 {
+    num: number;
+}
+// 代入する値は実装したクラスとかじゃなくてもええんじゃ！
+var objB: B2 = {
+    str: "string",
+    num: 42
+};
+
+// interfaceはクラスすら拡張する！(実装はなかったことになる
+class FooClass {
+    constructor(public num: number) {}
+}
+interface C extends FooClass {
+    str: string;
+}
+var objC: C = {
+    num: 42,
+    str: "string"
+};
+#@end
+//}
 
 ==　構造的部分型
 
