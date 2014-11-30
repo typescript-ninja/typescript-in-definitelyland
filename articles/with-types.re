@@ -8,6 +8,7 @@
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO || 演算子あたりのだるさ
 #@# TODO 省略可能引数
+#@# TODO オーバーロードの選択アルゴリズム
 
 っしゃオラー！
 TypeScriptの華はやはり型！
@@ -1449,9 +1450,3 @@ obj = 1;
 @<strong>{interfaceでできることをtype aliasでやるな！}
 
 //footnote[type-alias-with-generics][こういうコードをmizchi君が書きたがってた https://twitter.com/mizchi/statuses/537908273865703424]
-
-== その他取りこぼし
-
-随時追加すること
-
- * オーバーロードの選択アルゴリズム
