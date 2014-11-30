@@ -7,6 +7,7 @@
 #@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.10.7
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO || 演算子あたりのだるさ
+#@# TODO 省略可能引数
 
 っしゃオラー！
 TypeScriptの華はやはり型！
@@ -296,9 +297,31 @@ obj2 = obj;
 
 プロパティシグニチャ + 関数な型 の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
-== 型としての関数
+== 関数型リテラル(function type literals)
 
-TBD
+関数も型として表現することができます(@<list>{function-types/basic})。
+
+//list[function-types/basic][関数も型として表現可能]{
+#@mapfile(../code/with-types/function-types/basic.ts)
+var func: (value: string) => string;
+// 当てはまる値はこんな感じ
+func = word => "Hello, " + word;
+func = (word: string) => {
+    return "Hello, " + word;
+};
+func = function(word: string) {
+    return "Hello, " + word;
+};
+
+// 型に対して実装の引数の数が少ないのはOK
+func = () => "Hello, TypeScript";
+
+// 型に対して実装の引数の数が多い場合、省略可能かデフォルト値付きでなければならない
+func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
+#@end
+//}
+
+アロー関数式の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く場所が違うので間違えないように注意が必要です。
 
 == インタフェース
 
