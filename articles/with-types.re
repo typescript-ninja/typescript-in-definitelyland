@@ -371,9 +371,104 @@ var objC: C = {
 #@end
 //}
 
-==　構造的部分型
+==　構造的部分型 (Structural Subtyping)
 
-TBD
+構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
+TypeScriptでは、オブジェクトの互換性を型の一致ではなく、構造が一致するかどうかで判定します(@<list>{structural-subtypings/basic})。
+
+//list[structural-subtypings/basic][大体一緒ならまぁ一緒ってことでいいじゃん]{
+#@mapfile(../code/with-types/structural-subtypings/basic.ts)
+// クラス Foo はstring型のstrという名前のプロパティとnumber型のnumという名前のプロパティを持つ
+class Foo {
+    str = "string";
+    num = 1;
+}
+
+// 構造が完全に一致…！！！
+// 構造が同じならもう同じってことでいいんじゃね！？
+var obj: Foo = {
+    str: "Hi!",
+    num: 42
+};
+#@end
+//}
+
+そのため、@<list>{structural-subtypings/class-compat}のようなコードもコンパイルが通ります。
+
+//list[structural-subtypings/class-compat][Pointインタフェースが要求されているが？]{
+#@mapfile(../code/with-types/structural-subtypings/class-compat.ts)
+interface Point {
+    x: number;
+    y: number;
+}
+// Point の実装を強制する！！！
+class PointImpl1 implements Point {
+    constructor(public x: number, public y: number) {}
+}
+// Point の実装が強制されないけど互換性はある！
+class PointImpl2 implements Point {
+    constructor(public x: number, public y: number) {}
+}
+
+// 引数に Point をとる
+function double(p: Point): Point {
+    return {
+        x: p.x * 2,
+        y: p.y * 2
+    };
+}
+// 以下の全ては正しいコードとなります
+double(new PointImpl1(1, 2));
+double(new PointImpl2(3, 4));
+double({
+    x: 5,
+    y: 6,
+    z: 7  // 要素が多すぎる分には問題ない
+});
+#@end
+//}
+
+通るには通りますが、コードの堅牢性としては、きちんとimplements節を使い、クラスの仕様であると主張したほうが良いコーディングスタイルになる場合のほうが多いでしょう。
+
+なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます(@<list>{structural-subtypings/optional})。
+
+//list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
+#@mapfile(../code/with-types/structural-subtypings/optional.ts)
+interface Point {
+    x: number;
+    y: number;
+    color?: string;
+}
+function printPoint(p:Point):void {
+    var message = "x=" + p.x + ", y=" + p.y;
+    if (p.color) {
+        message = p.color + "(" + message + ")";
+    }
+    console.log(message);
+}
+// optinal なプロパティはなくても大丈夫！
+// x=1, y=2 と表示される
+printPoint({
+    x: 1,
+    y: 2
+});
+// red(x=1, y=2) と表示される
+printPoint({
+    x: 1,
+    y: 2,
+    color: "red"
+});
+// とはいえ、型が不一致だと怒られる。
+// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }' is not assignable to parameter of type 'Point'.
+//   Types of property 'color' are incompatible.
+//     Type 'boolean' is not assignable to type 'string'.
+// printPoint({
+//     x: 1,
+//     y: 2,
+//     color: true
+// });
+#@end
+//}
 
 == 共通最適型 (Best Common Type)
 
