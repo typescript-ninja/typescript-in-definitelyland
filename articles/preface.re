@@ -3,9 +3,23 @@
 == 本書について
 
 本書は、ECMAScript 3レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
-また、解説するTypeScriptの内容には執筆時点(1.1.0-1)ではまだ導入されていないもろもろの構文についての解説も含みます。
+また、解説するTypeScriptの内容には執筆時点(1.3.0)ではまだ導入されていないもろもろの構文についての解説も含みます。
 
-内容は以下の通りです。
+本書の全てのサンプルコードは以下のうちのどちらかのバージョンでのコンパイルを確認しております。
+
+#@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")
+Version 1.3.0.0
+#@end
+
+もしくは、TypeScriptリポジトリの
+
+#@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
+05fd2e9fb3db8c3af0248a9d16ca198944c91a7e
+#@end
+
+です。
+
+本書の内容は以下の通りです。
 
  1. @<chapref>{typescript-basic}
  2. @<chapref>{with-types}

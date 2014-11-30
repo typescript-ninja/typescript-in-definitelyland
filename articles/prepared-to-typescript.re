@@ -34,7 +34,9 @@ cutting edgeな最新版コンパイラを利用したい場合は以下の手�
 $ npm install -g Microsoft/TypeScript
 省略
 $ tsc -v
+#@mapoutput(../node_modules/.bin/tsc -v)
 message TS6029: Version 1.3.0.0
+#@end
 //}
 
 未リリースのTypeScriptを常用するのは怖いので、一般的にはプロジェクトローカルで利用するのがよいでしょう。
