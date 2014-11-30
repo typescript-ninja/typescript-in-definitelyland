@@ -531,8 +531,6 @@ var array = [new A(), new B(), new C()];
 #@end
 //}
 
-#@# TODO なお、master/HEADでもarrayは A[] になる模様。 (A | B | C)[] ではない。仕様をよく読むこと。
-
 以上、解散！
 
 == タプル型 (tuple types)
@@ -827,8 +825,7 @@ var v = test(1, true);
 #@end
 //}
 
-TODO https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
-TODO https://twitter.com/mizchi/statuses/537908273865703424 このへん 親クラスがunion typesで子でnarrowsする
+#@# TODO Contextual Union Types https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
 #@# NOTE http://togetter.com/li/749889
 #@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと

@@ -45,7 +45,7 @@ LINQや拡張メソッドは確かに便利ですし、作者がC#と同じア�
 さて、「TypeScriptが将来のJavaScriptそのものになる？妄想乙」と思われた読者諸兄もおられるでしょう。
 あながちそれが誇大妄想ではないのではないか？という証跡が最近出てきましたのでここで紹介しておきます。
 
-GoogleがAngularJS 2.0のために開発する新言語AtScriptと、Facebookからも新言語Flowの存在が公表されました。
+GoogleがAngularJS 2.0のために開発する新言語AtScriptと、Facebookからも新言語Flowが公表されました。
 これら2つの言語は、両方ともTypeScriptのsuper set(上位互換)として設計されるそうです。
 MicrosoftとGoogle, Facebookの3巨人がTypeScriptに賭けると言っているのです。
 将来的にTypeScriptが時代の本流になる、という考えを妄想と切って捨てることはできないでしょう。

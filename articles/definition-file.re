@@ -650,8 +650,6 @@ bye(() => "function");
 #@end
 //}
 
-#@# TODO http://goo.gl/LHRXAr なぜ全部OKじゃないのか？
-
 === 外部モジュールの定義の統合
 
 @<strong>{利用可能になったバージョン 1.3.0}
