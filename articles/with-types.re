@@ -160,10 +160,10 @@ console.log(num);
 
 === コンストラクタシグニチャ
 
-3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクタシグニチャです(@<list>{object-type-literal/constructor-signature})。
+3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクタシグニチャです(@<list>{object-type-literal/constructor-signature-invalid})。
 
-//list[object-type-literal/constructor-signature][newできるんじゃよ]{
-#@mapfile(../code/with-types/object-type-literal/constructor-signature.ts)
+//list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
+#@mapfile(../code/with-types/object-type-literal/constructor-signature-invalid.ts)
 var clazz: {
     new (): any;
 };
