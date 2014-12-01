@@ -42,10 +42,12 @@ TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScr
 
 実際に、TypeScriptはECMAScriptのsuper set(上位互換)であることを標榜しています。
 つまり、ECMAScript+静的型付け=TypeScriptです。
-そして、"TypeScript独自の仕様"というものを避けて通っています。
+そして、"TypeScript独自の仕様"というものを注意深く避けてきています。
 
-他のaltJS、例えばCoffeeScriptやDartは、JavaScriptとは全く違う独自の記法で記述し、変換結果のJavaScriptも見づらく、人間に優しいとは言えません。
-これらは独自路線に行くことで、JavaScriptの辛さを軽減しようとしています。
+他のaltJS、例えばCoffeeScriptやDartは、JavaScriptとは全く違う独自の記法で記述します。
+これは記述はしやすいですが、変換結果のJavaScriptは見づらく、人間に優しい出力とは言えません。
+つまりこれらは独自路線に行くことで、JavaScriptの辛さを軽減しようとしています。
+
 一方、TypeScriptは先に述べたようにJavaScriptを踏襲します。
 @<href>{http://mozaic.fm/post/96461640633/8-altjs,mozaic.fm出張版 #8}でもあんどうやすしさんと一緒に考えましたが、そこでの結論も「JSの完全な置換えを目指すDartは夢、TypeScriptは現実」というものでした。
 
@@ -55,13 +57,13 @@ TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScr
 LINQや拡張メソッドは確かに便利ですし、作者がC#と同じアンダース・ヘルスバーグ氏なのでそういう期待が湧くのは、理解できますが、将来のECMAScriptに入ることは現時点では考えにくいでしょう。
 
 さて、「TypeScriptが将来のJavaScriptそのものになる？妄想乙」と思われた読者諸兄もおられるでしょう。
-あながちそれが誇大妄想ではないのではないか？という証跡が最近出てきましたのでここで紹介しておきます。
+あながちそれが誇大妄想ではないのではないか？という証跡が最近出てきています。
 
 GoogleがAngularJS 2.0のために開発する新言語AtScriptと、Facebookからも新言語Flowが公表されました。
-これら2つの言語は、両方ともTypeScriptのsuper set(上位互換)として設計されるそうです。
+これら2つの言語は、両方ともTypeScriptの上位互換または互換性を考慮して設計されるそうです。
 MicrosoftとGoogle, Facebookの3巨人がTypeScriptに賭けると言っているのです。
-将来的にTypeScriptが時代の本流になる、という考えを妄想と切って捨てることはできないでしょう。
-
-#@# TODO ソース探してきて貼る
+将来的にTypeScriptが時代の本流になる、という考えを妄想と切って捨てることはできないでしょう@<fn>{advent-calendar}。
 
 というわけで、Dartが完全にJSを置き換える可能性はありますが、今のところ私はTypeScriptに賭けていこうと思います。
+
+//footnote[advent-calendar][詳しくは http://qiita.com/vvakame/items/bf4d1e339d5815026fbb にまとめました]

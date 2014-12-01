@@ -12,18 +12,18 @@
     "update": "git submodule update"
   },
   "devDependencies": {
-    "typescript-formatter": "0.1.4",
-    "typescript": "1.3.0",
     "grunt": "0.4.5",
+    "grunt-contrib-clean": "0.6.0",
     "grunt-dtsm": "0.1.1",
+    "grunt-exec": "0.4.6",
+    "grunt-open": "0.2.3",
     "grunt-ts": "1.12.1",
     "grunt-tslint": "1.0.1",
     "grunt-typescript-formatter": "0.0.1",
-    "grunt-exec": "0.4.6",
-    "grunt-contrib-clean": "0.6.0",
-    "grunt-open": "0.2.3",
-    "load-grunt-tasks": "1.0.0"
+    "load-grunt-tasks": "1.0.0",
+    "tslint": "^1.0.1",
+    "typescript": "1.3.0",
+    "typescript-formatter": "0.1.4"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

@@ -807,23 +807,63 @@ TypeScriptでコードを書く上では、1ファイル1インタフェースor
 
 === 最終チェック！
 
-TBD
-tslintと--noImplicitAnyについては必ず書く
-
 やった！型定義ファイルが書けたぞ！
 己の出来高に満足する前に、もう少しだけやっておきたいことがあります。
-それが、tslintによるチェックと、--noImplicitAnyをつけてのコンパイルです。
+それが、--noImplicitAnyをつけての試しコンパイルとtslintによるチェックです。
+
+==== --noImplitictAny
+
+TypeScriptコンパイラの最重要オプション、--noImplicitAnyを使って型定義ファイルをコンパイルしてみましょう。
+@<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードを突っ込んでみます。
+
+//list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
+#@mapfile(../code/definition-file/noImplicitAny/basic-invalid.d.ts)
+declare class Sample {
+    // 返り値の型を指定し忘れている！
+    // error TS7010: 'method', which lacks return-type annotation, implicitly has an 'any' return type.
+    method();
+}
+#@end
+//}
+
+//cmd{
+$ tsc --noImplicitAny definition.d.ts
+definition.d.ts(3,5): error TS7010: 'method', which lacks return-type annotation, implicitly has an 'any' return type.
+//}
+
+返り値の型が書いていないため暗黙的にanyになってしまいました。
+これはあかんですよ！とコンパイラが教えてくれます。
+anyが紛れ込んでくるのはTypeScriptコードを書く上で、かなり上位に入る悪夢です。
+型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
 
 ==== tslint
 
 lint、というプログラムの種類があります。
 ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくれます。
 
-TBD
+TypeScriptではtslintというプログラムが一般的に使われています。
+tslintのリポジトリは@<href>{https://github.com/palantir/tslint,こちら}です。
 
-==== --noImplitictAny
+tslintはコンパイルはできるんだけど、悪いコードである部分を検出してくれます。
+例を見てみましょう(@<list>{tslint/basic})。
 
-TBD
+//list[tslint/basic][ん？何かおかしなコードがあるぞ？]{
+#@mapfile(../code/definition-file/tslint/basic.ts)
+// name must be in pascal case
+class foo {
+}
+// unused variable: 'bar'
+var bar: any;
+#@end
+//}
+
+このコードの悪いところは、クラス名が先頭大文字じゃない！一回も参照していない変数がある！というところです。
+その両方とも、tslintは検出してくれています。
+
+tslintは必ず設定ファイルを必要とします。
+今のところ、TypeScript界における統一見解は存在していないので、@<href>{https://github.com/palantir/tslint/blob/master/tslint.json,tslintが使ってる設定ファイル}を参考にしてみるのがよいかもしれません。
+
+#@# TODO 全設定項目解説とおすすめ設定を書きたいなぁ
 
 == Let's contribution!
 
