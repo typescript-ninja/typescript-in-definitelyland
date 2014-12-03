@@ -7,9 +7,9 @@
 # from https://github.com/kmuto/review/blob/master/doc/sample.yaml
 
 # ブック名(ファイル名になるもの。ASCII範囲の文字を使用)
-bookname: c87-typescript
+bookname: typescript-in-definitelyland
 # 書名
-booktitle: TypeScriptで本気を出すための本
+booktitle: TypeScript in Definitelyland
 # 著者
 aut: わかめ まさひろ
 prt: TechBooster
@@ -36,7 +36,7 @@ description:
 # coverfile: カバーページのbody要素内に挿入する内容を記述したファイル名
 # coverimage: 表紙用画像ファイル
 # 固有IDに使用するドメイン
-urnid: https://github.com/TechBooster/C87-TypeScript
+urnid: http://typescript.ninja/typescript-in-definitelyland/
 # CSSファイル (yamlファイルおよびReVIEWファイルを置いたディレクトリにあること
 stylesheet: stylesheet.css
 # LaTeX用のスタイルファイル(styディレクトリ以下に置くこと)
