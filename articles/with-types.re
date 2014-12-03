@@ -11,9 +11,11 @@
 #@# TODO オーバーロードの選択アルゴリズム
 #@# TODO 型アサーション
 
-っしゃオラー！
 TypeScriptの華はやはり型！
-@<chapref>{typescript-basic}など所詮児戯に過ぎぬわッ！！
+@<chapref>{typescript-basic}など所詮児戯に過ぎぬッ！！
+
+本章ではTypeScriptの型周りのうち、基本の部分と1.3.0以降に新しく増えた部分を解説していきます。
+#@# TODO 頑張りたい
 
 #@# NOTE https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#23-declarations
 まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
@@ -62,7 +64,10 @@ objB = objA;
 
 //list[object-type-literal/basic-usage][でも、正直読みづらい]{
 #@mapfile(../code/with-types/object-type-literal/basic-usage.ts)
-function move(value: {x: number; y: number; }, delta: {dx?: number; dy?: number;}): {x: number; y: number} {
+function move(
+            value: {x: number; y: number; },
+            delta: {dx?: number; dy?: number;}
+        ): {x: number; y: number} {
     if(delta.dx) {
         value.x += delta.dx;
     }
@@ -75,18 +80,18 @@ function move(value: {x: number; y: number; }, delta: {dx?: number; dy?: number;
 var result = move({x: 1, y: 2}, {dx: -2});
 // 以下のように表示される
 // {
-// "x": -1,
-// "y": 2
+//   "x": -1,
+//   "y": 2
 // }
 console.log(JSON.stringify(result, null, 2));
 #@end
 //}
 
-これから、オブジェクト型リテラルで使える書き方5つを見ていきます。
+では、オブジェクト型リテラルで使える書き方5つを見ていきましょう。
 
-//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではないのだ！！]
+//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではありません。]
 
-=== プロパティシグニチャ
+=== プロパティシグニチャ (property signatures)
 
 1つ目は、実は既に登場しているプロパティを書くための書き方、プロパティシグニチャです(@<list>{object-type-literal/property-signiture})。
 
@@ -102,9 +107,9 @@ obj = {
 #@end
 //}
 
-めっちゃわかりやすいですね。
+素直でわかりやすいですね。
 
-=== コールシグニチャ
+=== コールシグニチャ (call signatures)
 
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す書き方、コールシグニチャです(@<list>{object-type-literal/call-signature})。
 
@@ -127,7 +132,7 @@ console.log(str);
 #@end
 //}
 
-一応、オーバーロードも表現可能です(@<list>{object-type-literal/call-signature-overload})。
+オーバーロードも表現可能です(@<list>{object-type-literal/call-signature-overload})。
 
 //list[object-type-literal/call-signature-overload][オーバーロードも表現可能]{
 #@mapfile(../code/with-types/object-type-literal/call-signature-overload.ts)
@@ -158,9 +163,9 @@ console.log(num);
 
 実装が煩雑になるのでなるべくオーバーロードは避けたいですね。
 
-=== コンストラクタシグニチャ
+=== コンストラクトシグニチャ (construct signatures)
 
-3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクタシグニチャです(@<list>{object-type-literal/constructor-signature-invalid})。
+3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクトシグニチャです(@<list>{object-type-literal/constructor-signature-invalid})。
 
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
 #@mapfile(../code/with-types/object-type-literal/constructor-signature-invalid.ts)
@@ -184,17 +189,18 @@ new Hello();
 #@end
 //}
 
-TypeScriptのコードの書き方の範疇では、クラスを定義しなければコンストラクタシグニチャにマッチするコードを書くことはできません。
+TypeScriptのコードの書き方の範疇では、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。
 型アサーションを使って@<code>{<any>}で無理やり回避する方法はありますが、あまり使わないほうがよいでしょう。
 
-コンストラクタシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能ですが、実装するのがしちめんどくさいどころの話ではないのでほどほどにしましょう。
+コンストラクトシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能です。
+しかし、実装するのがしちめんどくさいどころの話ではないのでほどほどにしましょう。
 
-コンストラクタシグニチャは主に型定義ファイルの作成時にお世話になります。
+コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。
 
-=== インデックスシグニチャ
+=== インデックスシグニチャ (index signatures)
 
 4つ目は、インデックスシグニチャです。
-添字によるプロパティアクセスに対する型を表すことができます(@<list>{object-type-literal/index-signature})。
+添字によるプロパティアクセスに対して、型を当てはめることができます(@<list>{object-type-literal/index-signature})。
 
 //list[object-type-literal/index-signature][プロパティアクセスカッコツキ]{
 #@mapfile(../code/with-types/object-type-literal/index-signature.ts)
@@ -234,7 +240,7 @@ objB = {
 #@end
 //}
 
-インデックスシグニチャの型と、インデックスシグニチャ以外の(例えばプロパティシグニチャ)の型と矛盾が生じないようにする必要があります。
+インデックスシグニチャの型と、インデックスシグニチャ以外の(例えばプロパティシグニチャ)の型との間に矛盾が生じないようにする必要があります。
 
 ちなみに、TypeScriptは@<list>{object-type-literal/index-access-sample-invalid}のように、文字列リテラルによるアクセスも許可しています。
 
@@ -260,12 +266,12 @@ var str2 = obj[propertyName];
 #@end
 //}
 
-インデックスシグニチャの利用は静的な検証の恩恵からするりと外れるを考慮し、安易に行わないようにしましょう。
+インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。
 
-=== メソッドシグニチャ
+=== メソッドシグニチャ (method signatures)
 
 最後の5つ目は、メソッドシグニチャです。
-あるプロパティがメソッドであるものとして表現することができます(@<list>{object-type-literal/method-signature})。
+あるプロパティがメソッドであることを表現することができます(@<list>{object-type-literal/method-signature})。
 
 //list[object-type-literal/method-signature][メソッドの定義っぽい]{
 #@mapfile(../code/with-types/object-type-literal/method-signature.ts)
@@ -297,7 +303,7 @@ obj2 = obj;
 #@end
 //}
 
-プロパティシグニチャ + 関数な型 の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
+"プロパティシグニチャ + 関数な型"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
 == 関数型リテラル(function type literals)
 
@@ -323,16 +329,16 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 #@end
 //}
 
-アロー関数式の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く場所が違うので間違えないように注意が必要です。
+アロー関数式の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く場所の@<code>{=>}の前後が違うので間違えないように気をつけましょう。
 
 == インタフェース
 
-インタフェースは多くのOOPな言語に存在しているので、ご存知の型も多いでしょう。
+インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
-一番基本的な使い方は名前付きオブジェクト型リテラルを作ることでしょうか。
+TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。
 インタフェースの中に書ける記法はオブジェクト型リテラルそのまんまです。
 
-TypeScriptでのインタフェースの酷使されっぷりを、@<list>{interface/basic}で確かみてみろ！！
+TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
 
 //list[interface/basic][酷使されるインタフェースさん]{
 #@mapfile(../code/with-types/interface/basic.ts)
@@ -373,10 +379,11 @@ var objC: C = {
 #@end
 //}
 
-==　構造的部分型 (Structural Subtyping)
+== 構造的部分型 (Structural Subtyping)
 
 構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
-TypeScriptでは、オブジェクトの互換性を型の一致ではなく、構造が一致するかどうかで判定します(@<list>{structural-subtypings/basic})。
+TypeScriptでは、構造が一致するかどうかで型の互換性を判定します(@<list>{structural-subtypings/basic})。
+そこに実際の継承関係は必要ありません。
 
 //list[structural-subtypings/basic][大体一緒ならまぁ一緒ってことでいいじゃん]{
 #@mapfile(../code/with-types/structural-subtypings/basic.ts)
@@ -395,7 +402,7 @@ var obj: Foo = {
 #@end
 //}
 
-そのため、@<list>{structural-subtypings/class-compat}のようなコードもコンパイルが通ります。
+そのため、@<list>{structural-subtypings/class-compat}のようなコードもTypeScriptとしては正しいです。
 
 //list[structural-subtypings/class-compat][Pointインタフェースが要求されているが？]{
 #@mapfile(../code/with-types/structural-subtypings/class-compat.ts)
@@ -430,7 +437,7 @@ double({
 #@end
 //}
 
-通るには通りますが、コードの堅牢性としては、きちんとimplements節を使い、クラスの仕様であると主張したほうが良いコーディングスタイルになる場合のほうが多いでしょう。
+通るには通りますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうが良いコーディングスタイルになります。
 
 なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます(@<list>{structural-subtypings/optional})。
 
@@ -439,7 +446,7 @@ double({
 interface Point {
     x: number;
     y: number;
-    color?: string;
+    color?: string; // なくてもいい
 }
 function printPoint(p:Point):void {
     var message = "x=" + p.x + ", y=" + p.y;
@@ -483,13 +490,13 @@ printPoint({
 後述の tuple types, 及び union types が導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。
 現在の最新仕様ではBCTという概念そのものが消滅してますね…。
 こぇー…。
-本書執筆時点では1.3.0しかリリースされていないため、一応現行では生きてる仕様なのですが。
-まぁ、そりゃunion typesに置き換えられてしまいますよね…。
+本書執筆時点では1.3.0しかリリースされていないため、一応現行では生きてる仕様なのですが…。
+まぁ、そりゃ、より理解しやすいunion typesに置き換えられてしまいますよね…。
 
 #@# TODO 最新の記述にあわせる
 #@# TODO 本校執筆時 https://github.com/Microsoft/TypeScript/blob/9a5df8585bdb46427074b53fc0e46bc4f52dd261/doc/spec.md#4.12.2
 
-まぁ、消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
+消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
 Best Common Type の名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムの元に型が決定されていました。
 例えば、@<list>{bct-basic-1.3.0}のような感じ。
@@ -514,8 +521,8 @@ function test() {
 1つ目は配列の要素の型が一致しないため、BCTを求めた結果、共通のsuper typeがなかったので {} になっています。
 2つ目は関数のreturnステートメントが2つありますが、両者で型が一致しなかったので {} になり、結果コンパイルエラーとして怒られています。
 
-本当に共通の要素がある場合、それに収束したりします。
-例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります。
+本当に共通の要素がある場合、それに収束します。
+例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります(@<list>{bct-class-1.3.0})。
 
 //list[bct-class-1.3.0][あまり見かけないBCTが役に立つ例]{
 #@mapfile(../code/with-types/bct-class-1.3.0.ts)
@@ -545,15 +552,15 @@ var array = [new A(), new B(), new C()];
 @<strong>{導入されたバージョン 1.3.0}
 
 tuple(たぷる)は、任意の数の要素の組です。
-JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleはただのArrayです。
+JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
 既存のJavaScriptの資産を使おうとした時に、配列の形で多値を返してくるライブラリが稀にあります。
 タプル型はおそらくそういった時に使うためのもので、TypeScriptでコードを書く時に多様するものではないでしょう。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
-タプル型は型の世界でしか登場しません。
+タプル型は型の世界にしか登場せず、実装としてコンパイル後は消えてしまいます。
 記述方法は配列の型指定に @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
-記述例を見てみましょう@<list>{tuple1}。
+例を見てみましょう@<list>{tuple1}。
 
 //list[tuple1][基本的な例]{
 #@mapfile(../code/with-types/tuple1.ts)
@@ -597,7 +604,7 @@ tuple[1].hello(); // おー、静的に検証される！
 
 Good!いいですね。
 
-タプル型のない今まで(1.1.0-1以前)のTypeScriptでは@<list>{without-tuple}のような、数値添字で型安全 or 配列として利用可能 という究極の選択をしなければならなかったですからね…。
+タプル型のない今まで(1.1.0-1以前)のTypeScriptでは@<list>{without-tuple}のような、数値添字で型安全 or 配列として利用可能 という究極の選択をしなければならなかったのです…。
 辛かった。
 
 //list[without-tuple][TypeScript 1.1.0-1 までの苦しい運用]{
@@ -614,17 +621,16 @@ tuple[1].hello(); // おー、静的に検証される！
 //}
 
 さて、タプル型の重箱の隅を見て行きましょう。
-要素数が多すぎる場合、指定されていない値の型はBCTになります。
+要素数が多すぎる場合、指定されていない値の型はBCT(1.3.0まで)か、union types(1.4.0以降)になります。
 その例を見てみましょう(@<list>{tuple2})。
-TODO 1.4.0でのBCTの扱いが正しいか確認する
 
 //list[tuple2][値の要素数が多すぎる場合]{
 #@mapfile(../code/with-types/tuple2.ts)
 // 要素が多い分にはOKだ！
 var tuple: [string, number] = ["str", 1, "test"];
 
-// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまりここでは string | number になる。
 // 1.3.0 では型指定されていない要素は BCT(Best Common Type) つまりここでは {} になる
+// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまりここでは string | number になる。
 var value = tuple[2];
 
 // 1.3.0 では以下の記述は正しい
@@ -649,9 +655,9 @@ tuple[0].charAt(0);
 //}
 
 …悲しい結果になりました。
-@<code>{[1, true]}のような配列のリテラルをtuple typesに推論しないのはおそらくこういった事情でしょう。
+@<code>{[1, true]}のような配列のリテラルをtuple typesに推論しないのはおそらくこのためでしょう。
 
-unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをフォローすることは不可能です。
+unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
 TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(@<list>{tuple-unshift-1.3.0})。
@@ -679,19 +685,21 @@ tuple[0].charAt(0);
 @<strong>{導入されるバージョン 1.4.0}
 
 はい、皆様待望の機能でございます。
-言ってはならないあの界隈がよく使う用語を使って解説しないといけないのでビクビクですね。
+"名前を言ってはいけないあの界隈"がよく使う用語を使って解説しないといけないのでビクビクですね。
 
-一番最初に書いておくけど@<strong>{積極的にTypeScriptのコード書く時に使うもんじゃないぞ！！}
+一番最初に書いておくけど@<strong>{TypeScriptのコード書く時に積極的に使うものじゃあないぞ！！}
 
 じゃあ解説していきましょう。
 union typesはいわゆる直和型でございます。
-この変数の値は、アレか、コレか、ソレ！のどれか。
-どれかは知らん。
+この変数の値の型は、アレか、コレか、ソレ！のどれか。
+どれかはわからない。
 みたいな感じ。
 
 なんのために入ったのか？というと、既存JavaScriptにより良い型定義を与えるために入った…！！と言ってしまっていいでしょう。
-実際、自分でTypeScriptコード書いてる時は欲しくならないしね。
-ECMAScriptさん、パターンマッチもないしー。みたいなー(@<list>{union-types-basic})。
+実際、自分でTypeScriptコード書いてる時に欲しくなる機能ではあまりありません。
+ECMAScriptさん、パターンマッチもないしー。
+
+まずは簡単な例から見て行きましょう(@<list>{union-types-basic})。
 
 //list[union-types-basic][型A | 型B → 新食感！]{
 #@mapfile(../code/with-types/union-types-basic.ts)
@@ -712,10 +720,10 @@ var c: typeof a | typeof b;
 //}
 
 ハイ、型注釈で複数の型を | で区切って書ける感じです。
-既存のJavaScriptライブラリだとこういう感じの困った返り値の関数、ちょいちょいありますね。
+既存のJavaScriptライブラリだとこういった感じの困った返り値の関数がかなりあります。
 あとは普通にTypeScriptを書いている時でもSyntaxTreeとかをコードから構築する時にはあったほうが便利かもしれません。
 
-ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)だし、union typesのunion typesとかは単純にまとめられます。
+ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesとかは単純にまとめて1つのunion typesに統合できます。
 次に見る@<list>{union-types-subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
 これも実用上問題ありません。
 というのも、@<hd>{type-guards}で紹介する仕組みがあるからです(後で読んでね！)。
@@ -738,9 +746,9 @@ obj.str;
 // error TS2339: Property 'num' does not exist on type 'Base | Inherit'.
 // obj.num;
 
-// Base | Inherit は実質単に Base とするのと変わらないのでこんなんやると Base に丸められる
+// Base | Inherit は実質単に Base なのでそのまま Base に丸められる
 var base: typeof obj;
-// まぁ型が Base でも子クラスだから普通に代入できるけどね
+// 型が Base でも子クラスだから普通に代入できるので無問題
 base = new Inherit();
 #@end
 //}
@@ -762,7 +770,7 @@ var array = [1, true, "str"];
 //}
 
 一番よくお目にかかるのは配列リテラルでしょうか。
-TypeScript一般のベストプラクティスとして1つの配列に複数の型の値をツッコまないほうが堅牢なコードになるため、そこをしっかり守るとあんま見ないかもしんない。
+TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、綺麗なコードを書いている限りはあまり見ないかもしれません。
 
 型注釈として関数を与える時は記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types-syntax})。
 
@@ -785,11 +793,11 @@ var d: (() => string);
 //}
 
 ぶっちゃけ見づらいですよね。
-仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}りするので、頑張って気をつけましょう。
-まぁ、コンパイルすればわかるしー…みたいなー。
+仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}@<fn>{spec-example-bug}りするので、頑張って気をつけましょう。
+まぁ、コンパイルすればわかるし気にしすぎる必要はありません。
 
 union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けて通りましょう(@<list>{union-types-type-assertion})。
-次に説明する@<hd>{type-guards}を使おう！まずはそっちだ！
+次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
 
 //list[union-types-type-assertion][一応使えるよ こうすれば]{
 #@mapfile(../code/with-types/union-types-type-assertion.ts)
@@ -813,7 +821,7 @@ var obj: string | number | Date;
 #@end
 //}
 
-色々試してみるが、期待以上に頭がよかったりはしない(@<list>{union-types-cant-infered-invalid})。
+色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types-cant-infered-invalid})。
 
 //list[union-types-cant-infered-invalid][こういうのは型推論できない]{
 #@mapfile(../code/with-types/union-types-cant-infered-invalid.ts)
@@ -821,7 +829,8 @@ function test<T>(...args:T[]):T[] {
     return args;
 }
 // (number | boolean)[] にはならなかった。残念。
-// error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+// error TS2453: The type argument for type parameter 'T' cannot be inferred from
+// the usage. Consider specifying the type arguments explicitly.
 var v = test(1, true);
 #@end
 //}
@@ -835,12 +844,16 @@ var v = test(1, true);
 #@# NOTE 直積型 ??? TypeScriptのtype aliasっぽい…？ type 線 = 点1 * 点2 みたいな たかだか一種類のコンストラクタしかもたないもの(点を2つ取るもののみとか)
 #@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
 
-=={type-guards} type guards
+//footnote[spec-example-bug][https://github.com/Microsoft/TypeScript/issues/1267]
 
+=={type-guards} 型のためのガード (type guards)
+#@# TODO 和訳が微妙…
 @<strong>{導入されるバージョン 1.4.0}
 
-type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
+type guards@<fn>{type-guards-naming}は、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たす時、変数Aの型は××である"というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。
+
+//footnote[type-guards-naming][guard for types とか type narrowing rules とかのほうがよかったと思うんだけどなぁ…]
 
 === typeof による type guards
 
@@ -945,8 +958,7 @@ if (typeof obj === "string") {
 
 === instanceof による type guards
 
-primitive typesだけtype guardsが使えてもあんまり嬉しくないっすからね。
-instanceof を使った type guards、もちろんあります！！
+primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceof を使った type guardsももちろんあります！！
 でも、仕様が完璧とはちょっと言い難いんですよね。
 
 JavaScriptにおける instanceof は、ある値が指定した関数のインスタンスであるかを調べる演算子です。
@@ -1007,8 +1019,8 @@ if (obj instanceof  A) {
 #@end
 //}
 
-typeof の type guards と違って、else句でもちゃんと調べないとダメです。
-自動的に後続の型が絞り込まれたりはしません。
+typeof の type guards と違って、else句が自動的に絞りこまれたりはしません。
+個別にちゃんと調べないとダメです。
 まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。
 仕方ないね。
 
@@ -1020,7 +1032,7 @@ TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScrip
 最も簡単なのは、型定義上でも、クラスとして定義することです。
 クラスはデフォルトでinstanceof による type guards に対応しています。
 
-もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす(@<list>{type-guards-instanceof-prototype})！
+もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(@<list>{type-guards-instanceof-prototype})。
 
 //list[type-guards-instanceof-prototype][prototype の型が参照される]{
 #@mapfile(../code/with-types/type-guards-instanceof-prototype.ts)
@@ -1045,19 +1057,20 @@ instanceof の右側の値の、その型の、prototypeプロパティの、型
 つまり、instanceof の右側の A の型の AStatic の prototypeプロパティの、型(AInstance)！
 …まわりくどい！
 
-そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}のクラスの分割定義の箇所でも、prototypeなんかわざわざ定義してないんだなぁ…。
+そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}のクラスの分割定義の箇所でも、prototypeプロパティなんかわざわざ定義してないんだなぁ…。
 
-それどころか、執筆時点(2014/11/28)でのlib.d.tsでは組み込みオブジェクトのRegExpにprototypeプロパティが定義されてなくてコンパイルエラーになるんですよ！！@<fn>{missing-prototype-properties}
-流石にこれは草生えざるを得ない…。
-そもそも、これだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てに指摘して回るのはダルすぎんよ〜〜〜ｗｗｗ
+このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されてなくてinstanceofによるtype guardsができないという自体がありました。
+これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたのが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
 
-というわけで、prototype propertyの代わりに、constructor signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}を行っています。
+だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
+
+というわけで、prototype propertyの代わりに、construct signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}@<fn>{type-guards-by-construct-signature}を行っています。
 コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されてたら俺のことめっちゃ褒めてくれてもいいと思います( ｰ`дｰ´)ｷﾘｯ
 
 話を戻しましょう。
 prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。
-一番簡単なのは、インタフェースにconstructor signatureかcall signatureのどちらか、または両方を持たせることです。
-もし、このどちらも行わず、Function型との互換性がなくなると、以下のようなエラーになります(@<list>{type-guards-instanceof-prototype-invalid})。
+一番簡単なのは、インタフェースにconstruct signatureかcall signatureのどちらか、または両方を持たせることです。
+もし、このどちらも行わず、Function型との互換性がなくなると、@<list>{type-guards-instanceof-prototype-invalid}に示すようなエラーになります。
 
 //list[type-guards-instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
 #@mapfile(../code/with-types/type-guards-instanceof-prototype-invalid.ts)
@@ -1105,14 +1118,16 @@ if (obj instanceof A) {
 instanceofを使ってtype guardsで型の絞込みをしたつもりのシチュエーションです。
 しかし、AStaticはprototypeプロパティを持っていません。
 つまり、type guardsは効力を発揮しなかったんだよ！ΩΩΩ＜な、なんだってー！
-ここでのエラー原因は、"AInstanceに型を絞ることに失敗したよ！"ということです。
-ですが、実際のエラーは"AInstance | Date だとstrプロパティにアクセスして安全かわかんなかったっすわ"というメッセージです。
+ここでのエラーに根本的な原因は、期待に反して"AInstanceに型を絞ることに失敗したよ！"ということです。
+ですが、実際のエラーは"AInstance | Date だとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
 type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
 慣れていないと、このエラーとtype guardsに実は失敗している！ということが結びつきにくいので気をつけましょう。
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
 
-//footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/issues/1282 として報告済み]
+//footnote[writing-dts-files][http://www.typescriptlang.org/Handbook#writing-dts-files]
+//footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/pull/1317 初pull reqest & 初merge！]
+//footnote[type-guards-by-construct-signature][https://github.com/Microsoft/TypeScript/issues/1283]
 
 ==== Generics と type guards
 
@@ -1149,7 +1164,7 @@ if(array instanceof Array) {
     // Array.prototype の型は Array<any> つまりは any[] …！
     // any[] は number[] に代入可能だな！！型を狭められたに違いない！
     // error TS2339: Property 'length' does not exist on type 'number[] | Date'.
-    // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) !?
+    // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) エラーだと…！？
     array.length;
 }
 #@end
@@ -1226,7 +1241,7 @@ if (!(typeof obj !== "string")) {
 #@end
 //}
 
-あんま使わない気がするな！
+あんまり使わない気がしますね。
 
 === type guardsの弱点
 
@@ -1257,7 +1272,7 @@ if (obj instanceof Sample) {
 //}
 
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
-コンパイル後のJavaScriptコード(@<list>{type-guards-weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると勘違いしやすいです。
+コンパイル後のJavaScriptコード(@<list>{type-guards-weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
 
 //list[type-guards-weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/with-types/type-guards-weakspot.js)
@@ -1389,7 +1404,7 @@ var strArray = new StringArray();
 //}
 
 TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{type-alias-spec-example})。
-union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけ、interfaceで置き換えができません。
+union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
 
 //list[type-alias-spec-example][interfaceを使うんだ！]{
 #@mapfile(../code/with-types/type-alias-spec-example.ts)

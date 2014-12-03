@@ -1,7 +1,7 @@
 interface Point {
     x: number;
     y: number;
-    color?: string;
+    color?: string; // なくてもいい
 }
 function printPoint(p:Point):void {
     var message = "x=" + p.x + ", y=" + p.y;

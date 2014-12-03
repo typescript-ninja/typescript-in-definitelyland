@@ -14,7 +14,7 @@ obj.str;
 // error TS2339: Property 'num' does not exist on type 'Base | Inherit'.
 // obj.num;
 
-// Base | Inherit は実質単に Base とするのと変わらないのでこんなんやると Base に丸められる
+// Base | Inherit は実質単に Base なのでそのまま Base に丸められる
 var base: typeof obj;
-// まぁ型が Base でも子クラスだから普通に代入できるけどね
+// 型が Base でも子クラスだから普通に代入できるので無問題
 base = new Inherit();
