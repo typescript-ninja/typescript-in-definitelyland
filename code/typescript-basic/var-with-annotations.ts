@@ -3,5 +3,4 @@ var num: number;
 var bool: boolean;
 
 var func: Function;
-// とりあえずなんか型
-var obj: {};
+var obj: any; // なんでも型

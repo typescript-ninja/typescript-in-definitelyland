@@ -23,7 +23,7 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 
 TypeScriptの変数宣言は概ねJavaScriptと一緒です。
 違うのは、@<list>{var-with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
-これをtype annotations、直訳して型注釈と呼びます。
+これを@<kw>{型注釈,type annotations}と呼びます。
 
 //list[var-with-annotations][型注釈付きの変数]{
 #@mapfile(../code/typescript-basic/var-with-annotations.ts)
@@ -32,32 +32,36 @@ var num: number;
 var bool: boolean;
 
 var func: Function;
-// とりあえずなんか型
-var obj: {};
+var obj: any; // なんでも型
 #@end
 //}
 
-これの何が嬉しいかというと、@<list>{var-with-annotations-invalid}のように、型に反するようなコードを書くと、tscコマンドを使ってコンパイルした時にコンパイルエラーとして整合性がとれていない箇所が明らかになります。
+これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルした時にコンパイルエラーになるのです。
+例えば@<list>{var-with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
 //list[var-with-annotations-invalid][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/var-with-annotations-invalid.ts)
 var str: string;
-// var-with-annotations-invalid.ts(3,1): error TS2322: Type 'number' is not assignable to type 'string'.
+// 文字列は数値と互換性がない！
+// error TS2322: Type 'number' is not assignable to type 'string'.
 str = 1;
 
 var num: number;
-// var-with-annotations-invalid.ts(7,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+// 数値は真偽値と互換性がない！
+// error TS2322: Type 'boolean' is not assignable to type 'number'.
 num = true;
 
 var bool: boolean;
-// var-with-annotations-invalid.ts(11,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
+// 真偽値は文字列と互換性がない！
+// error TS2322: Type 'string' is not assignable to type 'boolean'.
 bool = "str";
 #@end
 //}
 
-いや、安心・安全を得るために型注釈いちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。
-例えば@<list>{var-with-initializer}のように、型注釈を書かずに、変数定義と初期化を同時に行うようにします。
+おう、安心・安全なのはわかった。
+わかったけど、そのために型注釈いちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。
+@<list>{var-with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
 
 //list[var-with-initializer][初期化付き変数 = 最強]{
 #@mapfile(../code/typescript-basic/var-with-initializer.ts)
@@ -73,7 +77,7 @@ var obj = {};
 
 これで手で型注釈を与えずに済むぞ！しかも、書き方がJavaScriptと全く同じになりました。
 楽 + コンパイルによる型チェック = TypeScriptサイキョー。
-お分かりいただけただろうか？
+ということがご納得いただけたと思います。
 
 == クラス
 
@@ -98,7 +102,10 @@ class Base {
     protected static numD: number;
 
     // コンストラクタ
-    constructor(boolA: boolean, public boolB: boolean, private boolC: boolean, protected boolD: boolean) {
+    constructor(boolA: boolean,
+         public boolB: boolean,
+        private boolC: boolean,
+      protected boolD: boolean) {
     }
 
     // メソッド
@@ -121,11 +128,11 @@ var obj = new Base(true, false, true, false);
 obj.numA;
 obj.strA;
 obj.numB;
-// obj.numC; // private はダメ
-// obj.numD; // protected もダメ
+// obj.numC; // private   なメンバにはアクセスできぬ
+// obj.numD; // protected なメンバにもアクセスできぬ
 obj.boolB;
-// obj.boolC; // private はダメ
-// obj.boolD; // protected もダメ
+// obj.boolC; // private   なメンバにはアクセスできぬ
+// obj.boolD; // protected なメンバにもアクセスできぬ
 obj.hello("TypeScript");
 obj.dateA = new Date();
 obj.dateA;
@@ -139,9 +146,8 @@ obj.dateA;
 
 アクセス修飾子として、private, public, protected(TypeScript 1.3.0より)などの可視性を制御するアクセス修飾子が利用可能です。
 何も指定していない時のデフォルトの可視性はpublicになります。
-しかしまぁコンパイル後のJSを見るとわかりますが、@<code>{<any>}とかを使うと簡単にそれら要素にアクセスできてしまうので過信は禁物です。
-筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの(JavaScriptでもよく見られた)運用をしています。
-privateやprotectedは使わないほうが良いと思うんだよなぁ…。
+しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれら要素にアクセスできてしまうので過信は禁物です。
+そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの(JavaScriptでもよく見られた)運用をしています。
 
 次はコンストラクタです。
 引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
@@ -176,13 +182,13 @@ console.log(obj.str);
 
 @<list>{class-basic}に戻りまして。
 次はメソッドです。
-これも特に特筆すべき要素はありませんね。
+これも特に特筆すべき要素はありませんね。普通です。
 
 最後に、get, setアクセサです。
-これはtscでコンパイルする時に@<code>{--target es5}が必要になるやつです。
-なかなかめんどくさいJavaScriptコードが生成されるようになりますが、ECMAScript 6で仕様に盛り込まれています。
-#@# TODO 仕様に盛り込まれてるよな！？(不安)
+これを含んだコードをコンパイルする時は、@<code>{--target es5}オプションが必要になります。
+なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。
 これを使うと、getterしか定義してなくてもプログラム上値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
+なお、この文法のget, setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれ@<fn>{getter-setter}るという不遇な運命をたどっており、@<code>{--target es6}でどういう扱いになるかドキドキしています(今のところ問題なく使えるようですが…)。
 
 これら構文はECMAScript 6の文法を概ね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラス定義ができるようになります。
 
@@ -215,15 +221,17 @@ TypeScript以外のオブジェクト指向の世界でも言えることです�
 
 #@# TODO 引数プロパティ宣言はES6に入らないよなぁ？
 
+//footnote[getter-setter][@<href>{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#Defining_getters_and_setters}]
+
 == 関数
 
 #@# NOTE クラスの後に関数定義の説明したーーーい！したくない？
 
 === 普通の関数
 
-おう普通だよ(@<list>{function})。
+至って普通です(@<list>{function})。
 型注釈の与え方や、引数をオプショナルにする方法だけJavaScriptと違いますね。
-デフォルト値付き引数はECMAScript 6で入ります。
+デフォルト値付き引数はECMAScript 6で入る予定です。
 
 //list[function][色々な関数定義]{
 #@mapfile(../code/typescript-basic/function.ts)
@@ -252,7 +260,7 @@ ahoy();
 #@end
 //}
 
-可変長引数もあるよ(@<list>{function-args})！
+可変長引数もあります(@<list>{function-args})！
 
 //list[function-args][可変長引数もあるよ]{
 #@mapfile(../code/typescript-basic/function-args.ts)
@@ -282,7 +290,7 @@ function funcB(...args:string, rest:string) {
 #@end
 //}
 
-ここまで見てきたオプショナルな引数とかデフォルト値付き引数とか可変長引数とかは全てクラスのコンストラクタやメソッドでもそのまま使えます。
+ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドの記述の時も同様に利用できます。
 
 === アロー関数式
 
@@ -364,19 +372,21 @@ new Sample().test();
 //}
 
 うーん、アロー関数式は期待通りの挙動ですね。
-旧来の関数では値が undefined になっています。
-JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式使っとけばいいんだよｵﾗｧﾝ！
+旧来の関数では値がundefinedになっています。
+JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式使っとけばいいと思います。
+
+#@# TODO argumentsの取り扱いがES6準拠ではない みたいな話も仕様ちゃんと読んで書きたい
 
 == モジュール
 
 プログラムの複雑さというのはクラスや関数だけではいかんともしがたく立ち向かいにくいものです。
 プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
 
-そのための武器として、モジュールがあります。
+そのための武器として、TypeScriptにはモジュールがあります。
 概ね、JavaのpackageやC#のnamespaceと類似のものと考えてよいでしょう。
 
 TypeScriptでは2種類のモジュールがあり、それぞれ内部モジュールと外部モジュールと呼ばれています。
-これにはJavaScript実行環境が色々とあるためです。
+複数種類必要なのは、JavaScript実行環境自体が複数あるためです。
 
 1つは、ブラウザです。
 ブラウザ上では複数のJavaScriptのファイルが連結され、まるで1つのファイルであるかのように解釈され実行されます。
@@ -385,12 +395,18 @@ TypeScriptでは2種類のモジュールがあり、それぞれ内部モジュ
 もう1つは、Node.jsです。
 Node.jsでは、1つのファイルを1つの独立した構造と見なす仕組みが備わっています。
 この、1ファイル = 1モジュール と見なした仕組みが外部モジュールです。
+階層構造は普通のファイルシステムのようにディレクトリで構成します。
 
-内部モジュール・外部モジュール、どっちの形式でプロジェクトを管理するかを決めるのは、非常に、非常に重要な決め事です。
-内部モジュールと外部モジュールを混在させてプロジェクトを管理するのはあまり良い決断とはいえません。
-なおかつ、プロジェクトの途中で内部モジュールと外部モジュールを切り替えるのは大変な苦痛を伴うため、最初によくよく調査・検証するようにしましょう。
+内部モジュール・外部モジュール、どちらの形式でプロジェクトを管理するかを決めるのは、非常に、非常に重要な決め事です。
+しかも、プロジェクトの途中で内部モジュールと外部モジュールを切り替えるのは大変な苦痛を伴うため、最初によくよく調査・検証する必要があります。
+そして、内部モジュールと外部モジュールを混在させてプロジェクトを管理するのはあまり良い決断とはいえません。
+ブラウザ上で使う場合はbrowserifyを使うのか、require.jsを使うのか、concatして使うのか、それ以外か。
+SourceMapを使ってのデバッグが必須要件になるかどうか。
+などなど、プロジェクト毎に求める解は違ってくるでしょう。
 
-マジだからな！！
+念を押しますが、最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。
+最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。
+本当に大事なことなので二回言いました。
 
 === 内部モジュール (internal modules)
 
@@ -438,12 +454,11 @@ console.log(d.e.hello());
 #@end
 //}
 
-うーん、簡単だな！！
-内部モジュール内部で定義した要素はクラスであれ関数であれなんであれ、最初に export をつけなければ外側から見えないようになります。
+うーん、簡単ですね！！
+内部モジュール内部で定義した要素はクラスであれ関数であれなんであれ、exportをつけなければ外側から見えないようになります。
 
 長い名前を使うのが嫌な時は@<list>{internal-module/import}のように、import句を使うこともできます。
-このimport句の使い方は内部モジュールに限った話ではありません。
-しかし、外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
+外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
 
 //list[internal-module/import][import句で別名を作る]{
 #@mapfile(../code/typescript-basic/internal-module/import.ts)
@@ -475,17 +490,17 @@ module b {
 さて、内部モジュールでプログラムを組むといっても、1つのソースファイルにだらだらと全部書いていくのは現実的ではありません。
 そのため、ファイルを分割する必要があります。
 
-単にファイルを分けて、何も工夫しないとJavaScriptやCoffeeScriptならともかく、プログラム全体をあわせた時の整合性のチェックを型でおこなうTypeScriptでは型が追えなくて困ってしまう場合があります。
-そういう時のために、TypeScriptにはソースコード同士の関係性を記述するreference commentという仕組みがあります。
+単にファイルを分けて、何も工夫しないと型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
+そういう時のために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
 
-例えば、reference-a.ts(@<list>{internal-module/reference-a})とreference-b.ts(@<list>{internal-module/reference-b})があったとします。
-reference-b.tsはreference-a.tsで定義している関数を呼び出しています。
-つまり、reference-b.tsはreference-a.tsに依存しているわけです。
-そこで、reference commentを使って@<code>{/// <reference path="./reference-a.ts" />}と記述します。
+例えば、a.ts(@<list>{internal-module/a})とb.ts(@<list>{internal-module/b})があったとします。
+b.tsはa.tsで定義している関数を呼び出しています。
+つまり、b.tsはa.tsに依存しているわけです。
+そこで、reference commentを使って@<code>{/// <reference path="./a.ts" />}と記述します。
 パスは相対パスでも絶対パスでも大丈夫ですが、一般的に相対パスを利用します。
 
-//list[internal-module/reference-a][reference-a.ts]{
-#@mapfile(../code/typescript-basic/internal-module/reference-a.ts)
+//list[internal-module/a][a.ts]{
+#@mapfile(../code/typescript-basic/internal-module/a.ts)
 module a {
     export function hello(word = "TypeScript") {
         return "Hello, " + word;
@@ -494,9 +509,9 @@ module a {
 #@end
 //}
 
-//list[internal-module/reference-b][reference-b.ts]{
-#@mapfile(../code/typescript-basic/internal-module/reference-b.ts)
-/// <reference path="./reference-a.ts" />
+//list[internal-module/b][b.ts]{
+#@mapfile(../code/typescript-basic/internal-module/b.ts)
+/// <reference path="./a.ts" />
 
 module b {
     console.log(a.hello("internal module"));
@@ -504,13 +519,13 @@ module b {
 #@end
 //}
 
-これをコンパイルする時、reference-b.tsだけコンパイルすればreference-a.tsも自動的に一緒にコンパイルされます。
-通常、何も指定しない場合reference-a.jsとreference-b.jsが生成されますが、--out オプションを併用することで1ファイルにまとめることも可能です。
+これをコンパイルする時、b.tsだけコンパイルすればa.tsも自動的に一緒にコンパイルされます。
+通常、何も指定しない場合a.jsとb.jsが生成されますが、--out オプションを併用することで1ファイルにまとめることも可能です。
 
 //cmd{
-$ tsc --out reference.js reference-b.ts
-$ cat reference.js
-#@mapoutput(../node_modules/.bin/tsc --out ../code/typescript-basic/internal-module/reference.js ../code/typescript-basic/internal-module/reference-b.ts && cat ../code/typescript-basic/internal-module/reference.js)
+$ tsc --out main.js b.ts
+$ cat main.js
+#@mapoutput(../node_modules/.bin/tsc --out ../code/typescript-basic/internal-module/main.js ../code/typescript-basic/internal-module/b.ts && cat ../code/typescript-basic/internal-module/main.js)
 var a;
 (function (a) {
     function hello(word) {
@@ -519,7 +534,7 @@ var a;
     }
     a.hello = hello;
 })(a || (a = {}));
-/// <reference path="./reference-a.ts" />
+/// <reference path="./a.ts" />
 var b;
 (function (b) {
     console.log(a.hello("internal module"));
@@ -532,15 +547,15 @@ var b;
 === 外部モジュール (external modules)
 
 外部モジュールは前述の通り、1ファイル = 1モジュール としてプロジェクトを構成していく方式です。
-@<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts(./foo.js)@<fn>{require-ext} を参照することができます。
+@<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts@<fn>{require-ext} を参照することができます。
 ここでは、./foo が1つのモジュールとして扱われます。
 
-外部モジュールはTypeScriptでは2つの方式があります。
-ちなみに、両方の形式とも同じ文法で書けます。
-ただ、コンパイル時に --module commonjs とするか --module amd とするかだけの違いです。
+外部モジュールはTypeScriptでは2つの方式に対応していて、その両方の形式ともTypeScript上では同じ文法で書けます。
+コンパイル時に --module commonjs とするか --module amd とするかだけの違いです。
+
 なので、ここでは細かいことは解説しません。
-1つ目のCommonJSという形式は、ざっくり言うとNode.jsが採用している仕組みです。
-2つ目のAMDという形式は、ブラウザ上で外部モジュールを利用するための仕組みです。
+1つ目のCommonJSはNode.jsが採用している仕組みです。
+2つ目のAMDはブラウザ上で外部モジュールを利用するための仕組みです。
 
 さて、実際のコード例を見てみましょう。
 foo.ts(@<list>{external-module/foo})、bar.ts(@<list>{external-module/bar})、buzz.ts(@<list>{external-module/buzz})というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
@@ -576,7 +591,7 @@ export = bye;
 #@end
 //}
 
-トップレベルの定義で export したものが別のファイルから参照された時に公開されています。
+トップレベルの定義でexportしたものが別のファイルから参照された時に公開されています。
 コンパイルして結果を確かめてみましょう。
 Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることがわかるでしょう。
 
@@ -623,4 +638,4 @@ console.log(sub.hello());
 
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
 
-//footnote[require-ext][細かく言うと、require("./foo")するとまず ./foo.js が探され、次に ./foo.json、./foo.node と検索されます。]
+//footnote[require-ext][Node.js上の仕様(TypeScriptではない)について細かく言うと、require("./foo")すると最初に ./foo.js が探され、次に ./foo.json、./foo.node と検索されます。]

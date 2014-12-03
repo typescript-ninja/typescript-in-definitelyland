@@ -15,7 +15,10 @@ class Base {
     protected static numD: number;
 
     // コンストラクタ
-    constructor(boolA: boolean, public boolB: boolean, private boolC: boolean, protected boolD: boolean) {
+    constructor(boolA: boolean,
+         public boolB: boolean,
+        private boolC: boolean,
+      protected boolD: boolean) {
     }
 
     // メソッド
@@ -38,11 +41,11 @@ var obj = new Base(true, false, true, false);
 obj.numA;
 obj.strA;
 obj.numB;
-// obj.numC; // private はダメ
-// obj.numD; // protected もダメ
+// obj.numC; // private   なメンバにはアクセスできぬ
+// obj.numD; // protected なメンバにもアクセスできぬ
 obj.boolB;
-// obj.boolC; // private はダメ
-// obj.boolD; // protected もダメ
+// obj.boolC; // private   なメンバにはアクセスできぬ
+// obj.boolD; // protected なメンバにもアクセスできぬ
 obj.hello("TypeScript");
 obj.dateA = new Date();
 obj.dateA;
