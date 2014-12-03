@@ -1,9 +1,9 @@
-= 公正なる『型付け』はプログラム自身を人間的に生長させてくれる
+= 型の国のTypeScript
 
 == 本書について
 
-本書は、ECMAScript 3レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
-また、解説するTypeScriptの内容には執筆時点(1.3.0)ではまだ導入されていないもろもろの構文についての解説も含みます。
+本書は、ECMAScript 5レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
+また、解説するTypeScriptの内容には執筆時点(1.3.0)ではまだ未リリースの構文についての解説も含みます。
 
 本書の全てのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
@@ -17,23 +17,27 @@ Version 1.3.0.0
 c075fe19170be128aa6e49641e6730eca8c4cd5c
 #@end
 
-本書の内容は以下の通りです。
+== 本書の内容
 
- 1. @<chapref>{typescript-basic}
- 2. @<chapref>{with-types}
- 3. @<chapref>{definition-file}
-#@# TBD 4. @<chapref>{es6}
-#@# TBD 5. @<chapref>{another-transpiler}
+@<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法と、WebStormの設定について言及します。Visual StudioやNuGetの扱いについては言及しませんのでご了承ください。
 
-@<chap>{typescript-basic}では、コマンドライン上でのTypeScriptコンパイラの使い方と、TypeScriptの基本構文を簡単に解説し、この後の章を読み解くための基礎知識を蓄えます。
-@<chapref>{with-types}では、TypeScriptの型の使われ方について解説し、コンパイルを通し、実際に開発を行うための基礎知識を蓄えます。1.1.0-1時点では導入されていないtuple types, union types, type aliasについての解説を含みます。
-@<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説と、その書き方、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
+@<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、この後の章を読み解くための基礎知識を蓄えます。
+
+@<chapref>{with-types}では、TypeScriptの型の使われ方について解説し、実際に開発を行うための知識を蓄えます。
+
+@<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方。ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
+
 #@# TBD @<chapref>{es6}では、TypeScriptのOOPの基礎であるECMAScript 6の概要と、TypeScriptに取り込まれつつあるstring templatesなどの仕様について簡単に解説します。
+
 #@# TBD @<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
 
-なお、本解説ではMac OS X + WebStorm での利用を前提に解説します。
-Visual StudioやNuGetの扱いについては言及しませんのでご了承ください。
-#@# NOTE 誰かが書いてpull requestしてくれてもいいけどその部分の文責は負わない＞＜
+JavaScriptの(TypeScriptではなく)仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス(@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin})を参照してください。
+
+TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
+しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
+
+//footnote[ts-reference-amazon][http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22]
+//footnote[ts-reference-tatsujin][http://tatsu-zine.com/books/typescript-reference]
 
 == なぜTypeScriptを選ぶべきなのか
 
@@ -42,28 +46,30 @@ TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScr
 
 実際に、TypeScriptはECMAScriptのsuper set(上位互換)であることを標榜しています。
 つまり、ECMAScript+静的型付け=TypeScriptです。
-そして、"TypeScript独自の仕様"というものを注意深く避けてきています。
+そして、"TypeScript独自の実装として表れる仕様"を注意深く避けてきています。
 
 他のaltJS、例えばCoffeeScriptやDartは、JavaScriptとは全く違う独自の記法で記述します。
 これは記述はしやすいですが、変換結果のJavaScriptは見づらく、人間に優しい出力とは言えません。
 つまりこれらは独自路線に行くことで、JavaScriptの辛さを軽減しようとしています。
 
 一方、TypeScriptは先に述べたようにJavaScriptを踏襲します。
-@<href>{http://mozaic.fm/post/96461640633/8-altjs,mozaic.fm出張版 #8}でもあんどうやすしさんと一緒に考えましたが、そこでの結論も「JSの完全な置換えを目指すDartは夢、TypeScriptは現実」というものでした。
+@<href>{http://mozaic.fm/post/96461640633/8-altjs,mozaic.fm出張版 #8}@<fn>{mozaic.fm}でもあんどうやすしさんと一緒に考えましたが、そこでの結論も「JSの完全な置換えを目指すDartは夢、TypeScriptは現実」というものでした。
 
-この方針ではECMAScriptのクソな仕様の数々は(勝手に闇に葬れないので)残ってしまいます。
+この方針ではECMAScriptのクソな仕様の数々は(勝手に闇に葬るわけにはいかないので)残ってしまいます。
 ですが、その代わりにTypeScriptは将来"正式な"JavaScriptになる可能性があります。
 稀に、TypeScriptのリポジトリに「TypeScriptにLINQを導入してほしい」という要望が上がってくることがありますが、上記の事情を鑑みればそのような要望が取り込まれないのは明らかです。
-LINQや拡張メソッドは確かに便利ですし、作者がC#と同じアンダース・ヘルスバーグ氏なのでそういう期待が湧くのは、理解できますが、将来のECMAScriptに入ることは現時点では考えにくいでしょう。
+LINQや拡張メソッドは確かに便利ですし、作者がC#と同じアンダース・ヘルスバーグ氏なのでそういう期待が湧くのは理解できます。
+しかし、将来のECMAScriptに入るとは現時点では考えにくいでしょう。
 
 さて、「TypeScriptが将来のJavaScriptそのものになる？妄想乙」と思われた読者諸兄もおられるでしょう。
 あながちそれが誇大妄想ではないのではないか？という証跡が最近出てきています。
 
-GoogleがAngularJS 2.0のために開発する新言語AtScriptと、Facebookからも新言語Flowが公表されました。
+GoogleからAngularJS 2.0のために開発する新言語AtScriptと、Facebookからも新言語Flowが公表されました。
 これら2つの言語は、両方ともTypeScriptの上位互換または互換性を考慮して設計されるそうです。
 MicrosoftとGoogle, Facebookの3巨人がTypeScriptに賭けると言っているのです。
 将来的にTypeScriptが時代の本流になる、という考えを妄想と切って捨てることはできないでしょう@<fn>{advent-calendar}。
 
 というわけで、Dartが完全にJSを置き換える可能性はありますが、今のところ私はTypeScriptに賭けていこうと思います。
 
+//footnote[mozaic.fm][http://mozaic.fm/post/96461640633/8-altjs]
 //footnote[advent-calendar][詳しくは http://qiita.com/vvakame/items/bf4d1e339d5815026fbb にまとめました]
