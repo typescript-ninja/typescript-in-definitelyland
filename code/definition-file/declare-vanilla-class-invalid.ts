@@ -5,7 +5,7 @@ declare class BaseA {
 class Inherit extends BaseA {
     number: number;
 }
-// ☓ クラスはopen endedじゃないので定義の拡張ができない…
+// × クラスはopen endedじゃないので定義の拡張ができない…
 // error TS2300: Duplicate identifier 'BaseA'.
 declare class BaseA {
     num: number;

@@ -5,7 +5,7 @@ interface BaseAStatic {
 interface BaseA {
     str: string;
 }
-// ☓ 利用時に継承できない…(しょせんインタフェース
+// × 利用時に継承できない…(しょせんインタフェース
 // error TS2311: A class may only extend another class.
 class Inherit extends BaseA {
     number: number;
