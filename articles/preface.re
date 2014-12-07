@@ -27,7 +27,7 @@ Version 1.3.0.0
 
 @<chapref>{types-advanced}では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。
 
-@<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方。ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
+@<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方と、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
 #@# TBD @<chapref>{es6}では、TypeScriptのOOPの基礎であるECMAScript 6の概要と、TypeScriptに取り込まれつつあるstring templatesなどの仕様について簡単に解説します。
 
