@@ -1,10 +1,7 @@
 = 型は便利だ楽しいな
 
-#@# TODO Generics
-#@# TODO 型クエリ
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO 省略可能引数
-#@# TODO 型アサーション
 
 TypeScriptの華はやはり型！
 @<chapref>{typescript-basic}など所詮児戯に過ぎぬッ！！
@@ -473,3 +470,89 @@ printPoint({
 // });
 #@end
 //}
+
+== 型アサーション (type assertions)
+
+型アサーションは他の言語でいうところのキャストです。
+@<list>{type-assertions/basic}のように、@<code>{<変換後型名>}と書くだけです。
+
+//list[type-assertions/basic][型アサーション 基本例]{
+#@mapfile(../code/types-basic/type-assertions/basic.ts)
+var obj: any = 1;
+
+// お前は今後 number として生きよ…
+var num = <number>obj;
+
+var str = "string";
+// 非常に外道なコードを書くことができる… 人としての良識を疑う
+// やめて！私をanyにしてnumberに打ち込む気なんでしょう！？anyみたいに！
+num = <any>str;
+#@end
+//}
+
+もちろん、互換性のない型に型アサーションで変換しようとすると怒られます(@<list>{type-assertions/invalid-assertions-invalid})。
+
+//list[type-assertions/invalid-assertions-invalid][stringはnumberにはなれない]{
+#@mapfile(../code/types-basic/type-assertions/invalid-assertions-invalid.ts)
+var str = "str";
+// anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
+// error TS2352: Neither type 'string' nor type 'number' is assignable to the other.
+var num: number = <number> str;
+#@end
+//}
+
+ダウンキャストも実行することができます(@<list>{type-assertions/class})。
+TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
+
+//list[type-assertions/class][親クラスから子クラスへ変換]{
+#@mapfile(../code/types-basic/type-assertions/class.ts)
+class Base {
+    str: string;
+}
+
+class InheritA extends Base {
+    num: number;
+}
+class InheritB extends Base {
+    bool: boolean;
+}
+
+// とりあえず型は親クラスとして…
+var obj: Base;
+
+// 中身が何か調べてから安全にダウンキャストする
+if (obj instanceof InheritA) {
+    var a = <InheritA>obj;
+    a.num;
+} else if(obj instanceof InheritB) {
+    var b = <InheritB>obj;
+    b.bool;
+}
+#@end
+//}
+
+<any>に一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。
+型定義ファイルを使っている時に、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります(@<list>{type-assertions/buggy-definition-file})。
+
+//list[type-assertions/buggy-definition-file][親クラスから子クラスへ変換]{
+#@mapfile(../code/types-basic/type-assertions/buggy-definition-file.ts)
+// こういう、型定義があるとする。実装はJavaScriptが与える。
+declare class Base {
+    str: string;
+}
+
+var obj = new Base();
+// 本当は、Baseクラスがnumプロパティも持ってるんだけど…
+// 型定義が不足しているなら、anyで誤魔化せばいいじゃない！！
+// キレイ事だけじゃ世の中生きていけないんじゃよ…
+var num: number = (<any>obj).num;
+#@end
+//}
+
+== 型クエリ
+
+TBD
+
+== ジェネリクス (generics)
+
+TBD
