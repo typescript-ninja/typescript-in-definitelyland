@@ -39,7 +39,7 @@ Best Common Type の名の響き通り、複数要素の間で型の統一がさ
 例えば、@<list>{bct-basic-1.3.0}のような感じ。
 
 //list[bct-basic-1.3.0][基本的な例]{
-#@mapfile(../code/with-types/bct-basic-1.3.0.ts)
+#@mapfile(../code/types-advanced/bct/basic-1.3.0.ts)
 // {}[] でございます。
 var array = [1, true];
 
@@ -62,7 +62,7 @@ function test() {
 例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります(@<list>{bct-class-1.3.0})。
 
 //list[bct-class-1.3.0][あまり見かけないBCTが役に立つ例]{
-#@mapfile(../code/with-types/bct-class-1.3.0.ts)
+#@mapfile(../code/types-advanced/bct/class-1.3.0.ts)
 class A { }
 class B extends A {
     str: string;
@@ -97,10 +97,10 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 
 タプル型は型の世界にしか登場せず、実装としてコンパイル後は消えてしまいます。
 記述方法は配列の型指定に @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
-例を見てみましょう@<list>{tuple1}。
+例を見てみましょう@<list>{tuple/basic}。
 
-//list[tuple1][基本的な例]{
-#@mapfile(../code/with-types/tuple1.ts)
+//list[tuple/basic][基本的な例]{
+#@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
 // TypeScript 1.3.0 ではこれはいままで通りの {}[]
 // TypeScript 1.4.0? ではこれは別の箇所で解説しているunion typesとあわせて(string | number | boolean)[]
@@ -124,10 +124,10 @@ tuple.forEach(v => {
 
 各要素の型を指定してやると、その要素のindexでアクセスした時に適切な型で扱われるようになります。
 
-もちろん、タプル型はGenericsと組み合わせて利用することができます(@<list>{tuple3})。
+もちろん、タプル型はGenericsと組み合わせて利用することができます(@<list>{tuple/with-generics})。
 
-//list[tuple3][Genericsでの利用も可]{
-#@mapfile(../code/with-types/tuple3.ts)
+//list[tuple/with-generics][Genericsでの利用も可]{
+#@mapfile(../code/types-advanced/tuple/with-generics.ts)
 // Genericsを使ってtupleを生成して返す
 function zip<T1, T2>(v1: T1, v2: T2): [T1, T2] {
     return [v1, v2];
@@ -141,28 +141,28 @@ tuple[1].hello(); // おー、静的に検証される！
 
 Good!いいですね。
 
-タプル型のない今まで(1.1.0-1以前)のTypeScriptでは@<list>{without-tuple}のような、数値添字で型安全 or 配列として利用可能 という究極の選択をしなければならなかったのです…。
+タプル型のない今まで(1.1.0-1以前)のTypeScriptでは@<list>{tuple/without-tuple}のような、数値添字で型安全 or 配列として利用可能 という究極の選択をしなければならなかったのです…。
 辛かった。
 
-//list[without-tuple][TypeScript 1.1.0-1 までの苦しい運用]{
-#@mapfile(../code/with-types/tuple3.ts)
-// Genericsを使ってtupleを生成して返す
-function zip<T1, T2>(v1: T1, v2: T2): [T1, T2] {
-    return [v1, v2];
-}
+//list[tuple/without-tuple][TypeScript 1.1.0-1 までの苦しい運用]{
+#@mapfile(../code/types-advanced/tuple/without-tuple.ts)
+var tuple: { 0: number; 1: string; 3: boolean; } = <any>[1, "str", true];
 
-var tuple = zip("str", { hello: () => "Hello!" });
-tuple[0].charAt(0); // おー、静的に検証される！
-tuple[1].hello(); // おー、静的に検証される！
+tuple[1].charAt(0); // string は charAt を持つ！
+
+// だがしかし(型のうえでは)Arrayではないので以下は通らない
+// tuple.forEach(v => {
+//   console.log(v);
+// });
 #@end
 //}
 
 さて、タプル型の重箱の隅を見て行きましょう。
 要素数が多すぎる場合、指定されていない値の型はBCT(1.3.0まで)か、union types(1.4.0以降)になります。
-その例を見てみましょう(@<list>{tuple2})。
+その例を見てみましょう(@<list>{tuple/many-values})。
 
-//list[tuple2][値の要素数が多すぎる場合]{
-#@mapfile(../code/with-types/tuple2.ts)
+//list[tuple/many-values][値の要素数が多すぎる場合]{
+#@mapfile(../code/types-advanced/tuple/many-values.ts)
 // 要素が多い分にはOKだ！
 var tuple: [string, number] = ["str", 1, "test"];
 
@@ -176,10 +176,10 @@ var value = tuple[2];
 #@end
 //}
 
-お次は要素の順序がズレた場合、どうなるかを見てみましょう(@<list>{tuple-unshift})。
+お次は要素の順序がズレた場合、どうなるかを見てみましょう(@<list>{tuple/unshift})。
 
-//list[tuple-unshift][絶望に身をよじれ…！]{
-#@mapfile(../code/with-types/tuple-unshift.ts)
+//list[tuple/unshift][絶望に身をよじれ…！]{
+#@mapfile(../code/types-advanced/tuple/unshift.ts)
 var tuple: [string, number] = ["str", 1];
 
 // 先頭を number に…
@@ -197,10 +197,10 @@ tuple[0].charAt(0);
 unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
-TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(@<list>{tuple-unshift-1.3.0})。
+TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(@<list>{tuple/unshift-1.3.0})。
 
-//list[tuple-unshift-1.3.0][1.3.0だともっと辛い]{
-#@mapfile(../code/with-types/tuple-unshift-1.3.0.ts)
+//list[tuple/unshift-1.3.0][1.3.0だともっと辛い]{
+#@mapfile(../code/types-advanced/tuple/unshift-1.3.0.ts)
 // 1.3.0 限定！！
 var tuple: [string, number] = ["str", 1];
 
@@ -236,10 +236,10 @@ union typesはいわゆる直和型でございます。
 実際、自分でTypeScriptコード書いてる時に欲しくなる機能ではあまりありません。
 ECMAScriptさん、パターンマッチもないしー。
 
-まずは簡単な例から見て行きましょう(@<list>{union-types-basic})。
+まずは簡単な例から見て行きましょう(@<list>{union-types/basic})。
 
-//list[union-types-basic][型A | 型B → 新食感！]{
-#@mapfile(../code/with-types/union-types-basic.ts)
+//list[union-types/basic][型A | 型B → 新食感！]{
+#@mapfile(../code/types-advanced/union-types/basic.ts)
 var a: string | boolean;
 // string | number なので以下はオッケー！
 a = "str";
@@ -261,12 +261,12 @@ var c: typeof a | typeof b;
 あとは普通にTypeScriptを書いている時でもSyntaxTreeとかをコードから構築する時にはあったほうが便利かもしれません。
 
 ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesとかは単純にまとめて1つのunion typesに統合できます。
-次に見る@<list>{union-types-subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
+次に見る@<list>{union-types/subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
 これも実用上問題ありません。
 というのも、@<hd>{type-guards}で紹介する仕組みがあるからです(後で読んでね！)。
 
-//list[union-types-subtype][要素Bが要素Aのサブタイプの場合Aにまとまる]{
-#@mapfile(../code/with-types/union-types-subtype.ts)
+//list[union-types/subtype][要素Bが要素Aのサブタイプの場合Aにまとまる]{
+#@mapfile(../code/types-advanced/union-types/subtype.ts)
 class Base {
     str: string;
 }
@@ -293,10 +293,10 @@ base = new Inherit();
 この辺り、仕様書上は若干小難しく書かれているのですが、単に最も少ない要素数になるように型がまとめられていくだけです。
 
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
-|| 演算子を使った時、条件(三項)演算子を使った時、配列リテラルを使った時です(@<list>{union-types-infered})。
+|| 演算子を使った時、条件(三項)演算子を使った時、配列リテラルを使った時です(@<list>{union-types/inferred})。
 
-//list[union-types-infered][要素Bが要素Aのサブタイプの場合Aにまとまる]{
-#@mapfile(../code/with-types/union-types-infered.ts)
+//list[union-types/inferred][要素Bが要素Aのサブタイプの場合Aにまとまる]{
+#@mapfile(../code/types-advanced/union-types/inferred.ts)
 // and の型は string | boolean
 var and = "str" || true;
 // cond の型は string | number
@@ -309,10 +309,10 @@ var array = [1, true, "str"];
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、綺麗なコードを書いている限りはあまり見ないかもしれません。
 
-型注釈として関数を与える時は記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types-syntax})。
+型注釈として関数を与える時は記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types/syntax})。
 
-//list[union-types-syntax][型名をカッコで囲うんです？]{
-#@mapfile(../code/with-types/union-types-syntax.ts)
+//list[union-types/syntax][型名をカッコで囲うんです？]{
+#@mapfile(../code/types-advanced/union-types/syntax.ts)
 // 引数無しの返り値stringな関数 な型注釈
 var func: () => string;
 
@@ -333,11 +333,11 @@ var d: (() => string);
 仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}@<fn>{spec-example-bug}りするので、頑張って気をつけましょう。
 まぁ、コンパイルすればわかるし気にしすぎる必要はありません。
 
-union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けて通りましょう(@<list>{union-types-type-assertion})。
+union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けて通りましょう(@<list>{union-types/type-assertion})。
 次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
 
-//list[union-types-type-assertion][一応使えるよ こうすれば]{
-#@mapfile(../code/with-types/union-types-type-assertion.ts)
+//list[union-types/type-assertion][一応使えるよ こうすれば]{
+#@mapfile(../code/types-advanced/union-types/type-assertion.ts)
 // 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
 // 型アサーションは悪い。常に悪い。なるべく使わないこと。
 
@@ -358,10 +358,10 @@ var obj: string | number | Date;
 #@end
 //}
 
-色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types-cant-infered-invalid})。
+色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types/cant-inferred-invalid})。
 
-//list[union-types-cant-infered-invalid][こういうのは型推論できない]{
-#@mapfile(../code/with-types/union-types-cant-infered-invalid.ts)
+//list[union-types/cant-inferred-invalid][こういうのは型推論できない]{
+#@mapfile(../code/types-advanced/union-types/cant-inferred-invalid.ts)
 function test<T>(...args:T[]):T[] {
     return args;
 }
@@ -408,11 +408,11 @@ ECMAScript 5の範囲では、変換ルールは以下の通り。
 
 ==== 使い方
 
-一番簡単な使い方から見ていきましょう(@<list>{type-guards-typeof-basic})。
+一番簡単な使い方から見ていきましょう(@<list>{type-guards/typeof-basic})。
 TypeScriptのtype guardsでは、typeofの結果が string, boolean, number の場合、その型に絞り込むことができます。
 
-//list[type-guards-typeof-basic][実際の型がわからないなら調べるしかないじゃない！]{
-#@mapfile(../code/with-types/type-guards-typeof-basic.ts)
+//list[type-guards/typeof-basic][実際の型がわからないなら調べるしかないじゃない！]{
+#@mapfile(../code/types-advanced/type-guards/typeof-basic.ts)
 var obj: number | string;
 if (typeof obj === "string") {
     // ここでは string と確定されている！
@@ -430,11 +430,11 @@ type guardsが導入された後は"変数objがtypeofで調べた時にstring�
 @<code>{==}ではダメです。
 
 さて、実際にtype guardsが起こっている例を見てみます。
-@<list>{type-guards-typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
+@<list>{type-guards/typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
 そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
 
-//list[type-guards-typeof-invalid][1.3.0ではエラーとして検出できぬ]{
-#@mapfile(../code/with-types/type-guards-typeof-invalid.ts)
+//list[type-guards/typeof-invalid][1.3.0ではエラーとして検出できぬ]{
+#@mapfile(../code/types-advanced/type-guards/typeof-invalid.ts)
 var obj:any;
 if (typeof obj === "string") {
     // ここでは string と確定されている！
@@ -447,10 +447,10 @@ if (typeof obj === "string") {
 
 うーん、便利ですね。
 
-ちなみに、本当に型を"狭める"だけなので、@<list>{type-guards-typeof-cant-narrow}のような互換性のない型に狭めることはできません。
+ちなみに、本当に型を"狭める"だけなので、@<list>{type-guards/typeof-cant-narrow}のような互換性のない型に狭めることはできません。
 
-//list[type-guards-typeof-cant-narrow]["狭める"だけなんだなぁ]{
-#@mapfile(../code/with-types/type-guards-typeof-cant-narrow.ts)
+//list[type-guards/typeof-cant-narrow]["狭める"だけなんだなぁ]{
+#@mapfile(../code/types-advanced/type-guards/typeof-cant-narrow.ts)
 var obj:number;
 if (typeof obj === "string") {
     // number を string に"狭める"ことはできない…
@@ -464,10 +464,10 @@ if (typeof obj === "string") {
 
 ==== 後続の型の絞込み
 
-typeof による type guards 特有の仕様として、後続の型の絞込があります(@<list>{type-guards-typeof-removes})。
+typeof による type guards 特有の仕様として、後続の型の絞込があります(@<list>{type-guards/typeof-removes})。
 
-//list[type-guards-typeof-removes][型の絞込み！]{
-#@mapfile(../code/with-types/type-guards-typeof-removes.ts)
+//list[type-guards/typeof-removes][型の絞込み！]{
+#@mapfile(../code/types-advanced/type-guards/typeof-removes.ts)
 var obj: number | string | boolean;
 
 if (typeof obj === "string") {
@@ -501,10 +501,10 @@ primitive typesだけtype guardsが使えてもあんまり嬉しくないので
 JavaScriptにおける instanceof は、ある値が指定した関数のインスタンスであるかを調べる演算子です。
 プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。
 
-動作例を確認しておきます(@<list>{instanceof})。
+動作例を確認しておきます(@<list>{type-guards/instanceof})。
 
-//list[instanceof][instanceof の挙動]{
-#@mapfile(../code/with-types/instanceof.ts)
+//list[type-guards/instanceof][instanceof の挙動]{
+#@mapfile(../code/types-advanced/type-guards/instanceof.ts)
 class Base {
 }
 
@@ -534,10 +534,10 @@ console.log(obj instanceof InheritB);
 
 ==== 使い方
 
-instanceofで型を絞り込みます(@<list>{type-guards-instanceof-basic})。
+instanceofで型を絞り込みます(@<list>{type-guards/instanceof-basic})。
 
-//list[type-guards-instanceof-basic][instanceof の挙動]{
-#@mapfile(../code/with-types/type-guards-instanceof-basic.ts)
+//list[type-guards/instanceof-basic][instanceof の挙動]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-basic.ts)
 class A {
     str: string;
 }
@@ -569,10 +569,10 @@ TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScrip
 最も簡単なのは、型定義上でも、クラスとして定義することです。
 クラスはデフォルトでinstanceof による type guards に対応しています。
 
-もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(@<list>{type-guards-instanceof-prototype})。
+もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(@<list>{type-guards/instanceof-prototype})。
 
-//list[type-guards-instanceof-prototype][prototype の型が参照される]{
-#@mapfile(../code/with-types/type-guards-instanceof-prototype.ts)
+//list[type-guards/instanceof-prototype][prototype の型が参照される]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-prototype.ts)
 interface AStatic {
     new (): AInstance;
     prototype: AInstance;
@@ -607,10 +607,10 @@ instanceof の右側の値の、その型の、prototypeプロパティの、型
 話を戻しましょう。
 prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。
 一番簡単なのは、インタフェースにconstruct signatureかcall signatureのどちらか、または両方を持たせることです。
-もし、このどちらも行わず、Function型との互換性がなくなると、@<list>{type-guards-instanceof-prototype-invalid}に示すようなエラーになります。
+もし、このどちらも行わず、Function型との互換性がなくなると、@<list>{type-guards/instanceof-prototype-invalid}に示すようなエラーになります。
 
-//list[type-guards-instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
-#@mapfile(../code/with-types/type-guards-instanceof-prototype-invalid.ts)
+//list[type-guards/instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-prototype-invalid.ts)
 interface AStatic {
     // 以下のどちらかがないと Function との互換性が無い
     // (): AInstance;
@@ -630,10 +630,10 @@ if (obj instanceof A) {
 //}
 
 もう一つ、重要なコツを示しておきます。
-それは、エラーメッセージの読み方です(@<list>{type-guards-instanceof-failed-invalid})。
+それは、エラーメッセージの読み方です(@<list>{type-guards/instanceof-failed-invalid})。
 
-//list[type-guards-instanceof-failed-invalid][んん？なんだこのエラーは？]{
-#@mapfile(../code/with-types/type-guards-instanceof-failed-invalid.ts)
+//list[type-guards/instanceof-failed-invalid][んん？なんだこのエラーは？]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-failed-invalid.ts)
 interface AStatic {
     new (): AInstance;
     // prototype: AInstance; がない！
@@ -671,10 +671,10 @@ type guardsの失敗が、別のエラーとなって間接的に表れてしま
 さて、ちょっと前に書いた"instanceof の右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
 
 prototypeのプロパティの型に、Genericsが絡むと、話がややこしくなります。
-話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{array-declaration-invalid})。
+話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{type-guards/array-declaration-invalid})。
 
-//list[array-declaration-invalid][lib.d.tsからArrayの定義を抜粋]{
-#@mapfile(../code/with-types/array-declaration-invalid.d.ts)
+//list[type-guards/array-declaration-invalid][lib.d.tsからArrayの定義を抜粋]{
+#@mapfile(../code/types-advanced/type-guards/array-declaration-invalid.d.ts)
 // lib.d.tsから抜粋 本当はもうちょっと色々ある
 declare var Array: {
     new (arrayLength?: number): any[];
@@ -691,10 +691,10 @@ interface Array<T> {
 #@end
 //}
 
-instanceof で type guards で型を狭めた時、 any[] になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards-instanceof-array-invalid}、@<list>{type-guards-instanceof-array}、@<list>{type-guards-instanceof-empty-array-invalid})。
+instanceof で type guards で型を狭めた時、 any[] になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
 
-//list[type-guards-instanceof-array-invalid][絞込み、失敗！]{
-#@mapfile(../code/with-types/type-guards-instanceof-array-invalid.ts)
+//list[type-guards/instanceof-array-invalid][絞込み、失敗！]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-array-invalid.ts)
 var array: number[] | Date;
 
 if(array instanceof Array) {
@@ -707,8 +707,8 @@ if(array instanceof Array) {
 #@end
 //}
 
-//list[type-guards-instanceof-array][any[\] に絞り込むのはできる]{
-#@mapfile(../code/with-types/type-guards-instanceof-array.ts)
+//list[type-guards/instanceof-array][any[\] に絞り込むのはできる]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-array.ts)
 var array: any[] | Date;
 
 if(array instanceof Array) {
@@ -718,8 +718,8 @@ if(array instanceof Array) {
 #@end
 //}
 
-//list[type-guards-instanceof-empty-array-invalid][{}[\] には絞り込めない…！]{
-#@mapfile(../code/with-types/type-guards-instanceof-empty-array-invalid.ts)
+//list[type-guards/instanceof-empty-array-invalid][{}[\] には絞り込めない…！]{
+#@mapfile(../code/types-advanced/type-guards/instanceof-empty-array-invalid.ts)
 var array: {}[] | Date;
 
 if(array instanceof Array) {
@@ -730,10 +730,10 @@ if(array instanceof Array) {
 //}
 
 うーん、これもうわかんねぇな？
-TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array<any>を更に型パラメタをインスタンス化する前に戻して、Array<T>にしてから絞り込みのチェックをしているようなのですが、その場合Array<{}>として評価されてるのかなー、と思いきや@<list>{type-guards-instanceof-empty-array-invalid}を見る限り、そうとも言えなさそうなんですよね…。
+TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array<any>を更に型パラメタをインスタンス化する前に戻して、Array<T>にしてから絞り込みのチェックをしているようなのですが、その場合Array<{}>として評価されてるのかなー、と思いきや@<list>{type-guards/instanceof-empty-array-invalid}を見る限り、そうとも言えなさそうなんですよね…。
 
 この辺り、わかりやすいルールが提示されないと実用上使いにくくて困りますね。
-とりあえず、Genericsが絡む場合はtype guardsに頼らないほうが詰まらずにすむ…という認識で良いでしょう@<fn>{type-guards-with-generics}。
+とりあえず、Genericsが絡む場合はtype guardsに頼らず、型アサーションに頼るほうが詰まらずにすむ…という認識で良いでしょう@<fn>{type-guards-with-generics}。
 
 #@# TODO Overloadは？状況に変化が生じていないか確認する
 #@# TODO だるすぎるからなんとかして
@@ -742,10 +742,10 @@ TypeScriptコンパイラのソースコードをざっくり読んだ感じだ�
 
 === type guardsと論理演算子
 
-&& とか || とか ? とか ! とかの論理演算子にもちゃんと対応しているよ！(@<list>{type-guards-operator})
+&& とか || とか ? とか ! とかの論理演算子にもちゃんと対応しているよ！(@<list>{type-guards/operator})
 
-//list[type-guards-operator][ブール代数みたいな演算に対応してる]{
-#@mapfile(../code/with-types/type-guards-operator.ts)
+//list[type-guards/operator][ブール代数みたいな演算に対応してる]{
+#@mapfile(../code/types-advanced/type-guards/operator.ts)
 var obj: number | boolean | string;
 
 // && 演算子で絞込み
@@ -787,10 +787,10 @@ JavaScriptの実行環境とは全く関係がないのです。
 
 TypeScriptでは、構造的部分型の仕組みにより、クラスが要求されている箇所に、互換性のある別の値を代入することができます。
 
-その仕組を使って、@<list>{type-guards-weakspot}のようなコードが書けてしまいます。
+その仕組を使って、@<list>{type-guards/weakspot}のようなコードが書けてしまいます。
 
-//list[type-guards-weakspot][構造的部分型とtype guards]{
-#@mapfile(../code/with-types/type-guards-weakspot.ts)
+//list[type-guards/weakspot][構造的部分型とtype guards]{
+#@mapfile(../code/types-advanced/type-guards/weakspot.ts)
 class Sample {
     str: string;
 }
@@ -809,10 +809,10 @@ if (obj instanceof Sample) {
 //}
 
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
-コンパイル後のJavaScriptコード(@<list>{type-guards-weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
+コンパイル後のJavaScriptコード(@<list>{type-guards/weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
 
-//list[type-guards-weakspot.js][コンパイル後のJS]{
-#@mapfile(../code/with-types/type-guards-weakspot.js)
+//list[type-guards/weakspot.js][コンパイル後のJS]{
+#@mapfile(../code/types-advanced/type-guards/weakspot.js)
 var Sample = (function () {
     function Sample() {
     }
@@ -828,11 +828,11 @@ if (obj instanceof Sample) {
 //}
 
 これを回避する方法は2つあります。
-1つ目はtype guardsに頼らず、今まで通りに処理することです(@<list>{type-guards-vs-weakspot1})。
-2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards-vs-weakspot2-invalid})。
+1つ目はtype guardsに頼らず、今まで通りに処理することです(@<list>{type-guards/vs-weakspot1})。
+2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards/vs-weakspot2-invalid})。
 
-//list[type-guards-vs-weakspot1][type guardsに頼らず生きる]{
-#@mapfile(../code/with-types/type-guards-vs-weakspot1.ts)
+//list[type-guards/vs-weakspot1][type guardsに頼らず生きる]{
+#@mapfile(../code/types-advanced/type-guards/vs-weakspot1.ts)
 class Sample {
     str: string;
 }
@@ -851,8 +851,8 @@ if (obj !== null) {
 #@end
 //}
 
-//list[type-guards-vs-weakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
-#@mapfile(../code/with-types/type-guards-vs-weakspot2-invalid.ts)
+//list[type-guards/vs-weakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
+#@mapfile(../code/types-advanced/type-guards/vs-weakspot2-invalid.ts)
 class Sample {
     private _tmp: any;
     str: string;
@@ -884,10 +884,10 @@ type aliasもunion typesの扱いを便利にするために導入された機�
 type aliasは仕様上、interfaceと同じように利用できる場面もあります。
 ですが、基本的にtype aliasはinterfaceより機能が貧弱であるためなるべく避けるほうがよいでしょう。
 
-代表例を見てみましょう(@<list>{type-alias-basic})。
+代表例を見てみましょう(@<list>{type-alias/basic})。
 
-//list[type-alias-basic][頻出するunion typesに名前をつける]{
-#@mapfile(../code/with-types/type-alias-basic.ts)
+//list[type-alias/basic][頻出するunion typesに名前をつける]{
+#@mapfile(../code/types-advanced/type-alias/basic.ts)
 type FooReturns = string | number | boolean;
 
 interface Foo {
@@ -901,10 +901,10 @@ interface Foo {
 わかりやすいですね。
 1ヶ所変更すると、関連箇所が全て更新されるのも便利です。
 
-tuple typesに名前をつけることもできます(@<list>{type-alias-tuple})。
+tuple typesに名前をつけることもできます(@<list>{type-alias/tuple})。
 
-//list[type-alias-tuple][tuple typesに名前をつける]{
-#@mapfile(../code/with-types/type-alias-tuple.ts)
+//list[type-alias/tuple][tuple typesに名前をつける]{
+#@mapfile(../code/types-advanced/type-alias/tuple.ts)
 // tuple typesに名前をつける
 type Point = [number, number];
 type Circle = [Point, number];
@@ -927,10 +927,10 @@ module alternative {
 素直にクラスでやれ！って感じですね。
 
 type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。
-そのため、@<list>{type-alias-do-not-have-instance-invalid}のようなコードは書くことができません。
+そのため、@<list>{type-alias/do-not-have-instance-invalid}のようなコードは書くことができません。
 
-//list[type-alias-do-not-have-instance-invalid][import句とは違うのだよ！import句とは！]{
-#@mapfile(../code/with-types/type-alias-do-not-have-instance-invalid.ts)
+//list[type-alias/do-not-have-instance-invalid][import句とは違うのだよ！import句とは！]{
+#@mapfile(../code/types-advanced/type-alias/do-not-have-instance-invalid.ts)
 // 型の別名を作るだけで何かの値を作るわけではない…！
 type StringArray = string[];
 
@@ -940,11 +940,11 @@ var strArray = new StringArray();
 #@end
 //}
 
-TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{type-alias-spec-example})。
+TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{type-alias/spec-example})。
 union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
 
-//list[type-alias-spec-example][interfaceを使うんだ！]{
-#@mapfile(../code/with-types/type-alias-spec-example.ts)
+//list[type-alias/spec-example][interfaceを使うんだ！]{
+#@mapfile(../code/types-advanced/type-alias/spec-example.ts)
 // これらはinterfaceで表現不可 type aliasで正解
 type StringOrNumber = string | number;
 type TextObject = string | { text: string };
@@ -968,10 +968,10 @@ interface AltRecFunc {
 //}
 
 また、type aliasではGenericsを使った名前を定義することはできません。
-つまり、@<list>{type-alias-with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
+つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
 
-//list[type-alias-with-type-parameters-invalid][こういうコードは書けないんじゃ]{
-#@mapfile(../code/with-types/type-alias-with-type-parameters-invalid.ts)
+//list[type-alias/with-type-parameters-invalid][こういうコードは書けないんじゃ]{
+#@mapfile(../code/types-advanced/type-alias/with-type-parameters-invalid.ts)
 // "type" Identifier "=" Type ";" という文法だからダメ
 // Identifier は TypeParameters を含まない
 // type-alias-with-type-parameters-invalid.ts(4,9): error TS1005: '=' expected.

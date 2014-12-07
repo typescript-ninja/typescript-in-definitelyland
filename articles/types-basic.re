@@ -32,7 +32,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です(@<list>{object-type-literal/basic})。
 
 //list[object-type-literal/basic][基本的な例]{
-#@mapfile(../code/with-types/object-type-literal/basic.ts)
+#@mapfile(../code/types-basic/object-type-literal/basic.ts)
 // オブジェクトリテラルで値を作成！
 var objA = {
     x: 1,
@@ -58,7 +58,7 @@ objB = objA;
 オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使うことができます(@<list>{object-type-literal/basic-usage})。
 
 //list[object-type-literal/basic-usage][でも、正直読みづらい]{
-#@mapfile(../code/with-types/object-type-literal/basic-usage.ts)
+#@mapfile(../code/types-basic/object-type-literal/basic-usage.ts)
 function move(
             value: {x: number; y: number; },
             delta: {dx?: number; dy?: number;}
@@ -91,7 +91,7 @@ console.log(JSON.stringify(result, null, 2));
 1つ目は、実は既に登場しているプロパティを書くための書き方、プロパティシグニチャです(@<list>{object-type-literal/property-signiture})。
 
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
-#@mapfile(../code/with-types/object-type-literal/property-signiture.ts)
+#@mapfile(../code/types-basic/object-type-literal/property-signiture.ts)
 var obj: {
     property: string;
 };
@@ -109,7 +109,7 @@ obj = {
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す書き方、コールシグニチャです(@<list>{object-type-literal/call-signature})。
 
 //list[object-type-literal/call-signature][関数として利用できる]{
-#@mapfile(../code/with-types/object-type-literal/call-signature.ts)
+#@mapfile(../code/types-basic/object-type-literal/call-signature.ts)
 var obj: {
     (word: string): string;
 };
@@ -130,7 +130,7 @@ console.log(str);
 オーバーロードも表現可能です(@<list>{object-type-literal/call-signature-overload})。
 
 //list[object-type-literal/call-signature-overload][オーバーロードも表現可能]{
-#@mapfile(../code/with-types/object-type-literal/call-signature-overload.ts)
+#@mapfile(../code/types-basic/object-type-literal/call-signature-overload.ts)
 var obj: {
     // overloadもできるよ
     (word: string): string;
@@ -163,7 +163,7 @@ console.log(num);
 3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクトシグニチャです(@<list>{object-type-literal/constructor-signature-invalid})。
 
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
-#@mapfile(../code/with-types/object-type-literal/constructor-signature-invalid.ts)
+#@mapfile(../code/types-basic/object-type-literal/constructor-signature-invalid.ts)
 var clazz: {
     new (): any;
 };
@@ -198,7 +198,7 @@ TypeScriptのコードの書き方の範疇では、クラスを定義しなけ�
 添字によるプロパティアクセスに対して、型を当てはめることができます(@<list>{object-type-literal/index-signature})。
 
 //list[object-type-literal/index-signature][プロパティアクセスカッコツキ]{
-#@mapfile(../code/with-types/object-type-literal/index-signature.ts)
+#@mapfile(../code/types-basic/object-type-literal/index-signature.ts)
 var objA: {
     [index:number]: string;
 };
@@ -240,7 +240,7 @@ objB = {
 ちなみに、TypeScriptは@<list>{object-type-literal/index-access-sample-invalid}のように、文字列リテラルによるアクセスも許可しています。
 
 //list[object-type-literal/index-access-sample-invalid][実は . アクセスと同じ堅牢さを誇る]{
-#@mapfile(../code/with-types/object-type-literal/index-access-sample-invalid.ts)
+#@mapfile(../code/types-basic/object-type-literal/index-access-sample-invalid.ts)
 var obj = {
     str: "string",
     num: 1
@@ -269,7 +269,7 @@ var str2 = obj[propertyName];
 あるプロパティがメソッドであることを表現することができます(@<list>{object-type-literal/method-signature})。
 
 //list[object-type-literal/method-signature][メソッドの定義っぽい]{
-#@mapfile(../code/with-types/object-type-literal/method-signature.ts)
+#@mapfile(../code/types-basic/object-type-literal/method-signature.ts)
 var obj: {
     hello(word: string): string;
 };
@@ -305,7 +305,7 @@ obj2 = obj;
 関数も型として表現することができます(@<list>{function-types/basic})。
 
 //list[function-types/basic][関数も型として表現可能]{
-#@mapfile(../code/with-types/function-types/basic.ts)
+#@mapfile(../code/types-basic/function-types/basic.ts)
 var func: (value: string) => string;
 // 当てはまる値はこんな感じ
 func = word => "Hello, " + word;
@@ -336,7 +336,7 @@ TypeScriptでの一番基本的な使い方は名前付きオブジェクト型�
 TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
 
 //list[interface/basic][酷使されるインタフェースさん]{
-#@mapfile(../code/with-types/interface/basic.ts)
+#@mapfile(../code/types-basic/interface/basic.ts)
 // 一般的な用法
 interface A {
     str: string;
@@ -381,7 +381,7 @@ TypeScriptでは、構造が一致するかどうかで型の互換性を判定�
 そこに実際の継承関係は必要ありません。
 
 //list[structural-subtypings/basic][大体一緒ならまぁ一緒ってことでいいじゃん]{
-#@mapfile(../code/with-types/structural-subtypings/basic.ts)
+#@mapfile(../code/types-basic/structural-subtypings/basic.ts)
 // クラス Foo はstring型のstrという名前のプロパティとnumber型のnumという名前のプロパティを持つ
 class Foo {
     str = "string";
@@ -400,7 +400,7 @@ var obj: Foo = {
 そのため、@<list>{structural-subtypings/class-compat}のようなコードもTypeScriptとしては正しいです。
 
 //list[structural-subtypings/class-compat][Pointインタフェースが要求されているが？]{
-#@mapfile(../code/with-types/structural-subtypings/class-compat.ts)
+#@mapfile(../code/types-basic/structural-subtypings/class-compat.ts)
 interface Point {
     x: number;
     y: number;
@@ -437,7 +437,7 @@ double({
 なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます(@<list>{structural-subtypings/optional})。
 
 //list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
-#@mapfile(../code/with-types/structural-subtypings/optional.ts)
+#@mapfile(../code/types-basic/structural-subtypings/optional.ts)
 interface Point {
     x: number;
     y: number;
