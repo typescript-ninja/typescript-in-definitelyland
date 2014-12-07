@@ -5,13 +5,13 @@ TypeScriptリファレンスをお持ちの場合(TypeScript 1.3.0現在)、こ�
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
-TypeScript 1.0.0の時代に比べて、型システム周りは強化されてきつつあるので@<chapref>{with-types}を熟読してもらえるとよいでしょう。
+TypeScript 1.0.0の時代に比べて、型システム周りは強化されてきつつあるので@<chapref>{types-advanced}を熟読してもらえるとよいでしょう。
 
 この章ではTypeScriptの基本的な構文を解説していきます。
 TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそうになります。
 まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。
 
-難しいこととか便利なことは@<chapref>{with-types}を見てください。
+型周りの基本は@<chapref>{types-basic}を、難しいこととか便利なことは@<chapref>{types-advanced}を見てください。
 既存のJavaScriptの資産やライブラリを使いたい場合は@<chapref>{definition-file}の最初のほうを見てください。
 
 #@# TODO enum と const enum どっか

@@ -23,7 +23,9 @@ Version 1.3.0.0
 
 @<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、この後の章を読み解くための基礎知識を蓄えます。
 
-@<chapref>{with-types}では、TypeScriptの型の使われ方について解説し、実際に開発を行うための知識を蓄えます。
+@<chapref>{types-basic}では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。
+
+@<chapref>{types-advanced}では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。
 
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方。ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
 

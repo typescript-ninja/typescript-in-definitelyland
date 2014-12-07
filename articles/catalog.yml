@@ -4,7 +4,8 @@ PREDEF:
 CHAPS:
   - prepared-to-typescript.re
   - typescript-basic.re
-  - with-types.re
+  - types-basic.re
+  - types-advanced.re
   - definition-file.re
 #  - es6.re
 #  - another-transpiler.re
