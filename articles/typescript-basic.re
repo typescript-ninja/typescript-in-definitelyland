@@ -144,10 +144,10 @@ obj.dateA;
 まずはクラス変数、インスタンス変数です。
 クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。
 
-アクセス修飾子として、private, public, protected(TypeScript 1.3.0より)などの可視性を制御するアクセス修飾子を利用できます。
+アクセス修飾子として、private, public, protected（TypeScript 1.3.0より）などの可視性を制御するアクセス修飾子を利用できます。
 何も指定していない時のデフォルトの可視性はpublicになります。
 しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれらの要素にアクセスできてしまうので過信は禁物です。
-そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの(JavaScriptでもよく見られた)運用をしています。
+そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの（JavaScriptでもよく見られた）運用をしています。
 
 次はコンストラクタです。
 引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
@@ -188,7 +188,7 @@ console.log(obj.str);
 これを含んだコードをコンパイルする時は、@<code>{--target es5}オプションが必要です。
 なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。
 これを使うと、getterしか定義してなくてもプログラム上は値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
-なお、この文法のget, setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれ@<fn>{getter-setter}るという不遇な運命をたどっており、@<code>{--target es6}でどういう扱いになるかドキドキしています(今のところ問題なく使えるようですが…)。
+なお、この文法のget, setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれ@<fn>{getter-setter}るという不遇な運命をたどっており、@<code>{--target es6}でどういう扱いになるかドキドキしています（今のところ問題なく使えるようですが…）。
 
 これらの構文はECMAScript 6の文法を概ね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラスを定義できるようになります。
 
@@ -229,7 +229,7 @@ TypeScript以外のオブジェクト指向の世界でも言えることです�
 
 === 普通の関数
 
-至って普通です(@<list>{function})。
+至って普通です（@<list>{function}）。
 型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。
 デフォルト値付き引数はECMAScript 6で入る予定です。
 
@@ -252,7 +252,7 @@ function hey(word?:string) {
 }
 hey();
 
-// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+// デフォルト値を指定することもできる（? を付けたのと同じ扱い+α）
 function ahoy(word = "TypeScript") {
     return "Ahoy! " + word;
 }
@@ -260,7 +260,7 @@ ahoy();
 #@end
 //}
 
-可変長引数もあります！(@<list>{function-args})
+可変長引数もあります！（@<list>{function-args}）
 
 //list[function-args][可変長引数もあるよ]{
 #@mapfile(../code/typescript-basic/function-args.ts)
@@ -272,7 +272,7 @@ console.log(hello("TS", "JS"));
 #@end
 //}
 
-なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです(@<list>{function-invalid})。
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function-invalid}）。
 
 //list[function-invalid][こういうのはアカン]{
 #@mapfile(../code/typescript-basic/function-invalid.ts)
@@ -294,11 +294,11 @@ function funcB(...args:string, rest:string) {
 
 === アロー関数式
 
-ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function expression}を見ていきましょう(@<list>{arrow-function-expression})。
+ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function expression}を見ていきましょう（@<list>{arrow-function-expression}）。
 
 //list[arrow-function-expression][アロー関数式 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrow-function-expression.ts)
-// 以下2つは(thisが絡まない限り)等価！
+// 以下2つは（thisが絡まない限り）等価！
 var funcA = () => true;
 var funcB = function () {
     return true;
@@ -319,10 +319,10 @@ asyncModoki(value => console.log("Hello, " + value));
 //}
 
 短くてかっこいいですね。
-将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう(なんせ、楽だし)。
+将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう（なんせ、楽だし）。
 早くNode.jsでも使えるようになって、Gruntfile.jsとかで使わせてほしいものです。
 
-アロー関数式は1つの文しか持たない時、その文の値を返り値として使ってくれます(@<list>{arrow-function-expression-short})。
+アロー関数式は1つの文しか持たない時、その文の値を返り値として使ってくれます（@<list>{arrow-function-expression-short}）。
 
 //list[arrow-function-expression-short][1つの文しか持たない時の便利な振る舞い]{
 #@mapfile(../code/typescript-basic/arrow-function-expression-short.ts)
@@ -344,7 +344,7 @@ console.log(funcC());
 
 もう一つの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使う時に不要な混乱をおこさずに済みます。
-例を見てみましょう(@<list>{arrow-function-expression-this})。
+例を見てみましょう（@<list>{arrow-function-expression-this}）。
 
 //list[arrow-function-expression-this][受け継がれるthisの値…！]{
 #@mapfile(../code/typescript-basic/arrow-function-expression-this.ts)
@@ -353,11 +353,11 @@ console.log(funcC());
 class Sample {
     test():void {
         var funcA = () => {
-            // ここでの this は元のまま(Sampleのインスタンス)
+            // ここでの this は元のまま（Sampleのインスタンス）
             console.log(typeof this);
         };
         var funcB = function () {
-            // ここでの this は undefined (ECMAScriptの仕様)
+            // ここでの this は undefined （ECMAScriptの仕様）
             console.log(typeof this);
         };
         // object と表示される
@@ -408,9 +408,9 @@ SourceMapを使ってのデバッグが必須要件になるかどうか。
 最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。
 本当に大事なことなので二回言いました。
 
-=== 内部モジュール (internal modules)
+=== 内部モジュール （internal modules）
 
-まずは簡単な例を見てみましょう(@<list>{internal-module/basic})。
+まずは簡単な例を見てみましょう（@<list>{internal-module/basic}）。
 
 //list[internal-module/basic][内部モジュール！]{
 #@mapfile(../code/typescript-basic/internal-module/basic.ts)
@@ -476,7 +476,7 @@ module b {
     var objB: Sample;
     objB = new Sample;
 
-    // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
+    // 別に違う名前をつけてもいい（けど混乱しちゃうかも？
     import Test = a.Sample;
     var objC: Test;
     objC = new Test();
@@ -493,7 +493,7 @@ module b {
 単にファイルを分けて何も工夫せずにいると、型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
 そういう時のために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
 
-例えば、a.ts(@<list>{internal-module/a})とb.ts(@<list>{internal-module/b})があったとします。
+例えば、a.ts（@<list>{internal-module/a}）とb.ts（@<list>{internal-module/b}）があったとします。
 b.tsはa.tsで定義している関数を呼び出しています。
 つまり、b.tsはa.tsに依存しているわけです。
 そこで、reference commentを使って@<code>{/// <reference path="./a.ts" />}と記述します。
@@ -544,7 +544,7 @@ var b;
 
 ひとまとまりのファイルとして出力されていますね。
 
-=== 外部モジュール (external modules)
+=== 外部モジュール （external modules）
 
 外部モジュールは前述の通り、1ファイル = 1モジュール としてプロジェクトを構成していく方式です。
 @<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts@<fn>{require-ext} を参照することができます。
@@ -558,7 +558,7 @@ var b;
 2つ目のAMDはブラウザ上で外部モジュールを利用するための仕組みです。
 
 さて、実際のコード例を見てみましょう。
-foo.ts(@<list>{external-module/foo})、bar.ts(@<list>{external-module/bar})、buzz.ts(@<list>{external-module/buzz})というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
+foo.ts（@<list>{external-module/foo}）、bar.ts（@<list>{external-module/bar}）、buzz.ts（@<list>{external-module/buzz}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
 
 //list[external-module/foo][foo.ts]{
 #@mapfile(../code/typescript-basic/external-module/foo.ts)
@@ -623,7 +623,7 @@ module.exports = bye;
 //}
 
 Node.jsに慣れている人に不可解な仕様を1つ紹介しておきます。
-通常、Node.jsでは@<code>{require("./sub/")}とすると自動的に ./sub/index が参照されますが、TypeScriptではそうならないため、明示的に@<code>{require("./sub/index")}としてやる必要があります(@<list>{external-module/reference-sub})。
+通常、Node.jsでは@<code>{require("./sub/")}とすると自動的に ./sub/index が参照されますが、TypeScriptではそうならないため、明示的に@<code>{require("./sub/index")}としてやる必要があります（@<list>{external-module/reference-sub}）。
 
 //list[external-module/reference-sub][ディレクトリを指定してもindex.tsを見てくれない]{
 #@mapfile(../code/typescript-basic/external-module/reference-sub.ts)
@@ -638,4 +638,4 @@ console.log(sub.hello());
 
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
 
-//footnote[require-ext][Node.js上の仕様(TypeScriptではない)について細かく言うと、require("./foo")すると最初に ./foo.js が探され、次に ./foo.json、./foo.node と検索されます]
+//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かく言うと、require("./foo")すると最初に ./foo.js が探され、次に ./foo.json、./foo.node と検索されます]
