@@ -5,9 +5,9 @@ TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
-TypeScript 1.0.0の時代に比べて、型システム周りは強化されてきつつあるので@<chapref>{types-advanced}を熟読してもらえるとよいでしょう。
+TypeScript 1.0.0の時代に比べて、型システム周りは強化されてきつつあるので@<chapref>{types-advanced}を熟読してください。
 
-この章ではTypeScriptの基本的な構文を解説していきます。
+この章ではTypeScriptの基本的な構文を解説します。
 TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそうになります。
 まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。
 
@@ -21,7 +21,7 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 
 == 変数
 
-TypeScriptの変数宣言は概ねJavaScriptと一緒です。
+TypeScriptの変数宣言は概ねJavaScriptと同じです。
 違うのは、@<list>{var-with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
@@ -60,7 +60,7 @@ bool = "str";
 //}
 
 おう、安心・安全なのはわかった。
-わかったけど、そのために型注釈いちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。
+わかったけど、そのために型注釈をいちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。
 @<list>{var-with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
 
 //list[var-with-initializer][初期化付き変数 = 最強]{
@@ -81,9 +81,9 @@ var obj = {};
 
 == クラス
 
-TypeScriptには一般的な構文でのクラスの定義が備わっています@<list>{class-basic}。
+TypeScriptには一般的な構文でのクラスの定義が備わっています（@<list>{class-basic}）。
 
-//list[class-basic][クラスの要素様々]{
+//list[class-basic][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class-basic.ts)
 class Base {
     // インスタンス変数
@@ -144,9 +144,9 @@ obj.dateA;
 まずはクラス変数、インスタンス変数です。
 クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。
 
-アクセス修飾子として、private, public, protected(TypeScript 1.3.0より)などの可視性を制御するアクセス修飾子が利用可能です。
+アクセス修飾子として、private, public, protected(TypeScript 1.3.0より)などの可視性を制御するアクセス修飾子を利用できます。
 何も指定していない時のデフォルトの可視性はpublicになります。
-しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれら要素にアクセスできてしまうので過信は禁物です。
+しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれらの要素にアクセスできてしまうので過信は禁物です。
 そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの(JavaScriptでもよく見られた)運用をしています。
 
 次はコンストラクタです。
@@ -180,21 +180,21 @@ console.log(obj.str);
 #@end
 //}
 
-@<list>{class-basic}に戻りまして。
+@<list>{class-basic}に戻ります。
 次はメソッドです。
 これも特に特筆すべき要素はありませんね。普通です。
 
 最後に、get, setアクセサです。
-これを含んだコードをコンパイルする時は、@<code>{--target es5}オプションが必要になります。
+これを含んだコードをコンパイルする時は、@<code>{--target es5}オプションが必要です。
 なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。
-これを使うと、getterしか定義してなくてもプログラム上値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
+これを使うと、getterしか定義してなくてもプログラム上は値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
 なお、この文法のget, setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれ@<fn>{getter-setter}るという不遇な運命をたどっており、@<code>{--target es6}でどういう扱いになるかドキドキしています(今のところ問題なく使えるようですが…)。
 
-これら構文はECMAScript 6の文法を概ね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラス定義ができるようになります。
+これらの構文はECMAScript 6の文法を概ね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラスを定義できるようになります。
 
 次に、クラスの継承も見て行きましょう。
 継承も普通にできます@<list>{class-inherit}。
-superを使っての親クラスのメソッドの参照も一応普通に使えます。
+superを使った親クラスのメソッドの参照も一応普通に使えます。
 
 //list[class-inherit][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class-inherit.ts)
@@ -230,7 +230,7 @@ TypeScript以外のオブジェクト指向の世界でも言えることです�
 === 普通の関数
 
 至って普通です(@<list>{function})。
-型注釈の与え方や、引数をオプショナルにする方法だけJavaScriptと違いますね。
+型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。
 デフォルト値付き引数はECMAScript 6で入る予定です。
 
 //list[function][色々な関数定義]{
@@ -260,7 +260,7 @@ ahoy();
 #@end
 //}
 
-可変長引数もあります(@<list>{function-args})！
+可変長引数もあります！(@<list>{function-args})
 
 //list[function-args][可変長引数もあるよ]{
 #@mapfile(../code/typescript-basic/function-args.ts)
@@ -305,7 +305,7 @@ var funcB = function () {
 };
 
 // NOTE ここのcallbackの型注釈の意味は別の章で解説！
-// 引数を1つ取って返り値無し の関数を表します。
+// 引数を1つ取って返り値無し の関数を表します
 function asyncModoki(callback:(value:string)=>void) {
     callback("TypeScript");
 }
@@ -343,7 +343,7 @@ console.log(funcC());
 //}
 
 もう一つの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。
-この仕組のおかげでクラスのメソッドなどでコールバック関数を使う時に、不要な混乱をおこさずに済みます。
+この仕組みのおかげでクラスのメソッドなどでコールバック関数を使う時に不要な混乱をおこさずに済みます。
 例を見てみましょう(@<list>{arrow-function-expression-this})。
 
 //list[arrow-function-expression-this][受け継がれるthisの値…！]{
@@ -373,7 +373,7 @@ new Sample().test();
 
 うーん、アロー関数式は期待通りの挙動ですね。
 旧来の関数では値がundefinedになっています。
-JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式使っとけばいいと思います。
+JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式を使っとけばいいと思います。
 
 #@# TODO argumentsの取り扱いがES6準拠ではない みたいな話も仕様ちゃんと読んで書きたい
 
@@ -490,7 +490,7 @@ module b {
 さて、内部モジュールでプログラムを組むといっても、1つのソースファイルにだらだらと全部書いていくのは現実的ではありません。
 そのため、ファイルを分割する必要があります。
 
-単にファイルを分けて、何も工夫しないと型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
+単にファイルを分けて何も工夫せずにいると、型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
 そういう時のために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
 
 例えば、a.ts(@<list>{internal-module/a})とb.ts(@<list>{internal-module/b})があったとします。
@@ -520,7 +520,7 @@ module b {
 //}
 
 これをコンパイルする時、b.tsだけコンパイルすればa.tsも自動的に一緒にコンパイルされます。
-通常、何も指定しない場合a.jsとb.jsが生成されますが、--out オプションを併用することで1ファイルにまとめることも可能です。
+通常、何も指定しない場合はa.jsとb.jsが生成されますが、--out オプションを併用すると1ファイルにまとめられます。
 
 //cmd{
 $ tsc --out main.js b.ts
@@ -622,7 +622,7 @@ module.exports = bye;
 #@end
 //}
 
-Node.jsに慣れている人に不可解な仕様を1つ紹介しておきましょう。
+Node.jsに慣れている人に不可解な仕様を1つ紹介しておきます。
 通常、Node.jsでは@<code>{require("./sub/")}とすると自動的に ./sub/index が参照されますが、TypeScriptではそうならないため、明示的に@<code>{require("./sub/index")}としてやる必要があります(@<list>{external-module/reference-sub})。
 
 //list[external-module/reference-sub][ディレクトリを指定してもindex.tsを見てくれない]{
@@ -638,4 +638,4 @@ console.log(sub.hello());
 
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
 
-//footnote[require-ext][Node.js上の仕様(TypeScriptではない)について細かく言うと、require("./foo")すると最初に ./foo.js が探され、次に ./foo.json、./foo.node と検索されます。]
+//footnote[require-ext][Node.js上の仕様(TypeScriptではない)について細かく言うと、require("./foo")すると最初に ./foo.js が探され、次に ./foo.json、./foo.node と検索されます]
