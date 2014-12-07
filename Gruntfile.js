@@ -4,7 +4,8 @@ module.exports = function (grunt) {
             'code/**/*.ts',
             '!code/**/*-invalid.ts', // コンパイルが通らないコード
             '!code/**/*-invalid.d.ts', // コンパイルが通らないコード
-            '!code/**/*-1.3.0.ts' // 1.3.0 限定コード
+            '!code/**/*-1.3.0.ts', // 1.3.0 限定コード
+            '!code/**/node_modules/**/*.ts'
         ]);
         var tasks = {};
         srcFileList.forEach(function (file) {

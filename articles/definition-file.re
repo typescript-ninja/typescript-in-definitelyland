@@ -81,10 +81,103 @@ typings
 あとは、これら型定義ファイルを自分の使うコードから参照するだけでコンパイルが可能になります。
 残念ながらライブラリの実体は含まれていないため、npmやbowerなどで別途取得する必要があるでしょう。
 
-#@# TODO mochaも入れて、簡単なテストを書く例(型定義ファイルを使う例)を示す
-
 //footnote[dtsm][dtsmは筆者(vvakame)が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
 //footnote[NuGet][WindowsユーザにはNuGetというツールもあるのですが、全然知らないため割愛します。]
+
+== 型定義ファイルを参照してみよう！
+
+型定義ファイルを参照するには、tscコマンドでコンパイルする時に一緒に指定するか、ソースコード中からリファレンスコメントで参照する必要があります。
+リファレンスコメントとして参照するほうがコンパイル手順を簡素に保てるため適しています。
+
+リファレンスコメントはソースコードの先頭に@<code>{/// <reference path="相対パスor絶対パス" />}の形式で指定します。
+
+mocha+power-assertでテストを書く場合を例に、使い方を解説していきます。
+
+テスト対象のコードは@<code>{usage/lib/index}です。
+
+//list[usage/lib/index][至って普通の外部モジュール]{
+#@mapfile(../code/definition-file/usage/lib/index.ts)
+"use strict";
+
+export function hello(word = "TypeScript") {
+    return "Hello, " + word;
+}
+#@end
+//}
+
+これに対して、テストコードを書いてみましょう(@<list>{usage/tests/indexSpec})。
+普通ですね。
+特定のinputを与えるとoutputが得られる。
+そのことを検証するコードです。
+
+//list[usage/tests/indexSpec][mocha + power-assert でテストを書く]{
+#@mapfile(../code/definition-file/usage/tests/indexSpec.ts)
+/// <reference path="../typings/mocha/mocha.d.ts" />
+/// <reference path="../typings/power-assert/power-assert.d.ts" />
+
+import assert = require("power-assert");
+
+import lib = require("../lib/index");
+
+describe("lib", ()=> {
+    describe("hello function", ()=> {
+        it("generate string with default value", ()=> {
+            var str = lib.hello();
+            assert(str === "Hello, TypeScript");
+        });
+        it("generate string with parameter", ()=> {
+            var str = lib.hello("JavaScript");
+            assert(str === "Hello, JavaScript");
+        });
+    });
+});
+#@end
+//}
+
+mochaでは、describeで何に対してのテストかを宣誓し、itでどういう性質を持つべきかを宣誓します。
+power-assertは、適当にassertに真になってほしい式を突っ込んでおけばそれが本当に真になっているかを検証して報告してくれます。
+
+ここで問題なのは、mochaとpower-assertについての情報がソースコード上に存在していないことです。
+例えば、assert関数はpower-assertが提供するものですし、describeとitはmochaが提供しています。
+JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため型情報をぶっこんでやる必要があります。
+そこで使われるのが型定義ファイルです。
+
+型定義ファイルの抜粋を示します。
+mocha@<list>{usage/abstract/mocha}とpower-assert@<list>{usage/abstract/power-assert}の型定義ファイル(抜粋)を見てみましょう。
+
+//list[usage/abstract/mocha][mocha.d.ts 抜粋]{
+#@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
+interface MochaDone {
+    (error?: Error): void;
+}
+
+declare var describe : {
+    (description: string, spec: () => void): void;
+    only(description: string, spec: () => void): void;
+    skip(description: string, spec: () => void): void;
+};
+
+declare var it: {
+    (expectation: string, assertion?: (done: MochaDone) => void): void;
+    only(expectation: string, assertion?: (done: MochaDone) => void): void;
+    skip(expectation: string, assertion?: (done: MochaDone) => void): void;
+};
+#@end
+//}
+
+//list[usage/abstract/power-assert][power-assert.d.ts 抜粋]{
+#@mapfile(../code/definition-file/usage/abstract/power-assert.d.ts)
+declare function assert(value:any, message?:string):void;
+
+declare module "power-assert" {
+    export = assert;
+}
+#@end
+//}
+
+型定義ファイルを見るとmocha, power-assertそれぞれのAPIが表現されています。
+@<list>{usage/tests/indexSpec}から「これらのAPIを使います！」と宣言すれば、矛盾なくコンパイルを通すことができそうです。
+その意思を表すためにリファレンスコメントを使います。
 
 == 型定義ファイルを書こう
 
