@@ -1,7 +1,7 @@
 = TypeScriptの基本
 
-JavaScriptの(TypeScriptではなく)仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス(@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin})を参照してください。
-TypeScriptリファレンスをお持ちの場合(TypeScript 1.3.0現在)、この章は読まなくて大丈夫です。
+JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
+TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、この章は読まなくて大丈夫です。
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。

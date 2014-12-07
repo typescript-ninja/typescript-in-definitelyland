@@ -3,7 +3,7 @@
 == 本書について
 
 本書は、ECMAScript 5レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
-また、解説するTypeScriptの内容には執筆時点(1.3.0)ではまだ未リリースの構文についての解説も含みます。
+また、解説するTypeScriptの内容には執筆時点（1.3.0）ではまだ未リリースの構文についての解説も含みます。
 
 本書の全てのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
@@ -33,7 +33,7 @@ Version 1.3.0.0
 
 #@# TBD @<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
 
-JavaScriptの(TypeScriptではなく)仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス(@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin})を参照してください。
+JavaScriptの(TypeScriptではなく)仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
@@ -43,10 +43,10 @@ TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 
 == なぜTypeScriptを選ぶべきなのか
 
-TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript(JavaScript)に静的な型付けによる検証を導入したものです。
+TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（JavaScript）に静的な型付けによる検証を導入したものです。
 現実を見据えた言語仕様で、"未来のJavaScriptそのもの"になることを目指しているようです。
 
-実際に、TypeScriptはECMAScriptのsuper set(上位互換)であることを標榜しています。
+実際に、TypeScriptはECMAScriptのsuper set（上位互換）であることを標榜しています。
 つまり、ECMAScript+静的型付け=TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けてきています。
 
@@ -57,7 +57,7 @@ TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScr
 一方、TypeScriptは先に述べたようにJavaScriptを踏襲します。
 @<href>{http://mozaic.fm/post/96461640633/8-altjs,mozaic.fm出張版 #8}@<fn>{mozaic.fm}でもあんどうやすしさんと一緒に考えましたが、そこでの結論も「JSの完全な置換えを目指すDartは夢、TypeScriptは現実」というものでした。
 
-この方針ではECMAScriptのクソな仕様の数々は(勝手に闇に葬るわけにはいかないので)残ってしまいます。
+この方針ではECMAScriptのクソな仕様の数々は（勝手に闇に葬るわけにはいかないので）残ってしまいます。
 ですが、その代わりにTypeScriptは将来"正式な"JavaScriptになる可能性があります。
 稀に、TypeScriptのリポジトリに「TypeScriptにLINQを導入してほしい」という要望が上がってくることがありますが、上記の事情を鑑みればそのような要望が取り込まれないのは明らかです。
 LINQや拡張メソッドは確かに便利ですし、作者がC#と同じアンダース・ヘルスバーグ氏なのでそういう期待が湧くのは理解できます。

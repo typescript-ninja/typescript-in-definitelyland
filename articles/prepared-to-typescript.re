@@ -68,7 +68,7 @@ Windowsの方は素直にVisual Studioを使うのがよいでしょう。
 WebStormの他にもEclipse用TypeScriptプラグインもあるため、自分に馴染むものを探してみるのがよいでしょう。
 
 WebStormは正式にTypeScriptに対応しています。
-WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラが持つIDE実装用API(俗にいうLanguageService)を利用していません。
+WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラが持つIDE実装用API（俗にいうLanguageService）を利用していません。
 このため、型推論の行われ方がTypeScriptコンパイラそのものほどは頭がよくありません。
 しかし、実用上はあまり問題にならないと思うので我慢できる範囲です。
 最近ではTypeScript側の開発が早すぎて、WebStorm側の対応が後手に回っている状態です。
@@ -103,7 +103,7 @@ File Watcherの初期設定は@<img>{new-watcher-default}のようになりま�
  * TypeScriptファイルが更新されたらコンパイル
  * 使うコンパイラはシステムデフォルトのもの
  * コンパイルオプションは --sourcemap のみ
- ** --noImplicitAny なし！(必須でしょ！)
+ ** --noImplicitAny なし！（必須でしょ！）
  ** --target es5 なし！
  ** --out なし！
 
@@ -189,7 +189,7 @@ get, setアクセサを使うために必要です。
  * コンパイルする時の対象ファイルを1ファイルに固定
 
 これは筆者の経験則によるものです。
-ファイルのコンパイル対象をデフォルトの"現在編集しているファイル($FileName$)"にするためには、プロジェクト内の全てのファイルが単独でコンパイルできるようになっている必要があります。
+ファイルのコンパイル対象をデフォルトの"現在編集しているファイル（$FileName$）"にするためには、プロジェクト内の全てのファイルが単独でコンパイルできるようになっている必要があります。
 つまり、ある1つのファイルの中に全ての依存関係を解決するreference commentを書いてまわらないといけないのです。
 筆者も最初はこの方針で作業していたのですが、管理がものすごくめんどくさいこと、循環依存が発生した時に--outオプションを併用した時の出力順制御が難しいこと、TypeScript 1.1.0-1からコンパイル時間が大幅に改善したのでコンパイル対象が大きくても気にならなくなったこと、上記3点を踏まえて、rootになるファイルを1つ定め、それを頂点としてtree上に依存関係を定義するようにしました。
 File Watcherやgruntなどのツールでは、このrootとして設計したファイルのみを常にコンパイルするようにします。
@@ -211,7 +211,7 @@ File Watcher 1つでは、1系統しか同時に面倒を見ることができ�
 ==== 総括
 
 Scopeを使ってプロジェクトを2つに区切って、File Watcherをそれに対応させて2つ作って、コンパイルオプションを変えよう！
-(@<img>{main-and-test-structure}、@<img>{scope-main}、@<img>{scope-test}、@<img>{main-watcher}、@<img>{test-watcher})
+（@<img>{main-and-test-structure}、@<img>{scope-main}、@<img>{scope-test}、@<img>{main-watcher}、@<img>{test-watcher}）
 
 //image[main-and-test-structure][lib/ と test/ 配下にコードとテストコードを入れる]{
 プロジェクト全体図
