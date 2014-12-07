@@ -36,7 +36,7 @@ var objA = {
     y: 2
 };
 
-// オブジェクト型リテラルで型を作成！（値は無し
+// オブジェクト型リテラルで型を作成！(値は無し
 // 上記の objA の型は型推論で objB と同一になる
 var objB: {
     x: number;
@@ -243,7 +243,7 @@ var obj = {
     num: 1
 };
 
-// 文字列リテラルによるアクセスだと普通に . アクセス同様の型情報が得られる
+// 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
 var str: string = obj["str"];
 var num: number = obj["num"];
 // ちなみに、存在しない要素にアクセスすると any になる
@@ -357,7 +357,7 @@ var objB: B2 = {
     num: 42
 };
 
-// interfaceはクラスすら拡張する！（実装はなかったことになる
+// interfaceはクラスすら拡張する！(実装はなかったことになる
 class FooClass {
     constructor(public num: number) {}
 }
