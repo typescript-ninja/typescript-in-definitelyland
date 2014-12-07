@@ -21,6 +21,7 @@ TBD
 
 TBD
  * 情報なさすぎて死ぬのでは
+#@# TODO https://twitter.com/mizchi/statuses/541485157438349312 mizchi君つよい
 
 == 予想される未来
 
