@@ -7,7 +7,7 @@ TypeScriptの華はやはり型！
 @<chapref>{typescript-basic}など所詮児戯に過ぎぬッ！！
 
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
-TypeScriptコードを書く分には使わない範囲(型定義ファイルで主に使う範囲)や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
+TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
 
 #@# NOTE https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#23-declarations
 まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
@@ -24,9 +24,9 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
 実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
 
-== オブジェクト型リテラル (object type literal)
+== オブジェクト型リテラル （object type literal）
 
-オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です(@<list>{object-type-literal/basic})。
+オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{object-type-literal/basic}）。
 
 //list[object-type-literal/basic][基本的な例]{
 #@mapfile(../code/types-basic/object-type-literal/basic.ts)
@@ -36,7 +36,7 @@ var objA = {
     y: 2
 };
 
-// オブジェクト型リテラルで型を作成！(値は無し
+// オブジェクト型リテラルで型を作成！（値は無し
 // 上記の objA の型は型推論で objB と同一になる
 var objB: {
     x: number;
@@ -52,7 +52,7 @@ objB = objA;
 値の代わりに型名を、要素の終わりに , ではなく ; を書くだけです。
 簡単ですね。
 
-オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます(@<list>{object-type-literal/basic-usage})。
+オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{object-type-literal/basic-usage}）。
 
 //list[object-type-literal/basic-usage][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/object-type-literal/basic-usage.ts)
@@ -83,9 +83,9 @@ console.log(JSON.stringify(result, null, 2));
 
 //footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではありません。]
 
-=== プロパティシグニチャ (property signatures)
+=== プロパティシグニチャ （property signatures）
 
-1つ目は、実は既に登場しているプロパティを書くための書き方、プロパティシグニチャです(@<list>{object-type-literal/property-signiture})。
+1つ目は、実は既に登場しているプロパティを書くための書き方、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
 
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/object-type-literal/property-signiture.ts)
@@ -101,9 +101,9 @@ obj = {
 
 素直でわかりやすいですね。
 
-=== コールシグニチャ (call signatures)
+=== コールシグニチャ （call signatures）
 
-2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す書き方、コールシグニチャです(@<list>{object-type-literal/call-signature})。
+2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す書き方、コールシグニチャです（@<list>{object-type-literal/call-signature}）。
 
 //list[object-type-literal/call-signature][関数として利用できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature.ts)
@@ -124,7 +124,7 @@ console.log(str);
 #@end
 //}
 
-オーバーロードも表現できます(@<list>{object-type-literal/call-signature-overload})。
+オーバーロードも表現できます（@<list>{object-type-literal/call-signature-overload}）。
 
 //list[object-type-literal/call-signature-overload][オーバーロードも表現できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature-overload.ts)
@@ -155,9 +155,9 @@ console.log(num);
 
 実装が煩雑になるのでなるべくオーバーロードは避けたいですね。
 
-=== コンストラクトシグニチャ (construct signatures)
+=== コンストラクトシグニチャ （construct signatures）
 
-3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクトシグニチャです(@<list>{object-type-literal/constructor-signature-invalid})。
+3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
 
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
 #@mapfile(../code/types-basic/object-type-literal/constructor-signature-invalid.ts)
@@ -189,10 +189,10 @@ TypeScriptのコードの書き方の範疇では、クラスを定義しなけ�
 
 コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。
 
-=== インデックスシグニチャ (index signatures)
+=== インデックスシグニチャ （index signatures）
 
 4つ目は、インデックスシグニチャです。
-添字によるプロパティアクセスに対して、型を当てはめられます(@<list>{object-type-literal/index-signature})。
+添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{object-type-literal/index-signature}）。
 
 //list[object-type-literal/index-signature][プロパティアクセスカッコツキ]{
 #@mapfile(../code/types-basic/object-type-literal/index-signature.ts)
@@ -232,7 +232,7 @@ objB = {
 #@end
 //}
 
-インデックスシグニチャの型と、インデックスシグニチャ以外(例えばプロパティシグニチャ)の型との間に矛盾が生じないようにする必要があります。
+インデックスシグニチャの型と、インデックスシグニチャ以外（例えばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。
 
 ちなみに、TypeScriptは@<list>{object-type-literal/index-access-sample-invalid}のように、文字列リテラルによるアクセスも許可しています。
 
@@ -260,10 +260,10 @@ var str2 = obj[propertyName];
 
 インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。
 
-=== メソッドシグニチャ (method signatures)
+=== メソッドシグニチャ （method signatures）
 
 最後の5つ目は、メソッドシグニチャです。
-あるプロパティがメソッドであることを表現できます(@<list>{object-type-literal/method-signature})。
+あるプロパティがメソッドであることを表現できます（@<list>{object-type-literal/method-signature}）。
 
 //list[object-type-literal/method-signature][メソッドの定義っぽい]{
 #@mapfile(../code/types-basic/object-type-literal/method-signature.ts)
@@ -297,9 +297,9 @@ obj2 = obj;
 
 "プロパティシグニチャ + 関数な型"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
-== 関数型リテラル(function type literals)
+== 関数型リテラル （function type literals）
 
-関数も型として表現できます(@<list>{function-types/basic})。
+関数も型として表現できます（@<list>{function-types/basic}）。
 
 //list[function-types/basic][関数も型として表現できる]{
 #@mapfile(../code/types-basic/function-types/basic.ts)
@@ -357,7 +357,7 @@ var objB: B2 = {
     num: 42
 };
 
-// interfaceはクラスすら拡張する！(実装はなかったことになる
+// interfaceはクラスすら拡張する！（実装はなかったことになる
 class FooClass {
     constructor(public num: number) {}
 }
@@ -371,10 +371,10 @@ var objC: C = {
 #@end
 //}
 
-== 構造的部分型 (structural subtyping)
+== 構造的部分型 （structural subtyping）
 
 構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
-TypeScriptでは、構造が一致するかどうかで型の互換性を判定します(@<list>{structural-subtypings/basic})。
+TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structural-subtypings/basic}）。
 そこに実際の継承関係は必要ありません。
 
 //list[structural-subtypings/basic][大体一緒ならまぁ一緒ってことでいいじゃん]{
@@ -431,7 +431,7 @@ double({
 
 通るには通りますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうが良いコーディングスタイルになります。
 
-なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます(@<list>{structural-subtypings/optional})。
+なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structural-subtypings/optional}）。
 
 //list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
 #@mapfile(../code/types-basic/structural-subtypings/optional.ts)
@@ -471,7 +471,7 @@ printPoint({
 #@end
 //}
 
-== 型アサーション (type assertions)
+== 型アサーション （type assertions）
 
 型アサーションは他の言語でいうところのキャストです。
 @<list>{type-assertions/basic}のように、@<code>{<変換後型名>}と書くだけです。
@@ -490,7 +490,7 @@ num = <any>str;
 #@end
 //}
 
-もちろん、互換性のない型に型アサーションで変換しようとすると怒られます(@<list>{type-assertions/invalid-assertions-invalid})。
+もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（@<list>{type-assertions/invalid-assertions-invalid}）。
 
 //list[type-assertions/invalid-assertions-invalid][stringはnumberにはなれない]{
 #@mapfile(../code/types-basic/type-assertions/invalid-assertions-invalid.ts)
@@ -501,7 +501,7 @@ var num: number = <number> str;
 #@end
 //}
 
-ダウンキャストも実行できます(@<list>{type-assertions/class})。
+ダウンキャストも実行できます（@<list>{type-assertions/class}）。
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
 
 //list[type-assertions/class][親クラスから子クラスへ変換]{
@@ -532,7 +532,7 @@ if (obj instanceof InheritA) {
 //}
 
 <any>に一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。
-型定義ファイルを使っている時に、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります(@<list>{type-assertions/buggy-definition-file})。
+型定義ファイルを使っている時に、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{type-assertions/buggy-definition-file}）。
 
 //list[type-assertions/buggy-definition-file][親クラスから子クラスへ変換]{
 #@mapfile(../code/types-basic/type-assertions/buggy-definition-file.ts)
