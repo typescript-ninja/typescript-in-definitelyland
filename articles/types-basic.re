@@ -549,10 +549,6 @@ var num: number = (<any>obj).num;
 #@end
 //}
 
-== 型クエリ
-
-TBD
-
 == ジェネリクス (generics)
 
 TBD

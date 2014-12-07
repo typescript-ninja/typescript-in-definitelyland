@@ -78,6 +78,84 @@ var array = [new A(), new B(), new C()];
 
 以上、解散！
 
+== 型クエリ (type queries)
+
+型クエリは指定した変数(やメソッドなど)の型をコピーします。
+例えば、@<list>{type-queries/basic}のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
+そういう時に、型クエリを使います。
+
+//list[type-queries/basic][クラスそのものの型だよ！]{
+#@mapfile(../code/types-advanced/type-queries/basic.ts)
+class Sample {
+    str: string;
+}
+
+// この書き方だとSampleのインスタンスになる Sampleクラスそのものではない
+var obj: Sample;
+// Sample自体の型をコピー！ つまりこれはSampleクラスそのものだ！
+var clazz: typeof Sample;
+
+// それぞれに当てはまる値は以下の通り なるほどな！
+obj = new Sample();
+clazz = Sample;
+
+obj = new clazz();
+
+// clazz を頑張って手で書くと以下に等しい
+var alterClazz: {
+    new (): { str: string; };
+};
+alterClazz = clazz;
+clazz = alterClazz;
+#@end
+//}
+
+メソッドなどの値も取れますが、thisを使ったりすることはできないため少しトリッキーなコードが必要になる場合もあります。
+@<list>{type-queries/cheap-trick}の例は、prototypeプロパティを使っているためJavaScript力が多少ないと思いつかないかもしれません。
+
+//list[type-queries/cheap-trick][prototypeを参照するとメソッドの型が取れる]{
+#@mapfile(../code/types-advanced/type-queries/cheap-trick.ts)
+class Sample {
+    hello = (word = "TypeScript") => "Hello, " + word;
+    bye: typeof Sample.prototype.hello;
+}
+
+var obj = new Sample();
+obj.bye = obj.hello;
+#@end
+//}
+
+型クエリはわざわざインタフェースを定義するのもめんどくさいけど…という時に使える場合もあります。
+@<list>{type-queries/copy-invalid}では、1つ目の引数の型を2つ目の引数や返り値の型にもコピーして使っています。
+
+//list[type-queries/copy-invalid][ここまで複雑にするならインタフェース使って]{
+#@mapfile(../code/types-advanced/type-queries/copy-invalid.ts)
+// このコードは正しい
+function move(p1: {x1: number; y1: number; x2: number; y2: number; }, p2: typeof p1): typeof p1 {
+    return {
+        x1: p1.x1 + p2.x1,
+        y1: p1.y1 + p2.y1,
+        x2: p1.x2 + p2.x2,
+        y2: p1.y2 + p2.y2
+    };
+}
+
+var rect = move({
+    x1: 1, y1: 1, z1: 1, // 無駄に多い
+    x2: 2, y2: 2, z2: 2  // プロパティ
+}, {
+    x1: 3, y1: 3,
+    x2: 4, y2: 4
+});
+// z1 は typeof 1 には存在しないのだ！
+// error TS2339: Property 'z1' does not exist on
+// type '{ x1: number; y1: number; x2: number; y2: number; }'.
+rect.z1;
+#@end
+//}
+
+ここまで来るとさすがに読みにくくなるのでインタフェースを1つ定義したほうがいいですね。
+
 == タプル型 (tuple types)
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
