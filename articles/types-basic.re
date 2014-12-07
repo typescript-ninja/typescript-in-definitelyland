@@ -557,6 +557,9 @@ Javaなどでは総称型とも呼ばれます。
 
 ジェネリクスなんて知らんわい！
 という人も、実は既に色々なところでお世話になっています。
+
+=== ジェネリクスの基本
+
 TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
 例を見てみましょう(@<list>{generic-types/basic})。
 
@@ -641,9 +644,100 @@ interface Array {
 "stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach"などになりました。
 ジェネリクス、使う分にはめっちゃ簡単ですね！
 
+このように、ジェネリクスを使うと柔軟性と堅牢さを両立することができます。
+
 //footnote[array-forEach][紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！]
 
-TBD 柔軟性を損なうことなくかっちり型付けが嬉しい！という話を書く
-TBD extends の話
-TBD 複数型パラメタ
-TBD 自分でジェネリクスありのコードを書く時の話
+=== ジェネリクスの書き方色々
+
+ここでジェネリクスの書き方を確認しておきます（@<list>{generic-types/variation}）。
+
+//list[generic-types/variation][Array<T>が登場する]{
+#@mapfile(../code/types-basic/generic-types/variation.ts)
+// それぞれのTは独立していて、関連性はない
+
+// クラスとジェネリクス
+class SampleA<T> {
+    constructor(public data: T) {}
+}
+// 使い方 <string>は省略しても引数から推論可能
+var objA = new SampleA<string>("str");
+
+// インタフェースとジェネリクス
+interface SampleB<T> {
+    data: T;
+}
+// 使い方
+var objB: SampleB<number> = { data: 1 };
+
+// オブジェクト型リテラル各種
+var obj: {
+    new <T>(value: T): any;
+    <T>(value: T): any;
+    methodA<T>(value: T): any;
+    // 型パラメータは複数あってもよい
+    methodB<T, U>(value: T): U;
+};
+
+// 関数型
+var func: <T>(array: T[]) => T;
+// 使い方
+func = <T>(array: T[]) => array[0];
+func<number>([1, 2, 3]);
+
+// コンストラクタ型
+var ctor: new <T>(value: T) => any;
+// 使い方
+ctor = SampleA;
+new ctor<string>("str");
+#@end
+//}
+
+この中でよく使うのは、クラスとインタフェースとメソッドシグニチャの書き方でしょう。
+まずはこの3パターンの書き方を覚えておくべきです。
+
+=== 型パラメータと制約
+
+型パラメータには満たすべき制約を設けることができます。
+例を見てみましょう（@<list>{generic-types/limitation-invalid}）。
+
+//list[generic-types/limitation-invalid][型パラメータTはBaseを継承していなければならない]{
+#@mapfile(../code/types-basic/generic-types/limitation-invalid.ts)
+class Base {
+    str: string;
+}
+class InheritA extends Base {
+    num: number;
+}
+
+interface Sample<T extends Base> {
+    method(): T;
+}
+
+// これはOK
+var objA: Sample<InheritA>;
+
+// これはダメ RegExpはBaseを継承していない
+// error TS2344: Type 'RegExp' does not satisfy the constraint 'Base'.
+// Property 'str' is missing in type 'RegExp'.
+var objB: Sample<RegExp>;
+
+// これはOK 指定したオブジェクト型リテラルはBaseクラスの要件を満たす
+var objC: Sample<{ str: string; }>;
+#@end
+//}
+
+型パラメータが満たすべき制約をextendsの形式で指定することができます。
+これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。
+
+=== 自分でジェネリクス有りのコードを書く
+
+ジェネリクスで一番難しいのは、使うことではなく、使わせることです。
+何故ならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。
+例えば、"○○のArray"のように、型パラメータ部分が何になっても上手く動くような設計です。
+
+逆に言うと、実際に使う時には具体化しなければいけないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
+これを上手に使いこなすには一段上の設計力が要求されます。
+
+通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
+ですが、そこが出来るようになったらだいぶ型に慣れ親しんできたと言えます。
