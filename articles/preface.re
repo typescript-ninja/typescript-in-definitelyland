@@ -14,7 +14,7 @@ Version 1.3.0.0
 
 現時点でTypeScriptリポジトリのmaster/HEADは以下の通り。
 #@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
-c075fe19170be128aa6e49641e6730eca8c4cd5c
+98750ca7b49902f2ad6141452e46e55e1aa9931d
 #@end
 
 == 本書の内容
