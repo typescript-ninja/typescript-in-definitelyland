@@ -371,7 +371,7 @@ var objC: C = {
 #@end
 //}
 
-== 構造的部分型 (Structural Subtyping)
+== 構造的部分型 (structural subtyping)
 
 構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
 TypeScriptでは、構造が一致するかどうかで型の互換性を判定します(@<list>{structural-subtypings/basic})。
