@@ -549,6 +549,101 @@ var num: number = (<any>obj).num;
 #@end
 //}
 
-== ジェネリクス (generics)
+== ジェネリクス (generic types)
 
-TBD
+いよいよ来ました。
+最後の大ボスです。
+Javaなどでは総称型とも呼ばれます。
+
+ジェネリクスなんて知らんわい！
+という人も、実は既に色々なところでお世話になっています。
+TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
+例を見てみましょう(@<list>{generic-types/basic})。
+
+//list[generic-types/basic][配列はジェネリクスに支えられております]{
+#@mapfile(../code/types-basic/generic-types/basic.ts)
+// string[] は実は Array<string> と同じ意味なのだ！(Arrayだけ特別に！
+var strArray: Array<string> = ["a", "b", "c"];
+var numArray: Array<number> = [1, 2, 3];
+
+// ArrayのメソッドとしてforEachがある
+// forEachで渡される値の型はそれぞれ違う(forEachは汎用的だ！
+strArray.forEach(v => v.charAt(0));
+numArray.forEach(v => v.toFixed(2));
+
+// 頑張ってこうやって書いてもいいけど、めんどいよね
+strArray.forEach((v: string) => v.charAt(0));
+numArray.forEach((v: number) => v.toFixed(2));
+
+// あと、間違った型を指定した時にエラーにならないとこわい…
+// error TS2345: Argument of type '(v: RegExp) => boolean' is not assignable to
+// parameter of type '(value: string, index: number, array: string[]) => void'.
+// strArray.forEach((v: RegExp) => v.test("str"));
+#@end
+//}
+
+実は、@<code>{string[]}という型は@<code>{Array<string>}と同じ意味なのです！
+ArrayだけはTypeScriptの中で特別扱いされています。
+
+ここで出てくる@<code>{<string>}という部分がジェネリクスの肝です。
+@<code>{Array<string>}を声に出して読むと、"stringのArray"になります。
+ただのArrayではないのです。
+"stringの"という所が重要です。
+stringを別のものにして"numberのArray"とか"RegExpのArray"と言うこともできます。
+つまり、色々な型に対して、"○○のArray"と言うことができるのです。
+これをプログラム上で表現すると@<code>{Array<T>}という表現になります。
+
+ここで新しく出てきた@<code>{T}を@<kw>{型パラメータ,type parameters}と呼びます。
+実際、ここで出てくるアルファベットは@<code>{T}じゃなくてもかまいせん。
+@<code>{Type}でもいいですし、なんでも良いです。
+ただ、慣習として他の既存の型とかぶらないようにアルファベット大文字1文字を使う場合が多いです。
+代表的な例ではTypeの頭文字であるTや、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。
+
+さて、ではlib.d.tsから一部を抜粋した@<list>{generic-types/array-declaration-invalid}を見てみます@<fn>{array-forEach}。
+
+//list[generic-types/array-declaration-invalid][Array<T>が登場する]{
+#@mapfile(../code/types-basic/generic-types/array-declaration-invalid.ts)
+declare var Array: {
+    new <T>(...items: T[]): T[];
+};
+
+interface Array<T> {
+    length: number;
+    push(...items: T[]): number;
+    pop(): T;
+    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+    [n: number]: T;
+}
+#@end
+//}
+
+色々な所でTが使われています。
+pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach"などの、汎用化された要素がたくさんあります。
+
+ここで、型パラメータTを実際にstringで具体化します(@<list>{generic-types/array-declaration-string-invalid})。
+
+//list[generic-types/array-declaration-string-invalid][Array<T>が登場する]{
+#@mapfile(../code/types-basic/generic-types/array-declaration-string-invalid.ts)
+declare var Array: {
+    new (...items: string[]): string[];
+};
+
+interface Array {
+    length: number;
+    push(...items: string[]): number;
+    pop(): string;
+    forEach(callbackfn: (value: string) => void, thisArg?: any): void;
+    [n: number]: string;
+}
+#@end
+//}
+
+"stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach"などになりました。
+ジェネリクス、使う分にはめっちゃ簡単ですね！
+
+//footnote[array-forEach][紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！]
+
+TBD 柔軟性を損なうことなくかっちり型付けが嬉しい！という話を書く
+TBD extends の話
+TBD 複数型パラメタ
+TBD 自分でジェネリクスありのコードを書く時の話

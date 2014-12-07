@@ -252,7 +252,7 @@ function hey(word?:string) {
 }
 hey();
 
-// デフォルト値を指定することもできる（? を付けたのと同じ扱い+α）
+// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
 function ahoy(word = "TypeScript") {
     return "Ahoy! " + word;
 }
@@ -298,14 +298,14 @@ ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function e
 
 //list[arrow-function-expression][アロー関数式 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrow-function-expression.ts)
-// 以下2つは（thisが絡まない限り）等価！
+// 以下2つは(thisが絡まない限り)等価！
 var funcA = () => true;
 var funcB = function () {
     return true;
 };
 
 // NOTE ここのcallbackの型注釈の意味は別の章で解説！
-// 引数を1つ取って返り値無し の関数を表します
+// 引数を1つ取って返り値無し の関数を表します。
 function asyncModoki(callback:(value:string)=>void) {
     callback("TypeScript");
 }
@@ -353,11 +353,11 @@ console.log(funcC());
 class Sample {
     test():void {
         var funcA = () => {
-            // ここでの this は元のまま（Sampleのインスタンス）
+            // ここでの this は元のまま(Sampleのインスタンス)
             console.log(typeof this);
         };
         var funcB = function () {
-            // ここでの this は undefined （ECMAScriptの仕様）
+            // ここでの this は undefined (ECMAScriptの仕様)
             console.log(typeof this);
         };
         // object と表示される
@@ -476,7 +476,7 @@ module b {
     var objB: Sample;
     objB = new Sample;
 
-    // 別に違う名前をつけてもいい（けど混乱しちゃうかも？
+    // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
     import Test = a.Sample;
     var objC: Test;
     objC = new Test();
