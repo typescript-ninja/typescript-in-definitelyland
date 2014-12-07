@@ -17,7 +17,7 @@
     "grunt-dtsm": "0.1.1",
     "grunt-exec": "0.4.6",
     "grunt-open": "0.2.3",
-    "grunt-ts": "1.12.1",
+    "grunt-ts": "2.0.0",
     "grunt-tslint": "1.0.1",
     "grunt-typescript-formatter": "0.0.1",
     "load-grunt-tasks": "1.0.0",

@@ -8,7 +8,8 @@ module.exports = function (grunt) {
         ]);
         var tasks = {};
         srcFileList.forEach(function (file) {
-            var task = tasks[file] = {
+            taskName = file.replace(/\./g, "-dot-");
+            var task = tasks[taskName] = {
                 src: file,
                 options: {
                     compiler: './typescript/bin/tsc',
