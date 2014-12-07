@@ -22,7 +22,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 そういう場面は実はTypeScriptではいっぱいあるため、その差を理解し積極的に活用できるようになるとTypeScript上級者と言えるでしょう。
 
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
-実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及しています。
+実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
 
 == オブジェクト型リテラル (object type literal)
 
@@ -52,7 +52,7 @@ objB = objA;
 値の代わりに型名を、要素の終わりに , ではなく ; を書くだけです。
 簡単ですね。
 
-オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使うことができます(@<list>{object-type-literal/basic-usage})。
+オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます(@<list>{object-type-literal/basic-usage})。
 
 //list[object-type-literal/basic-usage][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/object-type-literal/basic-usage.ts)
@@ -124,9 +124,9 @@ console.log(str);
 #@end
 //}
 
-オーバーロードも表現可能です(@<list>{object-type-literal/call-signature-overload})。
+オーバーロードも表現できます(@<list>{object-type-literal/call-signature-overload})。
 
-//list[object-type-literal/call-signature-overload][オーバーロードも表現可能]{
+//list[object-type-literal/call-signature-overload][オーバーロードも表現できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature-overload.ts)
 var obj: {
     // overloadもできるよ
@@ -192,7 +192,7 @@ TypeScriptのコードの書き方の範疇では、クラスを定義しなけ�
 === インデックスシグニチャ (index signatures)
 
 4つ目は、インデックスシグニチャです。
-添字によるプロパティアクセスに対して、型を当てはめることができます(@<list>{object-type-literal/index-signature})。
+添字によるプロパティアクセスに対して、型を当てはめられます(@<list>{object-type-literal/index-signature})。
 
 //list[object-type-literal/index-signature][プロパティアクセスカッコツキ]{
 #@mapfile(../code/types-basic/object-type-literal/index-signature.ts)
@@ -232,7 +232,7 @@ objB = {
 #@end
 //}
 
-インデックスシグニチャの型と、インデックスシグニチャ以外の(例えばプロパティシグニチャ)の型との間に矛盾が生じないようにする必要があります。
+インデックスシグニチャの型と、インデックスシグニチャ以外(例えばプロパティシグニチャ)の型との間に矛盾が生じないようにする必要があります。
 
 ちなみに、TypeScriptは@<list>{object-type-literal/index-access-sample-invalid}のように、文字列リテラルによるアクセスも許可しています。
 
@@ -243,7 +243,7 @@ var obj = {
     num: 1
 };
 
-// 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
+// 文字列リテラルによるアクセスだと普通に . アクセス同様の型情報が得られる
 var str: string = obj["str"];
 var num: number = obj["num"];
 // ちなみに、存在しない要素にアクセスすると any になる
@@ -263,7 +263,7 @@ var str2 = obj[propertyName];
 === メソッドシグニチャ (method signatures)
 
 最後の5つ目は、メソッドシグニチャです。
-あるプロパティがメソッドであることを表現することができます(@<list>{object-type-literal/method-signature})。
+あるプロパティがメソッドであることを表現できます(@<list>{object-type-literal/method-signature})。
 
 //list[object-type-literal/method-signature][メソッドの定義っぽい]{
 #@mapfile(../code/types-basic/object-type-literal/method-signature.ts)
@@ -299,9 +299,9 @@ obj2 = obj;
 
 == 関数型リテラル(function type literals)
 
-関数も型として表現することができます(@<list>{function-types/basic})。
+関数も型として表現できます(@<list>{function-types/basic})。
 
-//list[function-types/basic][関数も型として表現可能]{
+//list[function-types/basic][関数も型として表現できる]{
 #@mapfile(../code/types-basic/function-types/basic.ts)
 var func: (value: string) => string;
 // 当てはまる値はこんな感じ
@@ -501,7 +501,7 @@ var num: number = <number> str;
 #@end
 //}
 
-ダウンキャストも実行することができます(@<list>{type-assertions/class})。
+ダウンキャストも実行できます(@<list>{type-assertions/class})。
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
 
 //list[type-assertions/class][親クラスから子クラスへ変換]{
