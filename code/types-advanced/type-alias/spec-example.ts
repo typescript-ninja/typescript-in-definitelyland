@@ -6,14 +6,15 @@ type ObjectStatics = typeof Object;
 
 // これらはinterfaceで表現可能
 type HolidayLookup = Map<string, Date>;
-interface AltHolidayLookup extends Map<string, Date> {}
+interface AltHolidayLookup extends Map<string, Date> {
+}
 
 type Callback = (data: string) => void;
 interface AltCallback {
-    (date: string): void;
+	(date: string): void;
 }
 
 type RecFunc = () => RecFunc;
 interface AltRecFunc {
-    (): AltRecFunc;
+	(): AltRecFunc;
 }

@@ -70,7 +70,7 @@ var str = "string";
 var num = 1;
 var bool = true;
 
-var func = function () {
+var func = function() {
 };
 var obj = {};
 #@end
@@ -88,42 +88,42 @@ TypeScriptには一般的な構文でのクラスの定義が備わっていま�
 //list[class-basic][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class-basic.ts)
 class Base {
-    // インスタンス変数
-    numA: number;
-    strA = "string";
+  // インスタンス変数
+  numA: number;
+  strA = "string";
 
-    public numB: number;
-    private numC: number;
-    // TypeScript 1.3.0 から protected 利用可
-    protected numD: number;
+  public numB: number;
+  private numC: number;
+  // TypeScript 1.3.0 から protected 利用可
+  protected numD: number;
 
-    // クラス変数
-    static numA: number;
-    public static numB: number;
-    private static numC: number;
-    protected static numD: number;
+  // クラス変数
+  static numA: number;
+  public static numB: number;
+  private static numC: number;
+  protected static numD: number;
 
-    // コンストラクタ
-    constructor(boolA: boolean,
-         public boolB: boolean,
-        private boolC: boolean,
-      protected boolD: boolean) {
-    }
+  // コンストラクタ
+  constructor(boolA: boolean,
+    public boolB: boolean,
+    private boolC: boolean,
+    protected boolD: boolean) {
+  }
 
-    // メソッド
-    hello(word: string): string {
-        return "Hello, " + word;
-    }
+  // メソッド
+  hello(word: string): string {
+    return "Hello, " + word;
+  }
 
-    // get, setアクセサ
-    // コンパイル時に --target es5 以上が必要
-    _date: Date;
-    get dateA(): Date {
-        return this._date;
-    }
-    set dateA(value: Date) {
-        this._date = value;
-    }
+  // get, setアクセサ
+  // コンパイル時に --target es5 以上が必要
+  _date: Date;
+  get dateA(): Date {
+    return this._date;
+  }
+  set dateA(value: Date) {
+    this._date = value;
+  }
 }
 
 var obj = new Base(true, false, true, false);
@@ -159,8 +159,8 @@ obj.dateA;
 //list[class-constructor.ts][引数プロパティ宣言！]{
 #@mapfile(../code/typescript-basic/class-constructor.ts)
 class Sample {
-    constructor(public str:string) {
-    }
+  constructor(public str: string) {
+  }
 }
 
 var obj = new Sample("TypeScript");
@@ -201,15 +201,15 @@ superを使った親クラスのメソッドの参照も一応普通に使えま
 //list[class-inherit][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class-inherit.ts)
 class Base {
-    greeting(name:string) {
-        return "Hi! " + name;
-    }
+  greeting(name: string) {
+    return "Hi! " + name;
+  }
 }
 
 class Inherit extends Base {
-    greeting(name:string) {
-        return super.greeting(name) + ". How are you?";
-    }
+  greeting(name: string) {
+    return super.greeting(name) + ". How are you?";
+  }
 }
 
 var obj = new Inherit();
@@ -237,26 +237,26 @@ TypeScript以外のオブジェクト指向の世界でも言えることです�
 
 //list[function][色々な関数定義]{
 #@mapfile(../code/typescript-basic/function.ts)
-function hello(word:string):string {
-    return "Hello, " + word;
+function hello(word: string): string {
+  return "Hello, " + word;
 }
 hello("TypeScript");
 
 // 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある。
-function bye(word:string) {
-    return "Bye, " + word;
+function bye(word: string) {
+  return "Bye, " + word;
 }
 bye("TypeScript");
 
 // ? をつけると呼び出し時に引数が省略可能になる
-function hey(word?:string) {
-    return "Hey, " + (word || "TypeScript");
+function hey(word?: string) {
+  return "Hey, " + (word || "TypeScript");
 }
 hey();
 
 // デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
 function ahoy(word = "TypeScript") {
-    return "Ahoy! " + word;
+  return "Ahoy! " + word;
 }
 ahoy();
 #@end
@@ -266,8 +266,8 @@ ahoy();
 
 //list[function-args][可変長引数もあるよ]{
 #@mapfile(../code/typescript-basic/function-args.ts)
-function hello(...args:string[]) {
-    return "Hello, " + args.join(" & ");
+function hello(...args: string[]) {
+  return "Hello, " + args.join(" & ");
 }
 // Hello, TS & JS と表示される
 console.log(hello("TS", "JS"));
@@ -280,14 +280,14 @@ console.log(hello("TS", "JS"));
 #@mapfile(../code/typescript-basic/function-invalid.ts)
 // オプショナルな引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
-function funcA(arg1?:string, arg2:string) {
-    return "Hello, " + arg1 + ", " + arg2;
+function funcA(arg1?: string, arg2: string) {
+  return "Hello, " + arg1 + ", " + arg2;
 }
 
 // 可変長引数は必ず最後じゃないといけない
 // error TS1014: A rest parameter must be last in a parameter list.
-function funcB(...args:string, rest:string) {
-    return "Hello, " + args.join(", ") + " and " + rest;
+function funcB(...args: string, rest: string) {
+  return "Hello, " + args.join(", ") + " and " + rest;
 }
 #@end
 //}
@@ -302,18 +302,18 @@ ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function e
 #@mapfile(../code/typescript-basic/arrow-function-expression.ts)
 // 以下2つは(thisが絡まない限り)等価！
 var funcA = () => true;
-var funcB = function () {
-    return true;
+var funcB = function() {
+  return true;
 };
 
 // NOTE ここのcallbackの型注釈の意味は別の章で解説！
 // 引数を1つ取って返り値無し の関数を表します。
-function asyncModoki(callback:(value:string)=>void) {
-    callback("TypeScript");
+function asyncModoki(callback: (value: string) => void) {
+  callback("TypeScript");
 }
 // 旧来の書き方
-asyncModoki(function (value:string) {
-    console.log("Hello, " + value);
+asyncModoki(function(value: string) {
+  console.log("Hello, " + value);
 });
 // アロー関数式だと楽やで
 asyncModoki(value => console.log("Hello, " + value));
@@ -337,7 +337,7 @@ funcA();
 // アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
 var funcB = (word = "TypeScript") => "Hello, " + word;
 var funcC = (word = "TypeScript") => {
-    return "Hello, " + word;
+  return "Hello, " + word;
 };
 console.log(funcB());
 console.log(funcC());
@@ -353,20 +353,20 @@ console.log(funcC());
 "use strict";
 
 class Sample {
-    test():void {
-        var funcA = () => {
-            // ここでの this は元のまま(Sampleのインスタンス)
-            console.log(typeof this);
-        };
-        var funcB = function () {
-            // ここでの this は undefined (ECMAScriptの仕様)
-            console.log(typeof this);
-        };
-        // object と表示される
-        funcA();
-        // undefined と表示される
-        funcB();
-    }
+  test(): void {
+    var funcA = () => {
+      // ここでの this は元のまま(Sampleのインスタンス)
+      console.log(typeof this);
+    };
+    var funcB = function() {
+      // ここでの this は undefined (ECMAScriptの仕様)
+      console.log(typeof this);
+    };
+    // object と表示される
+    funcA();
+    // undefined と表示される
+    funcB();
+  }
 }
 
 new Sample().test();
@@ -417,36 +417,36 @@ SourceMapを使ってのデバッグが必須要件になるかどうか。
 //list[internal-module/basic][内部モジュール！]{
 #@mapfile(../code/typescript-basic/internal-module/basic.ts)
 module a {
-    // export してないものは外部からは見えない
-    class Sample {
-        hello(word = "TypeScript") {
-            return "Hello, " + word;
-        }
+  // export してないものは外部からは見えない
+  class Sample {
+    hello(word = "TypeScript") {
+      return "Hello, " + word;
     }
+  }
 
-    export var obj = new Sample();
+  export var obj = new Sample();
 }
 module a {
-    export function bye(word = "JavaScript") {
-        return "Bye, " + word;
-    }
+  export function bye(word = "JavaScript") {
+    return "Bye, " + word;
+  }
 
-    // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
-    // error TS2304: Cannot find name 'Sample'.
-    // var tmp = new Sample();
+  // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
+  // error TS2304: Cannot find name 'Sample'.
+  // var tmp = new Sample();
 }
 
 module b {
-    export module c {
-        export function hello() {
-            return a.obj.hello();
-        }
+  export module c {
+    export function hello() {
+      return a.obj.hello();
     }
+  }
 }
 module d.e {
-    export function hello() {
-        return a.obj.hello();
-    }
+  export function hello() {
+    return a.obj.hello();
+  }
 }
 
 // Hello, TypeScript と表示される
@@ -466,26 +466,26 @@ console.log(d.e.hello());
 //list[internal-module/import][import句で別名を作る]{
 #@mapfile(../code/typescript-basic/internal-module/import.ts)
 module a {
-    export class Sample {}
+  export class Sample { }
 }
 
 module b {
-    // 他のモジュールも普通に参照できる
-    var objA: a.Sample;
-    objA = new a.Sample();
+  // 他のモジュールも普通に参照できる
+  var objA: a.Sample;
+  objA = new a.Sample();
 
-    // めんどくさいなら import句 を使えばいい
-    import Sample = a.Sample;
-    var objB: Sample;
-    objB = new Sample;
+  // めんどくさいなら import句 を使えばいい
+  import Sample = a.Sample;
+  var objB: Sample;
+  objB = new Sample;
 
-    // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
-    import Test = a.Sample;
-    var objC: Test;
-    objC = new Test();
+  // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
+  import Test = a.Sample;
+  var objC: Test;
+  objC = new Test();
 
-    // 別に名前が違っても互換性が失われるわけではないのだ
-    objA = new Test();
+  // 別に名前が違っても互換性が失われるわけではないのだ
+  objA = new Test();
 }
 #@end
 //}
@@ -506,9 +506,9 @@ b.tsはa.tsで定義している関数を呼び出しています。
 //list[internal-module/a][a.ts]{
 #@mapfile(../code/typescript-basic/internal-module/a.ts)
 module a {
-    export function hello(word = "TypeScript") {
-        return "Hello, " + word;
-    }
+  export function hello(word = "TypeScript") {
+    return "Hello, " + word;
+  }
 }
 #@end
 //}
@@ -518,7 +518,7 @@ module a {
 /// <reference path="./a.ts" />
 
 module b {
-    console.log(a.hello("internal module"));
+  console.log(a.hello("internal module"));
 }
 #@end
 //}
@@ -580,7 +580,7 @@ console.log(bye());
 //list[external-module/bar][bar.ts]{
 #@mapfile(../code/typescript-basic/external-module/bar.ts)
 export function hello(word = "TypeScript") {
-    return "Hello, " + word;
+  return "Hello, " + word;
 }
 #@end
 //}
@@ -588,7 +588,7 @@ export function hello(word = "TypeScript") {
 //list[external-module/buzz][buzz.ts]{
 #@mapfile(../code/typescript-basic/external-module/buzz.ts)
 function bye(word = "TypeScript") {
-    return "Good bye, " + word;
+  return "Good bye, " + word;
 }
 
 export = bye;

@@ -52,7 +52,7 @@ interface MochaDone {
 
 declare var mocha: Mocha;
 
-declare var describe : {
+declare var describe: {
     (description: string, spec: () => void): void;
     only(description: string, spec: () => void): void;
     skip(description: string, spec: () => void): void;
@@ -60,7 +60,7 @@ declare var describe : {
 }
 
 // alias for `describe`
-declare var context : {
+declare var context: {
     (contextTitle: string, spec: () => void): void;
     only(contextTitle: string, spec: () => void): void;
     skip(contextTitle: string, spec: () => void): void;

@@ -46,11 +46,11 @@ var array = [1, true];
 // No best common type exists among return expressions. と怒られます。
 // つまり 返り値が {} に推論されたので怒られた。
 function test() {
-    if (Math.random() < 0.5) {
-        return 1;
-    } else {
-        return true;
-    }
+  if (Math.random() < 0.5) {
+    return 1;
+  } else {
+    return true;
+  }
 }
 #@end
 //}
@@ -63,12 +63,13 @@ function test() {
 
 //list[bct-class-1.3.0][あまり見かけないBCTが役に立つ例]{
 #@mapfile(../code/types-advanced/bct/class-1.3.0.ts)
-class A { }
+class A {
+}
 class B extends A {
-    str: string;
+  str: string;
 }
 class C extends A {
-    num: number;
+  num: number;
 }
 
 // array: A[] だ！
@@ -87,7 +88,7 @@ var array = [new A(), new B(), new C()];
 //list[type-queries/basic][クラスそのものの型だよ！]{
 #@mapfile(../code/types-advanced/type-queries/basic.ts)
 class Sample {
-    str: string;
+  str: string;
 }
 
 // この書き方だとSampleのインスタンスになる Sampleクラスそのものではない
@@ -103,7 +104,7 @@ obj = new clazz();
 
 // clazz を頑張って手で書くと以下に等しい
 var alterClazz: {
-    new (): { str: string; };
+  new (): { str: string; };
 };
 alterClazz = clazz;
 clazz = alterClazz;
@@ -116,8 +117,8 @@ clazz = alterClazz;
 //list[type-queries/cheap-trick][prototypeを参照するとメソッドの型が取れる]{
 #@mapfile(../code/types-advanced/type-queries/cheap-trick.ts)
 class Sample {
-    hello = (word = "TypeScript") => "Hello, " + word;
-    bye: typeof Sample.prototype.hello;
+  hello = (word = "TypeScript") => "Hello, " + word;
+  bye: typeof Sample.prototype.hello;
 }
 
 var obj = new Sample();
@@ -131,21 +132,21 @@ obj.bye = obj.hello;
 //list[type-queries/copy-invalid][ここまで複雑にするならインタフェース使って]{
 #@mapfile(../code/types-advanced/type-queries/copy-invalid.ts)
 // このコードは正しい
-function move(p1: {x1: number; y1: number; x2: number; y2: number; }, p2: typeof p1): typeof p1 {
-    return {
-        x1: p1.x1 + p2.x1,
-        y1: p1.y1 + p2.y1,
-        x2: p1.x2 + p2.x2,
-        y2: p1.y2 + p2.y2
-    };
+function move(p1: { x1: number; y1: number; x2: number; y2: number; }, p2: typeof p1): typeof p1 {
+  return {
+    x1: p1.x1 + p2.x1,
+    y1: p1.y1 + p2.y1,
+    x2: p1.x2 + p2.x2,
+    y2: p1.y2 + p2.y2
+  };
 }
 
 var rect = move({
-    x1: 1, y1: 1, z1: 1, // 無駄に多い
-    x2: 2, y2: 2, z2: 2  // プロパティ
+  x1: 1, y1: 1, z1: 1, // 無駄に多い
+  x2: 2, y2: 2, z2: 2  // プロパティ
 }, {
-    x1: 3, y1: 3,
-    x2: 4, y2: 4
+  x1: 3, y1: 3,
+  x2: 4, y2: 4
 });
 // z1 は typeof 1 には存在しないのだ！
 // error TS2339: Property 'z1' does not exist on
@@ -195,7 +196,7 @@ tuple[1].charAt(0);
 
 // TypeScriptのtuple typesは普通にArrayでもあるのだ
 tuple.forEach(v => {
-    console.log(v);
+  console.log(v);
 });
 #@end
 //}
@@ -208,7 +209,7 @@ tuple.forEach(v => {
 #@mapfile(../code/types-advanced/tuple/with-generics.ts)
 // Genericsを使ってtupleを生成して返す
 function zip<T1, T2>(v1: T1, v2: T2): [T1, T2] {
-    return [v1, v2];
+  return [v1, v2];
 }
 
 var tuple = zip("str", { hello: () => "Hello!" });
@@ -346,10 +347,10 @@ var c: typeof a | typeof b;
 //list[union-types/subtype][要素Bが要素Aのサブタイプの場合Aにまとまる]{
 #@mapfile(../code/types-advanced/union-types/subtype.ts)
 class Base {
-    str: string;
+  str: string;
 }
 class Inherit extends Base {
-    num: number;
+  num: number;
 }
 
 // 明示的に指定しとくと Base | Inherit となる(今のところ
@@ -440,8 +441,8 @@ var obj: string | number | Date;
 
 //list[union-types/cant-inferred-invalid][こういうのは型推論できない]{
 #@mapfile(../code/types-advanced/union-types/cant-inferred-invalid.ts)
-function test<T>(...args:T[]):T[] {
-    return args;
+function test<T>(...args: T[]): T[] {
+  return args;
 }
 // (number | boolean)[] にはならなかった。残念。
 // error TS2453: The type argument for type parameter 'T' cannot be inferred from
@@ -493,11 +494,11 @@ TypeScriptのtype guardsでは、typeofの結果が string, boolean, number の�
 #@mapfile(../code/types-advanced/type-guards/typeof-basic.ts)
 var obj: number | string;
 if (typeof obj === "string") {
-    // ここでは string と確定されている！
-    obj.charAt(0);
+  // ここでは string と確定されている！
+  obj.charAt(0);
 } else {
-    // ここでは消去法で number と確定されている！
-    obj.toFixed(2);
+  // ここでは消去法で number と確定されている！
+  obj.toFixed(2);
 }
 #@end
 //}
@@ -513,12 +514,12 @@ type guardsが導入された後は"変数objがtypeofで調べた時にstring�
 
 //list[type-guards/typeof-invalid][1.3.0ではエラーとして検出できぬ]{
 #@mapfile(../code/types-advanced/type-guards/typeof-invalid.ts)
-var obj:any;
+var obj: any;
 if (typeof obj === "string") {
-    // ここでは string と確定されている！
-    // number にしか存在しないメソッドを呼ぶとコンパイルエラー！
-    // error TS2339: Property 'toFixed' does not exist on type 'string'.
-    obj.toFixed(0);
+  // ここでは string と確定されている！
+  // number にしか存在しないメソッドを呼ぶとコンパイルエラー！
+  // error TS2339: Property 'toFixed' does not exist on type 'string'.
+  obj.toFixed(0);
 }
 #@end
 //}
@@ -529,11 +530,11 @@ if (typeof obj === "string") {
 
 //list[type-guards/typeof-cant-narrow]["狭める"だけなんだなぁ]{
 #@mapfile(../code/types-advanced/type-guards/typeof-cant-narrow.ts)
-var obj:number;
+var obj: number;
 if (typeof obj === "string") {
-    // number を string に"狭める"ことはできない…
-    // コンパイル通っちゃう
-    obj.toFixed(0);
+  // number を string に"狭める"ことはできない…
+  // コンパイル通っちゃう
+  obj.toFixed(0);
 }
 #@end
 //}
@@ -549,22 +550,22 @@ typeof による type guards 特有の仕様として、後続の型の絞込が
 var obj: number | string | boolean;
 
 if (typeof obj === "string") {
-    // ここでは string と確定されている！
-    obj.charAt(0);
+  // ここでは string と確定されている！
+  obj.charAt(0);
 } else {
-    // ここでは string が引かれ number | boolean;
-    obj;
+  // ここでは string が引かれ number | boolean;
+  obj;
 }
 
 if (typeof obj === "string") {
-    // ここでは string と確定されている！
-    obj.charAt(0);
-} else if(typeof obj === "number") {
-    // ここでは number と確定されている！
-    obj.toFixed(2);
+  // ここでは string と確定されている！
+  obj.charAt(0);
+} else if (typeof obj === "number") {
+  // ここでは number と確定されている！
+  obj.toFixed(2);
 } else {
-    // ここでは string, number が引かれ boolean となる！
-    obj;
+  // ここでは string, number が引かれ boolean となる！
+  obj;
 }
 #@end
 //}
@@ -617,19 +618,19 @@ instanceofで型を絞り込みます(@<list>{type-guards/instanceof-basic})。
 //list[type-guards/instanceof-basic][instanceof の挙動]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-basic.ts)
 class A {
-    str: string;
+  str: string;
 }
 class B {
-    num: number;
+  num: number;
 }
 
 var obj: A | B;
-if (obj instanceof  A) {
-    // ここでは A と確定されている！
-    obj.str;
-}else if(obj instanceof B) {
-    // ここでは B と確定されている！
-    obj.num;
+if (obj instanceof A) {
+  // ここでは A と確定されている！
+  obj.str;
+} else if (obj instanceof B) {
+  // ここでは B と確定されている！
+  obj.num;
 }
 #@end
 //}
@@ -652,18 +653,18 @@ TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScrip
 //list[type-guards/instanceof-prototype][prototype の型が参照される]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-prototype.ts)
 interface AStatic {
-    new (): AInstance;
-    prototype: AInstance;
+  new (): AInstance;
+  prototype: AInstance;
 }
 interface AInstance {
-    str: string;
+  str: string;
 }
 declare var A: AStatic;
 
 var obj: AInstance | {};
 if (obj instanceof A) {
-    // ここでは AInstance と確定されている！
-    obj.str;
+  // ここでは AInstance と確定されている！
+  obj.str;
 }
 #@end
 //}
@@ -690,13 +691,13 @@ prototypeプロパティを持っているだけではダメで、Functionとの
 //list[type-guards/instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-prototype-invalid.ts)
 interface AStatic {
-    // 以下のどちらかがないと Function との互換性が無い
-    // (): AInstance;
-    // new (): AInstance;
-    prototype: AInstance;
+  // 以下のどちらかがないと Function との互換性が無い
+  // (): AInstance;
+  // new (): AInstance;
+  prototype: AInstance;
 }
 interface AInstance {
-    str: string;
+  str: string;
 }
 declare var A: AStatic;
 
@@ -713,19 +714,19 @@ if (obj instanceof A) {
 //list[type-guards/instanceof-failed-invalid][んん？なんだこのエラーは？]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-failed-invalid.ts)
 interface AStatic {
-    new (): AInstance;
-    // prototype: AInstance; がない！
+  new (): AInstance;
+  // prototype: AInstance; がない！
 }
 interface AInstance {
-    str: string;
+  str: string;
 }
 declare var A: AStatic;
 
 var obj: AInstance | Date;
 if (obj instanceof A) {
-    // ここでは AInstance に確定されていてほしかった…
-    // error TS2339: Property 'str' does not exist on type 'Date | AInstance'.
-    obj.str;
+  // ここでは AInstance に確定されていてほしかった…
+  // error TS2339: Property 'str' does not exist on type 'Date | AInstance'.
+  obj.str;
 }
 #@end
 //}
@@ -755,16 +756,16 @@ prototypeのプロパティの型に、Genericsが絡むと、話がややこし
 #@mapfile(../code/types-advanced/type-guards/array-declaration-invalid.d.ts)
 // lib.d.tsから抜粋 本当はもうちょっと色々ある
 declare var Array: {
-    new (arrayLength?: number): any[];
-    (arrayLength?: number): any[];
-    isArray(arg: any): boolean;
-    prototype: Array<any>;
+  new (arrayLength?: number): any[];
+  (arrayLength?: number): any[];
+  isArray(arg: any): boolean;
+  prototype: Array<any>;
 };
 
 interface Array<T> {
-    length: number;
-    push(...items:T[]): number;
-    pop(): T;
+  length: number;
+  push(...items: T[]): number;
+  pop(): T;
 }
 #@end
 //}
@@ -775,12 +776,12 @@ instanceof で type guards で型を狭めた時、 any[] になるのかな…�
 #@mapfile(../code/types-advanced/type-guards/instanceof-array-invalid.ts)
 var array: number[] | Date;
 
-if(array instanceof Array) {
-    // Array.prototype の型は Array<any> つまりは any[] …！
-    // any[] は number[] に代入可能だな！！型を狭められたに違いない！
-    // error TS2339: Property 'length' does not exist on type 'number[] | Date'.
-    // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) エラーだと…！？
-    array.length;
+if (array instanceof Array) {
+  // Array.prototype の型は Array<any> つまりは any[] …！
+  // any[] は number[] に代入可能だな！！型を狭められたに違いない！
+  // error TS2339: Property 'length' does not exist on type 'number[] | Date'.
+  // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) エラーだと…！？
+  array.length;
 }
 #@end
 //}
@@ -789,9 +790,9 @@ if(array instanceof Array) {
 #@mapfile(../code/types-advanced/type-guards/instanceof-array.ts)
 var array: any[] | Date;
 
-if(array instanceof Array) {
-    // any[] に絞り込まれる
-    array.length;
+if (array instanceof Array) {
+  // any[] に絞り込まれる
+  array.length;
 }
 #@end
 //}
@@ -800,9 +801,9 @@ if(array instanceof Array) {
 #@mapfile(../code/types-advanced/type-guards/instanceof-empty-array-invalid.ts)
 var array: {}[] | Date;
 
-if(array instanceof Array) {
-    // error TS2339: Property 'length' does not exist on type 'Date | {}[]'.
-    array.length;
+if (array instanceof Array) {
+  // error TS2339: Property 'length' does not exist on type 'Date | {}[]'.
+  array.length;
 }
 #@end
 //}
@@ -833,25 +834,25 @@ typeof obj === "string" && obj.charAt(0);
 // typeof obj === "number" && obj.charAt(0);
 
 // || 演算子でunion typesに
-if(typeof obj === "string" || typeof obj === "boolean") {
-    // string | boolean に絞り込まれる
+if (typeof obj === "string" || typeof obj === "boolean") {
+  // string | boolean に絞り込まれる
 } else {
-    // 消去法で number ！ (typeof による type guards だけ)
+  // 消去法で number ！ (typeof による type guards だけ)
 }
 
 // 三項演算子は普通にif文と一緒の挙動
 typeof obj === "string" ? obj.charAt(0) : obj;
 // 以下と等価
 if (typeof obj === "string") {
-    obj.charAt(0);
+  obj.charAt(0);
 } else {
-    obj;
+  obj;
 }
 
 // 一応、否定演算子にも対応している
 if (!(typeof obj !== "string")) {
-    // 否定の否定は普通にそのまんまstringだな！ちゃんと絞りこまれます
-    obj.charAt(0);
+  // 否定の否定は普通にそのまんまstringだな！ちゃんと絞りこまれます
+  obj.charAt(0);
 }
 #@end
 //}
@@ -870,18 +871,18 @@ TypeScriptでは、構造的部分型の仕組みにより、クラスが要求�
 //list[type-guards/weakspot][構造的部分型とtype guards]{
 #@mapfile(../code/types-advanced/type-guards/weakspot.ts)
 class Sample {
-    str: string;
+  str: string;
 }
 
 // 構造的部分型！
 var obj: Sample | Date = {
-    str: "Hi!"
+  str: "Hi!"
 };
 
 if (obj instanceof Sample) {
-    // 型は Sample に絞られている が！ 絶対に到達しない！
-    // 現在の obj はプロトタイプチェーンにSampleを持たない！
-    console.log(obj.str);
+  // 型は Sample に絞られている が！ 絶対に到達しない！
+  // 現在の obj はプロトタイプチェーンにSampleを持たない！
+  console.log(obj.str);
 }
 #@end
 //}
@@ -912,19 +913,19 @@ if (obj instanceof Sample) {
 //list[type-guards/vs-weakspot1][type guardsに頼らず生きる]{
 #@mapfile(../code/types-advanced/type-guards/vs-weakspot1.ts)
 class Sample {
-    str: string;
+  str: string;
 }
 
 // 構造的部分型！
 var obj: Sample | Date = {
-    str: "Hi!"
+  str: "Hi!"
 };
 
 if (obj !== null) {
-    var str = (<Sample>obj).str;
-    if(typeof str === "string") {
-        console.log(str);
-    }
+  var str = (<Sample>obj).str;
+  if (typeof str === "string") {
+    console.log(str);
+  }
 }
 #@end
 //}
@@ -932,16 +933,16 @@ if (obj !== null) {
 //list[type-guards/vs-weakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
 #@mapfile(../code/types-advanced/type-guards/vs-weakspot2-invalid.ts)
 class Sample {
-    private _tmp: any;
-    str: string;
+  private _tmp: any;
+  str: string;
 }
 
 // privateなインスタンス変数があるクラスのインスタンスは偽造できない！
 // error TS2322: Type '{ _tmp: null; str: string; }' is not assignable to type 'Sample'.
 //     Property '_tmp' is private in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
 var obj: Sample = {
-    _tmp: null,
-    str: "Hi!"
+  _tmp: null,
+  str: "Hi!"
 };
 #@end
 //}
@@ -969,9 +970,9 @@ type aliasは仕様上、interfaceと同じように利用できる場面もあ�
 type FooReturns = string | number | boolean;
 
 interface Foo {
-    bar(): FooReturns;
-    buzz(): FooReturns;
-    barbuzz(): FooReturns;
+  bar(): FooReturns;
+  buzz(): FooReturns;
+  barbuzz(): FooReturns;
 }
 #@end
 //}
@@ -991,13 +992,15 @@ var c: Circle = [[1, 2], 3];
 
 // でも、こっちのほうがTypeScriptとしては適切よね
 module alternative {
-    class Point {
-        constructor(public x: number, public y: number) {}
+  class Point {
+    constructor(public x: number, public y: number) {
     }
-    class Circle {
-        constructor(public p: Point, public r: number) {}
+  }
+  class Circle {
+    constructor(public p: Point, public r: number) {
     }
-    var c: Circle = new Circle(new Point(1, 2), 3);
+  }
+  var c: Circle = new Circle(new Point(1, 2), 3);
 }
 #@end
 //}
@@ -1031,16 +1034,17 @@ type ObjectStatics = typeof Object;
 
 // これらはinterfaceで表現可能
 type HolidayLookup = Map<string, Date>;
-interface AltHolidayLookup extends Map<string, Date> {}
+interface AltHolidayLookup extends Map<string, Date> {
+}
 
 type Callback = (data: string) => void;
 interface AltCallback {
-    (date: string): void;
+  (date: string): void;
 }
 
 type RecFunc = () => RecFunc;
 interface AltRecFunc {
-    (): AltRecFunc;
+  (): AltRecFunc;
 }
 #@end
 //}

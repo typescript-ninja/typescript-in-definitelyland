@@ -1,11 +1,11 @@
 interface AStatic {
-    // 以下のどちらかがないと Function との互換性が無い
-    // (): AInstance;
-    // new (): AInstance;
-    prototype: AInstance;
+	// 以下のどちらかがないと Function との互換性が無い
+	// (): AInstance;
+	// new (): AInstance;
+	prototype: AInstance;
 }
 interface AInstance {
-    str: string;
+	str: string;
 }
 declare var A: AStatic;
 

@@ -1,15 +1,15 @@
 class Sample {
-    str: string;
+	str: string;
 }
 
 // 構造的部分型！
 var obj: Sample | Date = {
-    str: "Hi!"
+	str: "Hi!"
 };
 
 if (obj !== null) {
-    var str = (<Sample>obj).str;
-    if(typeof str === "string") {
-        console.log(str);
-    }
+	var str = (<Sample>obj).str;
+	if (typeof str === "string") {
+		console.log(str);
+	}
 }

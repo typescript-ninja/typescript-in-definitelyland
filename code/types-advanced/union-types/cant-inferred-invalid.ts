@@ -1,5 +1,5 @@
-function test<T>(...args:T[]):T[] {
-    return args;
+function test<T>(...args: T[]): T[] {
+	return args;
 }
 // (number | boolean)[] にはならなかった。残念。
 // error TS2453: The type argument for type parameter 'T' cannot be inferred from

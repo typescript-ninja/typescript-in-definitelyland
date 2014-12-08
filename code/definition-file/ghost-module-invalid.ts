@@ -1,7 +1,7 @@
 declare module ghost {
-    interface Test {
-        str: string;
-    }
+	interface Test {
+		str: string;
+	}
 }
 
 // 型としては普通にアクセスできる

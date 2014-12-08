@@ -1,9 +1,10 @@
-class A { }
+class A {
+}
 class B extends A {
-    str: string;
+	str: string;
 }
 class C extends A {
-    num: number;
+	num: number;
 }
 
 // array: A[] だ！

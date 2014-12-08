@@ -1,6 +1,6 @@
 class Sample {
-    constructor(public str:string) {
-    }
+	constructor(public str: string) {
+	}
 }
 
 var obj = new Sample("TypeScript");

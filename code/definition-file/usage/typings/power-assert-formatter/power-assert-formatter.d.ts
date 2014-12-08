@@ -3,7 +3,7 @@
 // Definitions by: vvakame <https://github.com/vvakame>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-declare function powerAssertFormatter(options?:powerAssertFormatter.Options):powerAssertFormatter.Formatter;
+declare function powerAssertFormatter(options?: powerAssertFormatter.Options): powerAssertFormatter.Formatter;
 
 declare module powerAssertFormatter {
     export interface Options {
@@ -17,13 +17,13 @@ declare module powerAssertFormatter {
         widthOf?: Function;
         stringify?: Function;
         diff?: Function;
-        writerClass?: {new (): any;};
+        writerClass?: { new (): any; };
         renderers?: any[]; // { string | Function }[]
     }
 
     export interface Formatter {
-        (powerAssertContext:any): string;
+        (powerAssertContext: any): string;
     }
 
-    export function defaultOptions():Options;
+    export function defaultOptions(): Options;
 }

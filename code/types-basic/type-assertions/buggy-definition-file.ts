@@ -1,6 +1,6 @@
 // こういう、型定義があるとする。実装はJavaScriptが与える。
 declare class Base {
-    str: string;
+	str: string;
 }
 
 var obj = new Base();

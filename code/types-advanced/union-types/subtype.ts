@@ -1,8 +1,8 @@
 class Base {
-    str: string;
+	str: string;
 }
 class Inherit extends Base {
-    num: number;
+	num: number;
 }
 
 // 明示的に指定しとくと Base | Inherit となる(今のところ

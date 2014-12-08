@@ -1,6 +1,6 @@
 class Sample {
-    hello = (word = "TypeScript") => "Hello, " + word;
-    bye: typeof Sample.prototype.hello;
+	hello = (word = "TypeScript") => "Hello, " + word;
+	bye: typeof Sample.prototype.hello;
 }
 
 var obj = new Sample();

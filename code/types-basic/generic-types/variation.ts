@@ -2,25 +2,26 @@
 
 // クラスとジェネリクス
 class SampleA<T> {
-    constructor(public data: T) {}
+	constructor(public data: T) {
+	}
 }
 // 使い方 <string>は省略しても引数から推論可能
 var objA = new SampleA<string>("str");
 
 // インタフェースとジェネリクス
 interface SampleB<T> {
-    data: T;
+	data: T;
 }
 // 使い方
 var objB: SampleB<number> = { data: 1 };
 
 // オブジェクト型リテラル各種
 var obj: {
-    new <T>(value: T): any;
-    <T>(value: T): any;
-    methodA<T>(value: T): any;
-    // 型パラメータは複数あってもよい
-    methodB<T, U>(value: T): U;
+	new <T>(value: T): any;
+	<T>(value: T): any;
+	methodA<T>(value: T): any;
+	// 型パラメータは複数あってもよい
+	methodB<T, U>(value: T): U;
 };
 
 // 関数型

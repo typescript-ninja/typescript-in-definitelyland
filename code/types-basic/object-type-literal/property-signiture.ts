@@ -1,7 +1,7 @@
 var obj: {
-    property: string;
+	property: string;
 };
 // 当てはまる値はこんな感じ
 obj = {
-    property: "Hi!"
+	property: "Hi!"
 };

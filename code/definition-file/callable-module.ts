@@ -1,8 +1,8 @@
 function test() {
-    return "test!";
+	return "test!";
 }
 module test {
-    export function func() {
-        return "function!";
-    }
+	export function func() {
+		return "function!";
+	}
 }

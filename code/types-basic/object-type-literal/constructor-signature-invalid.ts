@@ -1,5 +1,5 @@
 var clazz: {
-    new (): any;
+	new (): any;
 };
 
 // 当てはまる値はこんな感じ
@@ -8,7 +8,7 @@ class Sample {
 clazz = Sample;
 var obj = new clazz();
 
-function Hello(){
+function Hello() {
 }
 // 返り値が void な関数は new できるけど…
 new Hello();

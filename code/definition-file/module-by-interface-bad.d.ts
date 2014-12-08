@@ -1,13 +1,13 @@
 interface Foo {
-    bar: FooBar;
+	bar: FooBar;
 }
 
 interface FooBar {
-    buzz: FooBarBuzz;
+	buzz: FooBarBuzz;
 }
 
 interface FooBarBuzz {
-    str: string;
+	str: string;
 }
 
 declare var foo: Foo;

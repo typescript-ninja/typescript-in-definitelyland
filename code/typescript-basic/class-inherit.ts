@@ -1,13 +1,13 @@
 class Base {
-    greeting(name:string) {
-        return "Hi! " + name;
-    }
+	greeting(name: string) {
+		return "Hi! " + name;
+	}
 }
 
 class Inherit extends Base {
-    greeting(name:string) {
-        return super.greeting(name) + ". How are you?";
-    }
+	greeting(name: string) {
+		return super.greeting(name) + ". How are you?";
+	}
 }
 
 var obj = new Inherit();

@@ -7,7 +7,7 @@ funcA();
 // アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
 var funcB = (word = "TypeScript") => "Hello, " + word;
 var funcC = (word = "TypeScript") => {
-    return "Hello, " + word;
+	return "Hello, " + word;
 };
 console.log(funcB());
 console.log(funcC());

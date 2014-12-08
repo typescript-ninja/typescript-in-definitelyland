@@ -1,4 +1,4 @@
 declare var assert: {
-    (value: any): void;
-    ok(value: any): void;
-}
+	(value: any): void;
+	ok(value: any): void;
+};

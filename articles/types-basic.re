@@ -33,15 +33,15 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 #@mapfile(../code/types-basic/object-type-literal/basic.ts)
 // オブジェクトリテラルで値を作成！
 var objA = {
-    x: 1,
-    y: 2
+  x: 1,
+  y: 2
 };
 
 // オブジェクト型リテラルで型を作成！(値は無し
 // 上記の objA の型は型推論で objB と同一になる
 var objB: {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 };
 
 // おんなじ！
@@ -58,19 +58,19 @@ objB = objA;
 //list[object-type-literal/basic-usage][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/object-type-literal/basic-usage.ts)
 function move(
-            value: {x: number; y: number; },
-            delta: {dx?: number; dy?: number;}
-        ): {x: number; y: number} {
-    if(delta.dx) {
-        value.x += delta.dx;
-    }
-    if(delta.dy) {
-        value.y += delta.dy;
-    }
-    return value;
+      value: { x: number; y: number; },
+      delta: { dx?: number; dy?: number; }
+    ): { x: number; y: number } {
+  if (delta.dx) {
+    value.x += delta.dx;
+  }
+  if (delta.dy) {
+    value.y += delta.dy;
+  }
+  return value;
 }
 
-var result = move({x: 1, y: 2}, {dx: -2});
+var result = move({ x: 1, y: 2 }, { dx: -2 });
 // 以下のように表示される
 // {
 //   "x": -1,
@@ -92,11 +92,11 @@ console.log(JSON.stringify(result, null, 2));
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/object-type-literal/property-signiture.ts)
 var obj: {
-    property: string;
+  property: string;
 };
 // 当てはまる値はこんな感じ
 obj = {
-    property: "Hi!"
+  property: "Hi!"
 };
 #@end
 //}
@@ -111,15 +111,15 @@ obj = {
 //list[object-type-literal/call-signature][関数として利用できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature.ts)
 var obj: {
-    (word: string): string;
+  (word: string): string;
 };
 // 当てはまる値はこんな感じ
 obj = word => "Hello, " + word;
 obj = (word: string) => {
-    return "Hello, " + word;
+  return "Hello, " + word;
 };
 obj = function(word: string): string {
-    return "Hello, " + word;
+  return "Hello, " + word;
 };
 // 呼び出してみよう！
 var str = obj("TypeScript");
@@ -132,18 +132,18 @@ console.log(str);
 //list[object-type-literal/call-signature-overload][オーバーロードも表現できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature-overload.ts)
 var obj: {
-    // overloadもできるよ
-    (word: string): string;
-    (): number;
+  // overloadもできるよ
+  (word: string): string;
+  (): number;
 };
 // 当てはまる値はこんな感じ
 // 全ての引数と返り値に矛盾しないようにしなければならない…
 obj = (word?: string): any => {
-    if(typeof word === "string") {
-        return "Hello, " + word;
-    } else {
-        return 42;
-    }
+  if (typeof word === "string") {
+    return "Hello, " + word;
+  } else {
+    return 42;
+  }
 };
 // 呼び出してみよう！
 var str = obj("TypeScript");
@@ -166,7 +166,7 @@ console.log(num);
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
 #@mapfile(../code/types-basic/object-type-literal/constructor-signature-invalid.ts)
 var clazz: {
-    new (): any;
+  new (): any;
 };
 
 // 当てはまる値はこんな感じ
@@ -175,7 +175,7 @@ class Sample {
 clazz = Sample;
 var obj = new clazz();
 
-function Hello(){
+function Hello() {
 }
 // 返り値が void な関数は new できるけど…
 new Hello();
@@ -201,10 +201,10 @@ TypeScriptのコードの書き方の範疇では、クラスを定義しなけ�
 //list[object-type-literal/index-signature][プロパティアクセスカッコツキ]{
 #@mapfile(../code/types-basic/object-type-literal/index-signature.ts)
 var objA: {
-    [index:number]: string;
+  [index: number]: string;
 };
 var objB: {
-    [index:string]: string;
+  [index: string]: string;
 };
 
 // どういった使い方ができるの？
@@ -219,19 +219,19 @@ var s4 = objB["test"];
 
 // 当てはまる値はこんな感じ
 objA = {
-    0: "str",
-    // インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで取れる値に反していてもよい
-    num: 1
+  0: "str",
+  // インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで取れる値に反していてもよい
+  num: 1
 };
 objB = {
-    0: "str",
-    str: "str"
-    // インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに反しないようにしなければならない
-    // error TS2322: Type '{ [x: string]: string | number; 0: string; str: string; num: number; }' is not assignable to type '{ [x: string]: string; }'.
-    //     Index signatures are incompatible.
-    //         Type 'string | number' is not assignable to type 'string'.
-    //     Type 'number' is not assignable to type 'string'.
-    // num: 1
+  0: "str",
+  str: "str"
+  // インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに反しないようにしなければならない
+  // error TS2322: Type '{ [x: string]: string | number; 0: string; str: string; num: number; }' is not assignable to type '{ [x: string]: string; }'.
+  //     Index signatures are incompatible.
+  //         Type 'string | number' is not assignable to type 'string'.
+  //     Type 'number' is not assignable to type 'string'.
+  // num: 1
 };
 #@end
 //}
@@ -244,8 +244,8 @@ objB = {
 //list[object-type-literal/index-access-sample-invalid][実は . アクセスと同じ堅牢さを誇る]{
 #@mapfile(../code/types-basic/object-type-literal/index-access-sample-invalid.ts)
 var obj = {
-    str: "string",
-    num: 1
+  str: "string",
+  num: 1
 };
 
 // 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
@@ -273,27 +273,27 @@ var str2 = obj[propertyName];
 //list[object-type-literal/method-signature][メソッドの定義っぽい]{
 #@mapfile(../code/types-basic/object-type-literal/method-signature.ts)
 var obj: {
-    hello(word: string): string;
+  hello(word: string): string;
 };
 
 // 当てはまる値はこんな感じ
 obj = {
-    hello(word: string) {
-        return "Hello, " + word;
-    }
+  hello(word: string) {
+    return "Hello, " + word;
+  }
 };
 obj = {
-    hello: (word: string) => "Hello, " + word
+  hello: (word: string) => "Hello, " + word
 };
 obj = {
-    hello: function (word: string) {
-        return "Hello, " + word;
-    }
+  hello: function(word: string) {
+    return "Hello, " + word;
+  }
 };
 
 // プロパティシグニチャ + 関数型 の別の書き方なだけだな！
 var obj2: {
-    hello: (word: string) => string;
+  hello: (word: string) => string;
 };
 obj = obj2;
 obj2 = obj;
@@ -312,10 +312,10 @@ var func: (value: string) => string;
 // 当てはまる値はこんな感じ
 func = word => "Hello, " + word;
 func = (word: string) => {
-    return "Hello, " + word;
+  return "Hello, " + word;
 };
 func = function(word: string) {
-    return "Hello, " + word;
+  return "Hello, " + word;
 };
 
 // 型に対して実装の引数の数が少ないのはOK
@@ -342,37 +342,38 @@ TypeScriptでのインタフェースの酷使されっぷりを@<list>{interfac
 #@mapfile(../code/types-basic/interface/basic.ts)
 // 一般的な用法
 interface A {
-    str: string;
+  str: string;
 }
 // クラスに特定の実装を強制する
 class AImpl implements A {
-    str: string;
+  str: string;
 }
 var objA: A = new AImpl();
 
 // インタフェースは他のインタフェースを拡張できる
 interface B1 {
-    str: string;
+  str: string;
 }
 interface B2 extends B1 {
-    num: number;
+  num: number;
 }
 // 代入する値は実装したクラスとかじゃなくてもええんじゃ！
 var objB: B2 = {
-    str: "string",
-    num: 42
+  str: "string",
+  num: 42
 };
 
 // interfaceはクラスすら拡張する！(実装はなかったことになる
 class FooClass {
-    constructor(public num: number) {}
+  constructor(public num: number) {
+  }
 }
 interface C extends FooClass {
-    str: string;
+  str: string;
 }
 var objC: C = {
-    num: 42,
-    str: "string"
+  num: 42,
+  str: "string"
 };
 #@end
 //}
@@ -387,15 +388,15 @@ TypeScriptでは、構造が一致するかどうかで型の互換性を判定�
 #@mapfile(../code/types-basic/structural-subtypings/basic.ts)
 // クラス Foo はstring型のstrという名前のプロパティとnumber型のnumという名前のプロパティを持つ
 class Foo {
-    str = "string";
-    num = 1;
+  str = "string";
+  num = 1;
 }
 
 // 構造が完全に一致…！！！
 // 構造が同じならもう同じってことでいいんじゃね！？
 var obj: Foo = {
-    str: "Hi!",
-    num: 42
+  str: "Hi!",
+  num: 42
 };
 #@end
 //}
@@ -405,32 +406,34 @@ var obj: Foo = {
 //list[structural-subtypings/class-compat][Pointインタフェースが要求されているが？]{
 #@mapfile(../code/types-basic/structural-subtypings/class-compat.ts)
 interface Point {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 // Point の実装を強制する！！！
 class PointImpl1 implements Point {
-    constructor(public x: number, public y: number) {}
+  constructor(public x: number, public y: number) {
+  }
 }
 // Point の実装が強制されないけど互換性はある！
 class PointImpl2 implements Point {
-    constructor(public x: number, public y: number) {}
+  constructor(public x: number, public y: number) {
+  }
 }
 
 // 引数に Point をとる
 function double(p: Point): Point {
-    return {
-        x: p.x * 2,
-        y: p.y * 2
-    };
+  return {
+    x: p.x * 2,
+    y: p.y * 2
+  };
 }
 // 以下の全ては正しいコードとなります
 double(new PointImpl1(1, 2));
 double(new PointImpl2(3, 4));
 double({
-    x: 5,
-    y: 6,
-    z: 7  // 要素が多すぎる分には問題ない
+  x: 5,
+  y: 6,
+  z: 7  // 要素が多すぎる分には問題ない
 });
 #@end
 //}
@@ -443,28 +446,28 @@ double({
 //list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
 #@mapfile(../code/types-basic/structural-subtypings/optional.ts)
 interface Point {
-    x: number;
-    y: number;
-    color?: string; // なくてもいい
+  x: number;
+  y: number;
+  color?: string; // なくてもいい
 }
-function printPoint(p:Point):void {
-    var message = "x=" + p.x + ", y=" + p.y;
-    if (p.color) {
-        message = p.color + "(" + message + ")";
-    }
-    console.log(message);
+function printPoint(p: Point): void {
+  var message = "x=" + p.x + ", y=" + p.y;
+  if (p.color) {
+    message = p.color + "(" + message + ")";
+  }
+  console.log(message);
 }
 // optinal なプロパティはなくても大丈夫！
 // x=1, y=2 と表示される
 printPoint({
-    x: 1,
-    y: 2
+  x: 1,
+  y: 2
 });
 // red(x=1, y=2) と表示される
 printPoint({
-    x: 1,
-    y: 2,
-    color: "red"
+  x: 1,
+  y: 2,
+  color: "red"
 });
 // とはいえ、型が不一致だと怒られる。
 // error TS2345: Argument of type '{ x: number; y: number; color: boolean; }' is not assignable to parameter of type 'Point'.
@@ -515,14 +518,14 @@ TypeScriptコード中で一番よくみる型アサーションは、このinst
 //list[type-assertions/class][親クラスから子クラスへ変換]{
 #@mapfile(../code/types-basic/type-assertions/class.ts)
 class Base {
-    str: string;
+  str: string;
 }
 
 class InheritA extends Base {
-    num: number;
+  num: number;
 }
 class InheritB extends Base {
-    bool: boolean;
+  bool: boolean;
 }
 
 // とりあえず型は親クラスとして…
@@ -530,11 +533,11 @@ var obj: Base;
 
 // 中身が何か調べてから安全にダウンキャストする
 if (obj instanceof InheritA) {
-    var a = <InheritA>obj;
-    a.num;
-} else if(obj instanceof InheritB) {
-    var b = <InheritB>obj;
-    b.bool;
+  var a = <InheritA>obj;
+  a.num;
+} else if (obj instanceof InheritB) {
+  var b = <InheritB>obj;
+  b.bool;
 }
 #@end
 //}
@@ -546,7 +549,7 @@ if (obj instanceof InheritA) {
 #@mapfile(../code/types-basic/type-assertions/buggy-definition-file.ts)
 // こういう、型定義があるとする。実装はJavaScriptが与える。
 declare class Base {
-    str: string;
+  str: string;
 }
 
 var obj = new Base();
@@ -615,15 +618,15 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"と言うこ
 //list[generic-types/array-declaration-invalid][Array<T>が登場する]{
 #@mapfile(../code/types-basic/generic-types/array-declaration-invalid.ts)
 declare var Array: {
-    new <T>(...items: T[]): T[];
+  new <T>(...items: T[]): T[];
 };
 
 interface Array<T> {
-    length: number;
-    push(...items: T[]): number;
-    pop(): T;
-    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
-    [n: number]: T;
+  length: number;
+  push(...items: T[]): number;
+  pop(): T;
+  forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+  [n: number]: T;
 }
 #@end
 //}
@@ -636,15 +639,15 @@ pushの定義を見ると、"○○のArrayに対して、○○の値いくつ�
 //list[generic-types/array-declaration-string-invalid][Array<T>が登場する]{
 #@mapfile(../code/types-basic/generic-types/array-declaration-string-invalid.ts)
 declare var Array: {
-    new (...items: string[]): string[];
+  new (...items: string[]): string[];
 };
 
 interface Array {
-    length: number;
-    push(...items: string[]): number;
-    pop(): string;
-    forEach(callbackfn: (value: string) => void, thisArg?: any): void;
-    [n: number]: string;
+  length: number;
+  push(...items: string[]): number;
+  pop(): string;
+  forEach(callbackfn: (value: string) => void, thisArg?: any): void;
+  [n: number]: string;
 }
 #@end
 //}
@@ -666,25 +669,26 @@ interface Array {
 
 // クラスとジェネリクス
 class SampleA<T> {
-    constructor(public data: T) {}
+  constructor(public data: T) {
+  }
 }
 // 使い方 <string>は省略しても引数から推論可能
 var objA = new SampleA<string>("str");
 
 // インタフェースとジェネリクス
 interface SampleB<T> {
-    data: T;
+  data: T;
 }
 // 使い方
 var objB: SampleB<number> = { data: 1 };
 
 // オブジェクト型リテラル各種
 var obj: {
-    new <T>(value: T): any;
-    <T>(value: T): any;
-    methodA<T>(value: T): any;
-    // 型パラメータは複数あってもよい
-    methodB<T, U>(value: T): U;
+  new <T>(value: T): any;
+  <T>(value: T): any;
+  methodA<T>(value: T): any;
+  // 型パラメータは複数あってもよい
+  methodB<T, U>(value: T): U;
 };
 
 // 関数型
@@ -712,14 +716,14 @@ new ctor<string>("str");
 //list[generic-types/limitation-invalid][型パラメータTはBaseを継承していなければならない]{
 #@mapfile(../code/types-basic/generic-types/limitation-invalid.ts)
 class Base {
-    str: string;
+  str: string;
 }
 class InheritA extends Base {
-    num: number;
+  num: number;
 }
 
 interface Sample<T extends Base> {
-    method(): T;
+  method(): T;
 }
 
 // これはOK

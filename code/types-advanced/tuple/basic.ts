@@ -14,5 +14,5 @@ tuple[1].charAt(0);
 
 // TypeScriptのtuple typesは普通にArrayでもあるのだ
 tuple.forEach(v => {
-    console.log(v);
+	console.log(v);
 });

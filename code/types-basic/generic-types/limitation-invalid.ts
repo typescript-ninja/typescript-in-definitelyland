@@ -1,12 +1,12 @@
 class Base {
-    str: string;
+	str: string;
 }
 class InheritA extends Base {
-    num: number;
+	num: number;
 }
 
 interface Sample<T extends Base> {
-    method(): T;
+	method(): T;
 }
 
 // これはOK

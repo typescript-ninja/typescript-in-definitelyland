@@ -100,7 +100,7 @@ mocha+power-assertでテストを書く場合を例に、使い方を解説し�
 "use strict";
 
 export function hello(word = "TypeScript") {
-    return "Hello, " + word;
+  return "Hello, " + word;
 }
 #@end
 //}
@@ -119,17 +119,17 @@ import assert = require("power-assert");
 
 import lib = require("../lib/index");
 
-describe("lib", ()=> {
-    describe("hello function", ()=> {
-        it("generate string with default value", ()=> {
-            var str = lib.hello();
-            assert(str === "Hello, TypeScript");
-        });
-        it("generate string with parameter", ()=> {
-            var str = lib.hello("JavaScript");
-            assert(str === "Hello, JavaScript");
-        });
+describe("lib", () => {
+  describe("hello function", () => {
+    it("generate string with default value", () => {
+      var str = lib.hello();
+      assert(str === "Hello, TypeScript");
     });
+    it("generate string with parameter", () => {
+      var str = lib.hello("JavaScript");
+      assert(str === "Hello, JavaScript");
+    });
+  });
 });
 #@end
 //}
@@ -148,29 +148,29 @@ mocha@<list>{usage/abstract/mocha}とpower-assert@<list>{usage/abstract/power-as
 //list[usage/abstract/mocha][mocha.d.ts 抜粋]{
 #@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
 interface MochaDone {
-    (error?: Error): void;
+  (error?: Error): void;
 }
 
-declare var describe : {
-    (description: string, spec: () => void): void;
-    only(description: string, spec: () => void): void;
-    skip(description: string, spec: () => void): void;
+declare var describe: {
+  (description: string, spec: () => void): void;
+  only(description: string, spec: () => void): void;
+  skip(description: string, spec: () => void): void;
 };
 
 declare var it: {
-    (expectation: string, assertion?: (done: MochaDone) => void): void;
-    only(expectation: string, assertion?: (done: MochaDone) => void): void;
-    skip(expectation: string, assertion?: (done: MochaDone) => void): void;
+  (expectation: string, assertion?: (done: MochaDone) => void): void;
+  only(expectation: string, assertion?: (done: MochaDone) => void): void;
+  skip(expectation: string, assertion?: (done: MochaDone) => void): void;
 };
 #@end
 //}
 
 //list[usage/abstract/power-assert][power-assert.d.ts 抜粋]{
 #@mapfile(../code/definition-file/usage/abstract/power-assert.d.ts)
-declare function assert(value:any, message?:string):void;
+declare function assert(value: any, message?: string): void;
 
 declare module "power-assert" {
-    export = assert;
+  export = assert;
 }
 #@end
 //}
@@ -269,12 +269,12 @@ TypeScriptを書き始めの頃は、品質は気にした所で後々粗が見�
 //list[declaration-merging][定義を分割して書く]{
 #@mapfile(../code/definition-file/declaration-merging.d.ts)
 interface Foo {
-    hello(): string;
+  hello(): string;
 }
 
 // 同名のインタフェースを定義すると、合体される！
 interface Foo {
-    bye(): string;
+  bye(): string;
 }
 #@end
 //}
@@ -302,7 +302,7 @@ TypeScript 1.3.0ではデフォルトの型定義ファイル(lib.d.ts)にはま
 #@mapfile(../code/definition-file/array-find.ts)
 // TypeScript 1.3.0 では Array.prototype.find の定義はまだ存在していない
 interface Array<T> {
-    find(callback: (e: T, idx: number, array: T[]) => boolean, thisArg?: any): T;
+  find(callback: (e: T, idx: number, array: T[]) => boolean, thisArg?: any): T;
 }
 
 var array = [1, 2, 3];
@@ -329,9 +329,9 @@ array.find(v => v % 2 === 1);
 //list[ghost-module-invalid][幽霊モジュール]{
 #@mapfile(../code/definition-file/ghost-module-invalid.ts)
 declare module ghost {
-    interface Test {
-        str: string;
-    }
+  interface Test {
+    str: string;
+  }
 }
 
 // 型としては普通にアクセスできる
@@ -352,34 +352,34 @@ var notExists = ghost;
 //list[jquery-without-ghost-module][実際のjQueryの型定義の例]{
 #@mapfile(../code/definition-file/jquery-without-ghost-module.d.ts)
 interface JQuery {
-    addClass(className: string): JQuery;
-    html(htmlString: string): JQuery;
-    val(): any;
-    empty(): JQuery;
-    append(content1: JQuery, ...content2: any[]): JQuery;
-    appendTo(target: JQuery): JQuery;
+  addClass(className: string): JQuery;
+  html(htmlString: string): JQuery;
+  val(): any;
+  empty(): JQuery;
+  append(content1: JQuery, ...content2: any[]): JQuery;
+  appendTo(target: JQuery): JQuery;
 }
 
 interface JQueryStatic {
-    ajax(settings: JQueryAjaxSettings): any;
-    (selector: string, context?: Element): JQuery;
-    (element: Element): JQuery;
+  ajax(settings: JQueryAjaxSettings): any;
+  (selector: string, context?: Element): JQuery;
+  (element: Element): JQuery;
 }
 
 interface JQueryAjaxSettings {
-    data?: any;
-    type?: string;
-    url?: string;
+  data?: any;
+  type?: string;
+  url?: string;
 }
 
 interface JQueryPromise<T> {
-    state(): string;
-    then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): JQueryPromise<U>;
+  state(): string;
+  then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): JQueryPromise<U>;
 }
 
 interface JQueryDeferred<T> extends JQueryPromise<T> {
-    reject(...args: any[]): JQueryDeferred<T>;
-    resolve(value?: T, ...args: any[]): JQueryDeferred<T>;
+  reject(...args: any[]): JQueryDeferred<T>;
+  resolve(value?: T, ...args: any[]): JQueryDeferred<T>;
 }
 
 declare var $: JQueryStatic;
@@ -396,36 +396,36 @@ IDE上で型注釈を手書きする時も候補がたくさんサジェスト�
 //list[jquery-with-ghost-module][幽霊モジュールを使ってみた]{
 #@mapfile(../code/definition-file/jquery-with-ghost-module.d.ts)
 declare module jquery {
-    interface Element {
-        addClass(className: string): Element;
-        html(htmlString: string): Element;
-        val(): any;
-        empty(): Element;
-        append(content1: Element, ...content2: any[]): Element;
-        appendTo(target: Element): Element;
-    }
+  interface Element {
+    addClass(className: string): Element;
+    html(htmlString: string): Element;
+    val(): any;
+    empty(): Element;
+    append(content1: Element, ...content2: any[]): Element;
+    appendTo(target: Element): Element;
+  }
 
-    interface Static {
-        ajax(settings: AjaxSettings): any;
-        (selector: string, context?: Element): Element;
-        (element: Element): Element;
-    }
+  interface Static {
+    ajax(settings: AjaxSettings): any;
+    (selector: string, context?: Element): Element;
+    (element: Element): Element;
+  }
 
-    interface AjaxSettings {
-        data?: any;
-        type?: string;
-        url?: string;
-    }
+  interface AjaxSettings {
+    data?: any;
+    type?: string;
+    url?: string;
+  }
 
-    interface Promise<T> {
-        state(): string;
-        then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): Promise<U>;
-    }
+  interface Promise<T> {
+    state(): string;
+    then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): Promise<U>;
+  }
 
-    interface Deferred<T> extends Promise<T> {
-        reject(...args: any[]): Deferred<T>;
-        resolve(value?: T, ...args: any[]): Deferred<T>;
-    }
+  interface Deferred<T> extends Promise<T> {
+    reject(...args: any[]): Deferred<T>;
+    resolve(value?: T, ...args: any[]): Deferred<T>;
+  }
 }
 
 declare var $: jquery.Static;
@@ -461,15 +461,15 @@ declare var $: jquery.Static;
 //list[module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
 #@mapfile(../code/definition-file/module-by-interface-bad.d.ts)
 interface Foo {
-    bar: FooBar;
+  bar: FooBar;
 }
 
 interface FooBar {
-    buzz: FooBarBuzz;
+  buzz: FooBarBuzz;
 }
 
 interface FooBarBuzz {
-    str: string;
+  str: string;
 }
 
 declare var foo: Foo;
@@ -487,7 +487,7 @@ declare var foo: Foo;
 #@mapfile(../code/definition-file/module-by-interface-good.d.ts)
 // 普通にコレでいいだろ！！
 declare module foo.bar.buzz {
-    var str: string;
+  var str: string;
 }
 #@end
 //}
@@ -508,9 +508,9 @@ assert.ok(value);
 //list[callable-module-bad1][こうしてしまいたい、気持ち]{
 #@mapfile(../code/definition-file/callable-module-bad1.d.ts)
 declare var assert: {
-    (value: any): void;
-    ok(value: any): void;
-}
+  (value: any): void;
+  ok(value: any): void;
+};
 #@end
 //}
 
@@ -519,8 +519,8 @@ declare var assert: {
 declare var assert: Assert;
 
 interface Assert {
-    (value: any): void;
-    ok(value: any): void;
+  (value: any): void;
+  ok(value: any): void;
 }
 #@end
 //}
@@ -533,7 +533,7 @@ interface Assert {
 #@mapfile(../code/definition-file/callable-module-good.d.ts)
 declare function assert(value: any): void;
 declare module assert {
-    function ok(value: any): void;
+  function ok(value: any): void;
 }
 #@end
 //}
@@ -549,15 +549,15 @@ declare module assert {
 declare function assert(value: any, message?: string): void;
 declare module assert {
 
-    export function deepEqual(actual: any, expected: any): void;
-    export function notDeepEqual(acutal: any, expected: any): void;
+  export function deepEqual(actual: any, expected: any): void;
+  export function notDeepEqual(acutal: any, expected: any): void;
 
-    export interface Options {
-        assertion?: any;
-        output?: any;
-    }
+  export interface Options {
+    assertion?: any;
+    output?: any;
+  }
 
-    export function customize(options: Options): typeof assert;
+  export function customize(options: Options): typeof assert;
 }
 #@end
 //}
@@ -572,12 +572,12 @@ declare module assert {
 //list[callable-module-ts][関数が先、内部モジュールは後！絶対！]{
 #@mapfile(../code/definition-file/callable-module.ts)
 function test() {
-    return "test!";
+  return "test!";
 }
 module test {
-    export function func() {
-        return "function!";
-    }
+  export function func() {
+    return "function!";
+  }
 }
 #@end
 //}
@@ -609,12 +609,13 @@ var test;
 //list[declare-class][素直にクラス定義 vs インタフェース+変数]{
 #@mapfile(../code/definition-file/declare-class.d.ts)
 // A. 普通にクラスを定義する
-declare class TestA { }
+declare class TestA {
+}
 
 // B. クラスの分解定義 変数 + インタフェース2つ
 declare var TestB: TestBStatic;
 interface TestBStatic {
-    new (): TestB;
+  new (): TestB;
 }
 interface TestB {
 }
@@ -639,24 +640,24 @@ interface TestB {
 //list[declare-vanilla-class-invalid][クラスで定義]{
 #@mapfile(../code/definition-file/declare-vanilla-class-invalid.ts)
 declare class BaseA {
-    str: string;
+  str: string;
 }
 // ○利用時に普通に継承できる！
 class Inherit extends BaseA {
-    number: number;
+  number: number;
 }
 // × クラスはopen endedじゃないので定義の拡張ができない…
 // error TS2300: Duplicate identifier 'BaseA'.
 declare class BaseA {
-    num: number;
+  num: number;
 }
 
 interface FooListener {
-    on(eventName: string, callback: (data: any) => void): void;
+  on(eventName: string, callback: (data: any) => void): void;
 }
 declare class FooListenerImpl implements FooListener {
-    // インタフェースの要素全部書かないとコンパイル通らない…
-    on(eventName: string, callback: (data: any) => void): void;
+  // インタフェースの要素全部書かないとコンパイル通らない…
+  on(eventName: string, callback: (data: any) => void): void;
 }
 #@end
 //}
@@ -674,30 +675,30 @@ declare class FooListenerImpl implements FooListener {
 #@mapfile(../code/definition-file/declare-decompose-class-invalid.ts)
 var BaseA: BaseAStatic;
 interface BaseAStatic {
-    new (): BaseA;
+  new (): BaseA;
 }
 interface BaseA {
-    str: string;
+  str: string;
 }
 // × 利用時に継承できない…(しょせんインタフェース
 // error TS2311: A class may only extend another class.
 class Inherit extends BaseA {
-    number: number;
+  number: number;
 }
 // ○ インタフェースは定義の拡張ができる！！
 interface BaseA {
-    num: number;
+  num: number;
 }
 
 interface FooListener {
-    on(eventName: string, callback: (data: any) => void): void;
+  on(eventName: string, callback: (data: any) => void): void;
 }
 var FooListenerImpl: FooListenerImplStatic;
 interface FooListenerImplStatic {
-    new (): FooListenerImpl;
+  new (): FooListenerImpl;
 }
 interface FooListenerImpl extends FooListener {
-    // FooListenerの要素何も転記しなくて済む！
+  // FooListenerの要素何も転記しなくて済む！
 }
 #@end
 //}
@@ -774,11 +775,11 @@ bye(() => "function");
 #@mapfile(../code/definition-file/external-module-declaration-merging.d.ts)
 // 外部モジュールの定義の統合ができます！！
 declare module "foo" {
-    var str: string;
+  var str: string;
 }
 
 declare module "foo" {
-    var num: number;
+  var num: number;
 }
 #@end
 //}
@@ -843,26 +844,26 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 //list[callback/basic][optionalはもしかしたら値がない事を表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
 // 良い例
-declare function onClick(listener:(e:MouseEvent) => void):void;
+declare function onClick(listener: (e: MouseEvent) => void): void;
 // 悪い例
-declare function onClickOpt(listener:(e?:MouseEvent) => void):void;
+declare function onClickOpt(listener: (e?: MouseEvent) => void): void;
 
 // 使ってみよう！
 onClick(e => {
-    // ここでのeは必ず実体がある
-    console.log("clicked!" + e.srcElement.textContent);
+  // ここでのeは必ず実体がある
+  console.log("clicked!" + e.srcElement.textContent);
 });
 onClickOpt(e => {
-    // ここでのeはundefinedかもしれない… チェックしなくていいの？
-    console.log("clicked!" + e.srcElement.textContent);
+  // ここでのeはundefinedかもしれない… チェックしなくていいの？
+  console.log("clicked!" + e.srcElement.textContent);
 });
 
 // 引数を無視するのは自由 optionalにする理由にはならぬ！
-onClick(()=> {
-    console.log("clicked!");
+onClick(() => {
+  console.log("clicked!");
 });
-onClickOpt(()=> {
-    console.log("clicked!");
+onClickOpt(() => {
+  console.log("clicked!");
 });
 #@end
 //}
@@ -900,13 +901,13 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 //list[export-sample1][実はインタフェースFooも外から見えない]{
 #@mapfile(../code/definition-file/export-sample1.d.ts)
 declare module "foo" {
-    interface Foo {
-        num: number;
-    }
+  interface Foo {
+    num: number;
+  }
 
-    // この _ は外部からは参照できない。exportしてないので。
-    var _:Foo;
-    export = _;
+  // この _ は外部からは参照できない。exportしてないので。
+  var _: Foo;
+  export = _;
 }
 #@end
 //}
@@ -931,12 +932,12 @@ f.num;
 //list[export-sample2][それは値ではなくて型だけ輸出しているぞ！]{
 #@mapfile(../code/definition-file/export-sample2.d.ts)
 declare module "foo" {
-    interface Foo {
-        num: number;
-    }
+  interface Foo {
+    num: number;
+  }
 
-    // よくやりがちな過ち
-    export = Foo;
+  // よくやりがちな過ち
+  export = Foo;
 }
 #@end
 //}
@@ -980,10 +981,10 @@ TypeScriptコンパイラの最重要オプション、--noImplicitAnyを使っ�
 //list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
 #@mapfile(../code/definition-file/noImplicitAny/basic-invalid.d.ts)
 declare class Sample {
-    // 返り値の型を指定し忘れている！
-    // error TS7010: 'method', which lacks return-type annotation,
-    //               implicitly has an 'any' return type.
-    method();
+  // 返り値の型を指定し忘れている！
+  // error TS7010: 'method', which lacks return-type annotation,
+  //               implicitly has an 'any' return type.
+  method();
 }
 #@end
 //}

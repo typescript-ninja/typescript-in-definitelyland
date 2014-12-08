@@ -1,5 +1,5 @@
 class Sample {
-    str: string;
+	str: string;
 }
 
 // この書き方だとSampleのインスタンスになる Sampleクラスそのものではない
@@ -15,7 +15,7 @@ obj = new clazz();
 
 // clazz を頑張って手で書くと以下に等しい
 var alterClazz: {
-    new (): { str: string; };
+	new (): { str: string; };
 };
 alterClazz = clazz;
 clazz = alterClazz;
