@@ -2,6 +2,10 @@
 
 == 本書について
 
+本書の内容は全文をインターネット上で公開する予定です。
+予定地は @<href>{http://typescript.ninja/typescript-in-definitelyland/} こちら。
+しかし、表紙データなどは含まれない予定のため可愛い表紙の冊子が欲しい場合はぜひお買い上げください。
+
 本書は、ECMAScript 5レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
 また、解説するTypeScriptの内容には執筆時点（1.3.0）ではまだ未リリースの構文についての解説も含みます。
 
