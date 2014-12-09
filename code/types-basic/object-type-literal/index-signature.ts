@@ -18,14 +18,19 @@ var s4 = objB["test"];
 // 当てはまる値はこんな感じ
 objA = {
 	0: "str",
-	// インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで取れる値に反していてもよい
+	// インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで
+	// 取れる値に反していてもよい
 	num: 1
 };
 objB = {
 	0: "str",
 	str: "str"
-	// インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに反しないようにしなければならない
-	// error TS2322: Type '{ [x: string]: string | number; 0: string; str: string; num: number; }' is not assignable to type '{ [x: string]: string; }'.
+	// インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに
+	// 反しないようにしなければならない
+	// error TS2322: Type
+	//  '{ [x: string]: string | number; 0: string; str: string; num: number; }'
+	//     is not assignable to type
+	//  '{ [x: string]: string; }'.
 	//     Index signatures are incompatible.
 	//         Type 'string | number' is not assignable to type 'string'.
 	//     Type 'number' is not assignable to type 'string'.

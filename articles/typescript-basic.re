@@ -1,8 +1,8 @@
 = TypeScriptの基本
 
 JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
-TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、この章は読まなくて大丈夫です。
-#@# REVIEW muo: 大丈夫ですか
+TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、この章は読まなくても問題ありません。
+#@# OK REVIEW muo: 大丈夫ですか
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
@@ -78,8 +78,8 @@ var obj = {};
 
 これで手で型注釈を与えずに済むぞ！しかも、書き方がJavaScriptと全く同じになりました。
 楽 + コンパイルによる型チェック = TypeScriptサイキョー。
-ということがご納得いただけたと思います。
-#@# REVIEW muo: 「いただけたと思います」よりは「いただけたでしょう」あたりかな
+ということがご納得いただけたでしょう。
+#@# OK REVIEW muo: 「いただけたと思います」よりは「いただけたでしょう」あたりかな
 
 == クラス
 
@@ -457,8 +457,8 @@ console.log(d.e.hello());
 //}
 
 うーん、簡単ですね！！
-内部モジュール内部で定義した要素はクラスであれ関数であれなんであれ、exportをつけなければ外側から見えないようになります。
-#@# REVIEW muo: 「内部モジュール内部」は少々読みづらいので別の表現が良い感じ
+内部モジュールの内側で定義した要素はクラスであれ関数であれなんであれ、exportをつけなければ外側から見えないようになります。
+#@# OK REVIEW muo: 「内部モジュール内部」は少々読みづらいので別の表現が良い感じ
 
 長い名前を使うのが嫌な時は@<list>{internal-module/import}のように、import句を使うこともできます。
 外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
@@ -500,8 +500,8 @@ module b {
 b.tsはa.tsで定義している関数を呼び出しています。
 つまり、b.tsはa.tsに依存しているわけです。
 そこで、reference commentを使って@<code>{/// <reference path="./a.ts" />}と記述します。
-パスは相対パスでも絶対パスでも大丈夫ですが、一般的に相対パスを利用します。
-#@# REVIEW muo: 大丈夫ですか
+パスは相対パスでも絶対パスでも問題ありませんが、一般的に相対パスを利用します。
+#@# OK REVIEW muo: 大丈夫ですか
 
 //list[internal-module/a][a.ts]{
 #@mapfile(../code/typescript-basic/internal-module/a.ts)

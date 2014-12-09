@@ -13,8 +13,8 @@ TypeScriptコードを書く分には使わない範囲（型定義ファイル�
 まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
 別の言い方をすると、型定義と実装の差です。
 
-JavaやC#だと、概ね両者は密接に結びついていて、そこの差で困ることは概ねありません。
-#@# REVIEW muo: 概ね続きは少々読みづらいので片方を別の表現にしたほうが良いです
+JavaやC#だと、概ね両者は密接に結びついていて、そこの差で困ることは少ないです。
+#@# OK REVIEW muo: 概ね続きは少々読みづらいので片方を別の表現にしたほうが良いです
 筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。
 JavaのGenericsの型パラメータは実行時には消されてしまうため、例えば@<code>{new T();}というコードを書くことはできません。
 TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
@@ -86,8 +86,8 @@ console.log(JSON.stringify(result, null, 2));
 
 === プロパティシグニチャ （Property Signatures）
 
-1つ目は、実は既に登場しているプロパティを書くための書き方、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
-#@# REVIEW muo: 書くための書き方 は少々冗長です。プロパティの記法とするか、片方を別の表現にしたほうがよさそうです
+1つ目は、実は既に登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
+#@# OK REVIEW muo: 書くための書き方 は少々冗長です。プロパティの記法とするか、片方を別の表現にしたほうがよさそうです
 
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/object-type-literal/property-signiture.ts)
@@ -105,8 +105,8 @@ obj = {
 
 === コールシグニチャ （Call Signatures）
 
-2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す書き方、コールシグニチャです（@<list>{object-type-literal/call-signature}）。
-#@# REVIEW muo: ひとつ前と揃えて「示す書き方」→「示す記法」が良いかも
+2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{object-type-literal/call-signature}）。
+#@# OK REVIEW muo: ひとつ前と揃えて「示す書き方」→「示す記法」が良いかも
 
 //list[object-type-literal/call-signature][関数として利用できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature.ts)
@@ -160,8 +160,8 @@ console.log(num);
 
 === コンストラクトシグニチャ （Construct Signatures）
 
-3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す書き方、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
-#@# REVIEW muo: 例によって「示す書き方」→「示す記法」が良いかも
+3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
+#@# OK REVIEW muo: 例によって「示す書き方」→「示す記法」が良いかも
 
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
 #@mapfile(../code/types-basic/object-type-literal/constructor-signature-invalid.ts)
@@ -220,14 +220,19 @@ var s4 = objB["test"];
 // 当てはまる値はこんな感じ
 objA = {
   0: "str",
-  // インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで取れる値に反していてもよい
+  // インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで
+  // 取れる値に反していてもよい
   num: 1
 };
 objB = {
   0: "str",
   str: "str"
-  // インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに反しないようにしなければならない
-  // error TS2322: Type '{ [x: string]: string | number; 0: string; str: string; num: number; }' is not assignable to type '{ [x: string]: string; }'.
+  // インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに
+  // 反しないようにしなければならない
+  // error TS2322: Type
+  //  '{ [x: string]: string | number; 0: string; str: string; num: number; }'
+  //     is not assignable to type
+  //  '{ [x: string]: string; }'.
   //     Index signatures are incompatible.
   //         Type 'string | number' is not assignable to type 'string'.
   //     Type 'number' is not assignable to type 'string'.
@@ -235,7 +240,7 @@ objB = {
 };
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 インデックスシグニチャの型と、インデックスシグニチャ以外（例えばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。
 
@@ -333,8 +338,8 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
 TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。
-インタフェースの中に書ける記法はオブジェクト型リテラルそのまんまです。
-#@# REVIEW muo: 〜に書ける→〜で許される かなー
+インタフェースの中で許される記法はオブジェクト型リテラルそのまんまです。
+#@# OK REVIEW muo: 〜に書ける→〜で許される かなー
 
 TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
 
@@ -440,8 +445,8 @@ double({
 
 通るには通りますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうが良いコーディングスタイルになります。
 
-なお、optionalなプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structural-subtypings/optional}）。
-#@# REVIEW muo: 基礎のところでだいぶ「オプショナル」という表記をしてたけどこれは統一すべきなのか悩ましい感じ
+なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structural-subtypings/optional}）。
+#@# OK REVIEW muo: 基礎のところでだいぶ「オプショナル」という表記をしてたけどこれは統一すべきなのか悩ましい感じ
 
 //list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
 #@mapfile(../code/types-basic/structural-subtypings/optional.ts)
@@ -506,11 +511,12 @@ num = <any>str;
 #@mapfile(../code/types-basic/type-assertions/invalid-assertions-invalid.ts)
 var str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
-// error TS2352: Neither type 'string' nor type 'number' is assignable to the other.
+// error TS2352: Neither type 'string' nor type 'number'
+// is assignable to the other.
 var num: number = <number> str;
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 ダウンキャストも実行できます（@<list>{type-assertions/class}）。
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。

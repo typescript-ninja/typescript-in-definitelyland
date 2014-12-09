@@ -12,7 +12,7 @@ tscコマンドでTypeScriptコードのコンパイルを行います。
 //cmd{
 # -g をつけるとグローバルなコマンドとしてインストールする
 $ npm install -g typescript
-省略
+# 省略
 $ tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
 message TS6029: Version 1.3.0.0
@@ -33,7 +33,7 @@ cutting edgeな最新版コンパイラを利用したい場合は以下の手�
 
 //cmd{
 $ npm install -g Microsoft/TypeScript
-省略
+# 省略
 $ tsc -v
 #@mapoutput(node ../typescript/bin/tsc.js -v)
 message TS6029: Version 1.3.0.0
@@ -45,7 +45,7 @@ message TS6029: Version 1.3.0.0
 
 //cmd{
 $ npm init
-Enter連打
+# Enter連打
 $ ls package.json                                                                                                                package.json
 $ npm install Microsoft/TypeScript --save-dev
 $ ./node_modules/.bin/tsc -v
@@ -126,15 +126,8 @@ WebStormで開発する場合、File Watchersは常に有効にするように�
 === 設定の改良
 
 デフォルトの設定には色々と不満があります。
-
-#@# REVIEW muo: 前の節に同じのがあるので、これ構成ミスった?と見える。「前述のように」とかでつなぐのがいい
- * 使うコンパイラはシステムデフォルトのもの
- * コンパイルオプションは --sourcemap のみ
- ** --noImplicitAny なし！必須だろ！
- ** --target es5 なし！
- ** --out なし！
-
-これを、以下のように変えたいところです。
+設定を以下のように変えたいところです。
+#@# OK REVIEW muo: 前の節に同じのがあるので、これ構成ミスった?と見える。「前述のように」とかでつなぐのがいい
 
  * 使うコンパイラはプロジェクトローカルのもの
  ** 具体的には ./node_modules/.bin/tsc
@@ -166,12 +159,12 @@ $ ./node_modules/.bin/tsc --version
 message TS6029: Version 1.3.0.0
 #@end
 //}
-#@# REVIEW muo: コマンド実行へのコメント、前のほうは#無しだったけどここでは付いてる。揃えたほうがいい
+#@# OK REVIEW muo: コマンド実行へのコメント、前のほうは#無しだったけどここでは付いてる。揃えたほうがいい
 
 これを、File WatcherのProgram欄に指定します。
-見た目上絶対パスで指定されているように見えますが、プロジェクト内部にあるファイルを指定したら内部的には以下のように保存されるので気にしないで大丈夫です。
+見た目上絶対パスで指定されているように見えますが、プロジェクト内部にあるファイルを指定したら内部的には以下のように保存されるので気にする必要はありません。
 
-#@# REVIEW muo: 「大丈夫です。」はなんとかしたいところ。口語的に行き過ぎ感
+#@# OK REVIEW muo: 「大丈夫です。」はなんとかしたいところ。口語的に行き過ぎ感
 
 @<code>{<option name="program" value="$PROJECT_DIR$/node_modules/.bin/tsc" />}
 
@@ -200,10 +193,10 @@ File Watcherやgruntなどのツールでは、このrootとして設計した�
 
  * 必要があれば --out を設定
 
-依存関係をtree状に綺麗に定義した場合として、ファイルの出力結果を予想しやすくなります。
-#@# REVIEW muo: 「場合として」とは
-なので、コンパイラにconcatを任せてしまったほうが後で順番を手動で制御する作業をもう一回やるよりも楽です。
-#@# REVIEW muo: concatは「結合作業」とか「結合」のほうがわかりよいのでは
+依存関係をtree状に綺麗に定義すると、結果としてファイルの出力を予想しやすくなります。
+#@# OK REVIEW muo: 「場合として」とは
+なので、コンパイラに結合処理を任せてしまったほうが後で順番を手動で制御する作業をもう一回やるよりも楽です。
+#@# OK REVIEW muo: concatは「結合作業」とか「結合」のほうがわかりよいのでは
 
 以上を踏まえて、Arguments の所に以下を指定します。
 
