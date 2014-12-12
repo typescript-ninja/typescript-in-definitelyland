@@ -171,12 +171,12 @@ tuple(たぷる)は、任意の数の要素の組です。
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
 既存のJavaScriptの資産を使おうとした時に、配列の形で多値を返してくるライブラリが稀にあります。
-タプル型はおそらくそういった時に使うためのもので、TypeScriptでコードを書く時に多様するものではないでしょう。
+タプル型はおそらくそういった時に使うためのもので、TypeScriptでコードを書く時に多用するものではないでしょう。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
 タプル型は型の世界にしか登場せず、実装としてコンパイル後は消えてしまいます。
-記述方法は配列の型指定に @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
-例を見てみましょう@<list>{tuple/basic}。
+記述方法は配列の型指定へ @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
+例を見てみましょう（@<list>{tuple/basic}）。
 
 //list[tuple/basic][基本的な例]{
 #@mapfile(../code/types-advanced/tuple/basic.ts)
@@ -203,7 +203,7 @@ tuple.forEach(v => {
 
 各要素の型を指定してやると、その要素のindexでアクセスした時に適切な型で扱われるようになります。
 
-もちろん、タプル型はGenericsと組み合わせて利用することができます(@<list>{tuple/with-generics})。
+もちろん、タプル型はGenericsと組み合わせて利用できます(@<list>{tuple/with-generics})。
 
 //list[tuple/with-generics][Genericsでの利用も可]{
 #@mapfile(../code/types-advanced/tuple/with-generics.ts)
@@ -236,7 +236,7 @@ tuple[1].charAt(0); // string は charAt を持つ！
 #@end
 //}
 
-さて、タプル型の重箱の隅を見て行きましょう。
+さて、タプル型の重箱の隅を見ていきましょう。
 要素数が多すぎる場合、指定されていない値の型はBCT(1.3.0まで)か、union types(1.4.0以降)になります。
 その例を見てみましょう(@<list>{tuple/many-values})。
 
@@ -315,7 +315,7 @@ union typesはいわゆる直和型でございます。
 実際、自分でTypeScriptコード書いてる時に欲しくなる機能ではあまりありません。
 ECMAScriptさん、パターンマッチもないしー。
 
-まずは簡単な例から見て行きましょう(@<list>{union-types/basic})。
+まずは簡単な例から見ていきましょう(@<list>{union-types/basic})。
 
 //list[union-types/basic][型A | 型B → 新食感！]{
 #@mapfile(../code/types-advanced/union-types/basic.ts)
@@ -339,7 +339,7 @@ var c: typeof a | typeof b;
 既存のJavaScriptライブラリだとこういった感じの困った返り値の関数がかなりあります。
 あとは普通にTypeScriptを書いている時でもSyntaxTreeとかをコードから構築する時にはあったほうが便利かもしれません。
 
-ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesとかは単純にまとめて1つのunion typesに統合できます。
+ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesなどは単純にまとめて1つのunion typesに統合できます。
 次に見る@<list>{union-types/subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
 これも実用上問題ありません。
 というのも、@<hd>{type-guards}で紹介する仕組みがあるからです(後で読んでね！)。
@@ -474,14 +474,14 @@ type guardsは"変数Aが○○という条件を満たす時、変数Aの型は
 === typeof による type guards
 
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
-ECMAScript 5の範囲では、変換ルールは以下の通り。
+ECMAScript 5の範囲では、変換ルールは以下の通りです。
 
- * string の時は "string" を返す。
- * boolean の時は "boolean" を返す。
- * number の時は "number" を返す。
- * undefine の時は "undefined" を返す。
- * 関数として呼び出し可能な場合 "function" を返す。
- * それ以外の場合(nullを含む！)は "object" を返す。
+ * string の時は "string" を返す
+ * boolean の時は "boolean" を返す
+ * number の時は "number" を返す
+ * undefined の時は "undefined" を返す
+ * 関数として呼び出し可能な場合は "function" を返す
+ * それ以外の場合(nullを含む！)は "object" を返す
 
 これを利用して、変数の型を狭めます。
 
@@ -543,7 +543,7 @@ if (typeof obj === "string") {
 
 ==== 後続の型の絞込み
 
-typeof による type guards 特有の仕様として、後続の型の絞込があります(@<list>{type-guards/typeof-removes})。
+typeof による type guards 特有の仕様として、後続の型の絞込みがあります(@<list>{type-guards/typeof-removes})。
 
 //list[type-guards/typeof-removes][型の絞込み！]{
 #@mapfile(../code/types-advanced/type-guards/typeof-removes.ts)
@@ -635,7 +635,7 @@ if (obj instanceof A) {
 #@end
 //}
 
-typeof の type guards と違って、else句が自動的に絞りこまれたりはしません。
+typeof の type guards と違って、else句が自動的に絞込まれたりはしません。
 個別にちゃんと調べないとダメです。
 まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。
 仕方ないね。
@@ -675,7 +675,7 @@ instanceof の右側の値の、その型の、prototypeプロパティの、型
 
 そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}のクラスの分割定義の箇所でも、prototypeプロパティなんかわざわざ定義してないんだなぁ…。
 
-このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されてなくてinstanceofによるtype guardsができないという自体がありました。
+このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
 これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたのが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
 
 だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
@@ -866,7 +866,7 @@ JavaScriptの実行環境とは全く関係がないのです。
 
 TypeScriptでは、構造的部分型の仕組みにより、クラスが要求されている箇所に、互換性のある別の値を代入することができます。
 
-その仕組を使って、@<list>{type-guards/weakspot}のようなコードが書けてしまいます。
+その仕組みを使って、@<list>{type-guards/weakspot}のようなコードが書けてしまいます。
 
 //list[type-guards/weakspot][構造的部分型とtype guards]{
 #@mapfile(../code/types-advanced/type-guards/weakspot.ts)
@@ -947,7 +947,7 @@ var obj: Sample = {
 #@end
 //}
 
-色々書きましたが、一番の解決策はunion typesやanyを多様せず、真っ当なコードを書けるよう設計することですね。
+色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
 
 == 型の別名 (type alias)
 
@@ -1074,7 +1074,7 @@ obj = 1;
  ** type aliasは無理
  * interface は定義の統合ができるので後から自由に拡張できる
  ** type aliasは無理
- * interface は Genericsが使えて型パラメータが持てる
+ * interface は Genericsが使えて型パラメータを持てる
  ** type aliasは無理
  * interface が絡んだ時のコンパイルエラーにはinterface名が表示されてわかりやすい
  ** type aliasは展開されて表示されちゃうので無理
