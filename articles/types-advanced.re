@@ -10,11 +10,14 @@
 タプル型(tuple types)や直和型(union types)についての解説もありますよ！
 
 基本的に、筆者はこの章に書かれている内容に関わらずに書かれているコードこそよいTypeScriptのコードだと思っています@<fn>{bad-code}。
+#@# REVIEW muo: ちょい文の構造をつかみにくいと感じた
 TypeScriptは現実問題として、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
+#@# REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
 そういった時に本章の内容が活きてきます。
 ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、それはそれでよくないコードだと思います。
 
 //footnote[bad-code][本章で触れる機能を使うのが良い場合もあります。例えば構文木の構築・分解などです。自分の用途に本当にそれが必要かはよくよく考えてみてください。]
+#@# REVIEW muo: 分解など→分解時など
 
 == 共通最適型 (Best Common Type)
 
@@ -36,7 +39,9 @@ TypeScriptは現実問題として、JavaScriptで書かれたコードを型定
 消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
 Best Common Type の名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムの元に型が決定されていました。
+#@# REVIEW muo: アルゴリズムの元に→アルゴリズムによって
 例えば、@<list>{bct-basic-1.3.0}のような感じ。
+#@# REVIEW muo: 感じ→感じです
 
 //list[bct-basic-1.3.0][基本的な例]{
 #@mapfile(../code/types-advanced/bct/basic-1.3.0.ts)
@@ -154,6 +159,7 @@ var rect = move({
 rect.z1;
 #@end
 //}
+#@# REVIEW muo: これ右端あふれてます
 
 ここまで来るとさすがに読みにくくなるのでインタフェースを1つ定義したほうがいいですね。
 
@@ -168,6 +174,7 @@ rect.z1;
 @<strong>{導入されたバージョン 1.3.0}
 
 tuple(たぷる)は、任意の数の要素の組です。
+#@# REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
 既存のJavaScriptの資産を使おうとした時に、配列の形で多値を返してくるライブラリが稀にあります。
@@ -175,6 +182,7 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
 タプル型は型の世界にしか登場せず、実装としてコンパイル後は消えてしまいます。
+#@# REVIEW muo: ちょいわかりづらさ感じました。TS側では使われるけどJSの世界には残らんという話だけどもう少し分かりやすくならないかなー
 記述方法は配列の型指定へ @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
 例を見てみましょう（@<list>{tuple/basic}）。
 
@@ -272,6 +280,7 @@ tuple[0].charAt(0);
 
 …悲しい結果になりました。
 @<code>{[1, true]}のような配列のリテラルをtuple typesに推論しないのはおそらくこのためでしょう。
+#@# REVIEW muo: ここのtuple typesはタプル型表記のほうが自然なのでは
 
 unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
@@ -384,6 +393,7 @@ var cond = true ? 1 : "str";
 var array = [1, true, "str"];
 #@end
 //}
+#@# REVIEW muo: キャプション、ひとつ上のコピペにしてない?
 
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、綺麗なコードを書いている限りはあまり見ないかもしれません。
@@ -436,6 +446,7 @@ var obj: string | number | Date;
 // (<RegExp>obj).test("test");
 #@end
 //}
+#@# REVIEW muo: これ右端あふれてます
 
 色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types/cant-inferred-invalid})。
 
@@ -450,6 +461,7 @@ function test<T>(...args: T[]): T[] {
 var v = test(1, true);
 #@end
 //}
+#@# REVIEW muo: これ右端あふれてます
 
 #@# TODO Contextual Union Types https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
@@ -504,11 +516,13 @@ if (typeof obj === "string") {
 //}
 
 TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型はそのままでした。
+#@# REVIEW muo: どのまま?明示したほうがいい
 type guardsが導入された後は"変数objがtypeofで調べた時にstringであるという条件を満たす時、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
 なお、この時の比較は必ず@<code>{===}を使う必要があります。
 @<code>{==}ではダメです。
 
 さて、実際にtype guardsが起こっている例を見てみます。
+#@# REVIEW muo: 起こる?おこなわれる?
 @<list>{type-guards/typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
 そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
 
@@ -674,6 +688,7 @@ instanceof の右側の値の、その型の、prototypeプロパティの、型
 …まわりくどい！
 
 そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}のクラスの分割定義の箇所でも、prototypeプロパティなんかわざわざ定義してないんだなぁ…。
+#@# REVIEW muo: ののののの
 
 このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
 これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたのが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
@@ -707,6 +722,7 @@ if (obj instanceof A) {
 }
 #@end
 //}
+#@# REVIEW muo: これ右端あふれてます
 
 もう一つ、重要なコツを示しておきます。
 それは、エラーメッセージの読み方です(@<list>{type-guards/instanceof-failed-invalid})。
@@ -738,6 +754,7 @@ instanceofを使ってtype guardsで型の絞込みをしたつもりのシチ�
 ですが、実際のエラーは"AInstance | Date だとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
 type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
 慣れていないと、このエラーとtype guardsに実は失敗している！ということが結びつきにくいので気をつけましょう。
+#@# REVIEW muo: 慣れて の前になんか対象物指定あったほうが良い(この周辺だいぶ飛ばした書き方になってるので、なるべくこのへんの読みやすさ改善でカバーしとくべき)
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
 
@@ -946,6 +963,7 @@ var obj: Sample = {
 };
 #@end
 //}
+#@# REVIEW muo: これ右端あふれてます
 
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
 
@@ -954,6 +972,7 @@ var obj: Sample = {
 @<strong>{導入されるバージョン 1.4.0}
 
 最初に書いておきましょう。@<strong>{可能な限りtype aliasを使うな！interface使え！}
+#@# REVIEW muo: 主観だけど、 〜書いておきます。 のほうがいいんじゃないかなぁ。そのほうが主張すっきり伝わりそう
 筆者はtype aliasの乱用を恐れています！
 
 type aliasもunion typesの扱いを便利にするために導入された機能です。
@@ -1050,6 +1069,7 @@ interface AltRecFunc {
 //}
 
 また、type aliasではGenericsを使った名前を定義することはできません。
+#@# REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
 つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
 
 //list[type-alias/with-type-parameters-invalid][こういうコードは書けないんじゃ]{
