@@ -410,7 +410,7 @@ SourceMapを使ってのデバッグが必須要件になるかどうか。
 最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。
 本当に大事なことなので二回言いました。
 
-=== 内部モジュール （internal modules）
+=== 内部モジュール （Internal Modules）
 
 まずは簡単な例を見てみましょう（@<list>{internal-module/basic}）。
 
@@ -548,7 +548,7 @@ var b;
 
 ひとまとまりのファイルとして出力されていますね。
 
-=== 外部モジュール （external modules）
+=== 外部モジュール （External Modules）
 
 外部モジュールは前述の通り、1ファイル = 1モジュール としてプロジェクトを構成していく方式です。
 @<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts@<fn>{require-ext} を参照することができます。

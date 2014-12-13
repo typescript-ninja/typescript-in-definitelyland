@@ -25,7 +25,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
 実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
 
-== オブジェクト型リテラル （Object Type Literal）
+== オブジェクト型リテラル （Object Type Literals）
 
 オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{object-type-literal/basic}）。
 
@@ -568,7 +568,7 @@ var num: number = (<any>obj).num;
 #@end
 //}
 
-== ジェネリクス (generic types)
+== ジェネリクス (Generic Types)
 
 いよいよ来ました。
 最後の大ボスです。

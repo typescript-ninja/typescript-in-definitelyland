@@ -84,7 +84,7 @@ var array = [new A(), new B(), new C()];
 
 以上、解散！
 
-== 型クエリ (type queries)
+== 型クエリ (Type Queries)
 
 型クエリは指定した変数(やメソッドなど)の型をコピーします。
 例えば、@<list>{type-queries/basic}のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
@@ -165,7 +165,7 @@ rect.z1;
 
 ここまで来るとさすがに読みにくくなるのでインタフェースを1つ定義したほうがいいですね。
 
-== タプル型 (tuple types)
+== タプル型 (Tuple Types)
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
 
@@ -308,7 +308,7 @@ tuple[0].charAt(0);
 
 結論：タプル型を過信するのはやめろ繰り返すタプル型を過信するのはやめろ！
 
-== 直和型 (union types)
+== 直和型 (Union Types)
 
 @<strong>{導入されるバージョン 1.4.0}
 
@@ -479,7 +479,7 @@ var v = test(1, true);
 
 //footnote[spec-example-bug][https://github.com/Microsoft/TypeScript/issues/1267]
 
-=={type-guards} 型のためのガード (type guards)
+=={type-guards} 型のためのガード (Type Guards)
 #@# TODO 和訳が微妙…
 @<strong>{導入されるバージョン 1.4.0}
 
