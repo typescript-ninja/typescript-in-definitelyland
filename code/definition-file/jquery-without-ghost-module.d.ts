@@ -21,7 +21,10 @@ interface JQueryAjaxSettings {
 
 interface JQueryPromise<T> {
 	state(): string;
-	then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): JQueryPromise<U>;
+	then<U>(
+		fullfill: (value: T) => U,
+		reject?: (...reasons: any[]) => U
+	): JQueryPromise<U>;
 }
 
 interface JQueryDeferred<T> extends JQueryPromise<T> {

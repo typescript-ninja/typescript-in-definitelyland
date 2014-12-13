@@ -22,7 +22,10 @@ declare module jquery {
 
 	interface Promise<T> {
 		state(): string;
-		then<U>(fullfill: (value: T) => U, reject?: (...reasons: any[]) => U): Promise<U>;
+		then<U>(
+			fullfill: (value: T) => U,
+			reject?: (...reasons: any[]) => U
+		): Promise<U>;
 	}
 
 	interface Deferred<T> extends Promise<T> {
