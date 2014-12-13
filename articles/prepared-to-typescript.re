@@ -36,7 +36,7 @@ $ npm install -g Microsoft/TypeScript
 # 省略
 $ tsc -v
 #@mapoutput(node ../typescript/bin/tsc.js -v)
-message TS6029: Version 1.3.0.0
+message TS6029: Version 1.4.0.0
 #@end
 //}
 
@@ -50,7 +50,7 @@ $ ls package.json                                                               
 $ npm install Microsoft/TypeScript --save-dev
 $ ./node_modules/.bin/tsc -v
 #@mapoutput(node ../typescript/bin/tsc.js -v)
-message TS6029: Version 1.3.0.0
+message TS6029: Version 1.4.0.0
 #@end
 //}
 
