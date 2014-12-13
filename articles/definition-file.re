@@ -51,7 +51,7 @@ $ tsd query power-assert --action install --save --resolve
  - power-assert/power-assert.d.ts : <head> : 2014-11-14 02:03
 
    >> empower/empower.d.ts : <head> : 2014-11-14 02:03
-   >> power-assert-formatter/power-assert-formatter.d.ts : <head> : 2014-11-14 02:03
+   >> power-assert-formatter/power-assert-formatter.d.ts : <head> : (略)
 
 >> running install..
 

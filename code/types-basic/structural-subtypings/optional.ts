@@ -23,11 +23,12 @@ printPoint({
 	color: "red"
 });
 // とはいえ、型が不一致だと怒られる。
-// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }' is not assignable to parameter of type 'Point'.
+// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }'
+//   is not assignable to parameter of type 'Point'.
 //   Types of property 'color' are incompatible.
 //     Type 'boolean' is not assignable to type 'string'.
 // printPoint({
-//     x: 1,
-//     y: 2,
-//     color: true
+//   x: 1,
+//   y: 2,
+//   color: true
 // });

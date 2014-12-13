@@ -1,4 +1,5 @@
-// クラス Foo はstring型のstrという名前のプロパティとnumber型のnumという名前のプロパティを持つ
+// クラス Foo はstring型のstrという名前のプロパティと
+// number型のnumという名前のプロパティを持つ
 class Foo {
 	str = "string";
 	num = 1;

@@ -2,7 +2,7 @@
 var tuple: [string, number] = ["str", 1, "test"];
 
 // 1.3.0 では型指定されていない要素は BCT(Best Common Type) つまりここでは {} になる
-// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまりここでは string | number になる。
+// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまり string | number になる。
 var value = tuple[2];
 
 // 1.3.0 では以下の記述は正しい

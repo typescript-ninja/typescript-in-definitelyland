@@ -192,7 +192,8 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 #@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
 // TypeScript 1.3.0 ではこれはいままで通りの {}[]
-// TypeScript 1.4.0? ではこれは別の箇所で解説しているunion typesとあわせて(string | number | boolean)[]
+// TypeScript 1.4.0? ではこれは別の箇所で解説している
+//   union typesとあわせて(string | number | boolean)[]
 var array = [1, "str", true];
 
 // {} は charAt を持たないので下記はコンパイルエラーになる
@@ -256,7 +257,7 @@ tuple[1].charAt(0); // string は charAt を持つ！
 var tuple: [string, number] = ["str", 1, "test"];
 
 // 1.3.0 では型指定されていない要素は BCT(Best Common Type) つまりここでは {} になる
-// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまりここでは string | number になる。
+// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまり string | number になる。
 var value = tuple[2];
 
 // 1.3.0 では以下の記述は正しい

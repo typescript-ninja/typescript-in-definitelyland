@@ -1,6 +1,7 @@
 // まずは今までどおりの配列から
 // TypeScript 1.3.0 ではこれはいままで通りの {}[]
-// TypeScript 1.4.0? ではこれは別の箇所で解説しているunion typesとあわせて(string | number | boolean)[]
+// TypeScript 1.4.0? ではこれは別の箇所で解説している
+//   union typesとあわせて(string | number | boolean)[]
 var array = [1, "str", true];
 
 // {} は charAt を持たないので下記はコンパイルエラーになる
