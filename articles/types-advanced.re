@@ -8,16 +8,16 @@
 
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
 タプル型(tuple types)や直和型(union types)についての解説もありますよ！
+なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそ良い設計だと筆者は考えています@<fn>{bad-code}。
+#@# OK REVIEW muo: ちょい文の構造をつかみにくいと感じた
 
-基本的に、筆者はこの章に書かれている内容に関わらずに書かれているコードこそよいTypeScriptのコードだと思っています@<fn>{bad-code}。
-#@# REVIEW muo: ちょい文の構造をつかみにくいと感じた
-TypeScriptは現実問題として、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
-#@# REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
+TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
+#@# OK REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
 そういった時に本章の内容が活きてきます。
-ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、それはそれでよくないコードだと思います。
+ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと思います。
 
-//footnote[bad-code][本章で触れる機能を使うのが良い場合もあります。例えば構文木の構築・分解などです。自分の用途に本当にそれが必要かはよくよく考えてみてください。]
-#@# REVIEW muo: 分解など→分解時など
+//footnote[bad-code][本章で触れる機能を使うのが良い場合もあります。例えば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください。]
+#@# OK REVIEW muo: 分解など→分解時など
 
 == 共通最適型 (Best Common Type)
 
@@ -27,7 +27,7 @@ TypeScriptは現実問題として、JavaScriptで書かれたコードを型定
 
 @<strong>{消滅したバージョン 1.4.0}
 
-後述の tuple types, 及び union types が導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。
+後述のtuple types, 及びunion typesが導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。
 現在の最新仕様ではBCTという概念そのものが消滅してますね…。
 こぇー…。
 本書執筆時点では1.3.0しかリリースされていないため、一応現行では生きてる仕様なのですが…。
@@ -38,10 +38,10 @@ TypeScriptは現実問題として、JavaScriptで書かれたコードを型定
 
 消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
-Best Common Type の名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムの元に型が決定されていました。
-#@# REVIEW muo: アルゴリズムの元に→アルゴリズムによって
-例えば、@<list>{bct-basic-1.3.0}のような感じ。
-#@# REVIEW muo: 感じ→感じです
+Best Common Typeの名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
+#@# OK REVIEW muo: アルゴリズムの元に→アルゴリズムによって
+例えば、@<list>{bct-basic-1.3.0}のようになります。
+#@# OK REVIEW muo: 感じ→感じです
 
 //list[bct-basic-1.3.0][基本的な例]{
 #@mapfile(../code/types-advanced/bct/basic-1.3.0.ts)
@@ -137,7 +137,9 @@ obj.bye = obj.hello;
 //list[type-queries/copy-invalid][ここまで複雑にするならインタフェース使って]{
 #@mapfile(../code/types-advanced/type-queries/copy-invalid.ts)
 // このコードは正しい
-function move(p1: { x1: number; y1: number; x2: number; y2: number; }, p2: typeof p1): typeof p1 {
+function move(p1: { x1: number; y1: number; x2: number; y2: number; },
+              p2: typeof p1
+             ):   typeof p1 {
   return {
     x1: p1.x1 + p2.x1,
     y1: p1.y1 + p2.y1,
@@ -159,7 +161,7 @@ var rect = move({
 rect.z1;
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 ここまで来るとさすがに読みにくくなるのでインタフェースを1つ定義したほうがいいですね。
 
@@ -173,16 +175,16 @@ rect.z1;
 
 @<strong>{導入されたバージョン 1.3.0}
 
-tuple(たぷる)は、任意の数の要素の組です。
-#@# REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
+tuple(タプル)は、任意の数の要素の組です。
+#@# OK REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
 既存のJavaScriptの資産を使おうとした時に、配列の形で多値を返してくるライブラリが稀にあります。
 タプル型はおそらくそういった時に使うためのもので、TypeScriptでコードを書く時に多用するものではないでしょう。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
-タプル型は型の世界にしか登場せず、実装としてコンパイル後は消えてしまいます。
-#@# REVIEW muo: ちょいわかりづらさ感じました。TS側では使われるけどJSの世界には残らんという話だけどもう少し分かりやすくならないかなー
+タプル型は型(TypeScript)の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。
+#@# OK REVIEW muo: ちょいわかりづらさ感じました。TS側では使われるけどJSの世界には残らんという話だけどもう少し分かりやすくならないかなー
 記述方法は配列の型指定へ @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
 例を見てみましょう（@<list>{tuple/basic}）。
 
@@ -279,8 +281,8 @@ tuple[0].charAt(0);
 //}
 
 …悲しい結果になりました。
-@<code>{[1, true]}のような配列のリテラルをtuple typesに推論しないのはおそらくこのためでしょう。
-#@# REVIEW muo: ここのtuple typesはタプル型表記のほうが自然なのでは
+@<code>{[1, true]}のような配列のリテラルをタプル型に推論しないのはおそらくこのためでしょう。
+#@# OK REVIEW muo: ここのtuple typesはタプル型表記のほうが自然なのでは
 
 unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
@@ -383,7 +385,7 @@ base = new Inherit();
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
 || 演算子を使った時、条件(三項)演算子を使った時、配列リテラルを使った時です(@<list>{union-types/inferred})。
 
-//list[union-types/inferred][要素Bが要素Aのサブタイプの場合Aにまとまる]{
+//list[union-types/inferred][こういう時は目にしますね]{
 #@mapfile(../code/types-advanced/union-types/inferred.ts)
 // and の型は string | boolean
 var and = "str" || true;
@@ -393,7 +395,7 @@ var cond = true ? 1 : "str";
 var array = [1, true, "str"];
 #@end
 //}
-#@# REVIEW muo: キャプション、ひとつ上のコピペにしてない?
+#@# OK REVIEW muo: キャプション、ひとつ上のコピペにしてない?
 
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、綺麗なコードを書いている限りはあまり見ないかもしれません。
@@ -442,11 +444,12 @@ var obj: string | number | Date;
 (<Date>obj).getTime();
 
 // 値の集合に含まれない型にしてみると普通に怒られる
-// error TS2352: Neither type 'string | number | Date' nor type 'RegExp' is assignable to the other.
+// error TS2352: Neither type 'string | number | Date'
+//     nor type 'RegExp' is assignable to the other.
 // (<RegExp>obj).test("test");
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types/cant-inferred-invalid})。
 
@@ -456,12 +459,13 @@ function test<T>(...args: T[]): T[] {
   return args;
 }
 // (number | boolean)[] にはならなかった。残念。
-// error TS2453: The type argument for type parameter 'T' cannot be inferred from
-// the usage. Consider specifying the type arguments explicitly.
+// error TS2453: The type argument for type parameter 'T'
+// cannot be inferred from the usage.
+// Consider specifying the type arguments explicitly.
 var v = test(1, true);
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 #@# TODO Contextual Union Types https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
@@ -500,7 +504,7 @@ ECMAScript 5の範囲では、変換ルールは以下の通りです。
 ==== 使い方
 
 一番簡単な使い方から見ていきましょう(@<list>{type-guards/typeof-basic})。
-TypeScriptのtype guardsでは、typeofの結果が string, boolean, number の場合、その型に絞り込むことができます。
+TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。
 
 //list[type-guards/typeof-basic][実際の型がわからないなら調べるしかないじゃない！]{
 #@mapfile(../code/types-advanced/type-guards/typeof-basic.ts)
@@ -515,14 +519,14 @@ if (typeof obj === "string") {
 #@end
 //}
 
-TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型はそのままでした。
-#@# REVIEW muo: どのまま?明示したほうがいい
+TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型は型注釈したものから変わらずそのままでした。
+#@# OK REVIEW muo: どのまま?明示したほうがいい
 type guardsが導入された後は"変数objがtypeofで調べた時にstringであるという条件を満たす時、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
 なお、この時の比較は必ず@<code>{===}を使う必要があります。
 @<code>{==}ではダメです。
 
-さて、実際にtype guardsが起こっている例を見てみます。
-#@# REVIEW muo: 起こる?おこなわれる?
+もう一例見てみましょう。
+#@# OK REVIEW muo: 起こる?おこなわれる?
 @<list>{type-guards/typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
 そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
 
@@ -553,11 +557,11 @@ if (typeof obj === "string") {
 #@end
 //}
 
-まぁ、指定した型通りの値が入ってくるのであればなにも問題ないな！
+まぁ、指定した型通りの値が入ってくるのであればなにも問題はないな！
 
 ==== 後続の型の絞込み
 
-typeof による type guards 特有の仕様として、後続の型の絞込みがあります(@<list>{type-guards/typeof-removes})。
+typeofによるtype guards特有の仕様として、後続の型の絞込みがあります(@<list>{type-guards/typeof-removes})。
 
 //list[type-guards/typeof-removes][型の絞込み！]{
 #@mapfile(../code/types-advanced/type-guards/typeof-removes.ts)
@@ -584,14 +588,15 @@ if (typeof obj === "string") {
 #@end
 //}
 
-最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないって、はっきり分かるんだね。
+最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないことはわかりきっています。
+親切な仕様ですね。
 
 === instanceof による type guards
 
-primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceof を使った type guardsももちろんあります！！
+primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceofを使ったtype guardsももちろんあります！！
 でも、仕様が完璧とはちょっと言い難いんですよね。
 
-JavaScriptにおける instanceof は、ある値が指定した関数のインスタンスであるかを調べる演算子です。
+JavaScriptにおけるinstanceofは、ある値が指定した関数のインスタンスであるかを調べる演算子です。
 プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。
 
 動作例を確認しておきます(@<list>{type-guards/instanceof})。
@@ -649,18 +654,18 @@ if (obj instanceof A) {
 #@end
 //}
 
-typeof の type guards と違って、else句が自動的に絞込まれたりはしません。
+typeofのtype guardsと違って、else句が自動的に絞込まれたりはしません。
 個別にちゃんと調べないとダメです。
 まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。
 仕方ないね。
 
 ==== 自分で定義した型で使うには？
 
-TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScript上で定義したクラスだけが type guards の対象になる、そんなの悲しすぎ！
+TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScript上で定義したクラスだけがtype guardsの対象になる、そんなの悲しすぎ！
 というわけで、それを解消する方法が用意されています。
 
 最も簡単なのは、型定義上でも、クラスとして定義することです。
-クラスはデフォルトでinstanceof による type guards に対応しています。
+クラスはデフォルトでinstanceofによるtype guardsに対応しています。
 
 もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(@<list>{type-guards/instanceof-prototype})。
 
@@ -683,12 +688,12 @@ if (obj instanceof A) {
 #@end
 //}
 
-instanceof の右側の値の、その型の、prototypeプロパティの、型！
-つまり、instanceof の右側の A の型の AStatic の prototypeプロパティの、型(AInstance)！
+instanceofの右側の値の、その型の、prototypeプロパティの、型！
+つまり、instanceofの右側のAの型のAStaticのprototypeプロパティの、型(AInstance)！
 …まわりくどい！
 
-そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}のクラスの分割定義の箇所でも、prototypeプロパティなんかわざわざ定義してないんだなぁ…。
-#@# REVIEW muo: ののののの
+そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}の項目、クラスの分割定義について言及している箇所でも、prototypeプロパティなんかわざわざ定義してないんですよね…。
+#@# OK REVIEW muo: ののののの
 
 このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
 これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたのが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
@@ -696,7 +701,7 @@ instanceof の右側の値の、その型の、prototypeプロパティの、型
 だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
 
 というわけで、prototype propertyの代わりに、construct signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}@<fn>{type-guards-by-construct-signature}を行っています。
-コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されてたら俺のことめっちゃ褒めてくれてもいいと思います( ｰ`дｰ´)ｷﾘｯ
+コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されていたら俺のことめっちゃ褒めてくれてもいいと思います( ｰ`дｰ´)ｷﾘｯ
 
 話を戻しましょう。
 prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。
@@ -717,12 +722,14 @@ interface AInstance {
 declare var A: AStatic;
 
 var obj: any;
-// error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+// error TS2359: The right-hand side of an 'instanceof'
+// expression must be of type 'any' or of a type assignable
+// to the 'Function' interface type.
 if (obj instanceof A) {
 }
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 もう一つ、重要なコツを示しておきます。
 それは、エラーメッセージの読み方です(@<list>{type-guards/instanceof-failed-invalid})。
@@ -750,11 +757,12 @@ if (obj instanceof A) {
 instanceofを使ってtype guardsで型の絞込みをしたつもりのシチュエーションです。
 しかし、AStaticはprototypeプロパティを持っていません。
 つまり、type guardsは効力を発揮しなかったんだよ！ΩΩΩ＜な、なんだってー！
-ここでのエラーに根本的な原因は、期待に反して"AInstanceに型を絞ることに失敗したよ！"ということです。
-ですが、実際のエラーは"AInstance | Date だとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
+
+ここでのエラーの根本的な原因は、変数objの型をAInstanceに絞ることに失敗したことです。
+ですが、実際に表示されるエラーメッセージは"AInstance | Dateだとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
 type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
-慣れていないと、このエラーとtype guardsに実は失敗している！ということが結びつきにくいので気をつけましょう。
-#@# REVIEW muo: 慣れて の前になんか対象物指定あったほうが良い(この周辺だいぶ飛ばした書き方になってるので、なるべくこのへんの読みやすさ改善でカバーしとくべき)
+union types絡みのエラーに慣れていないと、このエラーメッセージとtype guardsが実は失敗している！ということが結びつきにくいので気をつけましょう。
+#@# OK REVIEW muo: 慣れて の前になんか対象物指定あったほうが良い(この周辺だいぶ飛ばした書き方になってるので、なるべくこのへんの読みやすさ改善でカバーしとくべき)
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
 
@@ -764,7 +772,7 @@ type guardsの失敗が、別のエラーとなって間接的に表れてしま
 
 ==== Generics と type guards
 
-さて、ちょっと前に書いた"instanceof の右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
+さて、ちょっと前に書いた"instanceofの右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
 
 prototypeのプロパティの型に、Genericsが絡むと、話がややこしくなります。
 話がややこしい奴代表として、Array<T>に登場してもらいましょう(@<list>{type-guards/array-declaration-invalid})。
@@ -787,7 +795,7 @@ interface Array<T> {
 #@end
 //}
 
-instanceof で type guards で型を狭めた時、 any[] になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
+instanceofでtype guardsで型を狭めた時、any[]になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
 
 //list[type-guards/instanceof-array-invalid][絞込み、失敗！]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-array-invalid.ts)
@@ -955,15 +963,16 @@ class Sample {
 }
 
 // privateなインスタンス変数があるクラスのインスタンスは偽造できない！
-// error TS2322: Type '{ _tmp: null; str: string; }' is not assignable to type 'Sample'.
-//     Property '_tmp' is private in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
+// error TS2322: Type '{ _tmp: null; str: string; }' is not
+//     assignable to type 'Sample'. Property '_tmp' is private
+//     in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
 var obj: Sample = {
   _tmp: null,
   str: "Hi!"
 };
 #@end
 //}
-#@# REVIEW muo: これ右端あふれてます
+#@# OK REVIEW muo: これ右端あふれてます
 
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
 
@@ -971,8 +980,8 @@ var obj: Sample = {
 
 @<strong>{導入されるバージョン 1.4.0}
 
-最初に書いておきましょう。@<strong>{可能な限りtype aliasを使うな！interface使え！}
-#@# REVIEW muo: 主観だけど、 〜書いておきます。 のほうがいいんじゃないかなぁ。そのほうが主張すっきり伝わりそう
+最初に書いておきます。@<strong>{可能な限りtype aliasを使うな！interface使え！}
+#@# OK REVIEW muo: 主観だけど、 〜書いておきます。 のほうがいいんじゃないかなぁ。そのほうが主張すっきり伝わりそう
 筆者はtype aliasの乱用を恐れています！
 
 type aliasもunion typesの扱いを便利にするために導入された機能です。
@@ -1068,8 +1077,8 @@ interface AltRecFunc {
 #@end
 //}
 
-また、type aliasではGenericsを使った名前を定義することはできません。
-#@# REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
+また、type aliasではGenericsを使った名前を定義することができません。
+#@# OK REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
 つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
 
 //list[type-alias/with-type-parameters-invalid][こういうコードは書けないんじゃ]{

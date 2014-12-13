@@ -1,5 +1,7 @@
 // このコードは正しい
-function move(p1: { x1: number; y1: number; x2: number; y2: number; }, p2: typeof p1): typeof p1 {
+function move(p1: { x1: number; y1: number; x2: number; y2: number; },
+              p2: typeof p1
+             ):   typeof p1 {
 	return {
 		x1: p1.x1 + p2.x1,
 		y1: p1.y1 + p2.y1,

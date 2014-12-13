@@ -13,5 +13,6 @@ var obj: string | number | Date;
 (<Date>obj).getTime();
 
 // 値の集合に含まれない型にしてみると普通に怒られる
-// error TS2352: Neither type 'string | number | Date' nor type 'RegExp' is assignable to the other.
+// error TS2352: Neither type 'string | number | Date'
+//     nor type 'RegExp' is assignable to the other.
 // (<RegExp>obj).test("test");
