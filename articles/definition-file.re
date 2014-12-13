@@ -12,9 +12,9 @@ TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換える�
 拡張子を .d.ts としたファイルに実装を含むようなコードを書くとtscがエラーにしてくれますので、ケアレスミス予防のためにも型定義ファイルの拡張子は必ず .d.ts にします。
 #@# OK REVIEW muo: 少々言葉不足でつながり悪く感じた。「拡張子を.d.tsとしたファイルに実装を含むようなコードを書くと」かなぁ
 
-TypeScriptではJavaScriptの自由奔放(かつ、危険がてんこ盛り)の世界に後付で型を与えます。
-元からTypeScriptで書かれている場合、実装と型定義を同時に書いているようなものなので、実装と型がズレて(つまりバグって)しまうことはありません。
-一方、型定義ファイルは既に実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる(バグる)可能性が大いに有ります。
+TypeScriptではJavaScriptの自由奔放（かつ、危険がてんこ盛り）の世界に後付で型を与えます。
+元からTypeScriptで書かれている場合、実装と型定義を同時に書いているようなものなので、実装と型がズレて（つまりバグって）しまうことはありません。
+一方、型定義ファイルは既に実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。
 #@# OK REVIEW muo: 後付で手書きで とつながるのが嫌な感じ。「JavaScriptに後付の型定義を手書きしていくため」かな。気に食わなかったらスルーでok
 そこのところを十分に気をつけないといけません。
 
@@ -85,7 +85,7 @@ typings
 残念ながらライブラリの実体は含まれていないため、npmやbowerなどで別途取得する必要があるでしょう。
 
 //footnote[tsd][tsdはbartvdsがメインに開発している型定義ファイル管理ツールで、広く使われています。]
-//footnote[dtsm][dtsmは筆者(vvakame)が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
+//footnote[dtsm][dtsmは筆者（vvakame）が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
 #@# OK REVIEW muo: こう書くならtsdについても一言紹介しておいたほうが良いように思った
 //footnote[NuGet][WindowsユーザにはNuGetというツールもあるのですが、全然知らないため割愛します。]
 
@@ -112,7 +112,7 @@ export function hello(word = "TypeScript") {
 #@end
 //}
 
-これに対して、テストコードを書いてみましょう(@<list>{usage/tests/indexSpec})。
+これに対して、テストコードを書いてみましょう（@<list>{usage/tests/indexSpec}）。
 普通ですね。
 特定のinputを与えるとoutputが得られる。
 そのことを検証するコードです。
@@ -150,7 +150,7 @@ JavaScriptの世界では静的な型検査などありませんので問題あ�
 そこで使われるのが型定義ファイルです。
 
 型定義ファイルの抜粋を示します。
-mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイル(抜粋)を見てみましょう。
+mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイル（抜粋）を見てみましょう。
 
 //list[usage/abstract/mocha][mocha.d.ts 抜粋]{
 #@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
@@ -203,17 +203,17 @@ declare module "power-assert" {
 
 TypeScriptはJavaScriptに対して後付で型による制約を付け足した言語です。
 そのため、JavaやC#のような最初から型ありきの言語より少し考え方が複雑です。
-具体的に言えば、型と実体(値)というものが分かれています。
+具体的に言えば、型と実体（値）というものが分かれています。
 
 全てがTypeScriptで書かれたプログラムであれば、型と実体は基本的には一致しています。
 #@# OK REVIEW muo: 書かれている→書かれた かな
-クラスの定義を書いた時、JavaScriptプログラムとしてのクラス(OOPするためのコンストラクタ関数)と、TypeScriptで使う型としてのクラスが一度に誕生します。
+クラスの定義を書いた時、JavaScriptプログラムとしてのクラス（OOPするためのコンストラクタ関数）と、TypeScriptで使う型としてのクラスが一度に誕生します。
 これは非常に素直かつ簡単で、型と実体を1つの記述から作成しているので、この2つが乖離してしまうことはありません。
 
 一方、JavaScriptでコードを書いて、TypeScriptで型定義ファイルを作成して使う場合は実装と型が個別に定義されることになります。
 #@# OK REVIEW muo: JavaScriptで書いて→JavaScriptでコードを書いて
 #@# OK REVIEW muo: 「当てて使う」の表現は少々感覚寄りすぎかなーと
-そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると(つまりバグると)コンパイルが通るのに実行時エラーが多発する、という有り様に成るわけです。
+そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、という有り様に成るわけです。
 型定義ファイルを書いて"この変数は、あります！"と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。
 
 === 良い型定義ファイル、悪い型定義ファイル
@@ -279,7 +279,7 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 === インタフェースを活用する
 
 インタフェースは大変使いやすいパーツです。
-というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです(@<list>{declaration-merging}、@<list>{declaration-merging-usage})。
+というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{declaration-merging}、@<list>{declaration-merging-usage}）。
 
 //list[declaration-merging][定義を分割して書く]{
 #@mapfile(../code/definition-file/declaration-merging.d.ts)
@@ -310,8 +310,8 @@ foo.bye();
 
 例を1つ見てみましょう。
 Array#findは、指定した方法に基づき要素を1つ探す関数です。
-TypeScript 1.3.0ではデフォルトの型定義ファイル(lib.d.ts)にはまだこのメソッドが定義されていません。
-そのため、Arrayインタフェースを拡張する形でコンパイルを通せるようにしてみましょう(@<list>{array-find})。
+TypeScript 1.3.0ではデフォルトの型定義ファイル（lib.d.ts）にはまだこのメソッドが定義されていません。
+そのため、Arrayインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{array-find}）。
 
 //list[array-find][Array#find を生やす]{
 #@mapfile(../code/definition-file/array-find.ts)
@@ -339,7 +339,7 @@ array.find(v => v % 2 === 1);
 幽霊モジュール@<fn>{ghost-module}という考え方があります。
 
 内部モジュールを作ったとしても、即座に実体が生成されるとは限りません。
-内部モジュールが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです(@<list>{ghost-module-invalid})。
+内部モジュールが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghost-module-invalid}）。
 
 //list[ghost-module-invalid][幽霊モジュール]{
 #@mapfile(../code/definition-file/ghost-module-invalid.ts)
@@ -362,7 +362,7 @@ var notExists = ghost;
 これを活用して、大量のインタフェースを持つようなライブラリの定義をひとまとまりにできます。
 
 実際の例を見てみましょう。
-@<list>{jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋(&一部改変)です。
+@<list>{jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋（＆一部改変）です。
 
 //list[jquery-without-ghost-module][実際のjQueryの型定義の例]{
 #@mapfile(../code/definition-file/jquery-without-ghost-module.d.ts)
@@ -482,7 +482,7 @@ declare var $: jquery.Static;
 おうお前少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？
 と、思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
-具体的に、モジュール様の構造をインタフェースを使って作ってはいけません(@<list>{module-by-interface-bad})。
+具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{module-by-interface-bad}）。
 
 //list[module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
 #@mapfile(../code/definition-file/module-by-interface-bad.d.ts)
@@ -553,9 +553,9 @@ interface Assert {
 #@end
 //}
 
-たしかに、この定義でも動きます(正直、assert関数だけの定義だとこのままでもいい気がしますが…)。
+たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。
 
-しかし、これには別の良いやり方があるのです(@<list>{callable-module-good})。
+しかし、これには別の良いやり方があるのです（@<list>{callable-module-good}）。
 
 //list[callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
 #@mapfile(../code/definition-file/callable-module-good.d.ts)
@@ -593,11 +593,11 @@ declare module assert {
 #@# OKREVIEW muo: 前のとキャプション同じだけど意図してる? 話的にはつながってるので良いかもしらんけど念のため
 
 外部に公開されている関数は@<code>{assert}のみで、そこに追加でプロパティが生えている形式です。
-実体のある要素(関数)があるため、幽霊モジュールにはなりませんが、Optionsインタフェースが上手く取り込まれています。
+実体のある要素（関数）があるため、幽霊モジュールにはなりませんが、Optionsインタフェースが上手く取り込まれています。
 余計な名前を階層の浅いところにバラ撒かず、厳密さも損なっていません。
 この書き方は、案外よく登場するパターンなので覚えておくと良いでしょう。
 
-実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます(@<list>{callable-module-ts})。
+実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます（@<list>{callable-module-ts}）。
 
 //list[callable-module-ts][関数が先、内部モジュールは後！絶対！]{
 #@mapfile(../code/definition-file/callable-module.ts)
@@ -634,7 +634,7 @@ var test;
 === クラスを定義するには？
 
 普通に定義すればええやろ！！と思うかもしれませんが、現在のTypeScriptはなかなか難しい問題を抱えています。
-先に、どういう選択肢が存在するかを見てみましょう(@<list>{declare-class})。
+先に、どういう選択肢が存在するかを見てみましょう（@<list>{declare-class}）。
 
 //list[declare-class][素直にクラス定義 vs インタフェース+変数]{
 #@mapfile(../code/definition-file/declare-class.d.ts)
@@ -662,8 +662,8 @@ interface TestB {
 
  * ライブラリ利用時に普通に継承できる
  * 定義の拡張ができない
- ** 別ライブラリが(プラグインなどで)拡張する設計のライブラリには向かない
- * 別途インタフェースの実装を型定義に盛り込む時めんどくさい(定義の二重記述が必要)
+ ** 別ライブラリが（プラグインなどで）拡張する設計のライブラリには向かない
+ * 別途インタフェースの実装を型定義に盛り込む時めんどくさい（定義の二重記述が必要）
 
 @<list>{declare-vanilla-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
@@ -698,7 +698,7 @@ declare class FooListenerImpl implements FooListener {
  * ライブラリ利用時に継承できない
  ** new するだけの利用法なら特に不便ではない
  * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
- * インタフェースを実装するのが(継承するだけなので)めっちゃ簡単
+ * インタフェースを実装するのが（継承するだけなので）めっちゃ簡単
 
 @<list>{declare-decompose-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
@@ -872,9 +872,9 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 #@# OK REVIEW muo: ここ1個目の"jquery"は意図してる?それともjQuery?
 コントリビュートの輪！
 
-=== コールバック関数の引数を無闇に省略可能(optional)にしない
+=== コールバック関数の引数を無闇に省略可能（optional）にしない
 
-まずは例を見てみましょう(@<list>{callback/basic})。
+まずは例を見てみましょう（@<list>{callback/basic}）。
 
 //list[callback/basic][optionalはもしかしたら値がない事を表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
@@ -904,7 +904,7 @@ onClickOpt(() => {
 //}
 
 両方とも、クリックイベントをハンドリングするための関数を型定義として書き起こしたものです。
-onClickはeが省略不可、onClickOptはeが省略可能(optional)になっています。
+onClickはeが省略不可、onClickOptはeが省略可能（optional）になっています。
 これは、onClickOptではeがundefinedになるかもしれない事を表します。
 eがundefinedかもしれないなら、if文とかで中身があるかチェックしなくていいの？という不安が生じます。
 
@@ -1045,7 +1045,7 @@ tslintのリポジトリは@<href>{https://github.com/palantir/tslint,こちら}
 
 tslintはコンパイルだけでは見つけきれない、悪い臭いのするコードを検出してくれます。
 #@# OK REVIEW muo: 匂い→臭いかな。ネガティブなニュアンスなので
-例を見てみましょう(@<list>{tslint/basic})。
+例を見てみましょう（@<list>{tslint/basic}）。
 
 //list[tslint/basic][ん？何かおかしなコードがあるぞ？]{
 #@mapfile(../code/definition-file/tslint/basic.ts)
@@ -1142,7 +1142,7 @@ npm, または bower に公開されている名前通りか。
 いくつか補足しましょう。
 
 破壊的変更が含まれていないか。
-例えば、コードスタイルの変更(インタフェースのプリフィクスにIをつける、つけない など)や、幽霊モジュールを使っていないスタイルから使っているスタイルへの変更など。
+例えば、コードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊モジュールを使っていないスタイルから使っているスタイルへの変更など。
 または、別に間違っていないメソッドなどの型定義から別表現への書き換えなど。
 これらはレビュアーが妥当かどうかを判断します。
 大抵、判断できないのでヘッダに書いてある Definitions by: に名前が書いてある人達にGitHub上でmentionを飛ばして相談します。

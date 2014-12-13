@@ -25,7 +25,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
 実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
 
-== オブジェクト型リテラル （Object Type Literals）
+== オブジェクト型リテラル（Object Type Literals）
 
 オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{object-type-literal/basic}）。
 
@@ -84,7 +84,7 @@ console.log(JSON.stringify(result, null, 2));
 
 //footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではありません。]
 
-=== プロパティシグニチャ （Property Signatures）
+=== プロパティシグニチャ（Property Signatures）
 
 1つ目は、実は既に登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
 #@# OK REVIEW muo: 書くための書き方 は少々冗長です。プロパティの記法とするか、片方を別の表現にしたほうがよさそうです
@@ -103,7 +103,7 @@ obj = {
 
 素直でわかりやすいですね。
 
-=== コールシグニチャ （Call Signatures）
+=== コールシグニチャ（Call Signatures）
 
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{object-type-literal/call-signature}）。
 #@# OK REVIEW muo: ひとつ前と揃えて「示す書き方」→「示す記法」が良いかも
@@ -158,7 +158,7 @@ console.log(num);
 
 実装が煩雑になるのでなるべくオーバーロードは避けたいですね。
 
-=== コンストラクトシグニチャ （Construct Signatures）
+=== コンストラクトシグニチャ（Construct Signatures）
 
 3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
 #@# OK REVIEW muo: 例によって「示す書き方」→「示す記法」が良いかも
@@ -193,7 +193,7 @@ TypeScriptのコードの書き方の範疇では、クラスを定義しなけ�
 
 コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。
 
-=== インデックスシグニチャ （Index Signatures）
+=== インデックスシグニチャ（Index Signatures）
 
 4つ目は、インデックスシグニチャです。
 添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{object-type-literal/index-signature}）。
@@ -270,7 +270,7 @@ var str2 = obj[propertyName];
 
 インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。
 
-=== メソッドシグニチャ （Method Signatures）
+=== メソッドシグニチャ（Method Signatures）
 
 最後の5つ目は、メソッドシグニチャです。
 あるプロパティがメソッドであることを表現できます（@<list>{object-type-literal/method-signature}）。
@@ -307,7 +307,7 @@ obj2 = obj;
 
 "プロパティシグニチャ + 関数な型"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
-== 関数型リテラル （Function Type Literals）
+== 関数型リテラル（Function Type Literals）
 
 関数も型として表現できます（@<list>{function-types/basic}）。
 
@@ -333,7 +333,7 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 
 アロー関数式の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く場所の@<code>{=>}の前後が違うので間違えないように気をつけましょう。
 
-== インタフェース （Interfaces）
+== インタフェース（Interfaces）
 
 インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
@@ -383,7 +383,7 @@ var objC: C = {
 #@end
 //}
 
-== 構造的部分型 （Structural Subtyping）
+== 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
 TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structural-subtypings/basic}）。
@@ -488,7 +488,7 @@ printPoint({
 #@end
 //}
 
-== 型アサーション （Type Assertions）
+== 型アサーション（Type Assertions）
 
 型アサーションは他の言語でいうところのキャストです。
 @<list>{type-assertions/basic}のように、@<code>{<変換後型名>}と書くだけです。
@@ -568,7 +568,7 @@ var num: number = (<any>obj).num;
 #@end
 //}
 
-== ジェネリクス (Generic Types)
+== ジェネリクス（Generic Types）
 
 いよいよ来ました。
 最後の大ボスです。

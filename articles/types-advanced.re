@@ -7,7 +7,7 @@
 #@# TODO オーバーロードの選択アルゴリズム
 
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
-タプル型(tuple types)や直和型(union types)についての解説もありますよ！
+タプル型（tuple types）や直和型（union types）についての解説もありますよ！
 なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそ良い設計だと筆者は考えています@<fn>{bad-code}。
 #@# OK REVIEW muo: ちょい文の構造をつかみにくいと感じた
 
@@ -19,7 +19,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 //footnote[bad-code][本章で触れる機能を使うのが良い場合もあります。例えば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください。]
 #@# OK REVIEW muo: 分解など→分解時など
 
-== 共通最適型 (Best Common Type)
+== 共通最適型（Best Common Type）
 
 #@# [1.3.0での仕様](https://github.com/Microsoft/TypeScript/blob/release-1.3/doc/spec.md#3.10)
 
@@ -64,7 +64,7 @@ function test() {
 2つ目は関数のreturnステートメントが2つありますが、両者で型が一致しなかったので {} になり、結果コンパイルエラーとして怒られています。
 
 本当に共通の要素がある場合、それに収束します。
-例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります(@<list>{bct-class-1.3.0})。
+例えば、親クラスA、その子クラスB, Cがある場合、BCTはAになります（@<list>{bct-class-1.3.0}）。
 
 //list[bct-class-1.3.0][あまり見かけないBCTが役に立つ例]{
 #@mapfile(../code/types-advanced/bct/class-1.3.0.ts)
@@ -84,9 +84,9 @@ var array = [new A(), new B(), new C()];
 
 以上、解散！
 
-== 型クエリ (Type Queries)
+== 型クエリ（Type Queries）
 
-型クエリは指定した変数(やメソッドなど)の型をコピーします。
+型クエリは指定した変数（やメソッドなど）の型をコピーします。
 例えば、@<list>{type-queries/basic}のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
 そういう時に、型クエリを使います。
 
@@ -165,7 +165,7 @@ rect.z1;
 
 ここまで来るとさすがに読みにくくなるのでインタフェースを1つ定義したほうがいいですね。
 
-== タプル型 (Tuple Types)
+== タプル型（Tuple Types）
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
 
@@ -308,7 +308,7 @@ tuple[0].charAt(0);
 
 結論：タプル型を過信するのはやめろ繰り返すタプル型を過信するのはやめろ！
 
-== 直和型 (Union Types)
+== 直和型（Union Types）
 
 @<strong>{導入されるバージョン 1.4.0}
 
@@ -479,7 +479,7 @@ var v = test(1, true);
 
 //footnote[spec-example-bug][https://github.com/Microsoft/TypeScript/issues/1267]
 
-=={type-guards} 型のためのガード (Type Guards)
+=={type-guards} 型のためのガード（Type Guards）
 #@# TODO 和訳が微妙…
 @<strong>{導入されるバージョン 1.4.0}
 
@@ -977,7 +977,7 @@ var obj: Sample = {
 
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
 
-== 型の別名 (type alias)
+== 型の別名（type alias）
 
 @<strong>{導入されるバージョン 1.4.0}
 

@@ -37,7 +37,7 @@ fbfb94f7769f26790d61938921add8c25cc8444b
 
 #@# TBD @<chapref>{another-transpiler}では、TypeScript以外のTypeScript処理系について、現状わかっている範囲で解説を行います。
 
-JavaScriptの(TypeScriptではなく)仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
+JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
 
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
