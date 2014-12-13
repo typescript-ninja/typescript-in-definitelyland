@@ -83,13 +83,13 @@ TypeScript関連技術にもうちょっと要員割いてください！お願�
 ここでは、WebStormを使う上で行うべき設定を解説します。
 執筆時に利用しているWebStormのバージョンは9.0.1です。
 
-もし、WebStormの操作に困った時はShiftキーを2回ほど連続で押すと "なんでも検索" の小窓が開くので、Preferences とかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
+もし、WebStormの操作に困った時はShiftキーを2回ほど連続で押すと "なんでも検索" の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
 WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
 
 //footnote[webstorm-support-1.3.0][https://youtrack.jetbrains.com/issue/WEB-14149]
 //footnote[webstorm-support-1.4.0][https://youtrack.jetbrains.com/issue/WEB-14151]
 
-=== File Watchers の設定
+=== File Watchersの設定
 
 WebStorm上でTypeScriptなファイルを新規作成すると、@<img>{project-open}のような表示がでます。
 
@@ -198,14 +198,14 @@ File Watcherやgruntなどのツールでは、このrootとして設計した�
 なので、コンパイラに結合処理を任せてしまったほうが後で順番を手動で制御する作業をもう一回やるよりも楽です。
 #@# OK REVIEW muo: concatは「結合作業」とか「結合」のほうがわかりよいのでは
 
-以上を踏まえて、Arguments の所に以下を指定します。
+以上を踏まえて、Argumentsの所に以下を指定します。
 
 @<code>{--sourcemap --noImplicitAny --target es5 --out lib/index.js lib/index.ts}
 
 ==== コンパイルの単位をメインの実装系とテストコード系に2分割したい
 
 単一のrootとなるファイルを構成する方針にした場合、本チャンの実装とテストコードはさすがに分割してコンパイルする必要がありますね。
-File Watcher 1つでは、1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
+File Watcher1つでは、1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
 
 ==== 総括
 
@@ -216,14 +216,14 @@ Scopeを使ってプロジェクトを2つに区切って、File Watcherをそ�
 プロジェクト全体図
 //}
 
-//image[scope-main][lib/ に対する Scope の設定]{
+//image[scope-main][lib/ に対するScopeの設定]{
 //}
 
-//image[scope-test][tests/ に対する Scope の設定]{
+//image[scope-test][tests/ に対するScopeの設定]{
 //}
 
-//image[main-watcher][mainのScope に対する Watcher の設定]{
+//image[main-watcher][mainのScopeに対するWatcherの設定]{
 //}
 
-//image[test-watcher][testのScope に対する Watcher の設定]{
+//image[test-watcher][testのScopeに対するWatcherの設定]{
 //}

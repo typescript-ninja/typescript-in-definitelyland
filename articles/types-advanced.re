@@ -486,9 +486,9 @@ var v = test(1, true);
 type guards@<fn>{type-guards-naming}は、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たす時、変数Aの型は××である"というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。
 
-//footnote[type-guards-naming][guard for types とか type narrowing rules とかのほうがよかったと思うんだけどなぁ…]
+//footnote[type-guards-naming][guard for typesとかtype narrowing rulesとかのほうがよかったと思うんだけどなぁ…]
 
-=== typeof による type guards
+=== typeofによるtype guards
 
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
 ECMAScript 5の範囲では、変換ルールは以下の通りです。
@@ -592,7 +592,7 @@ if (typeof obj === "string") {
 最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないことはわかりきっています。
 親切な仕様ですね。
 
-=== instanceof による type guards
+=== instanceofによるtype guards
 
 primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceofを使ったtype guardsももちろんあります！！
 でも、仕様が完璧とはちょっと言い難いんですよね。
@@ -635,7 +635,7 @@ console.log(obj instanceof InheritB);
 
 instanceofで型を絞り込みます(@<list>{type-guards/instanceof-basic})。
 
-//list[type-guards/instanceof-basic][instanceof の挙動]{
+//list[type-guards/instanceof-basic][instanceofの挙動]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-basic.ts)
 class A {
   str: string;
@@ -771,7 +771,7 @@ union types絡みのエラーに慣れていないと、このエラーメッセ
 //footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/pull/1317 初pull reqest & 初merge！]
 //footnote[type-guards-by-construct-signature][https://github.com/Microsoft/TypeScript/issues/1283]
 
-==== Generics と type guards
+==== Genericsとtype guards
 
 さて、ちょっと前に書いた"instanceofの右側の値の、その型の、prototypeプロパティの、型！"という表現は、実はちょっと不正確です。
 

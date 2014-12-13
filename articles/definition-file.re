@@ -117,7 +117,7 @@ export function hello(word = "TypeScript") {
 特定のinputを与えるとoutputが得られる。
 そのことを検証するコードです。
 
-//list[usage/tests/indexSpec][mocha + power-assert でテストを書く]{
+//list[usage/tests/indexSpec][mocha+power-assertでテストを書く]{
 #@mapfile(../code/definition-file/usage/tests/indexSpec.ts)
 /// <reference path="../typings/mocha/mocha.d.ts" />
 /// <reference path="../typings/power-assert/power-assert.d.ts" />
@@ -152,7 +152,7 @@ JavaScriptの世界では静的な型検査などありませんので問題あ�
 型定義ファイルの抜粋を示します。
 mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイル（抜粋）を見てみましょう。
 
-//list[usage/abstract/mocha][mocha.d.ts 抜粋]{
+//list[usage/abstract/mocha][mocha.d.ts抜粋]{
 #@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
 interface MochaDone {
   (error?: Error): void;
@@ -172,7 +172,7 @@ declare var it: {
 #@end
 //}
 
-//list[usage/abstract/power-assert][power-assert.d.ts 抜粋]{
+//list[usage/abstract/power-assert][power-assert.d.ts抜粋]{
 #@mapfile(../code/definition-file/usage/abstract/power-assert.d.ts)
 declare function assert(value: any, message?: string): void;
 
@@ -696,7 +696,7 @@ declare class FooListenerImpl implements FooListener {
 ==== インタフェース+変数に分解
 
  * ライブラリ利用時に継承できない
- ** new するだけの利用法なら特に不便ではない
+ ** newするだけの利用法なら特に不便ではない
  * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
  * インタフェースを実装するのが（継承するだけなので）めっちゃ簡単
 
@@ -842,7 +842,7 @@ foo.num;
 たまに、Objectを指定する人がいます。
 これはJavaScriptの仕様として、プロトタイプチェーンの頂点にいるのでObjectを使おう！と思うのでしょうが、これはやめたほうがよいでしょう。
 
-関数の引数に Objectや {} を指定するのは、結局どのような引数でも受け入れてしまいます。
+関数の引数にObjectや {} を指定するのは、結局どのような引数でも受け入れてしまいます。
 本当にどのような値でも受け入れる関数であれば、anyにするべきです。
 
 関数の返り値にObjectや {} を指定するのは、結局どのようなプロパティも存在しないため型アサーションでもって適切な型にするしかありません。
@@ -929,7 +929,7 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 
 //footnote[writing-dts-files][http://www.typescriptlang.org/Handbook#writing-dts-files]
 
-=== ちょっと小難しい export 句の使い方
+=== ちょっと小難しいexport句の使い方
 
 インタフェースやクラスのインスタンス単体を外部モジュールの外側に見せたい場合、@<list>{export-sample1}のように書きます。
 
@@ -1115,7 +1115,7 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加・修正につ�
 CIが通っているか。
 これは、ヘッダが定められた形式で書かれているか、--noImplicitAny付きで型定義ファイルやテストがコンパイルできるか、を主に見ています。
 
-npm, または bower に公開されている名前通りか。
+npm, またはbowerに公開されている名前通りか。
 これは、そのまんまでnpmに公開されているライブラリはnpmで公開されている名前と同一のディレクトリ名・ファイル名にします。
 もし、npmに公開されていない場合は適当に名前を選ぶしかありませんが、同名の別のライブラリがnpm上に存在していないかなどをチェックしています。
 
