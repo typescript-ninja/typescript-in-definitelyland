@@ -86,7 +86,7 @@ console.log(JSON.stringify(result, null, 2));
 
 === プロパティシグニチャ（Property Signatures）
 
-1つ目は、実は既に登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
+1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
 #@# OK REVIEW muo: 書くための書き方 は少々冗長です。プロパティの記法とするか、片方を別の表現にしたほうがよさそうです
 
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
@@ -575,7 +575,7 @@ var num: number = (<any>obj).num;
 Javaなどでは総称型とも呼ばれます。
 
 ジェネリクスなんて知らんわい！
-という人も、実は既に色々なところでお世話になっています。
+という人も、実はすでに色々なところでお世話になっています。
 
 === ジェネリクスの基本
 

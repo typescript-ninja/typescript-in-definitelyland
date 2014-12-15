@@ -2,7 +2,7 @@
 
 == まずはインストールしてみよう
 
-Node.jsのセットアップは既に完了しているものとします。
+Node.jsのセットアップはすでに完了しているものとします。
 筆者はNode.jsのインストールとバージョン管理に@<href>{https://github.com/hokaccha/nodebrew#nodebrew,nodebrew}@<fn>{nodebrew}を利用しています。
 
 TypeScriptのインストールには、Node.jsのパッケージマネージャである@<kw>{npm, Node Package Manager}を利用します。
@@ -75,7 +75,7 @@ WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラが�
 TypeScript関連技術にもうちょっと要員割いてください！お願いですJetBrains様！！
 
 @<href>{https://youtrack.jetbrains.com/issue/WEB-14149,1.3.0対応の要望}@<fn>{webstorm-support-1.3.0}は執筆時には実装が行われ、リリース待ちになっています。
-@<href>{https://youtrack.jetbrains.com/issue/WEB-14151,1.4.0対応の要望}@<fn>{webstorm-support-1.4.0}は既にあげてありますが対応はいつになるかな…？
+@<href>{https://youtrack.jetbrains.com/issue/WEB-14151,1.4.0対応の要望}@<fn>{webstorm-support-1.4.0}はすでにあげてありますが対応はいつになるかな…？
 という感じです。
 
 とはいえIDEとして非常に完成度の高いWebStormなので是非使っていきましょう。
