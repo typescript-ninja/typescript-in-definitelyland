@@ -551,7 +551,7 @@ if (obj instanceof InheritA) {
 //}
 
 <any>に一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。
-型定義ファイルを使っている時に、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{type-assertions/buggy-definition-file}）。
+型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{type-assertions/buggy-definition-file}）。
 
 //list[type-assertions/buggy-definition-file][親クラスから子クラスへ変換]{
 #@mapfile(../code/types-basic/type-assertions/buggy-definition-file.ts)
@@ -597,7 +597,7 @@ numArray.forEach(v => v.toFixed(2));
 strArray.forEach((v: string) => v.charAt(0));
 numArray.forEach((v: number) => v.toFixed(2));
 
-// あと、間違った型を指定した時にエラーにならないとこわい…
+// あと、間違った型を指定したときにエラーにならないとこわい…
 // error TS2345: Argument of type '(v: RegExp) => boolean' is not assignable to
 // parameter of type '(value: string, index: number, array: string[]) => void'.
 // strArray.forEach((v: RegExp) => v.test("str"));
@@ -756,7 +756,7 @@ var objC: Sample<{ str: string; }>;
 何故ならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。
 たとえば、"○○のArray"のように、型パラメータ部分が何になっても上手く動くような設計です。
 
-逆に言うと、実際に使う時には具体化しなければいけないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
+逆に言うと、実際に使うときには具体化しなければいけないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
 これを上手に使いこなすには一段上の設計力が要求されます。
 
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。

@@ -37,7 +37,7 @@ var obj: any; // なんでも型
 #@end
 //}
 
-これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルした時にコンパイルエラーになるのです。
+これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
 たとえば@<list>{var-with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
@@ -147,7 +147,7 @@ obj.dateA;
 クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。
 
 アクセス修飾子として、private, public, protected（TypeScript 1.3.0より）などの可視性を制御するアクセス修飾子を利用できます。
-何も指定していない時のデフォルトの可視性はpublicになります。
+何も指定していないときのデフォルトの可視性はpublicになります。
 しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれらの要素にアクセスできてしまうので過信は禁物です。
 そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに _ を使うなどの（JavaScriptでもよく見られた）運用をしています。
 
@@ -187,7 +187,7 @@ console.log(obj.str);
 これも特に特筆すべき要素はありませんね。普通です。
 
 最後に、get, setアクセサです。
-これを含んだコードをコンパイルする時は、@<code>{--target es5}オプションが必要です。
+これを含んだコードをコンパイルするときは、@<code>{--target es5}オプションが必要です。
 なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。
 これを使うと、getterしか定義してなくてもプログラム上は値の代入もできてしまうので、"use strict"を併用して実行時に検出できるようにしましょう。
 なお、この文法のget, setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれ@<fn>{getter-setter}るという不遇な運命をたどっており、@<code>{--target es6}でどういう扱いになるかドキドキしています（今のところ問題なく使えるようですが…）。
@@ -248,7 +248,7 @@ function bye(word: string) {
 }
 bye("TypeScript");
 
-// ? をつけると呼び出し時に引数が省略可能になる
+// ? をつけると呼び出しときに引数が省略可能になる
 function hey(word?: string) {
   return "Hey, " + (word || "TypeScript");
 }
@@ -292,7 +292,7 @@ function funcB(...args: string, rest: string) {
 #@end
 //}
 
-ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドの記述の時も同様に利用できます。
+ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドの記述のときも同様に利用できます。
 
 === アロー関数式
 
@@ -324,9 +324,9 @@ asyncModoki(value => console.log("Hello, " + value));
 将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう（なんせ、楽だし）。
 早くNode.jsでも使えるようになって、Gruntfile.jsとかで使わせてほしいものです。
 
-アロー関数式は1つの文しか持たない時、その文の値を返り値として使ってくれます（@<list>{arrow-function-expression-short}）。
+アロー関数式は1つの文しか持たないとき、その文の値を返り値として使ってくれます（@<list>{arrow-function-expression-short}）。
 
-//list[arrow-function-expression-short][1つの文しか持たない時の便利な振る舞い]{
+//list[arrow-function-expression-short][1つの文しか持たないときの便利な振る舞い]{
 #@mapfile(../code/typescript-basic/arrow-function-expression-short.ts)
 // 名前付き関数は定義できないので変数に入れる
 var funcA = () => {
@@ -345,7 +345,7 @@ console.log(funcC());
 //}
 
 もう一つの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。
-この仕組みのおかげでクラスのメソッドなどでコールバック関数を使う時に不要な混乱をおこさずに済みます。
+この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに不要な混乱をおこさずに済みます。
 例を見てみましょう（@<list>{arrow-function-expression-this}）。
 
 //list[arrow-function-expression-this][受け継がれるthisの値…！]{
@@ -460,7 +460,7 @@ console.log(d.e.hello());
 内部モジュールの内側で定義した要素はクラスであれ関数であれなんであれ、exportをつけなければ外側から見えないようになります。
 #@# OK REVIEW muo: 「内部モジュール内部」は少々読みづらいので別の表現が良い感じ
 
-長い名前を使うのが嫌な時は@<list>{internal-module/import}のように、import句を使うこともできます。
+長い名前を使うのが嫌なときは@<list>{internal-module/import}のように、import句を使うこともできます。
 外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
 
 //list[internal-module/import][import句で別名を作る]{
@@ -494,7 +494,7 @@ module b {
 そのため、ファイルを分割する必要があります。
 
 単にファイルを分けて何も工夫せずにいると、型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
-そういう時のために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
+そういうときのために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
 
 たとえば、a.ts（@<list>{internal-module/a}）とb.ts（@<list>{internal-module/b}）があったとします。
 b.tsはa.tsで定義している関数を呼び出しています。
@@ -523,7 +523,7 @@ module b {
 #@end
 //}
 
-これをコンパイルする時、b.tsだけコンパイルすればa.tsも自動的に一緒にコンパイルされます。
+これをコンパイルするとき、b.tsだけコンパイルすればa.tsも自動的に一緒にコンパイルされます。
 通常、何も指定しない場合はa.jsとb.jsが生成されますが、--out オプションを併用すると1ファイルにまとめられます。
 
 //cmd{
@@ -595,7 +595,7 @@ export = bye;
 #@end
 //}
 
-トップレベルの定義でexportしたものが別のファイルから参照された時に公開されています。
+トップレベルの定義でexportしたものが別のファイルから参照されたときに公開されています。
 コンパイルして結果を確かめてみましょう。
 Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることが分かるでしょう。
 

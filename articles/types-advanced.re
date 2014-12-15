@@ -13,7 +13,7 @@
 
 TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
 #@# OK REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
-そういった時に本章の内容が活きてきます。
+そういったときに本章の内容が活きてきます。
 ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと思います。
 
 //footnote[bad-code][本章で触れる機能を使うほうがよい場合もあります。たとえば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください。]
@@ -88,7 +88,7 @@ var array = [new A(), new B(), new C()];
 
 型クエリは指定した変数（やメソッドなど）の型をコピーします。
 たとえば、@<list>{type-queries/basic}のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
-そういう時に、型クエリを使います。
+そういうときに、型クエリを使います。
 
 //list[type-queries/basic][クラスそのものの型だよ！]{
 #@mapfile(../code/types-advanced/type-queries/basic.ts)
@@ -131,7 +131,7 @@ obj.bye = obj.hello;
 #@end
 //}
 
-型クエリはわざわざインタフェースを定義するのもめんどくさいけど…という時に使える場合もあります。
+型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合もあります。
 @<list>{type-queries/copy-invalid}では、1つ目の引数の型を2つ目の引数や返り値の型にもコピーして使っています。
 
 //list[type-queries/copy-invalid][ここまで複雑にするならインタフェース使って]{
@@ -179,8 +179,8 @@ tuple(タプル)は、任意の数の要素の組です。
 #@# OK REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
-既存のJavaScriptの資産を使おうとした時に、配列の形で多値を返してくるライブラリが稀にあります。
-タプル型はおそらくそういった時に使うためのもので、TypeScriptでコードを書く時に多用するものではないでしょう。
+既存のJavaScriptの資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
+タプル型はおそらくそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではないでしょう。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
 タプル型は型(TypeScript)の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。
@@ -212,7 +212,7 @@ tuple.forEach(v => {
 #@end
 //}
 
-各要素の型を指定してやると、その要素のindexでアクセスした時に適切な型で扱われるようになります。
+各要素の型を指定してやると、その要素のindexでアクセスしたときに適切な型で扱われるようになります。
 
 もちろん、タプル型はGenericsと組み合わせて利用できます(@<list>{tuple/with-generics})。
 
@@ -315,7 +315,7 @@ tuple[0].charAt(0);
 はい、皆様待望の機能でございます。
 "名前を言ってはいけないあの界隈"がよく使う用語を使って解説しないといけないのでビクビクですね。
 
-一番最初に書いておくけど@<strong>{TypeScriptのコード書く時に積極的に使うものじゃあないぞ！！}
+一番最初に書いておくけど@<strong>{TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！}
 
 じゃあ解説していきましょう。
 union typesはいわゆる直和型でございます。
@@ -324,7 +324,7 @@ union typesはいわゆる直和型でございます。
 みたいな感じ。
 
 なんのために入ったのか？というと、既存JavaScriptにより良い型定義を与えるために入った…！！と言ってしまっていいでしょう。
-実際、自分でTypeScriptコード書いてる時に欲しくなる機能ではあまりありません。
+実際、自分でTypeScriptコード書いてるときに欲しくなる機能ではあまりありません。
 ECMAScriptさん、パターンマッチもないしー。
 
 まずは簡単な例から見ていきましょう(@<list>{union-types/basic})。
@@ -349,7 +349,7 @@ var c: typeof a | typeof b;
 
 ハイ、型注釈で複数の型を | で区切って書ける感じです。
 既存のJavaScriptライブラリだとこういった感じの困った返り値の関数がかなりあります。
-あとは普通にTypeScriptを書いている時でもSyntaxTreeとかをコードから構築する時にはあったほうが便利かもしれません。
+あとは普通にTypeScriptを書いているときでもSyntaxTreeとかをコードから構築するときにはあったほうが便利かもしれません。
 
 ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesなどは単純にまとめて1つのunion typesに統合できます。
 次に見る@<list>{union-types/subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
@@ -384,9 +384,9 @@ base = new Inherit();
 この辺り、仕様書上は若干小難しく書かれているのですが、単に最も少ない要素数になるように型がまとめられていくだけです。
 
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
-|| 演算子を使った時、条件(三項)演算子を使った時、配列リテラルを使った時です(@<list>{union-types/inferred})。
+|| 演算子を使ったとき、条件(三項)演算子を使ったとき、配列リテラルを使ったときです(@<list>{union-types/inferred})。
 
-//list[union-types/inferred][こういう時は目にしますね]{
+//list[union-types/inferred][こういうときは目にしますね]{
 #@mapfile(../code/types-advanced/union-types/inferred.ts)
 // and の型は string | boolean
 var and = "str" || true;
@@ -401,7 +401,7 @@ var array = [1, true, "str"];
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。
 
-型注釈として関数を与える時は記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types/syntax})。
+型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります(@<list>{union-types/syntax})。
 
 //list[union-types/syntax][型名をカッコで囲うんです？]{
 #@mapfile(../code/types-advanced/union-types/syntax.ts)
@@ -416,7 +416,7 @@ var b: (() => string) | (() => boolean);
 // もしくはオブジェクト型リテラル使う
 var c: { (): string; } | { (): boolean; };
 
-// union typesじゃない時でも使えるけど見づらいな！
+// union typesじゃないときでも使えるけど見づらいな！
 var d: (() => string);
 #@end
 //}
@@ -425,7 +425,7 @@ var d: (() => string);
 仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}@<fn>{spec-example-bug}りするので、頑張って気をつけましょう。
 まぁ、コンパイルすれば分かるし気にしすぎる必要はありません。
 
-union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{union-types/type-assertion})。
+union typesな値を使うときは、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{union-types/type-assertion})。
 次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
 
 //list[union-types/type-assertion][一応使えるよ こうすれば]{
@@ -484,7 +484,7 @@ var v = test(1, true);
 @<strong>{導入されるバージョン 1.4.0}
 
 type guards@<fn>{type-guards-naming}は、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
-type guardsは"変数Aが○○という条件を満たす時、変数Aの型は××である"というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。
+type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。
 
 //footnote[type-guards-naming][guard for typesとかtype narrowing rulesとかのほうがよかったと思うんだけどなぁ…]
 
@@ -493,10 +493,10 @@ type guardsは"変数Aが○○という条件を満たす時、変数Aの型は
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
 ECMAScript 5の範囲では、変換ルールは次のとおりです。
 
- * string の時は "string" を返す
- * boolean の時は "boolean" を返す
- * number の時は "number" を返す
- * undefined の時は "undefined" を返す
+ * string のときは "string" を返す
+ * boolean のときは "boolean" を返す
+ * number のときは "number" を返す
+ * undefined のときは "undefined" を返す
  * 関数として呼び出し可能な場合は "function" を返す
  * それ以外の場合(nullを含む！)は "object" を返す
 
@@ -522,8 +522,8 @@ if (typeof obj === "string") {
 
 TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型は型注釈したものから変わらずそのままでした。
 #@# OK REVIEW muo: どのまま?明示したほうがいい
-type guardsが導入された後は"変数objがtypeofで調べた時にstringであるという条件を満たす時、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
-なお、この時の比較は必ず@<code>{===}を使う必要があります。
+type guardsが導入された後は"変数objがtypeofで調べたときにstringであるという条件を満たすとき、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
+なお、このときの比較は必ず@<code>{===}を使う必要があります。
 @<code>{==}ではダメです。
 
 もう一例見てみましょう。
@@ -796,7 +796,7 @@ interface Array<T> {
 #@end
 //}
 
-instanceofでtype guardsで型を狭めた時、any[]になるのかな…？と一瞬思いますが、ことはそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
+instanceofでtype guardsで型を狭めたとき、any[]になるのかな…？と一瞬思いますが、ことはそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
 
 //list[type-guards/instanceof-array-invalid][絞込み、失敗！]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-array-invalid.ts)
@@ -1106,7 +1106,7 @@ obj = 1;
  ** type aliasは無理
  * interface は Genericsが使えて型パラメータを持てる
  ** type aliasは無理
- * interface が絡んだ時のコンパイルエラーにはinterface名が表示されてわかりやすい
+ * interface が絡んだときのコンパイルエラーにはinterface名が表示されてわかりやすい
  ** type aliasは展開されて表示されちゃうので無理
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
