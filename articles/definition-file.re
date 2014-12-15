@@ -614,7 +614,7 @@ module test {
 
 コンパイル結果の@<list>{callable-module-js}を見ると、なぜ関数が先、内部モジュールが後、という決まりになっているかがわかりますね。
 
-//list[callable-module-js][コンパイル結果を見れば、理由がわかる。これ、正しいJSだ！]{
+//list[callable-module-js][コンパイル結果を見れば、理由が分かる。これ、正しいJSだ！]{
 #@mapfile(../code/definition-file/callable-module.js)
 function test() {
     return "test!";
@@ -753,7 +753,7 @@ interface FooListenerImpl extends FooListener {
 #@mapfile(../code/definition-file/use-overload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 
-// getの時 setの時 仕様が違うことがよくわかる
+// getの時 setの時 仕様が違うことがよく分かる
 declare function valueA(value: any): void;
 declare function valueA(): any;
 

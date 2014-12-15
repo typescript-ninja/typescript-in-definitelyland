@@ -423,7 +423,7 @@ var d: (() => string);
 
 ぶっちゃけ見づらいですよね。
 仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}@<fn>{spec-example-bug}りするので、頑張って気をつけましょう。
-まぁ、コンパイルすればわかるし気にしすぎる必要はありません。
+まぁ、コンパイルすれば分かるし気にしすぎる必要はありません。
 
 union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{union-types/type-assertion})。
 次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
