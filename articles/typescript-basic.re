@@ -38,7 +38,7 @@ var obj: any; // なんでも型
 //}
 
 これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルした時にコンパイルエラーになるのです。
-例えば@<list>{var-with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
+たとえば@<list>{var-with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
 //list[var-with-annotations-invalid][型注釈に反することをやってみる]{
@@ -496,7 +496,7 @@ module b {
 単にファイルを分けて何も工夫せずにいると、型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。
 そういう時のために、TypeScriptにはソースコード同士の関係性を記述する@<kw>{リファレンスコメント,reference comments}という仕組みがあります。
 
-例えば、a.ts（@<list>{internal-module/a}）とb.ts（@<list>{internal-module/b}）があったとします。
+たとえば、a.ts（@<list>{internal-module/a}）とb.ts（@<list>{internal-module/b}）があったとします。
 b.tsはa.tsで定義している関数を呼び出しています。
 つまり、b.tsはa.tsに依存しているわけです。
 そこで、reference commentを使って@<code>{/// <reference path="./a.ts" />}と記述します。

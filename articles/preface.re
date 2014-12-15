@@ -57,7 +57,7 @@ TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScr
 つまり、ECMAScript+静的型付け=TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けてきています。
 
-他のaltJS、例えばCoffeeScriptやDartは、JavaScriptとは全く違う独自の記法で記述します。
+他のaltJS、たとえばCoffeeScriptやDartは、JavaScriptとは全く違う独自の記法で記述します。
 これは記述はしやすいですが、変換結果のJavaScriptは見づらく、人間に優しい出力とはいえません。
 つまりこれらは独自路線に行くことで、JavaScriptの辛さを軽減しようとしています。
 
