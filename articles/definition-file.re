@@ -471,7 +471,7 @@ declare var $: jquery.Static;
 #@# OK REVIEW muo: うかつにJQueryStaticからjquery.Staticに変更すると(なにを?)
 特にjQueryプラグインとかはインタフェースを拡張する形で型定義するのでその量たるや…。
 
-ともあれ、過去の定義との互換性を壊す事に繋がるため、途中から幽霊モジュールに切り替えるのは難しい場合があります。
+ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊モジュールに切り替えるのは難しい場合があります。
 可能であれば最初から幽霊モジュールを使うようにしましょう。
 将来的には、このパターンの検出はtslintなどで機械的に行えるようにしたいところですね。
 
@@ -798,7 +798,7 @@ bye(() => "function");
 
 @<strong>{利用可能になったバージョン 1.3.0}
 
-あんまり言及される事がないのでここで触れておきます。
+あんまり言及されることがないのでここで触れておきます。
 1.1.0-1までの時代は、外部モジュールがopen endedじゃありませんでした。
 1.3.0からはopen endedになったので、@<list>{external-module-declaration-merging}と@<list>{external-module-declaration-merging-usage}のようなコードが書けます。
 めでたい。
@@ -876,7 +876,7 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 
 まずは例を見てみましょう（@<list>{callback/basic}）。
 
-//list[callback/basic][optionalはもしかしたら値がない事を表す]{
+//list[callback/basic][optionalはもしかしたら値がないことを表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
 // 良い例
 declare function onClick(listener: (e: MouseEvent) => void): void;
@@ -905,7 +905,7 @@ onClickOpt(() => {
 
 両方とも、クリックイベントをハンドリングするための関数を型定義として書き起こしたものです。
 onClickはeが省略不可、onClickOptはeが省略可能（optional）になっています。
-これは、onClickOptではeがundefinedになるかもしれない事を表します。
+これは、onClickOptではeがundefinedになるかもしれないことを表します。
 eがundefinedかもしれないなら、if文とかで中身があるかチェックしなくていいの？という不安が生じます。
 
 執筆時点ではこれを検出してくれる程度に頭のいいlintツールは筆者の知るかぎり存在していません。
@@ -1092,7 +1092,7 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加・修正につ�
 #@# TODO 転記して再構成したい…
 
 ここでは、筆者がDefinitelyTypedに送られてきた時にどういう考えでpull requestのレビューをしているかを示したいと思います。
-あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別の事を言われる場合もあるでしょう。
+あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことを言われる場合もあるでしょう。
 実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーの言うことを尊重して議論していただきたいと思います。
 
 とはいえ、メンテナは全員@<href>{http://definitelytyped.org/guides/contributing.html,DefinitelyTypedのContribution guide}@<fn>{dt-contrib-guide}は読んでいるはずなので、こちらには目を通しておくとよいでしょう。

@@ -796,7 +796,7 @@ interface Array<T> {
 #@end
 //}
 
-instanceofでtype guardsで型を狭めた時、any[]になるのかな…？と一瞬思いますが、事はそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
+instanceofでtype guardsで型を狭めた時、any[]になるのかな…？と一瞬思いますが、ことはそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
 
 //list[type-guards/instanceof-array-invalid][絞込み、失敗！]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-array-invalid.ts)
