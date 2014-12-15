@@ -137,7 +137,7 @@ var obj: {
   (): number;
 };
 // 当てはまる値はこんな感じ
-// 全ての引数と返り値に矛盾しないようにしなければならない…
+// すべての引数と返り値に矛盾しないようにしなければならない…
 obj = (word?: string): any => {
   if (typeof word === "string") {
     return "Hello, " + word;
@@ -227,7 +227,7 @@ objA = {
 objB = {
   0: "str",
   str: "str"
-  // インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに
+  // インデックスの型が string の場合、すべてのプロパティの型がインデックスシグニチャに
   // 反しないようにしなければならない
   // error TS2322: Type
   //  '{ [x: string]: string | number; 0: string; str: string; num: number; }'
@@ -433,7 +433,7 @@ function double(p: Point): Point {
     y: p.y * 2
   };
 }
-// 以下の全ては正しいコードとなります
+// 以下のすべては正しいコードとなります
 double(new PointImpl1(1, 2));
 double(new PointImpl2(3, 4));
 double({

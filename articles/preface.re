@@ -12,7 +12,7 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 本書は、ECMAScript 5レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
 また、解説するTypeScriptの内容には執筆時点（1.3.0）ではまだ未リリースの構文についての解説も含みます。
 
-本書の全てのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
+本書のすべてのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
 現時点で最新のTypeScriptコンパイラは次のとおり。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")

@@ -257,7 +257,7 @@ tuple[1].charAt(0); // string は charAt を持つ！
 var tuple: [string, number] = ["str", 1, "test"];
 
 // 1.3.0 では型指定されていない要素は BCT(Best Common Type) つまりここでは {} になる
-// 1.4.0? では範囲外の要素の型は全ての要素のunion、つまり string | number になる。
+// 1.4.0? では範囲外の要素の型はすべての要素のunion、つまり string | number になる。
 var value = tuple[2];
 
 // 1.3.0 では以下の記述は正しい
@@ -285,7 +285,7 @@ tuple[0].charAt(0);
 @<code>{[1, true]}のような配列のリテラルをタプル型に推論しないのはおそらくこのためでしょう。
 #@# OK REVIEW muo: ここのtuple typesはタプル型表記のほうが自然なのでは
 
-unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側で全てをキャッチアップすることは不可能です。
+unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
 TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(@<list>{tuple/unshift-1.3.0})。
@@ -699,7 +699,7 @@ instanceofの右側の値の、その型の、prototypeプロパティの、型�
 このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
 これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたのが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
 
-だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼ全ての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
+だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼすべての型定義ファイルがtype guards未対応になっちゃうし、今あるものを頑張って対応したとしても今後送られてくる型定義ファイルについて全てのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
 
 というわけで、prototype propertyの代わりに、construct signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}@<fn>{type-guards-by-construct-signature}を行っています。
 コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されていたら俺のことめっちゃ褒めてくれてもいいと思います( ｰ`дｰ´)ｷﾘｯ
@@ -1007,7 +1007,7 @@ interface Foo {
 //}
 
 わかりやすいですね。
-1ヶ所変更すると、関連箇所が全て更新されるのも便利です。
+1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。
 
 tuple typesに名前をつけることもできます(@<list>{type-alias/tuple})。
 
