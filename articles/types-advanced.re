@@ -835,7 +835,7 @@ if (array instanceof Array) {
 //}
 
 うーん、これもうわかんねぇな？
-TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array<any>を更に型パラメタをインスタンス化する前に戻して、Array<T>にしてから絞り込みのチェックをしているようなのですが、その場合Array<{}>として評価されてるのかなー、と思いきや@<list>{type-guards/instanceof-empty-array-invalid}を見る限り、そうともいえなさそうなんですよね…。
+TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array<any>をさらに型パラメタをインスタンス化する前に戻して、Array<T>にしてから絞り込みのチェックをしているようなのですが、その場合Array<{}>として評価されてるのかなー、と思いきや@<list>{type-guards/instanceof-empty-array-invalid}を見る限り、そうともいえなさそうなんですよね…。
 
 この辺り、わかりやすいルールが提示されないと実用上使いにくくて困りますね。
 とりあえず、Genericsが絡む場合はtype guardsに頼らず、型アサーションに頼るほうが詰まらずにすむ…という認識でよいでしょう@<fn>{type-guards-with-generics}。
