@@ -69,6 +69,7 @@ WebStormの他にもEclipse用TypeScriptプラグインもあるため、自分�
 
 WebStormは正式にTypeScriptに対応しています。
 WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラが持つIDE実装用API（俗にいうLanguageService）を利用していません。
+
 このため、型推論の行われ方がTypeScriptコンパイラそのものほどは頭がよくありません。
 しかし、実用上はあまり問題にならないと思うので我慢できる範囲です。
 最近ではTypeScript側の開発が早すぎて、WebStorm側の対応が後手に回っている状態です。
@@ -83,7 +84,7 @@ TypeScript関連技術にもうちょっと要員割いてください！お願�
 ここでは、WebStormを使う上で行うべき設定を解説します。
 執筆時に利用しているWebStormのバージョンは9.0.1です。
 
-もし、WebStormの操作に困ったときはShiftキーを2回ほど連続で押すと "なんでも検索" の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
+もし、WebStormの操作に困ったときはShiftキーを2回ほど連続で押すと"なんでも検索"の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
 WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
 
 //footnote[webstorm-support-1.3.0][https://youtrack.jetbrains.com/issue/WEB-14149]
@@ -146,7 +147,7 @@ WebStormで開発する場合、File Watchersは常に有効にするように�
 プロジェクト毎に開発速度や更新頻度も違います。
 ゆえに、新しいTypeScriptコンパイラがリリースされたとしてもそれへの対応にはばらつきが出ます。
 足並みを揃えて全部のプロジェクトのTypeScriptコンパイラのバージョンを一気にあげるなど、不可能です。
-これを解決するため、プロジェクトローカルにTypeScriptコンパイラをインストールしてやる必要があります。
+これを解決するため、プロジェクトローカルにTypeScriptコンパイラをインストールする必要があります。
 プロジェクトトップで次のコマンドを実行しましょう。
 
 //cmd{

@@ -28,7 +28,7 @@ fbfb94f7769f26790d61938921add8c25cc8444b
 
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法と、WebStormの設定について言及します。Visual StudioやNuGetの扱いについては言及しませんのでご了承ください。
 
-@<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、この後の章を読み解くための基礎知識を蓄えます。
+@<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、このあとの章を読み解くための基礎知識を蓄えます。
 
 @<chapref>{types-basic}では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。
 
@@ -81,4 +81,4 @@ MicrosoftとGoogle, Facebookの3巨人がTypeScriptに賭けると言ってい�
 というわけで、Dartが完全にJSを置き換える可能性はありますが、今のところ私はTypeScriptに賭けていこうと思います。
 
 //footnote[mozaic.fm][http://mozaic.fm/post/96461640633/8-altjs]
-//footnote[advent-calendar][詳しくは http://qiita.com/vvakame/items/bf4d1e339d5815026fbb にまとめました]
+//footnote[advent-calendar][詳しくはhttp://qiita.com/vvakame/items/bf4d1e339d5815026fbbにまとめました]
