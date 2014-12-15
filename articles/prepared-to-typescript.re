@@ -62,7 +62,7 @@ message TS6029: Version 1.4.0.0
 == WebStormで開発環境を整えよう
 
 Windowsの方は素直にVisual Studioを使うのがよいでしょう。
-11月13日、Visual Studio Community Editionが発表されましたので、そちらが良いかもしれません。
+11月13日、Visual Studio Community Editionが発表されましたので、そちらがよいかもしれません。
 しかし、筆者はMac OS XユーザなのでVisual Studioが選択肢から外れてしまいます。
 そのため、本ガイドでは開発環境としてWebStormを紹介していきます。
 WebStormの他にもEclipse用TypeScriptプラグインもあるため、自分に馴染むものを探してみるのがよいでしょう。
