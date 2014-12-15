@@ -14,12 +14,12 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 
 本書の全てのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの以下に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
-現時点で最新のTypeScriptコンパイラは以下の通り。
+現時点で最新のTypeScriptコンパイラは次のとおり。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")
 Version 1.3.0.0
 #@end
 
-現時点でTypeScriptリポジトリのmaster/HEADは以下の通り。
+現時点でTypeScriptリポジトリのmaster/HEADは次のとおり。
 #@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
 fbfb94f7769f26790d61938921add8c25cc8444b
 #@end

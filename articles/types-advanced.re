@@ -38,7 +38,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 
 消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
-Best Common Typeの名の響き通り、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
+Best Common Typeの名の響きどおり、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
 #@# OK REVIEW muo: アルゴリズムの元に→アルゴリズムによって
 例えば、@<list>{bct-basic-1.3.0}のようになります。
 #@# OK REVIEW muo: 感じ→感じです
@@ -101,7 +101,7 @@ var obj: Sample;
 // Sample自体の型をコピー！ つまりこれはSampleクラスそのものだ！
 var clazz: typeof Sample;
 
-// それぞれに当てはまる値は以下の通り なるほどな！
+// それぞれに当てはまる値は以下のとおり なるほどな！
 obj = new Sample();
 clazz = Sample;
 
@@ -191,7 +191,7 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 //list[tuple/basic][基本的な例]{
 #@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
-// TypeScript 1.3.0 ではこれはいままで通りの {}[]
+// TypeScript 1.3.0 ではこれはいままでどおりの {}[]
 // TypeScript 1.4.0? ではこれは別の箇所で解説している
 //   union typesとあわせて(string | number | boolean)[]
 var array = [1, "str", true];
@@ -425,7 +425,7 @@ var d: (() => string);
 仕様書上でも@<href>{https://github.com/Microsoft/TypeScript/issues/1267,カッコの対応ミスってた}@<fn>{spec-example-bug}りするので、頑張って気をつけましょう。
 まぁ、コンパイルすればわかるし気にしすぎる必要はありません。
 
-union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けて通りましょう(@<list>{union-types/type-assertion})。
+union typesな値を使う時は、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{union-types/type-assertion})。
 次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
 
 //list[union-types/type-assertion][一応使えるよ こうすれば]{
@@ -491,7 +491,7 @@ type guardsは"変数Aが○○という条件を満たす時、変数Aの型は
 === typeofによるtype guards
 
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
-ECMAScript 5の範囲では、変換ルールは以下の通りです。
+ECMAScript 5の範囲では、変換ルールは次のとおりです。
 
  * string の時は "string" を返す
  * boolean の時は "boolean" を返す
@@ -558,7 +558,7 @@ if (typeof obj === "string") {
 #@end
 //}
 
-まぁ、指定した型通りの値が入ってくるのであればなにも問題はないな！
+まぁ、指定した型どおりの値が入ってくるのであればなにも問題はないな！
 
 ==== 後続の型の絞込み
 
@@ -933,7 +933,7 @@ if (obj instanceof Sample) {
 //}
 
 これを回避する方法は2つあります。
-1つ目はtype guardsに頼らず、今まで通りに処理することです(@<list>{type-guards/vs-weakspot1})。
+1つ目はtype guardsに頼らず、今までどおりに処理することです(@<list>{type-guards/vs-weakspot1})。
 2つ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{type-guards/vs-weakspot2-invalid})。
 
 //list[type-guards/vs-weakspot1][type guardsに頼らず生きる]{
@@ -1080,7 +1080,7 @@ interface AltRecFunc {
 
 また、type aliasではGenericsを使った名前を定義することができません。
 #@# OK REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
-つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルが通りません。
+つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルがとおりません。
 
 //list[type-alias/with-type-parameters-invalid][こういうコードは書けないんじゃ]{
 #@mapfile(../code/types-advanced/type-alias/with-type-parameters-invalid.ts)
