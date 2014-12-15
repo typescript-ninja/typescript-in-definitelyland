@@ -101,13 +101,13 @@ var obj: Sample;
 // Sample自体の型をコピー！ つまりこれはSampleクラスそのものだ！
 var clazz: typeof Sample;
 
-// それぞれに当てはまる値は以下のとおり なるほどな！
+// それぞれに当てはまる値は次のとおり なるほどな！
 obj = new Sample();
 clazz = Sample;
 
 obj = new clazz();
 
-// clazz を頑張って手で書くと以下に等しい
+// clazz を頑張って手で書くと次に等しい
 var alterClazz: {
   new (): { str: string; };
 };
@@ -240,7 +240,7 @@ var tuple: { 0: number; 1: string; 3: boolean; } = <any>[1, "str", true];
 
 tuple[1].charAt(0); // string は charAt を持つ！
 
-// だがしかし(型のうえでは)Arrayではないので以下は通らない
+// だがしかし(型のうえでは)Arrayではないので次は通らない
 // tuple.forEach(v => {
 //   console.log(v);
 // });
@@ -256,11 +256,11 @@ tuple[1].charAt(0); // string は charAt を持つ！
 // 要素が多い分にはOKだ！
 var tuple: [string, number] = ["str", 1, "test"];
 
-// 1.3.0 では型指定されていない要素は BCT(Best Common Type) つまりここでは {} になる
+// 1.3.0 では型指定されていない要素は BCT（Best Common Type) つまりここでは {} になる
 // 1.4.0? では範囲外の要素の型はすべての要素のunion、つまり string | number になる。
 var value = tuple[2];
 
-// 1.3.0 では以下の記述は正しい
+// 1.3.0 では次の記述は正しい
 // 1.4.0? ではダメ。true は string | number ではないため。
 // tuple = ["str", 1, true];
 #@end
@@ -332,7 +332,7 @@ ECMAScriptさん、パターンマッチもないしー。
 //list[union-types/basic][型A | 型B → 新食感！]{
 #@mapfile(../code/types-advanced/union-types/basic.ts)
 var a: string | boolean;
-// string | number なので以下はオッケー！
+// string | number なので次はオッケー！
 a = "str";
 a = true;
 // number はアカン。
@@ -354,7 +354,7 @@ var c: typeof a | typeof b;
 ご覧のとおり、union types中の型の順番とかは関係ない(交換可能)し、union typesのunion typesなどは単純にまとめて1つのunion typesに統合できます。
 次に見る@<list>{union-types/subtype}のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。
 これも実用上問題ありません。
-というのも、@<hd>{type-guards}で紹介する仕組みがあるからです(後で読んでね！)。
+というのも、@<hd>{type-guards}で紹介する仕組みがあるからです（あとで読んでね！）。
 
 //list[union-types/subtype][要素Bが要素Aのサブタイプの場合Aにまとまる]{
 #@mapfile(../code/types-advanced/union-types/subtype.ts)
@@ -381,7 +381,7 @@ base = new Inherit();
 #@end
 //}
 
-この辺り、仕様書上は若干小難しく書かれているのですが、単に最も少ない要素数になるように型がまとめられていくだけです。
+この辺り、仕様書上は若干小難しく書かれているのですが、単にもっとも少ない要素数になるように型がまとめられていくだけです。
 
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
 || 演算子を使ったとき、条件(三項)演算子を使ったとき、配列リテラルを使ったときです(@<list>{union-types/inferred})。
@@ -665,7 +665,7 @@ typeofのtype guardsと違って、else句が自動的に絞込まれたりは�
 TypeScriptが標準で提供する(lib.d.tsに書いてある)型や、TypeScript上で定義したクラスだけがtype guardsの対象になる、そんなの悲しすぎ！
 というわけで、それを解消する方法が用意されています。
 
-最も簡単なのは、型定義上でも、クラスとして定義することです。
+もっとも簡単なのは、型定義上でも、クラスとして定義することです。
 クラスはデフォルトでinstanceofによるtype guardsに対応しています。
 
 もう一つは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(@<list>{type-guards/instanceof-prototype})。
@@ -712,7 +712,7 @@ prototypeプロパティを持っているだけではダメで、Functionとの
 //list[type-guards/instanceof-prototype-invalid][右側はanyかFunctionと互換性のある型にしろってさ]{
 #@mapfile(../code/types-advanced/type-guards/instanceof-prototype-invalid.ts)
 interface AStatic {
-  // 以下のどちらかがないと Function との互換性が無い
+  // 次のどちらかがないと Function との互換性が無い
   // (): AInstance;
   // new (): AInstance;
   prototype: AInstance;
@@ -855,7 +855,7 @@ var obj: number | boolean | string;
 
 // && 演算子で絞込み
 typeof obj === "string" && obj.charAt(0);
-// 以下のようなコードはエラーになる！
+// 次のようなコードはエラーになる！
 // error TS2339: Property 'charAt' does not exist on type 'number'.
 // typeof obj === "number" && obj.charAt(0);
 
@@ -868,7 +868,7 @@ if (typeof obj === "string" || typeof obj === "boolean") {
 
 // 三項演算子は普通にif文と一緒の挙動
 typeof obj === "string" ? obj.charAt(0) : obj;
-// 以下と等価
+// 次と等価
 if (typeof obj === "string") {
   obj.charAt(0);
 } else {

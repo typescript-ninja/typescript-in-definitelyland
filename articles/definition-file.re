@@ -68,7 +68,7 @@ power-assert-formatter/power-assert-formatter.d.ts
 //}
 
 デフォルトでは、typings/ フォルダに型定義ファイルが保存されます。
-tsdとdtsmでは微妙に生成されるファイルが異なりますが、概ね以下のような構成になっているはずです。
+tsdとdtsmでは微妙に生成されるファイルが異なりますが、概ね次のような構成になっているはずです。
 
 //cmd{
 $ tree typings
@@ -213,7 +213,7 @@ TypeScriptはJavaScriptに対して後付で型による制約を付け足した
 一方、JavaScriptでコードを書いて、TypeScriptで型定義ファイルを作成して使う場合は実装と型が個別に定義されることになります。
 #@# OK REVIEW muo: JavaScriptで書いて→JavaScriptでコードを書いて
 #@# OK REVIEW muo: 「当てて使う」の表現は少々感覚寄りすぎかなーと
-そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、という有り様に成るわけです。
+そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、という有り様になるわけです。
 型定義ファイルを書いて"この変数は、あります！"と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。
 
 === 良い型定義ファイル、悪い型定義ファイル
@@ -248,7 +248,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 == 型定義ファイルのベストプラクティス
 
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
-基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式のHandbookのWriting .d.ts files}@<fn>{official-handbook}に従っておけばよいです。
+基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式のHandbookのWriting .d.ts files}@<fn>{official-handbook}にしたがっておけばよいです。
 本書では、そこに書かれていることや筆者の経験則などを説明していきます。
 
 //footnote[dt-best-practice][http://definitelytyped.org/guides/best-practices.html]

@@ -71,7 +71,7 @@ function move(
 }
 
 var result = move({ x: 1, y: 2 }, { dx: -2 });
-// 以下のように表示される
+// 次のように表示される
 // {
 //   "x": -1,
 //   "y": 2
@@ -433,7 +433,7 @@ function double(p: Point): Point {
     y: p.y * 2
   };
 }
-// 以下のすべては正しいコードとなります
+// 次のすべては正しいコードとなります
 double(new PointImpl1(1, 2));
 double(new PointImpl2(3, 4));
 double({

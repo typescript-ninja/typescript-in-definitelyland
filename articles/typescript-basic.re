@@ -300,7 +300,7 @@ ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function e
 
 //list[arrow-function-expression][アロー関数式 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrow-function-expression.ts)
-// 以下2つは(thisが絡まない限り)等価！
+// 次の2つは(thisが絡まない限り)等価！
 var funcA = () => true;
 var funcB = function() {
   return true;
@@ -333,7 +333,7 @@ var funcA = () => {
 };
 funcA();
 
-// 以下の2つは等価
+// 次の2つは等価
 // アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
 var funcB = (word = "TypeScript") => "Hello, " + word;
 var funcC = (word = "TypeScript") => {
