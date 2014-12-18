@@ -48,3 +48,11 @@ $ grunt pdf
 大変感謝し、喜んでおります :satisfied:
 
 私はコード書き以外は割りと無能ですからね。
+
+## ライセンス
+
+サンプルコードは全て[MITライセンス](http://vvakame.mit-license.org/)とします。
+
+書籍部分については次の通りとします。
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br /><a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/typescript-ninja/typescript-in-definitelyland" property="cc:attributionName" rel="cc:attributionURL">vvakame</a> 作『<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">TypeScript in Definitelyland</span>』は<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">クリエイティブ・コモンズ 表示 - 非営利 - 改変禁止 4.0 国際 ライセンス</a>で提供されています。
