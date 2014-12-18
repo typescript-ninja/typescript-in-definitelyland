@@ -1,5 +1,5 @@
 interface AStatic {
-	// 以下のどちらかがないと Function との互換性が無い
+	// 次のどちらかがないとFunctionとの互換性が無い
 	// (): AInstance;
 	// new (): AInstance;
 	prototype: AInstance;

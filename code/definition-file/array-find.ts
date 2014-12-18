@@ -1,4 +1,4 @@
-// TypeScript 1.3.0 では Array.prototype.find の定義はまだ存在していない
+// TypeScript 1.3.0ではArray.prototype.findの定義はまだ存在していない
 interface Array<T> {
 	find(callback: (e: T, idx: number, array: T[]) => boolean, thisArg?: any): T;
 }

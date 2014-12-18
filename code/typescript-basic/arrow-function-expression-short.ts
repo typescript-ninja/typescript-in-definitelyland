@@ -3,7 +3,7 @@ var funcA = () => {
 };
 funcA();
 
-// 以下の2つは等価
+// 次の2つは等価
 // アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
 var funcB = (word = "TypeScript") => "Hello, " + word;
 var funcC = (word = "TypeScript") => {

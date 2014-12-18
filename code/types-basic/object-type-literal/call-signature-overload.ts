@@ -4,7 +4,7 @@ var obj: {
 	(): number;
 };
 // 当てはまる値はこんな感じ
-// 全ての引数と返り値に矛盾しないようにしなければならない…
+// すべての引数と返り値に矛盾しないようにしなければならない…
 obj = (word?: string): any => {
 	if (typeof word === "string") {
 		return "Hello, " + word;

@@ -9,6 +9,6 @@ declare var A: AStatic;
 
 var obj: AInstance | {};
 if (obj instanceof A) {
-	// ここでは AInstance と確定されている！
+	// ここではAInstanceと確定されている！
 	obj.str;
 }

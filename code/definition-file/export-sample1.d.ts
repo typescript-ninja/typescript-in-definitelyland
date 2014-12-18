@@ -3,7 +3,7 @@ declare module "foo" {
 		num: number;
 	}
 
-	// この _ は外部からは参照できない。exportしてないので。
+	// この_は外部からは参照できない。exportしてないので。
 	var _: Foo;
 	export = _;
 }

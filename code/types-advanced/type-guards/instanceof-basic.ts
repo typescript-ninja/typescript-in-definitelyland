@@ -7,9 +7,9 @@ class B {
 
 var obj: A | B;
 if (obj instanceof A) {
-	// ここでは A と確定されている！
+	// ここではAと確定されている！
 	obj.str;
 } else if (obj instanceof B) {
-	// ここでは B と確定されている！
+	// ここではBと確定されている！
 	obj.num;
 }

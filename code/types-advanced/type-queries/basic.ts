@@ -7,13 +7,13 @@ var obj: Sample;
 // Sample自体の型をコピー！ つまりこれはSampleクラスそのものだ！
 var clazz: typeof Sample;
 
-// それぞれに当てはまる値は以下の通り なるほどな！
+// それぞれに当てはまる値は次のとおり なるほどな！
 obj = new Sample();
 clazz = Sample;
 
 obj = new clazz();
 
-// clazz を頑張って手で書くと以下に等しい
+// clazz を頑張って手で書くと次に等しい
 var alterClazz: {
 	new (): { str: string; };
 };

@@ -1,4 +1,4 @@
-// 以下2つは(thisが絡まない限り)等価！
+// 次の2つは(thisが絡まない限り)等価！
 var funcA = () => true;
 var funcB = function() {
 	return true;

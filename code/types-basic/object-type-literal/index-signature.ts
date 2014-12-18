@@ -25,7 +25,7 @@ objA = {
 objB = {
 	0: "str",
 	str: "str"
-	// インデックスの型が string の場合、全てのプロパティの型がインデックスシグニチャに
+	// インデックスの型が string の場合、すべてのプロパティの型がインデックスシグニチャに
 	// 反しないようにしなければならない
 	// error TS2322: Type
 	//  '{ [x: string]: string | number; 0: string; str: string; num: number; }'

@@ -8,7 +8,7 @@ var obj: Sample | Date = {
 };
 
 if (obj instanceof Sample) {
-	// 型は Sample に絞られている が！ 絶対に到達しない！
-	// 現在の obj はプロトタイプチェーンにSampleを持たない！
+	// 型はSampleに絞られている が！絶対に到達しない！
+	// 現在のobjはプロトタイプチェーンにSampleを持たない！
 	console.log(obj.str);
 }

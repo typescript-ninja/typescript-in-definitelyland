@@ -9,5 +9,5 @@ var b: (() => string) | (() => boolean);
 // もしくはオブジェクト型リテラル使う
 var c: { (): string; } | { (): boolean; };
 
-// union typesじゃない時でも使えるけど見づらいな！
+// union typesじゃないときでも使えるけど見づらいな！
 var d: (() => string);

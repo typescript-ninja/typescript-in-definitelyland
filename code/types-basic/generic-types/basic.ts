@@ -11,7 +11,7 @@ numArray.forEach(v => v.toFixed(2));
 strArray.forEach((v: string) => v.charAt(0));
 numArray.forEach((v: number) => v.toFixed(2));
 
-// あと、間違った型を指定した時にエラーにならないとこわい…
+// あと、間違った型を指定したときにエラーにならないとこわい…
 // error TS2345: Argument of type '(v: RegExp) => boolean' is not assignable to
 // parameter of type '(value: string, index: number, array: string[]) => void'.
 // strArray.forEach((v: RegExp) => v.test("str"));
