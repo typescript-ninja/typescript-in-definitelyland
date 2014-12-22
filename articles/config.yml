@@ -38,7 +38,7 @@ description:
 # 固有IDに使用するドメイン
 urnid: http://typescript.ninja/typescript-in-definitelyland/
 # CSSファイル (yamlファイルおよびReVIEWファイルを置いたディレクトリにあること
-stylesheet: stylesheet.css
+stylesheet: style.css
 # LaTeX用のスタイルファイル(styディレクトリ以下に置くこと)
 texstyle: techbooster-doujin
 # LaTeX用のdocumentclassを指定する
