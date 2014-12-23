@@ -108,7 +108,7 @@ module.exports = function (grunt) {
             compile2html: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "bundle exec review-compile --all --target=html --footnotetext --stylesheet=style.css";
+                    return "bundle exec review-compile --all --target=html --footnotetext --stylesheet=style.css --chapterlink";
                 }
             },
             compile2latex: {
