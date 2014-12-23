@@ -12,7 +12,7 @@ module ReVIEW
       puts '' if level > 1
       a_id = ""
       unless anchor.nil?
-        a_id = %Q[<a id="h#{anchor}" href="#h#{anchor}" aria-hidden="true"><span class="octicon octicon-link">&sect;</span></a>]
+        a_id = %Q[<a id="h#{anchor}" href="#h#{anchor}" aria-hidden="true"><span class="header-link">&sect;</span></a>]
       end
       if caption.empty?
         puts a_id unless label.nil?
