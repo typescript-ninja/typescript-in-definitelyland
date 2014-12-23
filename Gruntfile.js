@@ -84,7 +84,7 @@ module.exports = function (grunt) {
                     paths: ["articles"]
                 },
                 files: {
-                    "articles/style.css": "articles/review.less"
+                    "articles/epub.css": "articles/review.less"
                 }
             }
         },
@@ -110,6 +110,8 @@ module.exports = function (grunt) {
                     'articles/*.epub',
                     'articles/*.html',
                     'articles/*.css',
+                    // grifletがgruntを叩けないので
+                    '!articles/epub.css',
                     // epubとhtmlでカスタムテンプレ利用有無を切り替える
                     'articles/layouts/layout.html.erb',
                     'articles/review-ext.rb'
