@@ -71,13 +71,29 @@ module.exports = function (grunt) {
             }
         },
         less: {
-            main: {
+            blog: {
                 options: {
                     paths: ["articles"]
                 },
                 files: {
                     "articles/style.css": "articles/style.less"
                 }
+            },
+            epub: {
+                options: {
+                    paths: ["articles"]
+                },
+                files: {
+                    "articles/style.css": "articles/review.less"
+                }
+            }
+        },
+        copy: {
+            blog: {
+                files: [
+                    {src: 'articles/_review-ext.rb', dest: 'articles/review-ext.rb'},
+                    {src: 'articles/layouts/_layout.html.erb', dest: 'articles/layouts/layout.html.erb'}
+                ]
             }
         },
         clean: {
@@ -92,7 +108,11 @@ module.exports = function (grunt) {
                     'articles/c87-typescript-pdf/',
                     'articles/*.pdf',
                     'articles/*.epub',
-                    'articles/*.html'
+                    'articles/*.html',
+                    'articles/*.css',
+                    // epubとhtmlでカスタムテンプレ利用有無を切り替える
+                    'articles/layouts/layout.html.erb',
+                    'articles/review-ext.rb'
                 ]
             }
         },
@@ -148,8 +168,9 @@ module.exports = function (grunt) {
         }
     });
 
-    function generateTask(target) {
-        return ['clean', /* 'typescript-formatter', */ 'ts', 'less', 'exec:preprocess', 'exec:compile2' + target];
+    function generateTask(target, pretask) {
+        pretask = pretask || [];
+        return ['clean', /* 'typescript-formatter', */ 'ts'].concat(pretask).concat(['exec:preprocess', 'exec:compile2' + target]);
     }
 
     grunt.registerTask(
@@ -165,7 +186,7 @@ module.exports = function (grunt) {
     grunt.registerTask(
         'html',
         "原稿をコンパイルしてHTMLファイルにする",
-        generateTask("html"));
+        generateTask("html", ['less:blog', 'copy:blog']));
 
     grunt.registerTask(
         'idgxml',
@@ -180,7 +201,7 @@ module.exports = function (grunt) {
     grunt.registerTask(
         'epub',
         "原稿をコンパイルしてepubファイルにする",
-        generateTask("epub"));
+        generateTask("epub", ['less:epub']));
 
     require('load-grunt-tasks')(grunt);
 };

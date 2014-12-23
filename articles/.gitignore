@@ -9,3 +9,7 @@
 *.epub
 
 *.css
+
+# switch by grunt task
+review-ext.rb
+layouts/layout.html.erb
