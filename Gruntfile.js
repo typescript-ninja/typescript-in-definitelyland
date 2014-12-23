@@ -70,6 +70,16 @@ module.exports = function (grunt) {
                 }
             }
         },
+        less: {
+            main: {
+                options: {
+                    paths: ["articles"]
+                },
+                files: {
+                    "articles/style.css": "articles/style.less"
+                }
+            }
+        },
         clean: {
             ts: {
                 src: [
@@ -139,7 +149,7 @@ module.exports = function (grunt) {
     });
 
     function generateTask(target) {
-        return ['clean', /* 'typescript-formatter', */ 'ts', 'exec:preprocess', 'exec:compile2' + target];
+        return ['clean', /* 'typescript-formatter', */ 'ts', 'less', 'exec:preprocess', 'exec:compile2' + target];
     }
 
     grunt.registerTask(

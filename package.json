@@ -14,6 +14,7 @@
   "devDependencies": {
     "grunt": "0.4.5",
     "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-less": "0.12.0",
     "grunt-dtsm": "0.1.1",
     "grunt-exec": "0.4.6",
     "grunt-open": "0.2.3",
