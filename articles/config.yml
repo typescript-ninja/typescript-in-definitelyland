@@ -1,5 +1,5 @@
 # review-epubmaker向けの設定ファイルの例。
-# yamlファイルをReVIEWファイルのある場所に置き、
+# yamlファイルをRe:VIEWファイルのある場所に置き、
 # 「review-epubmaker yamlファイル」を実行すると、<bookname>.epubファイルが
 # 生成されます。
 # このファイルはUTF-8エンコーディングで記述してください。
@@ -8,13 +8,16 @@
 
 # ブック名(ファイル名になるもの。ASCII範囲の文字を使用)
 bookname: typescript-in-definitelyland
+# 記述言語
+language: ja
 # 書名
-booktitle: TypeScript in Definitelyland
+title: TypeScript in Definitelyland
 # 著者
 aut: vvakame
 prt: TechBooster
 prt_url:  http://techbooster.org/
 edt: mhidaka
+# 刊行日。YYYY-MM-DD形式。省略した場合は本日の日付
 date: 2014-12-30
 rights: |
   (C) 2014 vvakame
@@ -38,7 +41,7 @@ description:
 # 固有IDに使用するドメイン
 urnid: http://typescript.ninja/typescript-in-definitelyland/
 # CSSファイル (yamlファイルおよびReVIEWファイルを置いたディレクトリにあること
-stylesheet: style.css
+stylesheet: ["style.css"]
 # LaTeX用のスタイルファイル(styディレクトリ以下に置くこと)
 texstyle: techbooster-doujin
 # LaTeX用のdocumentclassを指定する
@@ -64,11 +67,15 @@ colophon: true
 # EPUBで表紙をコンテンツに含めるか。デフォルトでは作成されない。yesにするとiBooks等でも最初に表紙が表示されるようになる
 cover_linear: null
 # review-compileに渡すパラメータ
-params: --stylesheet=sample.css
+params: --stylesheet=style.css
 # デバッグフラグ。nullでないときには一時ファイルをカレントディレクトリに作成し、削除もしない
 debug: null
 # 子ビルダに渡すパラメータ
 params:
 
-pubhistory: |
-  2014年12月30日  初版発行 v1.0.0
+# 発行年月。YYYY-MM-DD形式による配列指定。省略した場合はdateを使用する
+# 複数指定する場合は次のように記述する
+# [["初版第第1刷の日付", "初版第第2刷の日付"], ["第2版第1刷の日付"]]
+# 日付の後ろを空白文字で区切り、任意の文字列を置くことも可能。
+history:
+  - ["2014年12月30日  初版発行 v1.0.0"]

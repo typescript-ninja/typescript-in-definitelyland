@@ -80,7 +80,9 @@ module.exports = function (grunt) {
             review: {
                 src: [
                     'articles/c87-typescript-pdf/',
-                    'articles/*.pdf'
+                    'articles/*.pdf',
+                    'articles/*.epub',
+                    'articles/*.html'
                 ]
             }
         },
@@ -100,25 +102,25 @@ module.exports = function (grunt) {
             compile2text: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "bundle exec review-compile --all --target=text";
+                    return "bundle exec review-compile --all --target=text --footnotetext --stylesheet=style.css";
                 }
             },
             compile2html: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "bundle exec review-compile --all --target=html";
+                    return "bundle exec review-compile --all --target=html --footnotetext --stylesheet=style.css";
                 }
             },
             compile2latex: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "bundle exec review-compile --all --target=latex";
+                    return "bundle exec review-compile --all --target=latex --footnotetext --stylesheet=style.css";
                 }
             },
             compile2idgxml: {
                 cwd: "./articles",
                 cmd: function () {
-                    return "bundle exec review-compile --all --target=idgxml";
+                    return "bundle exec review-compile --all --target=idgxml --footnotetext --stylesheet=style.css";
                 }
             },
             compile2pdf: {
@@ -132,12 +134,6 @@ module.exports = function (grunt) {
                 cmd: function () {
                     return "bundle exec review-epubmaker config.yml";
                 }
-            },
-            checkWithTsc: {
-                cwd: "./articles",
-                cmd: function () {
-                    return "bundle exec review-compile --all --target=html tsc-check";
-                }
             }
         }
     });
@@ -150,11 +146,6 @@ module.exports = function (grunt) {
         'default',
         "原稿をコンパイルしてPDFファイルにする",
         "pdf");
-
-    grunt.registerTask(
-        'check',
-        "原稿に含まれるTypeScriptコードをtscに食わせてチェックする",
-        "exec:checkWithTsc");
 
     grunt.registerTask(
         'text',
