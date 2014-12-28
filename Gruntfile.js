@@ -3,7 +3,9 @@ module.exports = function (grunt) {
         var srcFileList = grunt.file.expand([
             'code/**/*.ts',
             '!code/**/*-invalid.ts', // コンパイルが通らないコード
+            '!code/**/invalid.ts', // コンパイルが通らないコード
             '!code/**/*-invalid.d.ts', // コンパイルが通らないコード
+            '!code/**/invalid.d.ts', // コンパイルが通らないコード
             '!code/**/*-1.3.0.ts', // 1.3.0 限定コード
             '!code/**/node_modules/**/*.ts'
         ]);

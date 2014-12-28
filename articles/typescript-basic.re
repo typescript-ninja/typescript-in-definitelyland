@@ -23,11 +23,11 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 == 変数
 
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{var-with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
+違うのは、@<list>{variable/with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
-//list[var-with-annotations][型注釈付きの変数]{
-#@mapfile(../code/typescript-basic/var-with-annotations.ts)
+//list[variable/with-annotations][型注釈付きの変数]{
+#@mapfile(../code/typescript-basic/variable/with-annotations.ts)
 var str: string;
 var num: number;
 var bool: boolean;
@@ -38,11 +38,11 @@ var obj: any; // なんでも型
 //}
 
 これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
-たとえば@<list>{var-with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
+たとえば@<list>{variable/with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
-//list[var-with-annotations-invalid][型注釈に反することをやってみる]{
-#@mapfile(../code/typescript-basic/var-with-annotations-invalid.ts)
+//list[variable/with-annotations-invalid][型注釈に反することをやってみる]{
+#@mapfile(../code/typescript-basic/variable/with-annotations-invalid.ts)
 var str: string;
 // 文字列は数値と互換性がない！
 // error TS2322: Type 'number' is not assignable to type 'string'.
@@ -62,10 +62,10 @@ bool = "str";
 
 おう、安心・安全なのはわかった。
 わかったけど、そのために型注釈をいちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。
-@<list>{var-with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
+@<list>{variable/with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
 
-//list[var-with-initializer][初期化付き変数 = 最強]{
-#@mapfile(../code/typescript-basic/var-with-initializer.ts)
+//list[variable/with-initializer][初期化付き変数 = 最強]{
+#@mapfile(../code/typescript-basic/variable/with-initializer.ts)
 var str = "string";
 var num = 1;
 var bool = true;
@@ -83,10 +83,10 @@ var obj = {};
 
 == クラス
 
-TypeScriptには一般的な構文でのクラスの定義が備わっています（@<list>{class-basic}）。
+TypeScriptには一般的な構文でのクラスの定義が備わっています（@<list>{class/basic}）。
 
-//list[class-basic][さまざまなクラス要素]{
-#@mapfile(../code/typescript-basic/class-basic.ts)
+//list[class/basic][さまざまなクラス要素]{
+#@mapfile(../code/typescript-basic/class/basic.ts)
 class Base {
   // インスタンス変数
   numA: number;
@@ -154,10 +154,10 @@ obj.dateA;
 次はコンストラクタです。
 引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
 これを@<kw>{引数プロパティ宣言,parameter property declaration}と呼びます。
-@<list>{class-constructor.ts}のようなコードを書くと@<list>{class-constructor.js}のようなJavaScriptが出てきます。
+@<list>{class/constructor.ts}のようなコードを書くと@<list>{class/constructor.js}のようなJavaScriptが出てきます。
 
-//list[class-constructor.ts][引数プロパティ宣言！]{
-#@mapfile(../code/typescript-basic/class-constructor.ts)
+//list[class/constructor.ts][引数プロパティ宣言！]{
+#@mapfile(../code/typescript-basic/class/constructor.ts)
 class Sample {
   constructor(public str: string) {
   }
@@ -169,8 +169,8 @@ console.log(obj.str);
 #@end
 //}
 
-//list[class-constructor.js][コンパイルするとこんなの]{
-#@mapfile(../code/typescript-basic/class-constructor.js)
+//list[class/constructor.js][コンパイルするとこんなの]{
+#@mapfile(../code/typescript-basic/class/constructor.js)
 var Sample = (function () {
     function Sample(str) {
         this.str = str;
@@ -182,7 +182,7 @@ console.log(obj.str);
 #@end
 //}
 
-@<list>{class-basic}に戻ります。
+@<list>{class/basic}に戻ります。
 次はメソッドです。
 これも特に特筆すべき要素はありませんね。普通です。
 
@@ -195,11 +195,11 @@ console.log(obj.str);
 これらの構文はECMAScript 6の文法をおおむね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラスを定義できるようになります。
 
 次に、クラスの継承も見て行きましょう。
-継承も普通にできます@<list>{class-inherit}。
+継承も普通にできます@<list>{class/inherit}。
 superを使った親クラスのメソッドの参照も一応普通に使えます。
 
-//list[class-inherit][普通に継承もあるよ]{
-#@mapfile(../code/typescript-basic/class-inherit.ts)
+//list[class/inherit][普通に継承もあるよ]{
+#@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
     return "Hi! " + name;
@@ -231,12 +231,12 @@ TypeScript以外のオブジェクト指向の世界でもいえることです�
 
 === 普通の関数
 
-いたって普通です（@<list>{function}）。
+いたって普通です（@<list>{function/basic}）。
 型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。
 デフォルト値付き引数はECMAScript 6で入る予定です。
 
-//list[function][色々な関数定義]{
-#@mapfile(../code/typescript-basic/function.ts)
+//list[function/basic][色々な関数定義]{
+#@mapfile(../code/typescript-basic/function/basic.ts)
 function hello(word: string): string {
   return "Hello, " + word;
 }
@@ -262,10 +262,10 @@ ahoy();
 #@end
 //}
 
-可変長引数もあります！（@<list>{function-args}）
+可変長引数もあります！（@<list>{function/args}）
 
-//list[function-args][可変長引数もあるよ]{
-#@mapfile(../code/typescript-basic/function-args.ts)
+//list[function/args][可変長引数もあるよ]{
+#@mapfile(../code/typescript-basic/function/args.ts)
 function hello(...args: string[]) {
   return "Hello, " + args.join(" & ");
 }
@@ -274,10 +274,10 @@ console.log(hello("TS", "JS"));
 #@end
 //}
 
-なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function-invalid}）。
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function/invalid}）。
 
-//list[function-invalid][こういうのはアカン]{
-#@mapfile(../code/typescript-basic/function-invalid.ts)
+//list[function/invalid][こういうのはアカン]{
+#@mapfile(../code/typescript-basic/function/invalid.ts)
 // オプショナルな引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
 function funcA(arg1?: string, arg2: string) {
@@ -296,10 +296,10 @@ function funcB(...args: string, rest: string) {
 
 === アロー関数式
 
-ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function expression}を見ていきましょう（@<list>{arrow-function-expression}）。
+ECMAScript 6で導入される予定の@<kw>{アロー関数式,arrow function expression}を見ていきましょう（@<list>{arrow-function-expression/basic}）。
 
-//list[arrow-function-expression][アロー関数式 短くてかっこいい]{
-#@mapfile(../code/typescript-basic/arrow-function-expression.ts)
+//list[arrow-function-expression/basic][アロー関数式 短くてかっこいい]{
+#@mapfile(../code/typescript-basic/arrow-function-expression/basic.ts)
 // 次の2つは(thisが絡まない限り)等価！
 var funcA = () => true;
 var funcB = function() {
@@ -324,10 +324,10 @@ asyncModoki(value => console.log("Hello, " + value));
 将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう（なんせ、楽だし）。
 早くNode.jsでも使えるようになって、Gruntfile.jsとかで使わせてほしいものです。
 
-アロー関数式は1つの文しか持たないとき、その文の値を返り値として使ってくれます（@<list>{arrow-function-expression-short}）。
+アロー関数式は1つの文しか持たないとき、その文の値を返り値として使ってくれます（@<list>{arrow-function-expression/short}）。
 
-//list[arrow-function-expression-short][1つの文しか持たないときの便利な振る舞い]{
-#@mapfile(../code/typescript-basic/arrow-function-expression-short.ts)
+//list[arrow-function-expression/short][1つの文しか持たないときの便利な振る舞い]{
+#@mapfile(../code/typescript-basic/arrow-function-expression/short.ts)
 // 名前付き関数は定義できないので変数に入れる
 var funcA = () => {
 };
@@ -346,10 +346,10 @@ console.log(funcC());
 
 もうひとつの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに不要な混乱をおこさずに済みます。
-例を見てみましょう（@<list>{arrow-function-expression-this}）。
+例を見てみましょう（@<list>{arrow-function-expression/this}）。
 
-//list[arrow-function-expression-this][受け継がれるthisの値…！]{
-#@mapfile(../code/typescript-basic/arrow-function-expression-this.ts)
+//list[arrow-function-expression/this][受け継がれるthisの値…！]{
+#@mapfile(../code/typescript-basic/arrow-function-expression/this.ts)
 "use strict";
 
 class Sample {
