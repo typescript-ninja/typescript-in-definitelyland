@@ -277,10 +277,10 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 === インタフェースを活用する
 
 インタフェースは大変使いやすいパーツです。
-というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{declaration-merging}、@<list>{declaration-merging-usage}）。
+というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declaration-merging}、@<list>{interface/declaration-merging-usage}）。
 
-//list[declaration-merging][定義を分割して書く]{
-#@mapfile(../code/definition-file/declaration-merging.d.ts)
+//list[interface/declaration-merging][定義を分割して書く]{
+#@mapfile(../code/definition-file/interface/declaration-merging.d.ts)
 interface Foo {
   hello(): string;
 }
@@ -292,8 +292,8 @@ interface Foo {
 #@end
 //}
 
-//list[declaration-merging-usage][定義が統合される！]{
-#@mapfile(../code/definition-file/declaration-merging-usage.ts)
+//list[interface/declaration-merging-usage][定義が統合される！]{
+#@mapfile(../code/definition-file/interface/declaration-merging-usage.ts)
 /// <reference path="./declaration-merging.d.ts" />
 
 var foo: Foo;
@@ -309,10 +309,10 @@ foo.bye();
 例をひとつ見てみましょう。
 Array#findは、指定した方法に基づき要素を1つ探す関数です。
 TypeScript 1.3.0ではデフォルトの型定義ファイル（lib.d.ts）にはまだこのメソッドが定義されていません。
-そのため、Arrayインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{array-find}）。
+そのため、Arrayインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/array-find}）。
 
-//list[array-find][Array#findを生やす]{
-#@mapfile(../code/definition-file/array-find.ts)
+//list[interface/array-find][Array#findを生やす]{
+#@mapfile(../code/definition-file/interface/array-find.ts)
 // TypeScript 1.3.0ではArray.prototype.findの定義はまだ存在していない
 interface Array<T> {
   find(callback: (e: T, idx: number, array: T[]) => boolean, thisArg?: any): T;
@@ -337,10 +337,10 @@ array.find(v => v % 2 === 1);
 幽霊モジュール@<fn>{ghost-module}という考え方があります。
 
 内部モジュールを作ったとしても、即座に実体が生成されるとは限りません。
-内部モジュールが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghost-module-invalid}）。
+内部モジュールが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghost-module/invalid}）。
 
-//list[ghost-module-invalid][幽霊モジュール]{
-#@mapfile(../code/definition-file/ghost-module-invalid.ts)
+//list[ghost-module/invalid][幽霊モジュール]{
+#@mapfile(../code/definition-file/ghost-module/invalid.ts)
 declare module ghost {
   interface Test {
     str: string;
@@ -352,7 +352,7 @@ var test: ghost.Test;
 test.str;
 
 // 実体としては存在していない！
-// ghost-module-invalid.ts(13,17): error TS2304: Cannot find name 'ghost'.
+// invalid.ts(13,17): error TS2304: Cannot find name 'ghost'.
 var notExists = ghost;
 #@end
 //}
@@ -360,10 +360,10 @@ var notExists = ghost;
 これを活用して、大量のインタフェースを持つようなライブラリの定義をひとまとまりにできます。
 
 実際の例を見てみましょう。
-@<list>{jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋（＆一部改変）です。
+@<list>{ghost-module/jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋（＆一部改変）です。
 
-//list[jquery-without-ghost-module][実際のjQueryの型定義の例]{
-#@mapfile(../code/definition-file/jquery-without-ghost-module.d.ts)
+//list[ghost-module/jquery-without-ghost-module][実際のjQueryの型定義の例]{
+#@mapfile(../code/definition-file/ghost-module/jquery-without-ghost-module.d.ts)
 interface JQuery {
   addClass(className: string): JQuery;
   html(htmlString: string): JQuery;
@@ -408,10 +408,10 @@ declare var $: JQueryStatic;
 ライブラリ内部のAPI同士の参照でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。
 IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。
 
-これを幽霊モジュールを使って書きなおしてみます（@<list>{jquery-with-ghost-module}）。
+これを幽霊モジュールを使って書きなおしてみます（@<list>{ghost-module/jquery-with-ghost-module}）。
 
-//list[jquery-with-ghost-module][幽霊モジュールを使ってみた]{
-#@mapfile(../code/definition-file/jquery-with-ghost-module.d.ts)
+//list[ghost-module/jquery-with-ghost-module][幽霊モジュールを使ってみた]{
+#@mapfile(../code/definition-file/ghost-module/jquery-with-ghost-module.d.ts)
 declare module jquery {
   interface Element {
     addClass(className: string): Element;
@@ -480,10 +480,10 @@ declare var $: jquery.Static;
 おうお前少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？
 と、思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
-具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{module-by-interface-bad}）。
+具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{interface-antipattern/module-by-interface-bad}）。
 
-//list[module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
-#@mapfile(../code/definition-file/module-by-interface-bad.d.ts)
+//list[interface-antipattern/module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
+#@mapfile(../code/definition-file/interface-antipattern/module-by-interface-bad.d.ts)
 interface Foo {
   bar: FooBar;
 }
@@ -507,10 +507,10 @@ declare var foo: Foo;
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
 #@# OK REVIEW muo: ×実際のコードを書くことは大いなる苦痛が ○実際のコードを書くことには大いなる苦痛が ○実際のコードを書くには大いなる苦痛が ○実際のコードを書くことは大いなる苦痛を
 俺は絶対使わんぞ！
-普通に、@<list>{module-by-interface-good}のように書くのだ！
+普通に、@<list>{interface-antipattern/module-by-interface-good}のように書くのだ！
 
-//list[module-by-interface-good][素直にこうしよう]{
-#@mapfile(../code/definition-file/module-by-interface-good.d.ts)
+//list[interface-antipattern/module-by-interface-good][素直にこうしよう]{
+#@mapfile(../code/definition-file/interface-antipattern/module-by-interface-good.d.ts)
 // 普通にコレでいいだろ！！
 declare module foo.bar.buzz {
   var str: string;
@@ -519,20 +519,20 @@ declare module foo.bar.buzz {
 //}
 
 普通、こんな型定義ファイルを書こうとは思わないと思いますが、こういうコードを書きたくなってしまうときが稀にあります。
-具体的には、@<list>{callable-module-usage}のように関数としても呼べるし、内部モジュールのようにも振る舞うオブジェクトの型定義を作成したいときです。
+具体的には、@<list>{interface-antipattern/callable-module-usage}のように関数としても呼べるし、内部モジュールのようにも振る舞うオブジェクトの型定義を作成したいときです。
 
-//list[callable-module-usage][関数・内部モジュール どっちなの？]{
-#@mapfile(../code/definition-file/callable-module-usage-invalid.ts)
+//list[interface-antipattern/callable-module-usage][関数・内部モジュール どっちなの？]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module-usage-invalid.ts)
 // assertは関数としても呼べるしモジュールのようにも見える
 assert(foo === "foo");
 assert.ok(value);
 #@end
 //}
 
-呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{callable-module-bad1}か、@<list>{callable-module-bad2}だ！
+呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{interface-antipattern/callable-module-bad1}か、@<list>{interface-antipattern/callable-module-bad2}だ！
 
-//list[callable-module-bad1][こうしてしまいたい、気持ち]{
-#@mapfile(../code/definition-file/callable-module-bad1.d.ts)
+//list[interface-antipattern/callable-module-bad1][こうしてしまいたい、気持ち]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module-bad1.d.ts)
 declare var assert: {
   (value: any): void;
   ok(value: any): void;
@@ -540,8 +540,8 @@ declare var assert: {
 #@end
 //}
 
-//list[callable-module-bad2][匿名型注釈よりはマシ]{
-#@mapfile(../code/definition-file/callable-module-bad2.d.ts)
+//list[interface-antipattern/callable-module-bad2][匿名型注釈よりはマシ]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module-bad2.d.ts)
 declare var assert: Assert;
 
 interface Assert {
@@ -553,10 +553,10 @@ interface Assert {
 
 たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。
 
-しかし、これには別の良いやり方があるのです（@<list>{callable-module-good}）。
+しかし、これには別の良いやり方があるのです（@<list>{interface-antipattern/callable-module-good}）。
 
-//list[callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
-#@mapfile(../code/definition-file/callable-module-good.d.ts)
+//list[interface-antipattern/callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module-good.d.ts)
 declare function assert(value: any): void;
 declare module assert {
   function ok(value: any): void;
@@ -569,10 +569,10 @@ declare module assert {
 #@# OK REVIEW muo: 層構造→階層構造 かな、ここの流れだと。
 
 この手法は、実際に@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
-@<list>{power-assert-abst}に抜粋&改変したものを示します。
+@<list>{interface-antipattern/power-assert-abst}に抜粋&改変したものを示します。
 
-//list[power-assert-abst][関数+内部モジュールの実例]{
-#@mapfile(../code/definition-file/power-assert-abst.d.ts)
+//list[interface-antipattern/power-assert-abst][関数+内部モジュールの実例]{
+#@mapfile(../code/definition-file/interface-antipattern/power-assert-abst.d.ts)
 declare function assert(value: any, message?: string): void;
 declare module assert {
 
@@ -595,10 +595,10 @@ declare module assert {
 余計な名前を階層の浅いところにバラ撒かず、厳密さも損なっていません。
 この書き方は、案外よく登場するパターンなので覚えておくとよいでしょう。
 
-実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます（@<list>{callable-module-ts}）。
+実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます（@<list>{interface-antipattern/callable-module-ts}）。
 
-//list[callable-module-ts][関数が先、内部モジュールは後！絶対！]{
-#@mapfile(../code/definition-file/callable-module.ts)
+//list[interface-antipattern/callable-module-ts][関数が先、内部モジュールは後！絶対！]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module.ts)
 function test() {
   return "test!";
 }
@@ -610,10 +610,10 @@ module test {
 #@end
 //}
 
-コンパイル結果の@<list>{callable-module-js}を見ると、なぜ関数が先、内部モジュールが後、という決まりになっているかがわかりますね。
+コンパイル結果の@<list>{interface-antipattern/callable-module-js}を見ると、なぜ関数が先、内部モジュールが後、という決まりになっているかがわかりますね。
 
-//list[callable-module-js][コンパイル結果を見れば、理由が分かる。これ、正しいJSだ！]{
-#@mapfile(../code/definition-file/callable-module.js)
+//list[interface-antipattern/callable-module-js][コンパイル結果を見れば、理由が分かる。これ、正しいJSだ！]{
+#@mapfile(../code/definition-file/interface-antipattern/callable-module.js)
 function test() {
     return "test!";
 }
@@ -632,10 +632,10 @@ var test;
 === クラスを定義するには？
 
 普通に定義すればええやろ！！と思うかもしれませんが、現在のTypeScriptはなかなか難しい問題を抱えています。
-先に、どういう選択肢が存在するかを見てみましょう（@<list>{declare-class}）。
+先に、どういう選択肢が存在するかを見てみましょう（@<list>{declare-class/basic}）。
 
-//list[declare-class][素直にクラス定義 vs インタフェース+変数]{
-#@mapfile(../code/definition-file/declare-class.d.ts)
+//list[declare-class/basic][素直にクラス定義 vs インタフェース+変数]{
+#@mapfile(../code/definition-file/declare-class/basic.d.ts)
 // A. 普通にクラスを定義する
 declare class TestA {
 }
@@ -663,11 +663,11 @@ interface TestB {
  ** 別ライブラリが（プラグインなどで）拡張する設計のライブラリには向かない
  * 別途インタフェースの実装を型定義に盛り込むときめんどくさい（定義の二重記述が必要）
 
-@<list>{declare-vanilla-class-invalid}みたいな感じです。
+@<list>{declare-class/declare-vanilla-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
 
-//list[declare-vanilla-class-invalid][クラスで定義]{
-#@mapfile(../code/definition-file/declare-vanilla-class-invalid.ts)
+//list[declare-class/declare-vanilla-class-invalid][クラスで定義]{
+#@mapfile(../code/definition-file/declare-class/declare-vanilla-class-invalid.ts)
 declare class BaseA {
   str: string;
 }
@@ -698,11 +698,11 @@ declare class FooListenerImpl implements FooListener {
  * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
  * インタフェースを実装するのが（継承するだけなので）めっちゃ簡単
 
-@<list>{declare-decompose-class-invalid}みたいな感じです。
+@<list>{declare-class/declare-decompose-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
 
-//list[declare-decompose-class-invalid][インタフェース+変数で定義]{
-#@mapfile(../code/definition-file/declare-decompose-class-invalid.ts)
+//list[declare-class/declare-decompose-class-invalid][インタフェース+変数で定義]{
+#@mapfile(../code/definition-file/declare-class/declare-decompose-class-invalid.ts)
 var BaseA: BaseAStatic;
 interface BaseAStatic {
   new (): BaseA;
@@ -744,11 +744,11 @@ interface FooListenerImpl extends FooListener {
 === オーバーロードを上手く使おう！
 
 正しいライブラリの使い方を導くこと。
-を心に秘めて、@<list>{use-overload}を見てください。
+を心に秘めて、@<list>{overload/use-overload}を見てください。
 どれが一番わかりやすいですか？
 
-//list[use-overload][普通に使えます]{
-#@mapfile(../code/definition-file/use-overload.ts)
+//list[overload/use-overload][普通に使えます]{
+#@mapfile(../code/definition-file/overload/use-overload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 
 // getのとき setのとき 仕様が違うことがよく分かる
@@ -772,11 +772,11 @@ JavaScriptのライブラリは1つの関数にさまざまな使い方をさせ
 なお、普通にTypeScriptコードを書くときにオーバーロードはあまり使わないのがよいスタイルです。
 実装が煩雑になっちゃうからね！素直にメソッドを分けましょう。
 
-union typesが使えるようになると、@<list>{overload-vs-union-types}のように書くこともできます。
+union typesが使えるようになると、@<list>{overload/overload-vs-union-types}のように書くこともできます。
 簡単な例だとunion typesのほうがよいと思いますが、このケースではどっちがいいかは、今の知見ではまだわからないですね。
 
-//list[overload-vs-union-types][うーん、どっちがいいかは難しい]{
-#@mapfile(../code/definition-file/overload-vs-union-types.ts)
+//list[overload/overload-vs-union-types][うーん、どっちがいいかは難しい]{
+#@mapfile(../code/definition-file/overload/overload-vs-union-types.ts)
 // union types 以前
 declare function hello(word: string): string;
 declare function hello(callback: () => string): string;
@@ -798,11 +798,11 @@ bye(() => "function");
 
 あんまり言及されることがないのでここで触れておきます。
 1.1.0-1までの時代は、外部モジュールがopen endedじゃありませんでした。
-1.3.0からはopen endedになったので、@<list>{external-module-declaration-merging}と@<list>{external-module-declaration-merging-usage}のようなコードが書けます。
+1.3.0からはopen endedになったので、@<list>{external-module-declaration-merging/basic}と@<list>{external-module-declaration-merging/usage}のようなコードが書けます。
 めでたい。
 
-//list[external-module-declaration-merging][これ、1.1.0時代はできなかったのよね]{
-#@mapfile(../code/definition-file/external-module-declaration-merging.d.ts)
+//list[external-module-declaration-merging/basic][これ、1.1.0時代はできなかったのよね]{
+#@mapfile(../code/definition-file/external-module-declaration-merging/basic.d.ts)
 // 外部モジュールの定義の統合ができます！！
 declare module "foo" {
   var str: string;
@@ -814,9 +814,9 @@ declare module "foo" {
 #@end
 //}
 
-//list[external-module-declaration-merging-usage][普通に使えます]{
-#@mapfile(../code/definition-file/external-module-declaration-merging-usage.ts)
-/// <reference path="./external-module-declaration-merging.d.ts" />
+//list[external-module-declaration-merging/usage][普通に使えます]{
+#@mapfile(../code/definition-file/external-module-declaration-merging/usage.ts)
+/// <reference path="./basic.d.ts" />
 
 import foo = require("foo");
 foo.str;
@@ -929,10 +929,10 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 
 === ちょっと小難しいexport句の使い方
 
-インタフェースやクラスのインスタンス単体を外部モジュールの外側に見せたい場合、@<list>{export-sample1}のように書きます。
+インタフェースやクラスのインスタンス単体を外部モジュールの外側に見せたい場合、@<list>{export/sample1}のように書きます。
 
-//list[export-sample1][実はインタフェースFooも外から見えない]{
-#@mapfile(../code/definition-file/export-sample1.d.ts)
+//list[export/sample1][実はインタフェースFooも外から見えない]{
+#@mapfile(../code/definition-file/export/sample1.d.ts)
 declare module "foo" {
   interface Foo {
     num: number;
@@ -945,12 +945,12 @@ declare module "foo" {
 #@end
 //}
 
-呼び出し側では@<list>{export-sample1-usage}のように使います。
+呼び出し側では@<list>{export/sample1-usage}のように使います。
 importした値がインタフェースFooのインスタンスになっていることがわかります。
 
-//list[export-sample1-usage][使うとき。インタフェースFooのインスタンスが得られる]{
-#@mapfile(../code/definition-file/export-sample1-usage.ts)
-/// <reference path="./export-sample1.d.ts" />
+//list[export/sample1-usage][使うとき。インタフェースFooのインスタンスが得られる]{
+#@mapfile(../code/definition-file/export/sample1-usage.ts)
+/// <reference path="./sample1.d.ts" />
 
 // f は "foo" の Fooのインスタンス だよ！
 import f = require("foo");
@@ -958,12 +958,12 @@ f.num;
 #@end
 //}
 
-よくやりがちな誤りは@<list>{export-sample2}みたいな書き方をしてしまうことです。
+よくやりがちな誤りは@<list>{export/sample2}みたいな書き方をしてしまうことです。
 インタフェースのインスタンスをexportしたつもりが型がexportされてしまうのです。
-そして@<list>{export-sample2-usage-invalid}のようなエラーに出くわすことになります。
+そして@<list>{export/sample2-usage-invalid}のようなエラーに出くわすことになります。
 
-//list[export-sample2][それは値ではなくて型だけ輸出しているぞ！]{
-#@mapfile(../code/definition-file/export-sample2.d.ts)
+//list[export/sample2][それは値ではなくて型だけ輸出しているぞ！]{
+#@mapfile(../code/definition-file/export/sample2.d.ts)
 declare module "foo" {
   interface Foo {
     num: number;
@@ -975,14 +975,14 @@ declare module "foo" {
 #@end
 //}
 
-//list[export-sample2-usage-invalid][ｱｰｯ! らめぇ！]{
-#@mapfile(../code/definition-file/export-sample2-usage-invalid.ts)
-/// <reference path="./export-sample2.d.ts" />
+//list[export/sample2-usage-invalid][ｱｰｯ! らめぇ！]{
+#@mapfile(../code/definition-file/export/sample2-usage-invalid.ts)
+/// <reference path="./sample2.d.ts" />
 
 // fは"foo"のFooそのものだよ！
 import f = require("foo");
 
-// export-sample2-usage-invalid.ts(7,1): error TS2304: Cannot find name 'f'.
+// sample2-usage-invalid.ts(7,1): error TS2304: Cannot find name 'f'.
 f.num;
 
 // この書き方は正しい

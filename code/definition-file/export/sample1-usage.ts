@@ -1,4 +1,4 @@
-/// <reference path="./export-sample1.d.ts" />
+/// <reference path="./sample1.d.ts" />
 
 // f は "foo" の Fooのインスタンス だよ！
 import f = require("foo");

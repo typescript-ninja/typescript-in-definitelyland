@@ -1,9 +1,9 @@
-/// <reference path="./export-sample2.d.ts" />
+/// <reference path="./sample2.d.ts" />
 
 // fは"foo"のFooそのものだよ！
 import f = require("foo");
 
-// export-sample2-usage-invalid.ts(7,1): error TS2304: Cannot find name 'f'.
+// sample2-usage-invalid.ts(7,1): error TS2304: Cannot find name 'f'.
 f.num;
 
 // この書き方は正しい
