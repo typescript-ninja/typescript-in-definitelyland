@@ -477,7 +477,7 @@ var v = test(1, true);
 #@# NOTE 直積型 ??? TypeScriptのtype aliasっぽい…？ type 線 = 点1 * 点2 みたいな たかだか一種類のコンストラクタしかもたないもの(点を2つ取るもののみとか)
 #@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
 
-//footnote[spec-example-bug][https://github.com/Microsoft/TypeScript/issues/1267]
+//footnote[spec-example-bug][@<href>{https://github.com/Microsoft/TypeScript/issues/1267}]
 
 =={type-guards} 型のためのガード（Type Guards）
 #@# TODO 和訳が微妙…
@@ -767,9 +767,9 @@ union types絡みのエラーに慣れていないと、このエラーメッセ
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
 
-//footnote[writing-dts-files][http://www.typescriptlang.org/Handbook#writing-dts-files]
-//footnote[missing-prototype-properties][https://github.com/Microsoft/TypeScript/pull/1317 初pull reqest＆初merge！]
-//footnote[type-guards-by-construct-signature][https://github.com/Microsoft/TypeScript/issues/1283]
+//footnote[writing-dts-files][@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files}]
+//footnote[missing-prototype-properties][@<href>{https://github.com/Microsoft/TypeScript/pull/1317} 初pull reqest＆初merge！]
+//footnote[type-guards-by-construct-signature][@<href>{https://github.com/Microsoft/TypeScript/issues/1283}]
 
 ==== Genericsとtype guards
 
@@ -843,7 +843,7 @@ TypeScriptコンパイラのソースコードをざっくり読んだ感じだ�
 #@# TODO Overloadは？状況に変化が生じていないか確認する
 #@# TODO だるすぎるからなんとかして
 
-//footnote[type-guards-with-generics][https://github.com/Microsoft/TypeScript/issues/1283 で議論されるかも？]
+//footnote[type-guards-with-generics][@<href>{https://github.com/Microsoft/TypeScript/issues/1283} で議論されるかも？]
 
 === type guardsと論理演算子
 
@@ -1111,4 +1111,4 @@ obj = 1;
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
 
-//footnote[type-alias-with-generics][こういうコードをmizchi君が書きたがってた https://twitter.com/mizchi/statuses/537908273865703424]
+//footnote[type-alias-with-generics][こういうコードをmizchi君が書きたがってた @<href>{https://twitter.com/mizchi/statuses/537908273865703424}]

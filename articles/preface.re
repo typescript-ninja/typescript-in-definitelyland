@@ -45,8 +45,8 @@ JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説につ
 TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。
 
-//footnote[ts-reference-amazon][http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22]
-//footnote[ts-reference-tatsujin][http://tatsu-zine.com/books/typescript-reference]
+//footnote[ts-reference-amazon][@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22}]
+//footnote[ts-reference-tatsujin][@<href>{http://tatsu-zine.com/books/typescript-reference}]
 
 == なぜTypeScriptを選ぶべきなのか
 
@@ -80,5 +80,5 @@ MicrosoftとGoogle, Facebookの3巨人がTypeScriptに賭けると言ってい�
 
 というわけで、Dartが完全にJSを置き換える可能性はありますが、今のところ私はTypeScriptに賭けていこうと思います。
 
-//footnote[mozaic.fm][http://mozaic.fm/post/96461640633/8-altjs]
-//footnote[advent-calendar][詳しくはhttp://qiita.com/vvakame/items/bf4d1e339d5815026fbbにまとめました]
+//footnote[mozaic.fm][@<href>{http://mozaic.fm/post/96461640633/8-altjs}]
+//footnote[advent-calendar][詳しくは@<href>{http://qiita.com/vvakame/items/bf4d1e339d5815026fbb}にまとめました]

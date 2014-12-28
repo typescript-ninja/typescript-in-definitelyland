@@ -249,8 +249,8 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式のHandbookのWriting .d.ts files}@<fn>{official-handbook}にしたがっておけばよいです。
 本書では、そこに書かれていることや筆者の経験則などを説明していきます。
 
-//footnote[dt-best-practice][http://definitelytyped.org/guides/best-practices.html]
-//footnote[official-handbook][http://www.typescriptlang.org/Handbook#writing-dts-files]
+//footnote[dt-best-practice][@<href>{http://definitelytyped.org/guides/best-practices.html}]
+//footnote[official-handbook][@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files}]
 
 === テキトーに、やろー！
 
@@ -330,7 +330,7 @@ array.find(v => v % 2 === 1);
 この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。
 相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。
 
-//footnote[es6-shim][https://github.com/paulmillr/es6-shim/]
+//footnote[es6-shim][@<href>{https://github.com/paulmillr/es6-shim/}]
 
 === 幽霊モジュール
 
@@ -627,7 +627,7 @@ var test;
 #@end
 //}
 
-//footnote[power-assert-dts][https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts]
+//footnote[power-assert-dts][@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts}]
 
 === クラスを定義するには？
 
@@ -739,7 +739,7 @@ interface FooListenerImpl extends FooListener {
 
 今のところはどうしようもないので、用途に応じて適切なほうを選びましょう。
 
-//footnote[optional-interface][https://github.com/Microsoft/TypeScript/issues/371]
+//footnote[optional-interface][@<href>{https://github.com/Microsoft/TypeScript/issues/371}]
 
 === オーバーロードを上手く使おう！
 
@@ -829,8 +829,8 @@ foo.num;
 既存ライブラリにメソッドを生やすという黒魔術はNode.js上でもできてしまうのが辛いところです。
 とはいえ、1.3.0以降は型定義の作成が多少楽になったのが嬉しいところです。
 
-//footnote[extract-module][https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/express/express.d.ts#L15]
-//footnote[use-internal-module][https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/passport/passport.d.ts#L8]
+//footnote[extract-module][@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/express/express.d.ts#L15}]
+//footnote[use-internal-module][@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/passport/passport.d.ts#L8}]
 #@# OK REVIEW muo: 上記2点のURL端っこ入る気がしないのでハッシュ削るなりしたほうが良い
 
 === anyと{}とObject
@@ -925,7 +925,7 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 そんなこんなで、まだ微妙に古いスタイルが残ってたりするのでTypeScriptコンパイラのコードを見てTypeScriptのコードスタイルを勉強してはいけないゾ☆
 本当に色々なスタイルが混在していてヤバイんですよ。1.4.0で内部APIが公開されるまでには修正されると思うのですけれど。
 
-//footnote[writing-dts-files][http://www.typescriptlang.org/Handbook#writing-dts-files]
+//footnote[writing-dts-files][@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files}]
 
 === ちょっと小難しいexport句の使い方
 
@@ -1063,8 +1063,8 @@ tslintは必ず設定ファイルを必要とします。
 
 #@# TODO 全設定項目解説とおすすめ設定を書きたいなぁ
 
-//footnote[tslint-repo][https://github.com/palantir/tslint]
-//footnote[tslint-example-config][https://github.com/palantir/tslint/blob/master/tslint.json]
+//footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
+//footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 
 == Let's contribute!
 #@# OK REVIEW muo: Let'sに噛ませるなら contribute! では
@@ -1095,9 +1095,9 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加、修正につ�
 
 とはいえ、メンテナは全員@<href>{http://definitelytyped.org/guides/contributing.html,DefinitelyTypedのContribution guide}@<fn>{dt-contrib-guide}は読んでいるはずなので、こちらには目を通しておくとよいでしょう。
 
-//footnote[dt][https://github.com/borisyankov/DefinitelyTyped]
-//footnote[guide-on-qiita][http://qiita.com/vvakame/items/1980d4b6cc222e03fdcb]
-//footnote[dt-contrib-guide][http://definitelytyped.org/guides/contributing.html]
+//footnote[dt][@<href>{https://github.com/borisyankov/DefinitelyTyped}]
+//footnote[guide-on-qiita][@<href>{http://qiita.com/vvakame/items/1980d4b6cc222e03fdcb}]
+//footnote[dt-contrib-guide][@<href>{http://definitelytyped.org/guides/contributing.html}]
 
 === 新規型定義ファイルの追加のレビューの観点
 

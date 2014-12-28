@@ -57,7 +57,7 @@ message TS6029: Version 1.4.0.0
 このやり方の場合、npm installするときに100MB近くもあるリポジトリをまるまるcloneしてこようとするため、ものすごく処理に時間がかかります。
 複数人で作業するようなプロジェクトでは素直にリリースされているバージョンを利用するのがよいでしょう。
 
-//footnote[nodebrew][https://github.com/hokaccha/nodebrew#nodebrew]
+//footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
 
 == WebStormで開発環境を整えよう
 
@@ -87,8 +87,8 @@ TypeScript関連技術にもうちょっと要員割いてください！お願�
 もし、WebStormの操作に困ったときはShiftキーを2回ほど連続で押すと"なんでも検索"の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
 WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
 
-//footnote[webstorm-support-1.3.0][https://youtrack.jetbrains.com/issue/WEB-14149]
-//footnote[webstorm-support-1.4.0][https://youtrack.jetbrains.com/issue/WEB-14151]
+//footnote[webstorm-support-1.3.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14149}]
+//footnote[webstorm-support-1.4.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14151}]
 
 === File Watchersの設定
 
