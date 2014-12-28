@@ -2,9 +2,14 @@
 
 == 本書について
 
-本書の内容は全文をインターネット上で公開する予定です。
-予定地は @<href>{http://typescript.ninja/typescript-in-definitelyland/} こちら。
-しかし、表紙データなどは含まれない予定のため可愛い表紙の冊子が欲しい場合はぜひお買い上げください。
+あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c87/#typescript,C87で頒布されたTypeScript in Definitelyland}の全文です。
+内容は（筆者のやる気次第で）随時更新されていく可能性があります。
+誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
+
+Webサイトとして閲覧したい場合は@<href>{http://typescript.ninja/typescript-in-definitelyland/}を参照してください。
+PDF, epubとして入手したい場合は@<href>{https://tcb.mowa-net.jp/griflet/github/typescript-ninja/typescript-in-definitelyland/}を参照してください。
+
+無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。
 C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
 この表紙のおかげで書名が決まりました。
 可愛い表紙を本当にありがとうございます！
@@ -23,6 +28,8 @@ Version 1.3.0.0
 #@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse master)
 5237ed7bed24695178a3386e4a9399e3614ed650
 #@end
+
+//footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
 == 本書の内容
 
