@@ -1,5 +1,3 @@
 specs:
-  - name: typescript-in-definitelyland
-    rule_name: pdf
-  - name: typescript-in-definitelyland
-    rule_name: epub
+  - pdf
+  - epub
