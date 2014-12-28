@@ -96,6 +96,16 @@ module.exports = function (grunt) {
 					{src: 'articles/_review-ext.rb', dest: 'articles/review-ext.rb'},
 					{src: 'articles/layouts/_layout.html.erb', dest: 'articles/layouts/layout.html.erb'}
 				]
+			},
+			public: {
+				expand: true,
+				cwd: 'articles/',
+				src: [
+					'*.html',
+					'style.css',
+					'images/**'
+				],
+				dest: 'public/'
 			}
 		},
 		clean: {
@@ -117,6 +127,11 @@ module.exports = function (grunt) {
 					// epubとhtmlでカスタムテンプレ利用有無を切り替える
 					'articles/layouts/layout.html.erb',
 					'articles/review-ext.rb'
+				]
+			},
+			public: {
+				src: [
+					'public/'
 				]
 			}
 		},
@@ -190,7 +205,7 @@ module.exports = function (grunt) {
 	grunt.registerTask(
 		'html',
 		"原稿をコンパイルしてHTMLファイルにする",
-		generateTask("html", ['less:blog', 'copy:blog']));
+		generateTask("html", ['less:blog', 'copy:blog']).concat(['copy:public']));
 
 	grunt.registerTask(
 		'idgxml',
