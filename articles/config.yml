@@ -8,6 +8,7 @@
 
 # ブック名(ファイル名になるもの。ASCII範囲の文字を使用)
 bookname: typescript-in-definitelyland
+booktitle: TypeScript in Definitelyland
 # 記述言語
 language: ja
 # 書名
