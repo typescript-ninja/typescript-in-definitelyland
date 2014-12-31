@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ops="http://www.idpf.org/2007/ops" xml:lang="ja">
+
+
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  
+
+  <meta name="generator" content="Re:VIEW" />
+  <title>TypeScriptの基本</title>
+  </head>
+<body>
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">TypeScript Ninja</a>
+    <nav class="site-nav">
+      <div class="trigger">
+          <a class="page-link" href="/typescript-in-definitelyland/preface.html">本のトップ</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="page-content">
+  <div class="wrapper">
+    <div class="home">
+      <div class="review">
+<h1><a id="h2" href="#h2" aria-hidden="true"><span class="header-link">&sect;</span></a>第2章　TypeScriptの基本</h1>
+<p>JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（<a href="http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22" class="link">Amazon</a><a id="fnb-ts-reference-amazon" href="#fn-ts-reference-amazon" class="noteref">*1</a>、<a href="http://tatsu-zine.com/books/typescript-reference" class="link">達人出版会</a><a id="fnb-ts-reference-tatsujin" href="#fn-ts-reference-tatsujin" class="noteref">*2</a>）を参照してください。TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、この章は読まなくても問題ありません。</p>
+<p>TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。しかし、TypeScriptの基本的な部分は変わっていないため、今でも役に立ちます。TypeScript 1.0.0の時代に比べて、型システム周りは強化されつつあります。<a href="./types-advanced.html">第4章「アドバンスド型戦略」</a>を熟読してください。</p>
+<p>この章ではTypeScriptの基本的な構文を解説します。TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそうになります。まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。</p>
+<p>型周りの基本は<a href="./types-basic.html">第3章「型は便利だ楽しいな」</a>を、難しいこととか便利なことは<a href="./types-advanced.html">第4章「アドバンスド型戦略」</a>を見てください。既存のJavaScriptの資産やライブラリを使いたい場合は<a href="./definition-file.html">第5章「JS資産と型定義ファイル」</a>の最初のほうを見てください。</p>
+<div class="footnote" id="fn-ts-reference-amazon"><p class="footnote">[<a href="#fnb-ts-reference-amazon">*1</a>] http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22</p></div>
+<div class="footnote" id="fn-ts-reference-tatsujin"><p class="footnote">[<a href="#fnb-ts-reference-tatsujin">*2</a>] http://tatsu-zine.com/books/typescript-reference</p></div>
+
+<h2><a id="h2-1" href="#h2-1" aria-hidden="true"><span class="header-link">&sect;</span></a>2.1　変数</h2>
+<p>TypeScriptの変数宣言はおおむねJavaScriptと同じです。違うのは、リスト2.1のように変数名の後に<tt class="inline-code">: 型名</tt>という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。これを<b class="kw">型注釈 (type annotations)</b><!-- IDX:型注釈 -->と呼びます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.1: 型注釈付きの変数</p>
+<pre class="list">var str: string;
+var num: number;
+var bool: boolean;
+
+var func: Function;
+var obj: any; // なんでも型
+</pre>
+</div>
+<p>これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。たとえばリスト2.2のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。安心安全！</p>
+<div class="caption-code">
+<p class="caption">リスト2.2: 型注釈に反することをやってみる</p>
+<pre class="list">var str: string;
+// 文字列は数値と互換性がない！
+// error TS2322: Type 'number' is not assignable to type 'string'.
+str = 1;
+
+var num: number;
+// 数値は真偽値と互換性がない！
+// error TS2322: Type 'boolean' is not assignable to type 'number'.
+num = true;
+
+var bool: boolean;
+// 真偽値は文字列と互換性がない！
+// error TS2322: Type 'string' is not assignable to type 'boolean'.
+bool = &quot;str&quot;;
+</pre>
+</div>
+<p>おう、安心・安全なのはわかった。わかったけど、そのために型注釈をいちいち全部に書くの？ダルすぎない？というあなたのために、TypeScriptは型推論の機能を備えています。リスト2.3のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。</p>
+<div class="caption-code">
+<p class="caption">リスト2.3: 初期化付き変数 = 最強</p>
+<pre class="list">var str = &quot;string&quot;;
+var num = 1;
+var bool = true;
+
+var func = function() {
+};
+var obj = {};
+</pre>
+</div>
+<p>これで手で型注釈を与えずに済むぞ！しかも、書き方がJavaScriptと全く同じになりました。楽 + コンパイルによる型チェック = TypeScriptサイキョー。ということがご納得いただけたでしょう。</p>
+
+<h2><a id="h2-2" href="#h2-2" aria-hidden="true"><span class="header-link">&sect;</span></a>2.2　クラス</h2>
+<p>TypeScriptには一般的な構文でのクラスの定義が備わっています（リスト2.4）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.4: さまざまなクラス要素</p>
+<pre class="list">class Base {
+  // インスタンス変数
+  numA: number;
+  strA = &quot;string&quot;;
+
+  public numB: number;
+  private numC: number;
+  // TypeScript 1.3.0 から protected 利用可
+  protected numD: number;
+
+  // クラス変数
+  static numA: number;
+  public static numB: number;
+  private static numC: number;
+  protected static numD: number;
+
+  // コンストラクタ
+  constructor(boolA: boolean,
+    public boolB: boolean,
+    private boolC: boolean,
+    protected boolD: boolean) {
+  }
+
+  // メソッド
+  hello(word: string): string {
+    return &quot;Hello, &quot; + word;
+  }
+
+  // get, setアクセサ
+  // コンパイル時に --target es5 以上が必要
+  _date: Date;
+  get dateA(): Date {
+    return this._date;
+  }
+  set dateA(value: Date) {
+    this._date = value;
+  }
+}
+
+var obj = new Base(true, false, true, false);
+obj.numA;
+obj.strA;
+obj.numB;
+// obj.numC; // private   なメンバにはアクセスできぬ
+// obj.numD; // protected なメンバにもアクセスできぬ
+obj.boolB;
+// obj.boolC; // private   なメンバにはアクセスできぬ
+// obj.boolD; // protected なメンバにもアクセスできぬ
+obj.hello(&quot;TypeScript&quot;);
+obj.dateA = new Date();
+obj.dateA;
+</pre>
+</div>
+<p>上から順に見て行きましょう。</p>
+<p>まずはクラス変数、インスタンス変数です。クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。</p>
+<p>アクセス修飾子として、private、public、protected（TypeScript 1.3.0より）などの可視性を制御するアクセス修飾子を利用できます。何も指定していないときのデフォルトの可視性はpublicになります。しかし、コンパイル後のJSを見るとわかりますが<tt class="inline-code">&lt;any&gt;</tt>などを使うと簡単にそれらの要素にアクセスできてしまうので過信は禁物です。そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに_を使うなどの（JavaScriptでもよく見られた）運用をしています。</p>
+<p>次はコンストラクタです。引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。これを<b class="kw">引数プロパティ宣言 (parameter property declaration)</b><!-- IDX:引数プロパティ宣言 -->と呼びます。リスト2.5のようなコードを書くとリスト2.6のようなJavaScriptが出てきます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.5: 引数プロパティ宣言！</p>
+<pre class="list">class Sample {
+  constructor(public str: string) {
+  }
+}
+
+var obj = new Sample(&quot;TypeScript&quot;);
+// TypeScript と表示される
+console.log(obj.str);
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.6: コンパイルするとこんなの</p>
+<pre class="list">var Sample = (function () {
+    function Sample(str) {
+        this.str = str;
+    }
+    return Sample;
+})();
+var obj = new Sample(&quot;TypeScript&quot;);
+console.log(obj.str);
+</pre>
+</div>
+<p>リスト2.4に戻ります。次はメソッドです。これも特に特筆すべき要素はありませんね。普通です。</p>
+<p>最後に、get、setアクセサです。これを含んだコードをコンパイルするときは、<tt class="inline-code">--target es5</tt>オプションが必要です。なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。これを使うと、getterしか定義してなくてもプログラム上は値の代入もできてしまうので、&quot;use strict&quot;を併用して実行時に検出するようにしましょう。なお、この文法のget、setアクセサはECMAScript 5のオブジェクト初期化子としてFirefox上では利用可能だったのですが、ECMAScript 6で取り除かれる<a id="fnb-getter-setter" href="#fn-getter-setter" class="noteref">*3</a>という不遇な運命をたどっており、<tt class="inline-code">--target es6</tt>でどういう扱いになるかドキドキしています（今のところ問題なく使えるようですが…）。</p>
+<p>これらの構文はECMAScript 6の文法をおおむね踏襲しており、将来的にJavaScriptでもこれと同様の記法でクラスを定義できるようになります。</p>
+<p>次に、クラスの継承も見て行きましょう。継承も普通にできますリスト2.7。superを使った親クラスのメソッドの参照も一応普通に使えます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.7: 普通に継承もあるよ</p>
+<pre class="list">class Base {
+  greeting(name: string) {
+    return &quot;Hi! &quot; + name;
+  }
+}
+
+class Inherit extends Base {
+  greeting(name: string) {
+    return super.greeting(name) + &quot;. How are you?&quot;;
+  }
+}
+
+var obj = new Inherit();
+// Hi! TypeScript. How are you? と出力される
+console.log(obj.greeting(&quot;TypeScript&quot;));
+</pre>
+</div>
+<p>TypeScript以外のオブジェクト指向の世界でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。頑張ってオブジェクト指向に適した設計を行いましょう。</p>
+<div class="footnote" id="fn-getter-setter"><p class="footnote">[<a href="#fnb-getter-setter">*3</a>] <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#Defining_getters_and_setters" class="link">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#Defining_getters_and_setters</a></p></div>
+
+<h2><a id="h2-3" href="#h2-3" aria-hidden="true"><span class="header-link">&sect;</span></a>2.3　関数</h2>
+
+<h3><a id="h2-3-1" href="#h2-3-1" aria-hidden="true"><span class="header-link">&sect;</span></a>普通の関数</h3>
+<p>いたって普通です（リスト2.8）。型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。デフォルト値付き引数はECMAScript 6で入る予定です。</p>
+<div class="caption-code">
+<p class="caption">リスト2.8: 色々な関数定義</p>
+<pre class="list">function hello(word: string): string {
+  return &quot;Hello, &quot; + word;
+}
+hello(&quot;TypeScript&quot;);
+
+// 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある
+function bye(word: string) {
+  return &quot;Bye, &quot; + word;
+}
+bye(&quot;TypeScript&quot;);
+
+// ? をつけると呼び出しときに引数が省略可能になる
+function hey(word?: string) {
+  return &quot;Hey, &quot; + (word || &quot;TypeScript&quot;);
+}
+hey();
+
+// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+function ahoy(word = &quot;TypeScript&quot;) {
+  return &quot;Ahoy! &quot; + word;
+}
+ahoy();
+</pre>
+</div>
+<p>可変長引数もあります！（リスト2.9）</p>
+<div class="caption-code">
+<p class="caption">リスト2.9: 可変長引数もあるよ</p>
+<pre class="list">function hello(...args: string[]) {
+  return &quot;Hello, &quot; + args.join(&quot; &amp; &quot;);
+}
+// Hello, TS &amp; JS と表示される
+console.log(hello(&quot;TS&quot;, &quot;JS&quot;));
+</pre>
+</div>
+<p>なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（リスト2.10）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.10: こういうのはアカン</p>
+<pre class="list">// オプショナルな引数の後に省略不可な引数がきてはいけない
+// error TS1016: A required parameter cannot follow an optional parameter.
+function funcA(arg1?: string, arg2: string) {
+  return &quot;Hello, &quot; + arg1 + &quot;, &quot; + arg2;
+}
+
+// 可変長引数は必ず最後じゃないといけない
+// error TS1014: A rest parameter must be last in a parameter list.
+function funcB(...args: string, rest: string) {
+  return &quot;Hello, &quot; + args.join(&quot;, &quot;) + &quot; and &quot; + rest;
+}
+</pre>
+</div>
+<p>ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドの記述のときも同様に利用できます。</p>
+
+<h3><a id="h2-3-2" href="#h2-3-2" aria-hidden="true"><span class="header-link">&sect;</span></a>アロー関数式</h3>
+<p>ECMAScript 6で導入される予定の<b class="kw">アロー関数式 (arrow function expression)</b><!-- IDX:アロー関数式 -->を見ていきましょう（リスト2.11）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.11: アロー関数式 短くてかっこいい</p>
+<pre class="list">// 次の2つは(thisが絡まない限り)等価！
+var funcA = () =&gt; true;
+var funcB = function() {
+  return true;
+};
+
+// NOTE ここのcallbackの型注釈の意味は別の章で解説！
+// 引数を1つ取って返り値無し の関数を表します。
+function asyncModoki(callback: (value: string) =&gt; void) {
+  callback(&quot;TypeScript&quot;);
+}
+// 旧来の書き方
+asyncModoki(function(value: string) {
+  console.log(&quot;Hello, &quot; + value);
+});
+// アロー関数式だと楽やで
+asyncModoki(value =&gt; console.log(&quot;Hello, &quot; + value));
+</pre>
+</div>
+<p>短くてかっこいいですね。将来のJavaScriptでは、アロー関数式による記述が主流になることは間違いないでしょう（なんせ、楽だし）。早くNode.jsでも使えるようになって、Gruntfile.jsとかで使わせてほしいものです。</p>
+<p>アロー関数式は1つの文しか持たないとき、その文の値を返り値として使ってくれます（リスト2.12）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.12: 1つの文しか持たないときの便利な振る舞い</p>
+<pre class="list">// 名前付き関数は定義できないので変数に入れる
+var funcA = () =&gt; {
+};
+funcA();
+
+// 次の2つは等価
+// アロー関数式は1ステートメントだけならカッコを省略して値をそのまま返せる
+var funcB = (word = &quot;TypeScript&quot;) =&gt; &quot;Hello, &quot; + word;
+var funcC = (word = &quot;TypeScript&quot;) =&gt; {
+  return &quot;Hello, &quot; + word;
+};
+console.log(funcB());
+console.log(funcC());
+</pre>
+</div>
+<p>もうひとつの便利な点として、アロー関数式は親スコープのthisをそのまま受け継ぎます。この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに不要な混乱をおこさずに済みます。例を見てみましょう（リスト2.13）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.13: 受け継がれるthisの値…！</p>
+<pre class="list">&quot;use strict&quot;;
+
+class Sample {
+  test(): void {
+    var funcA = () =&gt; {
+      // ここでの this は元のまま(Sampleのインスタンス)
+      console.log(typeof this);
+    };
+    var funcB = function() {
+      // ここでの this は undefined (ECMAScriptの仕様)
+      console.log(typeof this);
+    };
+    // object と表示される
+    funcA();
+    // undefined と表示される
+    funcB();
+  }
+}
+
+new Sample().test();
+</pre>
+</div>
+<p>うーん、アロー関数式は期待どおりの挙動ですね。旧来の関数では値がundefinedになっています。JavaScriptに慣れている人も、慣れていない人も、特別に理由がない限りアロー関数式を使っとけばいいと思います。</p>
+
+<h2><a id="h2-4" href="#h2-4" aria-hidden="true"><span class="header-link">&sect;</span></a>2.4　モジュール</h2>
+<p>プログラムの複雑さというのはクラスや関数だけではいかんともしがたく立ち向かいにくいものです。プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。</p>
+<p>そのための武器として、TypeScriptにはモジュールがあります。おおむね、JavaのpackageやC#のnamespaceと類似のものと考えてよいでしょう。</p>
+<p>TypeScriptでは2種類のモジュールがあり、それぞれ内部モジュールと外部モジュールと呼ばれています。複数の種類が必要な理由は、JavaScript実行環境自体が複数あるためです。</p>
+<p>ひとつは、ブラウザです。ブラウザ上では複数のJavaScriptのファイルが連結され、まるでひとつのファイルであるかのように解釈され実行されます。これに対して階層構造を与えるための仕組みが内部モジュールです。</p>
+<p>もうひとつは、Node.jsです。Node.jsでは、ひとつのファイルを独立した構造と見なす仕組みが備わっています。この、1ファイル＝1モジュールと見なした仕組みが外部モジュールです。階層構造は普通のファイルシステムのようにディレクトリで構成します。</p>
+<p>内部モジュール・外部モジュール、どちらの形式でプロジェクトを管理するかを決めるのは、非常に、非常に重要な決めごとです。しかも、プロジェクトの途中で内部モジュールと外部モジュールを切り替えるのは大変な苦痛を伴うため、最初によくよく調査、検証する必要があります。そして、内部モジュールと外部モジュールを混在させてプロジェクトを管理するのはあまりよい決断とはいえません。ブラウザ上で使う場合はbrowserifyを使うのか、require.jsを使うのか、concatして使うのか、それ以外か。SourceMapを使ってのデバッグが必須要件になるかどうか。などなど、プロジェクト毎に求める解は違ってくるでしょう。</p>
+<p>念を押しますが、最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。最初によくよく調査して、どうプロジェクトを構成するべきか決定するべきです。本当に大事なことなので二回言いました。</p>
+
+<h3><a id="h2-4-1" href="#h2-4-1" aria-hidden="true"><span class="header-link">&sect;</span></a>内部モジュール （Internal Modules）</h3>
+<p>まずは簡単な例を見てみましょう（リスト2.14）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.14: 内部モジュール！</p>
+<pre class="list">module a {
+  // export してないものは外部からは見えない
+  class Sample {
+    hello(word = &quot;TypeScript&quot;) {
+      return &quot;Hello, &quot; + word;
+    }
+  }
+
+  export var obj = new Sample();
+}
+module a {
+  export function bye(word = &quot;JavaScript&quot;) {
+    return &quot;Bye, &quot; + word;
+  }
+
+  // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
+  // error TS2304: Cannot find name 'Sample'.
+  // var tmp = new Sample();
+}
+
+module b {
+  export module c {
+    export function hello() {
+      return a.obj.hello();
+    }
+  }
+}
+module d.e {
+  export function hello() {
+    return a.obj.hello();
+  }
+}
+
+// Hello, TypeScript と表示される
+console.log(b.c.hello());
+// Hello, TypeScript と表示される
+console.log(d.e.hello());
+</pre>
+</div>
+<p>うーん、簡単ですね！！内部モジュールの内側で定義した要素はクラスであれ、関数であれ、なんであってもexportをつけなければ外側から見えないようになります。</p>
+<p>長い名前を使うのが嫌なときはリスト2.15のように、import句を使うこともできます。外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。</p>
+<div class="caption-code">
+<p class="caption">リスト2.15: import句で別名を作る</p>
+<pre class="list">module a {
+  export class Sample { }
+}
+
+module b {
+  // 他のモジュールも普通に参照できる
+  var objA: a.Sample;
+  objA = new a.Sample();
+
+  // めんどくさいなら import句 を使えばいい
+  import Sample = a.Sample;
+  var objB: Sample;
+  objB = new Sample;
+
+  // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
+  import Test = a.Sample;
+  var objC: Test;
+  objC = new Test();
+
+  // 別に名前が違っても互換性が失われるわけではないのだ
+  objA = new Test();
+}
+</pre>
+</div>
+<p>さて、内部モジュールでプログラムを組むといっても、1つのソースファイルにだらだらと全部書いていくのは現実的ではありません。そのため、ファイルを分割する必要があります。</p>
+<p>単にファイルを分けて何も工夫せずにいると、型の整合性を気にしないJavaScriptやCoffeeScriptならともかく、TypeScriptでは型が追えなくなって困ってしまう場合があります。そういうときのために、TypeScriptにはソースコード同士の関係性を記述する<b class="kw">リファレンスコメント (reference comments)</b><!-- IDX:リファレンスコメント -->という仕組みがあります。</p>
+<p>たとえば、a.ts（リスト2.16）とb.ts（リスト2.17）があったとします。b.tsはa.tsで定義している関数を呼び出しています。つまり、b.tsはa.tsに依存しているわけです。そこで、reference commentを使って<tt class="inline-code">/// &lt;reference path=&quot;./a.ts&quot; /&gt;</tt>と記述します。パスは相対パスでも絶対パスでも問題ありませんが、一般的に相対パスを利用します。</p>
+<div class="caption-code">
+<p class="caption">リスト2.16: a.ts</p>
+<pre class="list">module a {
+  export function hello(word = &quot;TypeScript&quot;) {
+    return &quot;Hello, &quot; + word;
+  }
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.17: b.ts</p>
+<pre class="list">/// &lt;reference path=&quot;./a.ts&quot; /&gt;
+
+module b {
+  console.log(a.hello(&quot;internal module&quot;));
+}
+</pre>
+</div>
+<p>これをコンパイルするとき、b.tsだけコンパイルすればa.tsも自動的に一緒にコンパイルされます。通常、何も指定しない場合はa.jsとb.jsが生成されますが、--out オプションを併用すると1ファイルにまとめられます。</p>
+<div class="cmd-code">
+<pre class="cmd">$ tsc --out main.js b.ts
+$ cat main.js
+var a;
+(function (a) {
+    function hello(word) {
+        if (word === void 0) { word = &quot;TypeScript&quot;; }
+        return &quot;Hello, &quot; + word;
+    }
+    a.hello = hello;
+})(a || (a = {}));
+/// &lt;reference path=&quot;./a.ts&quot; /&gt;
+var b;
+(function (b) {
+    console.log(a.hello(&quot;internal module&quot;));
+})(b || (b = {}));
+</pre>
+</div>
+<p>ひとまとまりのファイルとして出力されていますね。</p>
+
+<h3><a id="h2-4-2" href="#h2-4-2" aria-hidden="true"><span class="header-link">&sect;</span></a>外部モジュール （External Modules）</h3>
+<p>外部モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。<tt class="inline-code">import foo = require(&quot;./foo&quot;)</tt>のように書くと、そのファイルから ./foo.ts<a id="fnb-require-ext" href="#fn-require-ext" class="noteref">*4</a>を参照することができます。ここでは、./fooがひとつのモジュールとして扱われます。</p>
+<p>外部モジュールはTypeScriptでは2つの方式に対応していて、その両方の形式ともTypeScript上では同じ文法で書けます。コンパイル時に--module commonjsとするか--module amdとするかだけの違いです。</p>
+<p>なので、ここでは細かいことは解説しません。ひとつ目のCommonJSはNode.jsが採用している仕組みです。ふたつ目のAMDはブラウザ上で外部モジュールを利用するための仕組みです。</p>
+<p>さて、実際のコード例を見てみましょう。foo.ts（リスト2.18）、bar.ts（リスト2.19）、buzz.ts（リスト2.20）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。</p>
+<div class="caption-code">
+<p class="caption">リスト2.18: foo.ts</p>
+<pre class="list">import bar = require(&quot;./bar&quot;);
+
+// Hello, TypeScript! と表示される
+console.log(bar.hello());
+
+// Good bye, TypeScript! と表示される
+import bye = require(&quot;./buzz&quot;);
+console.log(bye());
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.19: bar.ts</p>
+<pre class="list">export function hello(word = &quot;TypeScript&quot;) {
+  return &quot;Hello, &quot; + word;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.20: buzz.ts</p>
+<pre class="list">function bye(word = &quot;TypeScript&quot;) {
+  return &quot;Good bye, &quot; + word;
+}
+
+export = bye;
+</pre>
+</div>
+<p>トップレベルの定義でexportしたものが別のファイルから参照されたときに公開されています。コンパイルして結果を確かめてみましょう。Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることが分かるでしょう。</p>
+<div class="cmd-code">
+<pre class="cmd">$ tsc --module commonjs foo.ts
+$ cat foo.js
+var bar = require(&quot;./bar&quot;);
+console.log(bar.hello());
+var bye = require(&quot;./buzz&quot;);
+console.log(bye());
+$ cat bar.js
+function hello(word) {
+    if (word === void 0) { word = &quot;TypeScript&quot;; }
+    return &quot;Hello, &quot; + word;
+}
+exports.hello = hello;
+$ cat buzz.js
+function bye(word) {
+    if (word === void 0) { word = &quot;TypeScript&quot;; }
+    return &quot;Good bye, &quot; + word;
+}
+module.exports = bye;
+</pre>
+</div>
+<p>Node.jsに慣れている人に不可解な仕様をひとつ紹介しておきます。通常、Node.jsでは<tt class="inline-code">require(&quot;./sub/&quot;)</tt>とすると自動的に ./sub/indexが参照されますが、TypeScriptではそうならないため、明示的に<tt class="inline-code">require(&quot;./sub/index&quot;)</tt>とする必要があります（リスト2.21）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.21: ディレクトリを指定してもindex.tsを見てくれない</p>
+<pre class="list">// Node.jsだと sub/ で自動的に sub/index と同じ扱いになるのだが…
+// import sub = require(&quot;sub/&quot;);
+// TypeScript上では index が省略不可になっている
+import sub = require(&quot;sub/index&quot;);
+
+console.log(sub.hello());
+</pre>
+</div>
+<div class="footnote" id="fn-require-ext"><p class="footnote">[<a href="#fnb-require-ext">*4</a>] Node.js上の仕様（TypeScriptではない）について細かく言うと、require(&quot;./foo&quot;)すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索されます</p></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">TypeScript Ninja</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>TypeScript Ninja</li>
+          <li><a href="mailto:vvakame+typescript@gmail.com">vvakame+typescript@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://github.com/vvakame">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://twitter.com/vvakame">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">TypeScriptについて色々書くよ。忍者！</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

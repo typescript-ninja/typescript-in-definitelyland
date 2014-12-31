@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ops="http://www.idpf.org/2007/ops" xml:lang="ja">
+
+
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  
+
+  <meta name="generator" content="Re:VIEW" />
+  <title>アドバンスド型戦略</title>
+  </head>
+<body>
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">TypeScript Ninja</a>
+    <nav class="site-nav">
+      <div class="trigger">
+          <a class="page-link" href="/typescript-in-definitelyland/preface.html">本のトップ</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="page-content">
+  <div class="wrapper">
+    <div class="home">
+      <div class="review">
+<h1><a id="h4" href="#h4" aria-hidden="true"><span class="header-link">&sect;</span></a>第4章　アドバンスド型戦略</h1>
+<p>型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。タプル型（tuple types）や直和型（union types）についての解説もありますよ！なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそ良い設計だと筆者は考えています<a id="fnb-bad-code" href="#fn-bad-code" class="noteref">*1</a>。</p>
+<p>TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。</p>
+<p>そういったときに本章の内容が活きてきます。ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと思います。</p>
+<div class="footnote" id="fn-bad-code"><p class="footnote">[<a href="#fnb-bad-code">*1</a>] 本章で触れる機能を使うほうがよい場合もあります。たとえば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください</p></div>
+
+<h2><a id="h4-1" href="#h4-1" aria-hidden="true"><span class="header-link">&sect;</span></a>4.1　共通最適型（Best Common Type）</h2>
+<p><strong>導入されたバージョン 1.0.0より前</strong></p>
+<p><strong>消滅したバージョン 1.4.0</strong></p>
+<p>後述のtuple types、及びunion typesが導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。現在の最新仕様ではBCTという概念そのものが消滅してますね…。こぇー…。本書執筆時点では1.3.0しかリリースされていないため、一応、現行では生きてる仕様なのですが…。まぁ、そりゃ、より挙動が直感的なunion typesに置き換えられてしまいますよね…。</p>
+<p>消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。</p>
+<p>Best Common Typeの名の響きどおり、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。</p>
+<p>たとえば、リスト4.1のようになります。</p>
+<div class="caption-code">
+<p class="caption">リスト4.1: 基本的な例</p>
+<pre class="list">// {}[] でございます。
+var array = [1, true];
+
+// No best common type exists among return expressions. と怒られます。
+// つまり 返り値が {} に推論されたので怒られた。
+function test() {
+  if (Math.random() &lt; 0.5) {
+    return 1;
+  } else {
+    return true;
+  }
+}
+</pre>
+</div>
+<p>ひとつ目は配列の要素の型が一致しないため、BCTを求めた結果、共通のsuper typeがなかったので {} になっています。ふたつ目は関数のreturnステートメントが2つありますが、両者で型が一致しなかったので {} になり、結果コンパイルエラーとして怒られています。</p>
+<p>本当に共通の要素がある場合、それに収束します。たとえば、親クラスA、その子クラスB, Cがある場合、BCTはAになります（リスト4.2）。</p>
+<div class="caption-code">
+<p class="caption">リスト4.2: あまり見かけないBCTが役に立つ例</p>
+<pre class="list">class A {
+}
+class B extends A {
+  str: string;
+}
+class C extends A {
+  num: number;
+}
+
+// array: A[] だ！
+var array = [new A(), new B(), new C()];
+</pre>
+</div>
+<p>以上、解散！</p>
+
+<h2><a id="h4-2" href="#h4-2" aria-hidden="true"><span class="header-link">&sect;</span></a>4.2　型クエリ（Type Queries）</h2>
+<p>型クエリは指定した変数（やメソッドなど）の型をコピーします。たとえば、リスト4.3のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。そういうときに、型クエリを使います。</p>
+<div class="caption-code">
+<p class="caption">リスト4.3: クラスそのものの型だよ！</p>
+<pre class="list">class Sample {
+  str: string;
+}
+
+// この書き方だとSampleのインスタンスになる Sampleクラスそのものではない
+var obj: Sample;
+// Sample自体の型をコピー！ つまりこれはSampleクラスそのものだ！
+var clazz: typeof Sample;
+
+// それぞれに当てはまる値は次のとおり なるほどな！
+obj = new Sample();
+clazz = Sample;
+
+obj = new clazz();
+
+// clazz を頑張って手で書くと次に等しい
+var alterClazz: {
+  new (): { str: string; };
+};
+alterClazz = clazz;
+clazz = alterClazz;
+</pre>
+</div>
+<p>メソッドなどの値も取れますが、thisを使うことはできないため、少しトリッキーなコードになる場合もあります。リスト4.4の例は、prototypeプロパティを使っているためJavaScript力が多少ないと思いつかないかもしれません。</p>
+<div class="caption-code">
+<p class="caption">リスト4.4: prototypeを参照するとメソッドの型が取れる</p>
+<pre class="list">class Sample {
+  hello = (word = &quot;TypeScript&quot;) =&gt; &quot;Hello, &quot; + word;
+  bye: typeof Sample.prototype.hello;
+}
+
+var obj = new Sample();
+obj.bye = obj.hello;
+</pre>
+</div>
+<p>型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合があります。リスト4.5では、ひとつ目の引数の型をふたつ目の引数や返り値の型にもコピーして使っています。</p>
+<div class="caption-code">
+<p class="caption">リスト4.5: ここまで複雑にするならインタフェース使って</p>
+<pre class="list">// このコードは正しい
+function move(p1: { x1: number; y1: number; x2: number; y2: number; },
+              p2: typeof p1
+             ):   typeof p1 {
+  return {
+    x1: p1.x1 + p2.x1,
+    y1: p1.y1 + p2.y1,
+    x2: p1.x2 + p2.x2,
+    y2: p1.y2 + p2.y2
+  };
+}
+
+var rect = move({
+  x1: 1, y1: 1, z1: 1, // 無駄に多い
+  x2: 2, y2: 2, z2: 2  // プロパティ
+}, {
+  x1: 3, y1: 3,
+  x2: 4, y2: 4
+});
+// z1 は typeof 1 には存在しないのだ！
+// error TS2339: Property 'z1' does not exist on
+// type '{ x1: number; y1: number; x2: number; y2: number; }'.
+rect.z1;
+</pre>
+</div>
+<p>ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがいいですね。</p>
+
+<h2><a id="h4-3" href="#h4-3" aria-hidden="true"><span class="header-link">&sect;</span></a>4.3　タプル型（Tuple Types）</h2>
+<p><strong>導入されたバージョン 1.3.0</strong></p>
+<p>tuple（タプル）は、任意の数の要素の組です。</p>
+<p>JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。</p>
+<p>既存のJavaScriptの資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。タプル型はおそらくそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではないでしょう。というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。</p>
+<p>タプル型は型（TypeScript）の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。</p>
+<p>記述方法は配列の型指定へ <tt class="inline-code">[typeA, typeB]</tt> のように配列の要素の代わりに型名を記述していくだけです。例を見てみましょう（リスト4.6）。</p>
+<div class="caption-code">
+<p class="caption">リスト4.6: 基本的な例</p>
+<pre class="list">// まずは今までどおりの配列から
+// TypeScript 1.3.0 ではこれはいままでどおりの {}[]
+// TypeScript 1.4.0? ではこれは別の箇所で解説している
+//   union typesとあわせて(string | number | boolean)[]
+var array = [1, &quot;str&quot;, true];
+
+// {} は charAt を持たないので下記はコンパイルエラーになる
+// array[1].charAt(0);
+
+// tuple! 明示的な型の指定が必要
+var tuple: [number, string, boolean] = [1, &quot;str&quot;, true];
+
+// string は charAt を持つ！
+tuple[1].charAt(0);
+
+// TypeScriptのtuple typesは普通にArrayでもあるのだ
+tuple.forEach(v =&gt; {
+  console.log(v);
+});
+</pre>
+</div>
+<p>各要素の型を指定すると、その要素のindexでアクセスしたときに適切な型で扱われます。</p>
+<p>もちろん、タプル型はGenericsと組み合わせて利用できます(リスト4.7)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.7: Genericsでの利用も可</p>
+<pre class="list">// Genericsを使ってtupleを生成して返す
+function zip&lt;T1, T2&gt;(v1: T1, v2: T2): [T1, T2] {
+  return [v1, v2];
+}
+
+var tuple = zip(&quot;str&quot;, { hello: () =&gt; &quot;Hello!&quot; });
+tuple[0].charAt(0); // おー、静的に検証される！
+tuple[1].hello(); // おー、静的に検証される！
+</pre>
+</div>
+<p>Good!いいですね。</p>
+<p>タプル型のない今まで（1.1.0-1以前）のTypeScriptではリスト4.8のような、数値添字で型安全または配列として利用可能という究極の選択をしなければならなかったのです…。つらかった。</p>
+<div class="caption-code">
+<p class="caption">リスト4.8: TypeScript 1.1.0-1 までの苦しい運用</p>
+<pre class="list">var tuple: { 0: number; 1: string; 3: boolean; } = &lt;any&gt;[1, &quot;str&quot;, true];
+
+tuple[1].charAt(0); // string は charAt を持つ！
+
+// だがしかし(型のうえでは)Arrayではないので次は通らない
+// tuple.forEach(v =&gt; {
+//   console.log(v);
+// });
+</pre>
+</div>
+<p>さて、タプル型の重箱の隅を見ていきましょう。要素数が多すぎる場合、指定されていない値の型はBCT（1.3.0まで）か、union types（1.4.0以降）になります。その例を見てみましょう(リスト4.9)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.9: 値の要素数が多すぎる場合</p>
+<pre class="list">// 要素が多い分にはOKだ！
+var tuple: [string, number] = [&quot;str&quot;, 1, &quot;test&quot;];
+
+// 1.3.0 では型指定されていない要素は BCT（Best Common Type) つまりここでは {} になる
+// 1.4.0? では範囲外の要素の型はすべての要素のunion、つまり string | number になる。
+var value = tuple[2];
+
+// 1.3.0 では次の記述は正しい
+// 1.4.0? ではダメ。true は string | number ではないため。
+// tuple = [&quot;str&quot;, 1, true];
+</pre>
+</div>
+<p>お次は要素の順序がズレた場合、どうなるかを見てみましょう(リスト4.10)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.10: 絶望に身をよじれ…！</p>
+<pre class="list">var tuple: [string, number] = [&quot;str&quot;, 1];
+
+// 先頭をnumberに…
+tuple.unshift(1);
+
+// あぁっ！実行時エラー！
+// Uncaught TypeError: undefined is not a function
+tuple[0].charAt(0);
+</pre>
+</div>
+<p>…悲しい結果になりました。<tt class="inline-code">[1, true]</tt>のような配列のリテラルをタプル型に推論しないのはおそらくこのためでしょう。</p>
+<p>unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。</p>
+<p>TypeScript 1.3.0ではもうちょっと辛いコードを書くこともできます(リスト4.11)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.11: 1.3.0だともっと辛い</p>
+<pre class="list">// 1.3.0 限定！！
+var tuple: [string, number] = [&quot;str&quot;, 1];
+
+// 先頭を boolean に…
+// unshiftの定義は Array&lt;T&gt;.unshift(...items: T[]): number
+// 1.3.0 の場合 T が {} なのでコンパイルが通ってしまう
+tuple.unshift(true);
+
+// あぁっ！実行時エラー！
+// Uncaught TypeError: undefined is not a function
+tuple[0].charAt(0);
+</pre>
+</div>
+<p>結論：タプル型を過信するのはやめろ。繰り返す、タプル型を過信するのはやめろ！</p>
+
+<h2><a id="h4-4" href="#h4-4" aria-hidden="true"><span class="header-link">&sect;</span></a>4.4　直和型（Union Types）</h2>
+<p><strong>導入されるバージョン 1.4.0</strong></p>
+<p>はい、皆様待望の機能でございます。&quot;名前を言ってはいけないあの界隈&quot;がよく使う用語を使って解説しないといけないのでビクビクですね。</p>
+<p>一番最初に書いておくけど<strong>TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！</strong></p>
+<p>じゃあ解説していきましょう。union typesはいわゆる直和型でございます。この変数の値の型は、アレか、コレか、ソレ！のどれか。どれかはわからない。みたいな感じ。</p>
+<p>なんのために入ったのか？というと、既存JavaScriptにより良い型定義を与えるために入った…！！と言ってしまっていいでしょう。実際、自分でTypeScriptコード書いてるときに欲しくなる機能ではあまりありません。ECMAScriptさん、パターンマッチもないしー。</p>
+<p>まずは簡単な例から見ていきましょう(リスト4.12)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.12: 型A | 型B → 新食感！</p>
+<pre class="list">var a: string | boolean;
+// string | boolean なので次はオッケー！
+a = &quot;str&quot;;
+a = true;
+// number はアカン。
+// error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+// Type 'number' is not assignable to type 'boolean'.
+// a = 1;
+
+var b: boolean | number;
+// a と b を合体させると string | boolean | boolean | number だ！
+// 実際にはc の型は string | number | boolean となる
+var c: typeof a | typeof b;
+</pre>
+</div>
+<p>ハイ、型注釈で複数の型を｜で区切って書ける感じです。既存のJavaScriptライブラリだとこういった感じの困った返り値の関数がかなりあります。あとは普通にTypeScriptを書いているときでもSyntaxTreeとかをコードから構築するときにはあったほうが便利かもしれません。</p>
+<p>ご覧のとおり、union types中の型の順番とかは関係ない（交換可能）し、union typesのunion typesなどは単純にまとめてひとつのunion typesに統合できます。次に見るリスト4.13のように、union typesに含まれる型同士が親子関係にある場合、単に親にまとめられます。これも実用上問題ありません。というのも、<a href="types-advanced.html#h4-5">「4.5 型のためのガード（Type Guards）」</a>で紹介する仕組みがあるからです（あとで読んでね！）。</p>
+<div class="caption-code">
+<p class="caption">リスト4.13: 要素Bが要素Aのサブタイプの場合Aにまとまる</p>
+<pre class="list">class Base {
+  str: string;
+}
+class Inherit extends Base {
+  num: number;
+}
+
+// 明示的に指定しとくと Base | Inherit となる(今のところ
+var obj: Base | Inherit;
+
+// Base にも Inherit にも存在する要素には普通にアクセスできる
+obj.str;
+// num は Base には存在しないのでアウトー！
+// error TS2339: Property 'num' does not exist on type 'Base | Inherit'.
+// obj.num;
+
+// Base | Inherit は実質単に Base なのでそのまま Base に丸められる
+var base: typeof obj;
+// 型が Base でも子クラスだから普通に代入できるので無問題
+base = new Inherit();
+</pre>
+</div>
+<p>この辺り、仕様書上は若干小難しく書かれているのですが、単にもっとも少ない要素数になるように型がまとめられていくだけです。</p>
+<p>自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。|| 演算子を使ったとき、条件(三項)演算子を使ったとき、配列リテラルを使ったときです(リスト4.14)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.14: こういうときは目にしますね</p>
+<pre class="list">// and の型は string | boolean
+var and = &quot;str&quot; || true;
+// cond の型は string | number
+var cond = true ? 1 : &quot;str&quot;;
+// array の型は (string | number | boolean)[]
+var array = [1, true, &quot;str&quot;];
+</pre>
+</div>
+<p>一番よくお目にかかるのは配列リテラルでしょうか。TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。</p>
+<p>型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります(リスト4.15)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.15: 型名をカッコで囲うんです？</p>
+<pre class="list">// 引数無しの返り値stringな関数 な型注釈
+var func: () =&gt; string;
+
+// 素直に考えるとこう書けてもいいっしょ！でもダメ！
+// var a: () =&gt; string | () =&gt; boolean;
+
+// 型名をカッコでくくる必要がある。これならOK
+var b: (() =&gt; string) | (() =&gt; boolean);
+// もしくはオブジェクト型リテラル使う
+var c: { (): string; } | { (): boolean; };
+
+// union typesじゃないときでも使えるけど見づらいな！
+var d: (() =&gt; string);
+</pre>
+</div>
+<p>ぶっちゃけ見づらいですよね。仕様書上でも<a href="https://github.com/Microsoft/TypeScript/issues/1267" class="link">カッコの対応ミスってた</a><a id="fnb-spec-example-bug" href="#fn-spec-example-bug" class="noteref">*2</a>りするので、頑張って気をつけましょう。まぁ、コンパイルすれば分かるし気にしすぎる必要はありません。</p>
+<p>union typesな値を使うときは、一応型アサーションも使えますがなるべくなら避けてとおりましょう(リスト4.16)。次に説明する<a href="types-advanced.html#h4-5">「4.5 型のためのガード（Type Guards）」</a>を使いましょう。話はそれからだ！</p>
+<div class="caption-code">
+<p class="caption">リスト4.16: 一応使えるよ こうすれば</p>
+<pre class="list">// 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
+// 型アサーションは悪い。常に悪い。なるべく使わないこと。
+
+var obj: string | number | Date;
+
+// string 扱いしてみる
+(&lt;string&gt;obj).charAt(0);
+
+// number 扱いしてみる
+(&lt;number&gt;obj).toFixed(2);
+
+// Date 扱いしてみる
+(&lt;Date&gt;obj).getTime();
+
+// 値の集合に含まれない型にしてみると普通に怒られる
+// error TS2352: Neither type 'string | number | Date'
+//     nor type 'RegExp' is assignable to the other.
+// (&lt;RegExp&gt;obj).test(&quot;test&quot;);
+</pre>
+</div>
+<p>色々試してみても、期待以上に頭がよかったりはしない(リスト4.17)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.17: こういうのは型推論できない</p>
+<pre class="list">function test&lt;T&gt;(...args: T[]): T[] {
+  return args;
+}
+// (number | boolean)[] にはならなかった。残念。
+// error TS2453: The type argument for type parameter 'T'
+// cannot be inferred from the usage.
+// Consider specifying the type arguments explicitly.
+var v = test(1, true);
+</pre>
+</div>
+<div class="footnote" id="fn-spec-example-bug"><p class="footnote">[<a href="#fnb-spec-example-bug">*2</a>] <a href="https://github.com/Microsoft/TypeScript/issues/1267" class="link">https://github.com/Microsoft/TypeScript/issues/1267</a></p></div>
+
+<h2 id="type-guards"><a id="h4-5" href="#h4-5" aria-hidden="true"><span class="header-link">&sect;</span></a>4.5　型のためのガード（Type Guards）</h2>
+<p><strong>導入されるバージョン 1.4.0</strong></p>
+<p>type guards<a id="fnb-type-guards-naming" href="#fn-type-guards-naming" class="noteref">*3</a>は、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。type guardsは&quot;変数Aが○○という条件を満たすとき、変数Aの型は××である&quot;というルールを用いて、条件チェックを行った後の変数の型を××に狭めることができます。</p>
+<div class="footnote" id="fn-type-guards-naming"><p class="footnote">[<a href="#fnb-type-guards-naming">*3</a>] guard for typesとかtype narrowing rulesとかのほうがよかったと思うんだけどなぁ…</p></div>
+
+<h3><a id="h4-5-1" href="#h4-5-1" aria-hidden="true"><span class="header-link">&sect;</span></a>typeofによるtype guards</h3>
+<p>JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。ECMAScript 5の範囲では、変換ルールは次のとおりです。</p>
+<ul>
+<li>string のときは&quot;string&quot;を返す</li>
+<li>boolean のときは&quot;boolean&quot;を返す</li>
+<li>number のときは&quot;number&quot;を返す</li>
+<li>undefined のときは&quot;undefined&quot;を返す</li>
+<li>関数として呼び出し可能な場合は&quot;function&quot;を返す</li>
+<li>それ以外の場合（nullを含む！）は&quot;object&quot;を返す</li>
+</ul>
+<p>これを利用して、変数の型を狭めます。</p>
+
+<h4><a id="h4-5-1-1" href="#h4-5-1-1" aria-hidden="true"><span class="header-link">&sect;</span></a>使い方</h4>
+<p>一番簡単な使い方から見ていきましょう（リスト4.18）。TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。</p>
+<div class="caption-code">
+<p class="caption">リスト4.18: 実際の型がわからないなら調べるしかないじゃない！</p>
+<pre class="list">var obj: number | string;
+if (typeof obj === &quot;string&quot;) {
+  // ここでは string と確定されている！
+  obj.charAt(0);
+} else {
+  // ここでは消去法で number と確定されている！
+  obj.toFixed(2);
+}
+</pre>
+</div>
+<p>TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型は型注釈したものから変わらずそのままでした。</p>
+<p>type guardsが導入された後は&quot;変数objがtypeofで調べたときにstringであるという条件を満たすとき、変数objの型はstringである&quot;というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。なお、このときの比較は必ず<tt class="inline-code">===</tt>を使う必要があります。<tt class="inline-code">==</tt>ではダメです。</p>
+<p>もう一例見てみましょう。</p>
+<p>リスト4.19では、anyと指定された変数をtype guardsでstringに絞り込んでいます。そのため、<tt class="inline-code">obj.toFixed(0)</tt>というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。</p>
+<div class="caption-code">
+<p class="caption">リスト4.19: 1.3.0ではエラーとして検出できぬ</p>
+<pre class="list">var obj: any;
+if (typeof obj === &quot;string&quot;) {
+  // ここでは string と確定されている！
+  // number にしか存在しないメソッドを呼ぶとコンパイルエラー！
+  // error TS2339: Property 'toFixed' does not exist on type 'string'.
+  obj.toFixed(0);
+}
+</pre>
+</div>
+<p>うーん、便利ですね。</p>
+<p>ちなみに、本当に型を&quot;狭める&quot;だけなので、リスト4.20のような互換性のない型に狭めることはできません。</p>
+<div class="caption-code">
+<p class="caption">リスト4.20: &quot;狭める&quot;だけなんだなぁ</p>
+<pre class="list">var obj: number;
+if (typeof obj === &quot;string&quot;) {
+  // numberをstringに&quot;狭める&quot;ことはできない…
+  // コンパイル通っちゃう
+  obj.toFixed(0);
+}
+</pre>
+</div>
+<p>まぁ、指定した型どおりの値が入ってくるのであればなにも問題はないな！</p>
+
+<h4><a id="h4-5-1-2" href="#h4-5-1-2" aria-hidden="true"><span class="header-link">&sect;</span></a>後続の型の絞込み</h4>
+<p>typeofによるtype guards特有の仕様として、後続の型の絞込みがあります（リスト4.21）。</p>
+<div class="caption-code">
+<p class="caption">リスト4.21: 型の絞込み！</p>
+<pre class="list">var obj: number | string | boolean;
+
+if (typeof obj === &quot;string&quot;) {
+  // ここではstringと確定されている！
+  obj.charAt(0);
+} else {
+  // ここではstringが引かれ number | boolean;
+  obj;
+}
+
+if (typeof obj === &quot;string&quot;) {
+  // ここではstringと確定されている！
+  obj.charAt(0);
+} else if (typeof obj === &quot;number&quot;) {
+  // ここではnumberと確定されている！
+  obj.toFixed(2);
+} else {
+  // ここではstring, numberが引かれbooleanとなる！
+  obj;
+}
+</pre>
+</div>
+<p>最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないことは、わかりきっています。親切な仕様ですね。</p>
+
+<h3><a id="h4-5-2" href="#h4-5-2" aria-hidden="true"><span class="header-link">&sect;</span></a>instanceofによるtype guards</h3>
+<p>primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceofを使ったtype guardsももちろんあります！！でも、仕様が完璧とはちょっと言い難いんですよね。</p>
+<p>JavaScriptにおけるinstanceofは、ある値が指定した関数のインスタンスであるかを調べる演算子です。プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。</p>
+<p>動作例を確認してみましょう(リスト4.22)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.22: instanceof の挙動</p>
+<pre class="list">class Base {
+}
+
+class InheritA extends Base {
+}
+class InheritB extends Base {
+}
+
+var obj = new InheritA();
+
+// trueと表示される
+console.log(obj instanceof Base);
+// trueと表示される
+console.log(obj instanceof InheritA);
+// falseと表示される
+console.log(obj instanceof InheritB);
+
+// ｵﾗｧﾝ!!!無理矢理親を差し替える！
+InheritA.prototype = new InheritB();
+obj = new InheritA();
+// trueと表示される
+console.log(obj instanceof InheritB);
+</pre>
+</div>
+<p>オブジェクトのprototypeと一致するか順番どおり見ていくだけですね。</p>
+
+<h4><a id="h4-5-2-1" href="#h4-5-2-1" aria-hidden="true"><span class="header-link">&sect;</span></a>使い方</h4>
+<p>instanceofで型を絞り込みます(リスト4.23)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.23: instanceofの挙動</p>
+<pre class="list">class A {
+  str: string;
+}
+class B {
+  num: number;
+}
+
+var obj: A | B;
+if (obj instanceof A) {
+  // ここではAと確定されている！
+  obj.str;
+} else if (obj instanceof B) {
+  // ここではBと確定されている！
+  obj.num;
+}
+</pre>
+</div>
+<p>typeofのtype guardsと違って、else句が自動的に絞込まれたりはしません。個別にちゃんと調べないとダメです。まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。仕方ないね。</p>
+
+<h4><a id="h4-5-2-2" href="#h4-5-2-2" aria-hidden="true"><span class="header-link">&sect;</span></a>自分で定義した型で使うには？</h4>
+<p>TypeScriptが標準で提供する（lib.d.tsに書いてある）型や、TypeScript上で定義したクラスだけがtype guardsの対象になる、そんなの悲しすぎ！というわけで、それを解消する方法が用意されています。</p>
+<p>もっとも簡単なのは、型定義上でも、クラスとして定義することです。クラスはデフォルトでinstanceofによるtype guardsに対応しています。</p>
+<p>もうひとつは、Functionと互換性をもたせたうえでprototypeプロパティを生やす方法です(リスト4.24)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.24: prototype の型が参照される</p>
+<pre class="list">interface AStatic {
+  new (): AInstance;
+  prototype: AInstance;
+}
+interface AInstance {
+  str: string;
+}
+declare var A: AStatic;
+
+var obj: AInstance | {};
+if (obj instanceof A) {
+  // ここではAInstanceと確定されている！
+  obj.str;
+}
+</pre>
+</div>
+<p>instanceofの右側の値の、その型の、prototypeプロパティの、型！つまり、instanceofの右側のAの型のAStaticのprototypeプロパティの、型(AInstance)！…まわりくどい！</p>
+<p>そもそも、公式のTypeScript Handbookの<a href="http://www.typescriptlang.org/Handbook#writing-dts-files" class="link">Writing .d.ts files</a><a id="fnb-writing-dts-files" href="#fn-writing-dts-files" class="noteref">*4</a>の項目、クラスの分割定義について言及している箇所でも、prototypeプロパティなんかわざわざ定義してないんですよね…。</p>
+<p>このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたものが奇しくも筆者の初のコードのコントリビュートになりました<a id="fnb-missing-prototype-properties" href="#fn-missing-prototype-properties" class="noteref">*5</a>。やったぜ！</p>
+<p>だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼすべての型定義ファイルがtype guards未対応になってしまいます。今あるものを頑張って対応したとしても、今後送られてくる型定義ファイルについてすべてのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！</p>
+<p>というわけで、prototype propertyの代わりに、construct signatureを持っている場合はそちらの返り値を参照するのはどう？という<a href="https://github.com/Microsoft/TypeScript/issues/1283" class="link">提案</a><a id="fnb-type-guards-by-construct-signature" href="#fn-type-guards-by-construct-signature" class="noteref">*6</a>を行っています。コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されていたら俺のことめっちゃ褒めてもいいと思います( ｰ`дｰ´)ｷﾘｯ</p>
+<p>話を戻しましょう。prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。一番簡単なのは、インタフェースにconstruct signatureかcall signatureのどちらか、または両方を持たせることです。もし、このどちらも行わず、Function型との互換性がなくなると、リスト4.25に示すようなエラーになります。</p>
+<div class="caption-code">
+<p class="caption">リスト4.25: 右側はanyかFunctionと互換性のある型にしろってさ</p>
+<pre class="list">interface AStatic {
+  // 次のどちらかがないとFunctionとの互換性が無い
+  // (): AInstance;
+  // new (): AInstance;
+  prototype: AInstance;
+}
+interface AInstance {
+  str: string;
+}
+declare var A: AStatic;
+
+var obj: any;
+// error TS2359: The right-hand side of an 'instanceof'
+// expression must be of type 'any' or of a type assignable
+// to the 'Function' interface type.
+if (obj instanceof A) {
+}
+</pre>
+</div>
+<p>もうひとつ、重要なコツを示しておきます。それは、エラーメッセージの読み方です(リスト4.26)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.26: んん？なんだこのエラーは？</p>
+<pre class="list">interface AStatic {
+  new (): AInstance;
+  // prototype: AInstance; がない！
+}
+interface AInstance {
+  str: string;
+}
+declare var A: AStatic;
+
+var obj: AInstance | Date;
+if (obj instanceof A) {
+  // ここではAInstanceに確定されていてほしかった…
+  // error TS2339: Property 'str' does not exist on type 'Date | AInstance'.
+  obj.str;
+}
+</pre>
+</div>
+<p>instanceofを使ってtype guardsで型の絞込みをしたつもりのシチュエーションです。しかし、AStaticはprototypeプロパティを持っていません。つまり、type guardsは効力を発揮しなかったんだよ！ΩΩΩ＜な、なんだってー！</p>
+<p>ここでのエラーの根本的な原因は、変数objの型をAInstanceに絞ることに失敗したことです。ですが、実際に表示されるエラーメッセージは&quot;AInstance | Dateだとstrプロパティにアクセスして安全かわかんなかったっす…&quot;というメッセージです。type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。union types絡みのエラーに慣れていないと、このエラーメッセージとtype guardsが実は失敗している！ということが結びつきにくいので気をつけましょう。</p>
+<div class="footnote" id="fn-writing-dts-files"><p class="footnote">[<a href="#fnb-writing-dts-files">*4</a>] <a href="http://www.typescriptlang.org/Handbook#writing-dts-files" class="link">http://www.typescriptlang.org/Handbook#writing-dts-files</a></p></div>
+<div class="footnote" id="fn-missing-prototype-properties"><p class="footnote">[<a href="#fnb-missing-prototype-properties">*5</a>] <a href="https://github.com/Microsoft/TypeScript/pull/1317" class="link">https://github.com/Microsoft/TypeScript/pull/1317</a> 初pull reqest＆初merge！</p></div>
+<div class="footnote" id="fn-type-guards-by-construct-signature"><p class="footnote">[<a href="#fnb-type-guards-by-construct-signature">*6</a>] <a href="https://github.com/Microsoft/TypeScript/issues/1283" class="link">https://github.com/Microsoft/TypeScript/issues/1283</a></p></div>
+
+<h4><a id="h4-5-2-3" href="#h4-5-2-3" aria-hidden="true"><span class="header-link">&sect;</span></a>Genericsとtype guards</h4>
+<p>さて、ちょっと前に書いた&quot;instanceofの右側の値の、その型の、prototypeプロパティの、型！&quot;という表現は、実はちょっと不正確です。</p>
+<p>prototypeのプロパティの型に、Genericsが絡むと、話がややこしくなります。話がややこしい奴代表として、Array&lt;T&gt;に登場してもらいましょう(リスト4.27)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.27: lib.d.tsからArrayの定義を抜粋</p>
+<pre class="list">// lib.d.tsから抜粋 本当はもうちょっと色々ある
+declare var Array: {
+  new (arrayLength?: number): any[];
+  (arrayLength?: number): any[];
+  isArray(arg: any): boolean;
+  prototype: Array&lt;any&gt;;
+};
+
+interface Array&lt;T&gt; {
+  length: number;
+  push(...items: T[]): number;
+  pop(): T;
+}
+</pre>
+</div>
+<p>instanceofでtype guardsで型を狭めたとき、any[]になるのかな…？と一瞬思いますが、ことはそう簡単ではありません(リスト4.28、リスト4.29、リスト4.30)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.28: 絞込み、失敗！</p>
+<pre class="list">var array: number[] | Date;
+
+if (array instanceof Array) {
+  // Array.prototype の型は Array&lt;any&gt; つまりは any[] …！
+  // any[]はnumber[]に代入可能だな！！型を狭められたに違いない！
+  // error TS2339: Property 'length' does not exist on type 'number[] | Date'.
+  // (つд⊂)ｺﾞｼｺﾞｼ (；ﾟ Дﾟ) エラーだと…！？
+  array.length;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト4.29: any[]に絞り込むのはできる</p>
+<pre class="list">var array: any[] | Date;
+
+if (array instanceof Array) {
+  // any[]に絞り込まれる
+  array.length;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト4.30: {}[] には絞り込めない…！</p>
+<pre class="list">var array: {}[] | Date;
+
+if (array instanceof Array) {
+  // error TS2339: Property 'length' does not exist on type 'Date | {}[]'.
+  array.length;
+}
+</pre>
+</div>
+<p>うーん、これもうわかんねぇな？TypeScriptコンパイラのソースコードをざっくり読んだ感じだと、Array&lt;any&gt;をさらに型パラメタをインスタンス化する前に戻して、Array&lt;T&gt;にしてから絞り込みのチェックをしているようです。その場合、Array&lt;{}&gt;として評価されてるのかなー、と思いきやリスト4.30を見る限り、そうともいえなさそうなんですよね…。</p>
+<p>この辺り、わかりやすいルールが提示されないと実用上使いにくくて困りますね。とりあえず、Genericsが絡む場合はtype guardsに頼らず、型アサーションに頼るほうが詰まらずにすむ…という認識でよいでしょう<a id="fnb-type-guards-with-generics" href="#fn-type-guards-with-generics" class="noteref">*7</a>。</p>
+<div class="footnote" id="fn-type-guards-with-generics"><p class="footnote">[<a href="#fnb-type-guards-with-generics">*7</a>] <a href="https://github.com/Microsoft/TypeScript/issues/1283" class="link">https://github.com/Microsoft/TypeScript/issues/1283</a> で議論されるかも？</p></div>
+
+<h3><a id="h4-5-3" href="#h4-5-3" aria-hidden="true"><span class="header-link">&sect;</span></a>type guardsと論理演算子</h3>
+<p>&amp;&amp;とか||とか?とか!とかの論理演算子にもちゃんと対応しているよ！(リスト4.31)</p>
+<div class="caption-code">
+<p class="caption">リスト4.31: ブール代数みたいな演算に対応してる</p>
+<pre class="list">var obj: number | boolean | string;
+
+// &amp;&amp;演算子で絞込み
+typeof obj === &quot;string&quot; &amp;&amp; obj.charAt(0);
+// 次のようなコードはエラーになる！
+// error TS2339: Property 'charAt' does not exist on type 'number'.
+// typeof obj === &quot;number&quot; &amp;&amp; obj.charAt(0);
+
+// ||演算子でunion typesに
+if (typeof obj === &quot;string&quot; || typeof obj === &quot;boolean&quot;) {
+  // string | boolean に絞り込まれる
+} else {
+  // 消去法でnumber！（typeofによるtype guardsだけ）
+}
+
+// 三項演算子は普通にif文と一緒の挙動
+typeof obj === &quot;string&quot; ? obj.charAt(0) : obj;
+// 次と等価
+if (typeof obj === &quot;string&quot;) {
+  obj.charAt(0);
+} else {
+  obj;
+}
+
+// 一応、否定演算子にも対応している
+if (!(typeof obj !== &quot;string&quot;)) {
+  // 否定の否定は普通にそのまんまstringだな！ちゃんと絞り込まれます
+  obj.charAt(0);
+}
+</pre>
+</div>
+<p>あんまり使わない気がしますね。</p>
+
+<h3><a id="h4-5-4" href="#h4-5-4" aria-hidden="true"><span class="header-link">&sect;</span></a>type guardsの弱点</h3>
+<p>type guardsは型システム上の仕組みだということを忘れてはいけません。JavaScriptの実行環境とは全く関係がないのです。</p>
+<p>TypeScriptでは、構造的部分型の仕組みにより、クラスが要求されている箇所に、互換性のある別の値を代入することができます。</p>
+<p>その仕組みを使って、リスト4.32のようなコードが書けてしまいます。</p>
+<div class="caption-code">
+<p class="caption">リスト4.32: 構造的部分型とtype guards</p>
+<pre class="list">class Sample {
+  str: string;
+}
+
+// 構造的部分型！
+var obj: Sample | Date = {
+  str: &quot;Hi!&quot;
+};
+
+if (obj instanceof Sample) {
+  // 型はSampleに絞られている が！絶対に到達しない！
+  // 現在のobjはプロトタイプチェーンにSampleを持たない！
+  console.log(obj.str);
+}
+</pre>
+</div>
+<p>objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。コンパイル後のJavaScriptコード(リスト4.33)を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。</p>
+<div class="caption-code">
+<p class="caption">リスト4.33: コンパイル後のJS</p>
+<pre class="list">var Sample = (function () {
+    function Sample() {
+    }
+    return Sample;
+})();
+var obj = {
+    str: &quot;Hi!&quot;
+};
+if (obj instanceof Sample) {
+    console.log(obj.str);
+}
+</pre>
+</div>
+<p>これを回避する方法はふたつあります。ひとつ目はtype guardsに頼らず、今までどおりに処理することです(リスト4.34)。ふたつつ目はprivateな要素をクラスに突っ込んでしまうことです(リスト4.35)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.34: type guardsに頼らず生きる</p>
+<pre class="list">class Sample {
+  str: string;
+}
+
+// 構造的部分型！
+var obj: Sample | Date = {
+  str: &quot;Hi!&quot;
+};
+
+if (obj !== null) {
+  var str = (&lt;Sample&gt;obj).str;
+  if (typeof str === &quot;string&quot;) {
+    console.log(str);
+  }
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト4.35: privateな要素があれば構造的部分型で値を偽造できない</p>
+<pre class="list">class Sample {
+  private _tmp: any;
+  str: string;
+}
+
+// privateなインスタンス変数があるクラスのインスタンスは偽造できない！
+// error TS2322: Type '{ _tmp: null; str: string; }' is not
+//     assignable to type 'Sample'. Property '_tmp' is private
+//     in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
+var obj: Sample = {
+  _tmp: null,
+  str: &quot;Hi!&quot;
+};
+</pre>
+</div>
+<p>色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。</p>
+
+<h2><a id="h4-6" href="#h4-6" aria-hidden="true"><span class="header-link">&sect;</span></a>4.6　型の別名（type alias）</h2>
+<p><strong>導入されるバージョン 1.4.0</strong></p>
+<p>最初に書いておきます。<strong>可能な限りtype aliasを使うな！interface使え！</strong></p>
+<p>筆者はtype aliasの乱用を恐れています！</p>
+<p>type aliasもunion typesの扱いを便利にするために導入された機能です。機能としてはただ単に、型をひとまとまりにして、それに名前が付けられるだけです。そんだけ。</p>
+<p>type aliasは仕様上、interfaceと同じように利用できる場面もあります。ですが、基本的にtype aliasはinterfaceより機能が貧弱であるため、なるべく避けるほうがよいでしょう。</p>
+<p>代表例を見てみましょう(リスト4.36)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.36: 頻出するunion typesに名前をつける</p>
+<pre class="list">type FooReturns = string | number | boolean;
+
+interface Foo {
+  bar(): FooReturns;
+  buzz(): FooReturns;
+  barbuzz(): FooReturns;
+}
+</pre>
+</div>
+<p>わかりやすいですね。1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。</p>
+<p>tuple typesに名前をつけることもできます(リスト4.37)。</p>
+<div class="caption-code">
+<p class="caption">リスト4.37: tuple typesに名前をつける</p>
+<pre class="list">// tuple typesに名前をつける
+type Point = [number, number];
+type Circle = [Point, number];
+
+var c: Circle = [[1, 2], 3];
+
+// でも、こっちのほうがTypeScriptとしては適切よね
+module alternative {
+  class Point {
+    constructor(public x: number, public y: number) {
+    }
+  }
+  class Circle {
+    constructor(public p: Point, public r: number) {
+    }
+  }
+  var c: Circle = new Circle(new Point(1, 2), 3);
+}
+</pre>
+</div>
+<p>素直にクラスでやれ！って感じですね。</p>
+<p>type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。そのため、リスト4.38のようなコードは書くことができません。</p>
+<div class="caption-code">
+<p class="caption">リスト4.38: import句とは違うのだよ！import句とは！</p>
+<pre class="list">// 型の別名を作るだけで何かの値を作るわけではない…！
+type StringArray = string[];
+
+// なのでこういうことはできない
+// error TS2304: Cannot find name 'StringArray'.
+var strArray = new StringArray();
+</pre>
+</div>
+<p>TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(リスト4.39)。union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。</p>
+<div class="caption-code">
+<p class="caption">リスト4.39: interfaceを使うんだ！</p>
+<pre class="list">// これらはinterfaceで表現不可 type aliasで正解
+type StringOrNumber = string | number;
+type TextObject = string | { text: string };
+type Coord = [number, number];
+type ObjectStatics = typeof Object;
+
+// これらはinterfaceで表現可能
+type HolidayLookup = Map&lt;string, Date&gt;;
+interface AltHolidayLookup extends Map&lt;string, Date&gt; {
+}
+
+type Callback = (data: string) =&gt; void;
+interface AltCallback {
+  (date: string): void;
+}
+
+type RecFunc = () =&gt; RecFunc;
+interface AltRecFunc {
+  (): AltRecFunc;
+}
+</pre>
+</div>
+<p>また、type aliasではGenericsを使った名前を定義することができません。</p>
+<p>つまり、リスト4.40みたいなコードは文法的に正しくないためコンパイルがとおりません。</p>
+<div class="caption-code">
+<p class="caption">リスト4.40: こういうコードは書けないんじゃ</p>
+<pre class="list">// &quot;type&quot; Identifier &quot;=&quot; Type &quot;;&quot; という文法だからダメ
+// Identifier は TypeParameters を含まない
+// type-alias-with-type-parameters-invalid.ts(4,9): error TS1005: '=' expected.
+type Foo&lt;T&gt; = Array&lt;T&gt; | T;
+
+// こういうのは書けないんだ…すまんな…
+var obj: Foo&lt;number&gt;;
+obj = [1, 2];
+obj = 1;
+</pre>
+</div>
+<p>こういう場合は、名前をつけずに関係各所にコピペして頑張るしかないですね…<a id="fnb-type-alias-with-generics" href="#fn-type-alias-with-generics" class="noteref">*8</a>。</p>
+<p>最後に、type aliasがいかにinterfaceに劣るかをまとめておきます。</p>
+<ul>
+<li>interfaceはextendsやimplementsとあわせて使える<ul>
+<li>type aliasは無理</li>
+</ul>
+</li>
+<li>interfaceは定義の統合ができるので後から自由に拡張できる<ul>
+<li>type aliasは無理</li>
+</ul>
+</li>
+<li>interfaceはGenericsが使えて型パラメータを持てる<ul>
+<li>type aliasは無理</li>
+</ul>
+</li>
+<li>interfaceが絡んだときのコンパイルエラーにはinterface名が表示されてわかりやすい<ul>
+<li>type aliasは展開されて表示されちゃうので無理</li>
+</ul>
+</li>
+</ul>
+<p><strong>interfaceでできることをtype aliasでやるな！</strong></p>
+<div class="footnote" id="fn-type-alias-with-generics"><p class="footnote">[<a href="#fnb-type-alias-with-generics">*8</a>] こういうコードをmizchi君が書きたがってた <a href="https://twitter.com/mizchi/statuses/537908273865703424" class="link">https://twitter.com/mizchi/statuses/537908273865703424</a></p></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">TypeScript Ninja</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>TypeScript Ninja</li>
+          <li><a href="mailto:vvakame+typescript@gmail.com">vvakame+typescript@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://github.com/vvakame">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://twitter.com/vvakame">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">TypeScriptについて色々書くよ。忍者！</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

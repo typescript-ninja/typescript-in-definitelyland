@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ops="http://www.idpf.org/2007/ops" xml:lang="ja">
+
+
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  
+
+  <meta name="generator" content="Re:VIEW" />
+  <title>型は便利だ楽しいな</title>
+  </head>
+<body>
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">TypeScript Ninja</a>
+    <nav class="site-nav">
+      <div class="trigger">
+          <a class="page-link" href="/typescript-in-definitelyland/preface.html">本のトップ</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="page-content">
+  <div class="wrapper">
+    <div class="home">
+      <div class="review">
+<h1><a id="h3" href="#h3" aria-hidden="true"><span class="header-link">&sect;</span></a>第3章　型は便利だ楽しいな</h1>
+<p>TypeScriptの華はやはり型！<a href="./typescript-basic.html">第2章「TypeScriptの基本」</a>など所詮児戯に過ぎぬッ！！</p>
+<p>この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては<a href="./types-advanced.html">第4章「アドバンスド型戦略」</a>で紹介します。</p>
+<p>まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが<b class="kw">型の宣言空間 (type declaration space)</b><!-- IDX:型の宣言空間 -->と<b class="kw">値の宣言空間 (variable declaration space)</b><!-- IDX:値の宣言空間 -->の存在です。別の言い方をすると、型定義と実装の差です。</p>
+<p>JavaやC#だと、おおむね両者は密接に結びついていて、そこの差で困ることは少ないです。</p>
+<p>筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。JavaのGenericsの型パラメータは実行時には消されてしまうため、たとえば<tt class="inline-code">new T();</tt>というコードを書くことはできません。TypeScriptの型と値の区別は、Javaの例に近いかもしれません。</p>
+<p>型情報としては存在していても、値として存在していない。そういう場面は実はTypeScriptではいっぱいあるため、差を理解し積極的に活用できるようになるとTypeScript上級者といえるでしょう。</p>
+<p>この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。実用上のテクニックは<a href="./types-advanced.html">第4章「アドバンスド型戦略」</a>や<a href="./definition-file.html">第5章「JS資産と型定義ファイル」</a>でも言及します。</p>
+
+<h2><a id="h3-1" href="#h3-1" aria-hidden="true"><span class="header-link">&sect;</span></a>3.1　オブジェクト型リテラル（Object Type Literals）</h2>
+<p>オブジェクト型リテラルは、オブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（リスト3.1）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.1: 基本的な例</p>
+<pre class="list">// オブジェクトリテラルで値を作成！
+var objA = {
+  x: 1,
+  y: 2
+};
+
+// オブジェクト型リテラルで型を作成！(値は無し
+// 上記の objA の型は型推論で objB と同一になる
+var objB: {
+  x: number;
+  y: number;
+};
+
+// おんなじ！
+objA = objB;
+objB = objA;
+</pre>
+</div>
+<p>値の代わりに型名を、要素の終わりに,ではなく;を書くだけです。簡単ですね。</p>
+<p>オブジェクト型リテラルは型を指定する箇所<a id="fnb-object-literal-type" href="#fn-object-literal-type" class="noteref">*1</a>であればどこでも使えます（リスト3.2）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.2: でも、正直読みづらい</p>
+<pre class="list">function move(
+      value: { x: number; y: number; },
+      delta: { dx?: number; dy?: number; }
+    ): { x: number; y: number } {
+  if (delta.dx) {
+    value.x += delta.dx;
+  }
+  if (delta.dy) {
+    value.y += delta.dy;
+  }
+  return value;
+}
+
+var result = move({ x: 1, y: 2 }, { dx: -2 });
+// 次のように表示される
+// {
+//   &quot;x&quot;: -1,
+//   &quot;y&quot;: 2
+// }
+console.log(JSON.stringify(result, null, 2));
+</pre>
+</div>
+<p>では、オブジェクト型リテラルで使える書き方5つを見ていきましょう。</p>
+<div class="footnote" id="fn-object-literal-type"><p class="footnote">[<a href="#fnb-object-literal-type">*1</a>] interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではありません</p></div>
+
+<h3><a id="h3-1-1" href="#h3-1-1" aria-hidden="true"><span class="header-link">&sect;</span></a>プロパティシグニチャ（Property Signatures）</h3>
+<p>1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（リスト3.3）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.3: 大将！いつものやつ！</p>
+<pre class="list">var obj: {
+  property: string;
+};
+// 当てはまる値はこんな感じ
+obj = {
+  property: &quot;Hi!&quot;
+};
+</pre>
+</div>
+<p>素直でわかりやすいですね。</p>
+
+<h3><a id="h3-1-2" href="#h3-1-2" aria-hidden="true"><span class="header-link">&sect;</span></a>コールシグニチャ（Call Signatures）</h3>
+<p>2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（リスト3.4）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.4: 関数として利用できる</p>
+<pre class="list">var obj: {
+  (word: string): string;
+};
+// 当てはまる値はこんな感じ
+obj = word =&gt; &quot;Hello, &quot; + word;
+obj = (word: string) =&gt; {
+  return &quot;Hello, &quot; + word;
+};
+obj = function(word: string): string {
+  return &quot;Hello, &quot; + word;
+};
+// 呼び出してみよう！
+var str = obj(&quot;TypeScript&quot;);
+console.log(str);
+</pre>
+</div>
+<p>オーバーロードも表現できます（リスト3.5）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.5: オーバーロードも表現できる</p>
+<pre class="list">var obj: {
+  // overloadもできるよ
+  (word: string): string;
+  (): number;
+};
+// 当てはまる値はこんな感じ
+// すべての引数と返り値に矛盾しないようにしなければならない…
+obj = (word?: string): any =&gt; {
+  if (typeof word === &quot;string&quot;) {
+    return &quot;Hello, &quot; + word;
+  } else {
+    return 42;
+  }
+};
+// 呼び出してみよう！
+var str = obj(&quot;TypeScript&quot;);
+// Hello, TypeScript と表示される
+console.log(str);
+
+var num = obj();
+// 42 と表示される
+console.log(num);
+</pre>
+</div>
+<p>実装が煩雑になるのでなるべくオーバーロードは避けたいですね。</p>
+
+<h3><a id="h3-1-3" href="#h3-1-3" aria-hidden="true"><span class="header-link">&sect;</span></a>コンストラクトシグニチャ（Construct Signatures）</h3>
+<p>3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（リスト3.6）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.6: newできるんじゃよ</p>
+<pre class="list">var clazz: {
+  new (): any;
+};
+
+// 当てはまる値はこんな感じ
+class Sample {
+}
+clazz = Sample;
+var obj = new clazz();
+
+function Hello() {
+}
+// 返り値が void な関数は new できるけど…
+new Hello();
+// 型としての互換性はない
+// error TS2322: Type '() =&gt; void' is not assignable to type 'new () =&gt; any'.
+// clazz = Hello;
+</pre>
+</div>
+<p>TypeScriptのコードの書き方の範疇では、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。型アサーションを使って<tt class="inline-code">&lt;any&gt;</tt>で無理やり回避する方法はありますが、あまり使わないほうがよいでしょう。</p>
+<p>コンストラクトシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能です。しかし、実装するのがしちめんどくさいどころの話ではないので、ほどほどにしましょう。</p>
+<p>コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。</p>
+
+<h3><a id="h3-1-4" href="#h3-1-4" aria-hidden="true"><span class="header-link">&sect;</span></a>インデックスシグニチャ（Index Signatures）</h3>
+<p>4つ目は、インデックスシグニチャです。添字によるプロパティアクセスに対して、型を当てはめられます（リスト3.7）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.7: プロパティアクセスカッコツキ</p>
+<pre class="list">var objA: {
+  [index: number]: string;
+};
+var objB: {
+  [index: string]: string;
+};
+
+// どういった使い方ができるの？
+var s1 = objA[1];
+// --noImplicitAny 付きだとちゃんとエラーになる
+// error TS7017: Index signature of object type implicitly has an 'any' type.
+// var s2 = objA[&quot;test&quot;];
+
+// インデックスの型指定が string の場合 string でも number でもOK
+var s3 = objB[1];
+var s4 = objB[&quot;test&quot;];
+
+// 当てはまる値はこんな感じ
+objA = {
+  0: &quot;str&quot;,
+  // インデックスの型が number の場合、数値以外のプロパティがインデックスシグニチャで
+  // 取れる値に反していてもよい
+  num: 1
+};
+objB = {
+  0: &quot;str&quot;,
+  str: &quot;str&quot;
+  // インデックスの型が string の場合、すべてのプロパティの型がインデックスシグニチャに
+  // 反しないようにしなければならない
+  // error TS2322: Type
+  //  '{ [x: string]: string | number; 0: string; str: string; num: number; }'
+  //     is not assignable to type
+  //  '{ [x: string]: string; }'.
+  //     Index signatures are incompatible.
+  //         Type 'string | number' is not assignable to type 'string'.
+  //     Type 'number' is not assignable to type 'string'.
+  // num: 1
+};
+</pre>
+</div>
+<p>インデックスシグニチャの型と、インデックスシグニチャ以外（たとえばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。</p>
+<p>ちなみに、TypeScriptはリスト3.8のように、文字列リテラルによるアクセスも許可しています。</p>
+<div class="caption-code">
+<p class="caption">リスト3.8: 実は . アクセスと同じ堅牢さを誇る</p>
+<pre class="list">var obj = {
+  str: &quot;string&quot;,
+  num: 1
+};
+
+// 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
+var str: string = obj[&quot;str&quot;];
+var num: number = obj[&quot;num&quot;];
+// ちなみに、存在しない要素にアクセスすると any になる
+// --noImplicitAny を使うと暗黙的anyとしてちゃんと怒られる 萌え
+// error TS7017: Index signature of object type implicitly has an 'any' type.
+var any = obj[&quot;notExists&quot;];
+
+// 即値じゃないとダメ！コンパイラが処理できないのです
+var propertyName = &quot;str&quot;;
+// error TS7017: Index signature of object type implicitly has an 'any' type.
+var str2 = obj[propertyName];
+</pre>
+</div>
+<p>インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。</p>
+
+<h3><a id="h3-1-5" href="#h3-1-5" aria-hidden="true"><span class="header-link">&sect;</span></a>メソッドシグニチャ（Method Signatures）</h3>
+<p>最後の5つ目は、メソッドシグニチャです。あるプロパティがメソッドであることを表現できます（リスト3.9）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.9: メソッドの定義っぽい</p>
+<pre class="list">var obj: {
+  hello(word: string): string;
+};
+
+// 当てはまる値はこんな感じ
+obj = {
+  hello(word: string) {
+    return &quot;Hello, &quot; + word;
+  }
+};
+obj = {
+  hello: (word: string) =&gt; &quot;Hello, &quot; + word
+};
+obj = {
+  hello: function(word: string) {
+    return &quot;Hello, &quot; + word;
+  }
+};
+
+// プロパティシグニチャ + 関数型 の別の書き方なだけだな！
+var obj2: {
+  hello: (word: string) =&gt; string;
+};
+obj = obj2;
+obj2 = obj;
+</pre>
+</div>
+<p>&quot;プロパティシグニチャ+関数な型&quot;の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。</p>
+
+<h2><a id="h3-2" href="#h3-2" aria-hidden="true"><span class="header-link">&sect;</span></a>3.2　関数型リテラル（Function Type Literals）</h2>
+<p>関数も型として表現できます（リスト3.10）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.10: 関数も型として表現できる</p>
+<pre class="list">var func: (value: string) =&gt; string;
+// 当てはまる値はこんな感じ
+func = word =&gt; &quot;Hello, &quot; + word;
+func = (word: string) =&gt; {
+  return &quot;Hello, &quot; + word;
+};
+func = function(word: string) {
+  return &quot;Hello, &quot; + word;
+};
+
+// 型に対して実装の引数の数が少ないのはOK
+func = () =&gt; &quot;Hello, TypeScript&quot;;
+
+// 型に対して実装の引数の数が多い場合、省略可能かデフォルト値付きでなければならない
+func = (v1: string, v2 = &quot;JavaScript&quot;) =&gt; &quot;Hello, &quot; + v1 + &quot; &amp; &quot; + v2;
+</pre>
+</div>
+<p>アロー関数式の実装は<tt class="inline-code">(word: string): string =&gt; &quot;Hello, &quot; + word;</tt>という記法なのに対して、関数型リテラルは<tt class="inline-code">(word: string) =&gt; string</tt>という記法で、返り値の型を置く場所の<tt class="inline-code">=&gt;</tt>の前後が違うので間違えないように気をつけましょう。</p>
+
+<h2><a id="h3-3" href="#h3-3" aria-hidden="true"><span class="header-link">&sect;</span></a>3.3　インタフェース（Interfaces）</h2>
+<p>インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。インタフェースの中で許される記法はオブジェクト型リテラルそのまんまです。</p>
+<p>TypeScriptでのインタフェースの酷使されっぷりをリスト3.11で紹介します。</p>
+<div class="caption-code">
+<p class="caption">リスト3.11: 酷使されるインタフェースさん</p>
+<pre class="list">// 一般的な用法
+interface A {
+  str: string;
+}
+// クラスに特定の実装を強制する
+class AImpl implements A {
+  str: string;
+}
+var objA: A = new AImpl();
+
+// インタフェースは他のインタフェースを拡張できる
+interface B1 {
+  str: string;
+}
+interface B2 extends B1 {
+  num: number;
+}
+// 代入する値は実装したクラスとかじゃなくてもええんじゃ！
+var objB: B2 = {
+  str: &quot;string&quot;,
+  num: 42
+};
+
+// interfaceはクラスすら拡張する！(実装はなかったことになる
+class FooClass {
+  constructor(public num: number) {
+  }
+}
+interface C extends FooClass {
+  str: string;
+}
+var objC: C = {
+  num: 42,
+  str: &quot;string&quot;
+};
+</pre>
+</div>
+
+<h2><a id="h3-4" href="#h3-4" aria-hidden="true"><span class="header-link">&sect;</span></a>3.4　構造的部分型（Structural Subtyping）</h2>
+<p>構造的部分型は、乱暴に言うと静的型付け用のduck typingです。TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（リスト3.12）。そこに実際の継承関係は必要ありません。</p>
+<div class="caption-code">
+<p class="caption">リスト3.12: 大体一緒ならまぁ一緒ってことでいいじゃん</p>
+<pre class="list">// クラス Foo はstring型のstrという名前のプロパティと
+// number型のnumという名前のプロパティを持つ
+class Foo {
+  str = &quot;string&quot;;
+  num = 1;
+}
+
+// 構造が完全に一致…！！！
+// 構造が同じならもう同じってことでいいんじゃね！？
+var obj: Foo = {
+  str: &quot;Hi!&quot;,
+  num: 42
+};
+</pre>
+</div>
+<p>そのため、リスト3.13のようなコードもTypeScriptとしては正しいです。</p>
+<div class="caption-code">
+<p class="caption">リスト3.13: Pointインタフェースが要求されているが？</p>
+<pre class="list">interface Point {
+  x: number;
+  y: number;
+}
+// Point の実装を強制する！！！
+class PointImpl1 implements Point {
+  constructor(public x: number, public y: number) {
+  }
+}
+// Point の実装が強制されないけど互換性はある！
+class PointImpl2 implements Point {
+  constructor(public x: number, public y: number) {
+  }
+}
+
+// 引数に Point をとる
+function double(p: Point): Point {
+  return {
+    x: p.x * 2,
+    y: p.y * 2
+  };
+}
+// 次のすべては正しいコードとなります
+double(new PointImpl1(1, 2));
+double(new PointImpl2(3, 4));
+double({
+  x: 5,
+  y: 6,
+  z: 7  // 要素が多すぎる分には問題ない
+});
+</pre>
+</div>
+<p>とおるにはとおりますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうが良いコーディングスタイルになります。</p>
+<p>なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（リスト3.14）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.14: optional(?)なプロパティはなくてもよい</p>
+<pre class="list">interface Point {
+  x: number;
+  y: number;
+  color?: string; // なくてもいい
+}
+function printPoint(p: Point): void {
+  var message = &quot;x=&quot; + p.x + &quot;, y=&quot; + p.y;
+  if (p.color) {
+    message = p.color + &quot;(&quot; + message + &quot;)&quot;;
+  }
+  console.log(message);
+}
+// optinal なプロパティはなくても大丈夫！
+// x=1, y=2 と表示される
+printPoint({
+  x: 1,
+  y: 2
+});
+// red(x=1, y=2) と表示される
+printPoint({
+  x: 1,
+  y: 2,
+  color: &quot;red&quot;
+});
+// とはいえ、型が不一致だと怒られる。
+// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }'
+//   is not assignable to parameter of type 'Point'.
+//   Types of property 'color' are incompatible.
+//     Type 'boolean' is not assignable to type 'string'.
+// printPoint({
+//   x: 1,
+//   y: 2,
+//   color: true
+// });
+</pre>
+</div>
+
+<h2><a id="h3-5" href="#h3-5" aria-hidden="true"><span class="header-link">&sect;</span></a>3.5　型アサーション（Type Assertions）</h2>
+<p>型アサーションは他の言語でいうところのキャストです。リスト3.15のように、<tt class="inline-code">&lt;変換後型名&gt;</tt>と書くだけです。</p>
+<div class="caption-code">
+<p class="caption">リスト3.15: 型アサーション 基本例</p>
+<pre class="list">var obj: any = 1;
+
+// お前は今後 number として生きよ…
+var num = &lt;number&gt;obj;
+
+var str = &quot;string&quot;;
+// 非常に外道なコードを書くことができる… 人としての良識を疑う
+// やめて！私をanyにしてnumberに打ち込む気なんでしょう！？anyみたいに！
+num = &lt;any&gt;str;
+</pre>
+</div>
+<p>もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（リスト3.16）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.16: stringはnumberにはなれない</p>
+<pre class="list">var str = &quot;str&quot;;
+// anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
+// error TS2352: Neither type 'string' nor type 'number'
+// is assignable to the other.
+var num: number = &lt;number&gt; str;
+</pre>
+</div>
+<p>ダウンキャストも実行できます（リスト3.17）。TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。</p>
+<div class="caption-code">
+<p class="caption">リスト3.17: 親クラスから子クラスへ変換</p>
+<pre class="list">class Base {
+  str: string;
+}
+
+class InheritA extends Base {
+  num: number;
+}
+class InheritB extends Base {
+  bool: boolean;
+}
+
+// とりあえず型は親クラスとして…
+var obj: Base;
+
+// 中身が何か調べてから安全にダウンキャストする
+if (obj instanceof InheritA) {
+  var a = &lt;InheritA&gt;obj;
+  a.num;
+} else if (obj instanceof InheritB) {
+  var b = &lt;InheritB&gt;obj;
+  b.bool;
+}
+</pre>
+</div>
+<p>&lt;any&gt;に一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（リスト3.18）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.18: 親クラスから子クラスへ変換</p>
+<pre class="list">// こういう、型定義があるとする。実装はJavaScriptが与える。
+declare class Base {
+  str: string;
+}
+
+var obj = new Base();
+// 本当は、Baseクラスがnumプロパティも持ってるんだけど…
+// 型定義が不足しているなら、anyで誤魔化せばいいじゃない！！
+// キレイごとだけじゃ世の中生きていけないんじゃよ…
+var num: number = (&lt;any&gt;obj).num;
+</pre>
+</div>
+
+<h2><a id="h3-6" href="#h3-6" aria-hidden="true"><span class="header-link">&sect;</span></a>3.6　ジェネリクス（Generic Types）</h2>
+<p>いよいよ来ました。最後の大ボスです。Javaなどでは総称型とも呼ばれます。</p>
+<p>ジェネリクスなんて知らんわい！という人も、実はすでに色々なところでお世話になっています。</p>
+
+<h3><a id="h3-6-1" href="#h3-6-1" aria-hidden="true"><span class="header-link">&sect;</span></a>ジェネリクスの基本</h3>
+<p>TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。例を見てみましょう(リスト3.19)。</p>
+<div class="caption-code">
+<p class="caption">リスト3.19: 配列はジェネリクスに支えられております</p>
+<pre class="list">// string[] は実は Array&lt;string&gt; と同じ意味なのだ！(Arrayだけ特別に！
+var strArray: Array&lt;string&gt; = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
+var numArray: Array&lt;number&gt; = [1, 2, 3];
+
+// ArrayのメソッドとしてforEachがある
+// forEachで渡される値の型はそれぞれ違う(forEachは汎用的だ！
+strArray.forEach(v =&gt; v.charAt(0));
+numArray.forEach(v =&gt; v.toFixed(2));
+
+// 頑張ってこうやって書いてもいいけど、めんどいよね
+strArray.forEach((v: string) =&gt; v.charAt(0));
+numArray.forEach((v: number) =&gt; v.toFixed(2));
+
+// あと、間違った型を指定したときにエラーにならないとこわい…
+// error TS2345: Argument of type '(v: RegExp) =&gt; boolean' is not assignable to
+// parameter of type '(value: string, index: number, array: string[]) =&gt; void'.
+// strArray.forEach((v: RegExp) =&gt; v.test(&quot;str&quot;));
+</pre>
+</div>
+<p>実は、<tt class="inline-code">string[]</tt>という型は<tt class="inline-code">Array&lt;string&gt;</tt>と同じ意味なのです！ArrayだけはTypeScriptの中で特別扱いされています。</p>
+<p>ここで出てくる<tt class="inline-code">&lt;string&gt;</tt>という部分がジェネリクスの肝です。<tt class="inline-code">Array&lt;string&gt;</tt>を声に出して読むと、&quot;stringのArray&quot;になります。ただのArrayではないのです。&quot;stringの&quot;という所が重要です。stringを別のものにして&quot;numberのArray&quot;とか&quot;RegExpのArray&quot;と言うこともできます。つまり、色々な型に対して、&quot;○○のArray&quot;と言うことができるのです。これをプログラム上で表現すると<tt class="inline-code">Array&lt;T&gt;</tt>という表現になります。</p>
+<p>ここで新しく出てきた<tt class="inline-code">T</tt>を<b class="kw">型パラメータ (type parameters)</b><!-- IDX:型パラメータ -->と呼びます。実際、ここで出てくるアルファベットは<tt class="inline-code">T</tt>じゃなくてもかまいせん。<tt class="inline-code">Type</tt>でもいいですし、なんでもよいです。ただ、慣習として他の既存の型とかぶらないようにアルファベット大文字1文字を使う場合が多いです。代表的な例ではTypeの頭文字であるTや、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。</p>
+<p>さて、ではlib.d.tsから一部を抜粋したリスト3.20を見てみます<a id="fnb-array-forEach" href="#fn-array-forEach" class="noteref">*2</a>。</p>
+<div class="caption-code">
+<p class="caption">リスト3.20: Array&lt;T&gt;が登場する</p>
+<pre class="list">declare var Array: {
+  new &lt;T&gt;(...items: T[]): T[];
+};
+
+interface Array&lt;T&gt; {
+  length: number;
+  push(...items: T[]): number;
+  pop(): T;
+  forEach(callbackfn: (value: T) =&gt; void, thisArg?: any): void;
+  [n: number]: T;
+}
+</pre>
+</div>
+<p>色々な所でTが使われています。pushの定義を見ると、&quot;○○のArrayに対して、○○の値いくつかを追加するメソッドpush&quot;とか、&quot;○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop&quot;、&quot;○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach&quot;などの、汎用化された要素がたくさんあります。</p>
+<p>ここで、型パラメータTを実際にstringで具体化します(リスト3.21)。</p>
+<div class="caption-code">
+<p class="caption">リスト3.21: Array&lt;T&gt;が登場する</p>
+<pre class="list">declare var Array: {
+  new (...items: string[]): string[];
+};
+
+interface Array {
+  length: number;
+  push(...items: string[]): number;
+  pop(): string;
+  forEach(callbackfn: (value: string) =&gt; void, thisArg?: any): void;
+  [n: number]: string;
+}
+</pre>
+</div>
+<p>&quot;stringのArrayに対して、stringの値をいくつか追加するメソッドpush&quot;や、&quot;stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop&quot;、&quot;stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach&quot;などになりました。ジェネリクス、使う分にはめっちゃ簡単ですね！</p>
+<p>このように、ジェネリクスを使うと柔軟性と堅牢さを両立することができます。</p>
+<div class="footnote" id="fn-array-forEach"><p class="footnote">[<a href="#fnb-array-forEach">*2</a>] 紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！</p></div>
+
+<h3><a id="h3-6-2" href="#h3-6-2" aria-hidden="true"><span class="header-link">&sect;</span></a>ジェネリクスの書き方色々</h3>
+<p>ここでジェネリクスの書き方を確認しておきます（リスト3.22）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.22: Array&lt;T&gt;が登場する</p>
+<pre class="list">// それぞれのTは独立していて、関連性はない
+
+// クラスとジェネリクス
+class SampleA&lt;T&gt; {
+  constructor(public data: T) {
+  }
+}
+// 使い方 &lt;string&gt;は省略しても引数から推論可能
+var objA = new SampleA&lt;string&gt;(&quot;str&quot;);
+
+// インタフェースとジェネリクス
+interface SampleB&lt;T&gt; {
+  data: T;
+}
+// 使い方
+var objB: SampleB&lt;number&gt; = { data: 1 };
+
+// オブジェクト型リテラル各種
+var obj: {
+  new &lt;T&gt;(value: T): any;
+  &lt;T&gt;(value: T): any;
+  methodA&lt;T&gt;(value: T): any;
+  // 型パラメータは複数あってもよい
+  methodB&lt;T, U&gt;(value: T): U;
+};
+
+// 関数型
+var func: &lt;T&gt;(array: T[]) =&gt; T;
+// 使い方
+func = &lt;T&gt;(array: T[]) =&gt; array[0];
+func&lt;number&gt;([1, 2, 3]);
+
+// コンストラクタ型
+var ctor: new &lt;T&gt;(value: T) =&gt; any;
+// 使い方
+ctor = SampleA;
+new ctor&lt;string&gt;(&quot;str&quot;);
+</pre>
+</div>
+<p>この中でよく使うのは、クラスとインタフェースとメソッドシグニチャの書き方でしょう。まずはこの3パターンの書き方を覚えておくべきです。</p>
+
+<h3><a id="h3-6-3" href="#h3-6-3" aria-hidden="true"><span class="header-link">&sect;</span></a>型パラメータと制約</h3>
+<p>型パラメータには満たすべき制約を設けることができます。例を見てみましょう（リスト3.23）。</p>
+<div class="caption-code">
+<p class="caption">リスト3.23: 型パラメータTはBaseを継承していなければならない</p>
+<pre class="list">class Base {
+  str: string;
+}
+class InheritA extends Base {
+  num: number;
+}
+
+interface Sample&lt;T extends Base&gt; {
+  method(): T;
+}
+
+// これはOK
+var objA: Sample&lt;InheritA&gt;;
+
+// これはダメ RegExpはBaseを継承していない
+// error TS2344: Type 'RegExp' does not satisfy the constraint 'Base'.
+// Property 'str' is missing in type 'RegExp'.
+var objB: Sample&lt;RegExp&gt;;
+
+// これはOK 指定したオブジェクト型リテラルはBaseクラスの要件を満たす
+var objC: Sample&lt;{ str: string; }&gt;;
+</pre>
+</div>
+<p>型パラメータが満たすべき制約をextendsの形式で指定することができます。これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。</p>
+
+<h3><a id="h3-6-4" href="#h3-6-4" aria-hidden="true"><span class="header-link">&sect;</span></a>自分でジェネリクス有りのコードを書く</h3>
+<p>ジェネリクスで一番難しいのは、使うことではなく、使わせることです。何故ならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。たとえば、&quot;○○のArray&quot;のように、型パラメータ部分が何になっても上手く動くような設計です。</p>
+<p>逆に言うと、実際に使うときには具体化しなければいけないわけで、ジェネリクス有りのコードは&quot;必ず何かと組み合わせて具体化する&quot;必要があります。これを上手に使いこなすには一段上の設計力が要求されます。</p>
+<p>通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <h2 class="footer-heading">TypeScript Ninja</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>TypeScript Ninja</li>
+          <li><a href="mailto:vvakame+typescript@gmail.com">vvakame+typescript@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://github.com/vvakame">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://twitter.com/vvakame">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                </svg>
+              </span>
+              <span class="username">vvakame</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">TypeScriptについて色々書くよ。忍者！</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
