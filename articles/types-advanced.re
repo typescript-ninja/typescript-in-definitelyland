@@ -332,7 +332,7 @@ ECMAScriptさん、パターンマッチもないしー。
 //list[union-types/basic][型A | 型B → 新食感！]{
 #@mapfile(../code/types-advanced/union-types/basic.ts)
 var a: string | boolean;
-// string | number なので次はオッケー！
+// string | boolean なので次はオッケー！
 a = "str";
 a = true;
 // number はアカン。

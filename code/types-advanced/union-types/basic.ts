@@ -1,5 +1,5 @@
 var a: string | boolean;
-// string | number なので次はオッケー！
+// string | boolean なので次はオッケー！
 a = "str";
 a = true;
 // number はアカン。
