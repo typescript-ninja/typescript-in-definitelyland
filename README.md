@@ -1,4 +1,4 @@
-# TypeScript in Definitelylang
+# TypeScript in Definitelyland [![Circle CI](https://circleci.com/gh/typescript-ninja/typescript-in-definitelyland.svg?style=svg)](https://circleci.com/gh/typescript-ninja/typescript-in-definitelyland)
 
 この書籍はvvakame([Twitter](https://twitter.com/vvakame), [GitHub](https://github.com/vvakame))が執筆した、[TypeScript](http://www.typescriptlang.org/)についての本です。
 初出はコミットマーケット87にて、[TechBoosterにて頒布](http://techbooster.github.io/c87/#typescript)したもので、その全文を公開しています。
