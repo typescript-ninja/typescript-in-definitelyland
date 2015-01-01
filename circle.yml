@@ -1,0 +1,24 @@
+machine:
+  timezone:
+    Asia/Tokyo
+
+checkout:
+  post:
+    - git submodule update --init
+
+dependencies:
+  pre:
+    # LaTeX入れようかと思ったけど必要になるまではいいや
+    # https://github.com/TechBooster/FirstStepReVIEW/blob/master/article/how_to_install.re
+    - npm install -g grunt-cli
+    - gem install bundler
+
+test:
+  override:
+    - grunt html
+
+deployment:
+  release:
+    branch: master
+    commands:
+      - ./deploy-gh-pages.sh
