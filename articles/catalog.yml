@@ -1,5 +1,5 @@
 PREDEF:
-  - preface.re
+  - index.re
 
 CHAPS:
   - prepared-to-typescript.re
