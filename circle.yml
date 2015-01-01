@@ -1,6 +1,12 @@
 machine:
   timezone:
     Asia/Tokyo
+  environment:
+    # for gh-pages
+    GIT_COMMITTER_NAME:  vvakame
+    GIT_COMMITTER_EMAIL: vvakame+dev@gmail.com
+    GIT_AUTHOR_NAME:     vvakame
+    GIT_AUTHOR_EMAIL:    vvakame+dev@gmail.com
 
 checkout:
   post:
