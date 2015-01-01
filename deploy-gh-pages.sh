@@ -24,7 +24,7 @@ cp -r ../public/** ./
 # commit & push
 echo "publishing..."
 git add .
-git commit -a -m "build ${CIRCLE_BUILD_NUM} commit:${CIRCLE_SHA1}"
 set +e # 変更ファイル無しの場合コケるけど無視する
-git push --quiet https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git gh-pages
+git commit -a -m "build ${CIRCLE_BUILD_NUM} commit:${CIRCLE_SHA1}"
 set -e
+git push --quiet https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git gh-pages
