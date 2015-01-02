@@ -31,7 +31,24 @@
   <div class="wrapper">
     <div class="home">
       <div class="review">
+        <div class="wrapper">
+<% if @prev.present? %>
+          <a class="prev" href='<%= @prev.id %>.html'>Prev</a>
+<% end %>
+<% if @next.present? %>
+          <a class="next" href='<%= @next.id %>.html'>Next</a>
+<% end %>
+        </div>
+
 <%= body %>
+
+        <div class="wrapper">
+<% if @prev.present? %>
+          <a class="prev" href='<%= @prev.id %>.html'>Prev</a>
+<% end %>
+<% if @next.present? %>
+          <a class="next" href='<%= @next.id %>.html'>Next</a>
+<% end %>
       </div>
     </div>
   </div>
