@@ -599,6 +599,12 @@ div.code p.caption {}
 .review a[id] {
   border-bottom: 0px;
 }
+.review a.prev {
+  float: left;
+}
+.review a.next {
+  float: right;
+}
 .review b {
   font-weight: bold;
 }
