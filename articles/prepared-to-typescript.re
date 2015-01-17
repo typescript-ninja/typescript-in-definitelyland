@@ -15,7 +15,7 @@ $ npm install -g typescript
 # 省略
 $ tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-message TS6029: Version 1.3.0.0
+message TS6029: Version 1.4.1.0
 #@end
 $ echo "class Sample {}" > sample.ts
 $ tsc --noImplicitAny sample.ts
@@ -157,7 +157,7 @@ $ npm install typescript --save-dev
 # 省略
 $ ./node_modules/.bin/tsc --version
 #@mapoutput(../node_modules/.bin/tsc -v)
-message TS6029: Version 1.3.0.0
+message TS6029: Version 1.4.1.0
 #@end
 //}
 #@# OK REVIEW muo: コマンド実行へのコメント、前のほうは#無しだったけどここでは付いてる。揃えたほうがいい

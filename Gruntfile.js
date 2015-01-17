@@ -16,7 +16,7 @@ module.exports = function (grunt) {
 				src: file,
 				options: {
 					compiler: './typescript/bin/tsc',
-					target: 'es6',
+					target: 'es5',
 					module: 'commonjs',
 					noImplicitAny: true,
 					sourceMap: false,
