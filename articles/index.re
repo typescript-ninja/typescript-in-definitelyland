@@ -21,7 +21,7 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 
 現時点で最新のTypeScriptコンパイラは次のとおり。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")
-Version 1.4.1.0
+Version 1.8.10
 #@end
 
 現時点でTypeScriptリポジトリのmaster/HEADは次のとおり。
