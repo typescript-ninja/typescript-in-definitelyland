@@ -10,12 +10,10 @@ TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換える�
 
 通常のTypeScriptコードは拡張子が.tsなのに対して、型定義ファイルは拡張子を.d.tsとします。
 拡張子を.d.tsとしたファイルに実装を含むようなコードを書くとtscがエラーにするので、ケアレスミス予防のためにも型定義ファイルの拡張子は必ず.d.tsにします。
-#@# OK REVIEW muo: 少々言葉不足でつながり悪く感じた。「拡張子を.d.tsとしたファイルに実装を含むようなコードを書くと」かなぁ
 
 TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り）の世界に後付で型を与えます。
 もとからTypeScriptで書かれている場合、実装と型定義を同時に書いているようなものなので、実装と型がズレて（つまりバグって）しまうことはありません。
 一方、型定義ファイルはすでに実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。
-#@# OK REVIEW muo: 後付で手書きで とつながるのが嫌な感じ。「JavaScriptに後付の型定義を手書きしていくため」かな。気に食わなかったらスルーでok
 そこのところを十分に気をつけないといけません。
 
 == ツールを使って検索だ！
@@ -40,7 +38,6 @@ $ dtsm init
 //}
 
 ここではテストを書くときに使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードし、保存してみます。
-#@# OK REVIEW muo: power-assetどっから出てきたの!? となるので、「ここでは〜〜なpower-assertを題材として型定義ファイルの〜〜をやってみましょう」的な前説を付近に追加すべき。
 
 //cmd{
 # どちらか！
@@ -86,15 +83,12 @@ typings
 
 //footnote[tsd][tsdはbartvdsがメインに開発している型定義ファイル管理ツールで、広く使われています]
 //footnote[dtsm][dtsmは筆者（vvakame）が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
-#@# OK REVIEW muo: こう書くならtsdについても一言紹介しておいたほうが良いように思った
 //footnote[NuGet][WindowsユーザにはNuGetというツールもあるのですが、全然知らないため割愛します]
 
 == 型定義ファイルを参照してみよう！
 
 型定義ファイルを参照するには、tscコマンドでソースコードをコンパイルするときに一緒に指定するか、ソースコード中からリファレンスコメントで参照する必要があります。
-#@# OK REVIEW muo: コマンドでソースをコンパイル あたりが良さそう(言葉足りてない)
 リファレンスコメントとして参照するほうがコンパイル手順を簡素に保てるため、プロジェクトの構成をシンプルに保つことができます。
-#@# OK REVIEW muo: 開発に適す?運用に適す?どういうことか補記あったほうが嬉しい
 
 リファレンスコメントはソースコードの先頭に@<code>{/// <reference path="相対パスor絶対パス" />}の形式で指定します。
 
@@ -189,7 +183,6 @@ declare module "power-assert" {
 さて、型定義ファイルの取得方法、使い方はわかりました。
 しかし、世の中にあるJavaScriptライブラリのうち、まだまだ型定義ファイルが書かれていないものは数多くあります。
 特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地に違いありません。
-#@# OK REVIEW muo: 社内製 内製 社内 は良いけど社内内製はいけない
 
 #@# @suppress InvalidExpression
 しからば！自分で書くしかあるまいよ！
@@ -206,14 +199,11 @@ TypeScriptはJavaScriptに対して後付で型による制約をつけたした
 
 #@# @suppress InvalidExpression
 すべてがTypeScriptで書かれたプログラムであれば、型と実体は基本的には一致しています。
-#@# OK REVIEW muo: 書かれている→書かれた かな
 クラスの定義を書いたとき、JavaScriptプログラムとしてのクラス（OOPするためのコンストラクタ関数）と、TypeScriptで使う型としてのクラスが一度に誕生します。
 これは非常に素直かつ簡単で、型と実体をひとつの記述から作成しているので、この2つが乖離してしまうことはありません。
 
 #@# @suppress CommaNumber
 一方、JavaScriptでコードを書いてTypeScriptで型定義ファイルを作成して使う場合、実装と型が個別に定義されることになります。
-#@# OK REVIEW muo: JavaScriptで書いて→JavaScriptでコードを書いて
-#@# OK REVIEW muo: 「当てて使う」の表現は少々感覚寄りすぎかなーと
 そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、というありさまになるわけです。
 型定義ファイルを書いて"この変数は、あります！"と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。
 
@@ -238,11 +228,8 @@ IDE上で使いやすいこと、というのは、Visual StudioやWebStorm上�
 
 #@# prh:disable
 これら3つを守ることが"良い品質であること"に繋がるというのは、TypeScript自体が型指定を行うことで間違ったコードを書きにくいようにするツールであると考えると納得がいくでしょう。
-#@# OK REVIEW muo: 「型を使って間違ったコードを書きにくいように」の部分が構文解析しづらいので、ちょい冗長になるけど「型指定をおこなうことで間違った」のほうが良さそう
-#@# OK REVIEW muo: 納得できると思います→納得できるでしょう(または、納得がいくでしょう)
 
 慣れないうちはどうしても"上手く書けないので仕方なく"悪い型定義を書いてしまうことがあります。
-#@# OK REVIEW muo: 人は誰しも→人間、どうしても あたり
 DefinitelyTypedにpull requestを送ってくれる人にもそういう人は多くいます。
 
 #@# prh:disable
@@ -265,9 +252,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 
 型定義ファイルの品質の良さにこだわるあまり、完成しない、使いたいライブラリが使えない、というのがもっともよくない状態です。
 型定義ファイルの良し悪しを判断する力は、TypeScript自体の理解度に大きく依存します。
-#@# OK REVIEW muo: 「最終的に、良し悪しが分かるようになるには」→「型定義ファイルの良し悪しを判断する力は」
 TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見えてくるのは避けられないのでまずは"使える"状態にすることを目指しましょう。
-#@# OK REVIEW muo: 品質は→品質を
 
 品質や"ライブラリ全体をカバーしている"かは気になるところではあります。
 しかし、まずは使いたいところが使えればいいのです。
@@ -408,7 +393,6 @@ interface JQueryDeferred<T> extends JQueryPromise<T> {
 declare var $: JQueryStatic;
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 トップレベルに複数の型がいくつも散乱してしまうのがよくありません。
 それに、@<code>{JQuery}というprefixが乱舞していて目を惑わせます。
@@ -459,7 +443,6 @@ declare module jquery {
 declare var $: jquery.Static;
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 #@# @suppress SuccessiveWord
 インタフェース名が短く、かつわかりやすくなりました。
@@ -467,8 +450,6 @@ declare var $: jquery.Static;
 
 もちろん、無理に幽霊モジュールを使う必要はありません。
 クラスや変数や関数などを持ち、通常の実体をもつモジュールが存在している場合は、そのモジュールに相乗りしてしまったほうが楽でしょう。
-#@# OK REVIEW muo: 実体のある→実体を持つ
-#@# OK REVIEW muo: 相乗りしていってしまったほうが→相乗りしてしまったほうが
 
 #@# @suppress JapaneseStyle
 #@# prh:disable
@@ -477,7 +458,6 @@ declare var $: jquery.Static;
 ひとつは幽霊モジュールの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
 先で説明しましたが、インタフェースは定義の統合ができます。
 この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまうのです。
-#@# OK REVIEW muo: うかつにJQueryStaticからjquery.Staticに変更すると(なにを?)
 特にjQueryプラグインとかはインタフェースを拡張する形で型定義するのでその量たるや…。
 
 ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊モジュールに切り替えるのは難しい場合があります。
@@ -517,9 +497,7 @@ declare var foo: Foo;
 
 #@# @suppress InvalidExpression
 この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。
-#@# OK REVIEW muo: 使える人は→使えるのは
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
-#@# OK REVIEW muo: ×実際のコードを書くことは大いなる苦痛が ○実際のコードを書くことには大いなる苦痛が ○実際のコードを書くには大いなる苦痛が ○実際のコードを書くことは大いなる苦痛を
 俺は絶対使わんぞ！
 普通に、@<list>{interface-antipattern/module-by-interface-good}のように書くのだ！
 
@@ -581,7 +559,6 @@ declare module assert {
 
 関数と内部モジュールを同名で宣言できるのです。
 これの効能は、階層構造を素直に表現できることと、前項で説明した幽霊モジュールの書き方を併用できるところです。
-#@# OK REVIEW muo: 層構造→階層構造 かな、ここの流れだと。
 
 #@# @suppress SentenceLength
 この手法は、実際に@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
@@ -604,7 +581,6 @@ declare module assert {
 }
 #@end
 //}
-#@# OKREVIEW muo: 前のとキャプション同じだけど意図してる? 話的にはつながってるので良いかもしらんけど念のため
 
 外部に公開されている関数は@<code>{assert}のみで、そこに追加でプロパティが生えている形式です。
 実体のある要素（関数）があるため、幽霊モジュールにはなりませんが、Optionsインタフェースが上手く取り込まれています。
@@ -681,7 +657,6 @@ interface TestB {
 
 #@# @suppress InvalidExpression
 @<list>{declare-class/declare-vanilla-class-invalid}みたいな感じです。
-#@# OK REVIEW muo: 感じ。→感じです。
 
 //list[declare-class/declare-vanilla-class-invalid][クラスで定義]{
 #@mapfile(../code/definition-file/declare-class/declare-vanilla-class-invalid.ts)
@@ -717,7 +692,6 @@ declare class FooListenerImpl implements FooListener {
 
 #@# @suppress InvalidExpression
 @<list>{declare-class/declare-decompose-class-invalid}みたいな感じです。
-#@# OK REVIEW muo: 感じ。→感じです。
 
 //list[declare-class/declare-decompose-class-invalid][インタフェース+変数で定義]{
 #@mapfile(../code/definition-file/declare-class/declare-decompose-class-invalid.ts)
@@ -853,7 +827,6 @@ foo.num;
 
 //footnote[extract-module][@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/express/express.d.ts#L15}]
 //footnote[use-internal-module][@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b/passport/passport.d.ts#L8}]
-#@# OK REVIEW muo: 上記2点のURL端っこ入る気がしないのでハッシュ削るなりしたほうが良い
 
 === anyと{}とObject
 
@@ -867,7 +840,6 @@ foo.num;
 
 関数の返り値にObjectや{}を指定するのは、結局どのようなプロパティも存在しないため型アサーションでもって適切な型にするしかありません。
 これは、anyを指定するのと同程度に危険です。
-#@# OK REVIEW muo: 危険度としては〜とするなら「同程度です。」で止める。逆に「危険です。」で止めるなら「危険度としては」を削る
 素直にanyを使いましょう。
 
 筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません。
@@ -889,7 +861,6 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 その場合、コードから型定義ファイルを起こすことになるのは仕方のないことです。
 
 なお、DefinitelyTypedのjQueryの型定義ファイルを熱心に面倒みてくれているJohn Reillyは特にドキュメントとの整合性を熱心に見るので、もしjQueryのドキュメント自体が間違っている場合はjQueryのドキュメントを直すところから始めるとよいでしょう。
-#@# OK REVIEW muo: ここ1個目の"jquery"は意図してる?それともjQuery?
 コントリビュートの輪！
 
 === コールバック関数の引数を無闇に省略可能（optional）にしない
@@ -1018,9 +989,6 @@ foo.num;
 こういう悲しい目を回避するには、型定義ファイルのテストが有効です。
 とりあえず型定義ファイルを書いたら適当なユースケースに当てはめて意図どおりコンパイルできるか確かめてみましょう。
 
-#@# OK REVIEW muo: ここの2行ゆるっゆるで文意がババロア感してるので一度見直しplz
-#@# ↑文章全体を削って対処
-
 === 最終チェック！
 
 やった！型定義ファイルが書けたぞ！
@@ -1057,15 +1025,12 @@ anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScri
 ==== tslint
 
 lintという種類のプログラムがあります。
-#@# OK REVIEW muo: プログラムの種類→種類のプログラム
 ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくるツールを指します。
-#@# OK REVIEW muo: のことを→トルツメ
 
 TypeScriptではtslintというプログラムが一般的に使われています。
 tslintのリポジトリは@<href>{https://github.com/palantir/tslint,こちら}@<fn>{tslint-repo}です。
 
 tslintはコンパイルだけでは見つけきれない、悪いにおいのするコードを検出してくれます。
-#@# OK REVIEW muo: 匂い→臭いかな。ネガティブなニュアンスなので
 例を見てみましょう（@<list>{tslint/basic}）。
 
 //list[tslint/basic][ん？何かおかしなコードがあるぞ？]{
@@ -1092,7 +1057,6 @@ tslintは必ず設定ファイルを必要とします。
 //footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 
 == Let's contribute!
-#@# OK REVIEW muo: Let'sに噛ませるなら contribute! では
 
 ようこそ！@<href>{https://github.com/borisyankov/DefinitelyTyped,DefinitelyTyped}@<fn>{dt}へ！
 メンテナのvvakameです。

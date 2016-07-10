@@ -9,16 +9,13 @@
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
 タプル型（tuple types）や直和型（union types）についての解説もありますよ！
 なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています@<fn>{bad-code}。
-#@# OK REVIEW muo: ちょい文の構造をつかみにくいと感じた
 
 #@# @suppress InvalidExpression
 TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
-#@# OK REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
 そういったときに本章の内容が活きてきます。
 ただ、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと思います。
 
 //footnote[bad-code][本章で触れる機能を使うほうがよい場合もあります。たとえば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください]
-#@# OK REVIEW muo: 分解など→分解時など
 
 == 共通最適型（Best Common Type）
 
@@ -41,9 +38,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
 Best Common Typeという名の響きどおり、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
-#@# OK REVIEW muo: アルゴリズムの元に→アルゴリズムによって
 たとえば、@<list>{bct-basic-1.3.0}のようになります。
-#@# OK REVIEW muo: 感じ→感じです
 
 //list[bct-basic-1.3.0][基本的な例]{
 #@mapfile(../code/types-advanced/bct/basic-1.3.0.ts)
@@ -166,7 +161,6 @@ var rect = move({
 rect.z1;
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがいいですね。
 
@@ -183,7 +177,6 @@ rect.z1;
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 tuple（タプル）は、任意の数の要素の組です。
-#@# OK REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
 既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
@@ -191,7 +184,6 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
 タプル型は型（TypeScript）の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。
-#@# OK REVIEW muo: ちょいわかりづらさ感じました。TS側では使われるけどJSの世界には残らんという話だけどもう少し分かりやすくならないかなー
 記述方法は配列の型指定へ @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
 例を見てみましょう（@<list>{tuple/basic}）。
 
@@ -290,7 +282,6 @@ tuple[0].charAt(0);
 
 …悲しい結果になりました。
 @<code>{[1, true]}のような配列のリテラルをタプル型に推論しないのはおそらくこのためでしょう。
-#@# OK REVIEW muo: ここのtuple typesはタプル型表記のほうが自然なのでは
 
 unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
@@ -405,7 +396,6 @@ var cond = true ? 1 : "str";
 var array = [1, true, "str"];
 #@end
 //}
-#@# OK REVIEW muo: キャプション、ひとつ上のコピペにしてない?
 
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。
@@ -459,7 +449,6 @@ var obj: string | number | Date;
 // (<RegExp>obj).test("test");
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 色々試してみても、期待以上に頭がよかったりはしない(@<list>{union-types/cant-inferred-invalid})。
 
@@ -475,7 +464,6 @@ function test<T>(...args: T[]): T[] {
 var v = test(1, true);
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 #@# TODO Contextual Union Types https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
@@ -531,13 +519,11 @@ if (typeof obj === "string") {
 
 #@# @suppress SentenceLength JapaneseAmbiguousNounConjunction
 TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型は型注釈したものから変わらずそのままでした。
-#@# OK REVIEW muo: どのまま?明示したほうがいい
 type guardsが導入された後は"変数objがtypeofで調べたときにstringであるという条件を満たすとき、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
 なお、このときの比較は必ず@<code>{===}を使う必要があります。
 @<code>{==}ではダメです。
 
 もう一例見てみましょう。
-#@# OK REVIEW muo: 起こる?おこなわれる?
 @<list>{type-guards/typeof-invalid}では、anyと指定された変数をtype guardsでstringに絞り込んでいます。
 そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
 
@@ -708,7 +694,6 @@ instanceofの右側の値の、その型の、prototypeプロパティの、型�
 
 #@# @suppress SentenceLength CommaNumber InvalidExpression
 そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}の項目、クラスの分割定義について言及している箇所でも、prototypeプロパティなんかわざわざ定義してないんですよね…。
-#@# OK REVIEW muo: ののののの
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
@@ -748,7 +733,6 @@ if (obj instanceof A) {
 }
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 もうひとつ、重要なコツを示しておきます。
 それは、エラーメッセージの読み方です(@<list>{type-guards/instanceof-failed-invalid})。
@@ -783,7 +767,6 @@ instanceofを使ってtype guardsで型の絞込みをしたつもりのシチ�
 ですが、実際に表示されるエラーメッセージは"AInstance | Dateだとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
 type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
 union types絡みのエラーに慣れていないと、このエラーメッセージとtype guardsが実は失敗している！ということが結びつきにくいので気をつけましょう。
-#@# OK REVIEW muo: 慣れて の前になんか対象物指定あったほうがよい（この周辺だいぶ飛ばした書き方になってるので、なるべくこのへんの読みやすさ改善でカバーしとくべき）
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/1283 が解決されない限り、definition-file.re に注意書きを書き足す
 
@@ -992,7 +975,6 @@ var obj: Sample = {
 };
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 #@# @suppress JapaneseStyle
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
@@ -1003,7 +985,6 @@ var obj: Sample = {
 @<strong>{導入されるバージョン 1.4.0}
 
 最初に書いておきます。@<strong>{可能な限りtype aliasを使うな！interface使え！}
-#@# OK REVIEW muo: 主観だけど、 〜書いておきます。 のほうがいいんじゃないかなぁ。そのほうが主張すっきり伝わりそう
 筆者はtype aliasの乱用を恐れています！
 
 type aliasもunion typesの扱いを便利にするために導入された機能です。
@@ -1102,7 +1083,6 @@ interface AltRecFunc {
 
 #@# @suppress InvalidExpression
 また、type aliasではGenericsを使った名前を定義することができません。
-#@# OK REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
 つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルがとおりません。
 
 //list[type-alias/with-type-parameters-invalid][こういうコードは書けないんじゃ]{

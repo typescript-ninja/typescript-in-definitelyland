@@ -15,7 +15,6 @@ TypeScriptコードを書く分には使わない範囲（型定義ファイル�
 別の言い方をすると、型定義と実装の差です。
 
 JavaやC#だと、おおむね両者は密接に結びついていて、そこの差で困ることは少ないです。
-#@# OK REVIEW muo: 概ね続きは少々読みづらいので片方を別の表現にしたほうが良いです
 筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。
 JavaのGenericsの型パラメータは実行時には消されてしまうため、たとえば@<code>{new T();}というコードを書くことはできません。
 TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
@@ -88,7 +87,6 @@ console.log(JSON.stringify(result, null, 2));
 === プロパティシグニチャ（Property Signatures）
 
 1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{object-type-literal/property-signiture}）。
-#@# OK REVIEW muo: 書くための書き方 は少々冗長です。プロパティの記法とするか、片方を別の表現にしたほうがよさそうです
 
 //list[object-type-literal/property-signiture][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/object-type-literal/property-signiture.ts)
@@ -107,7 +105,6 @@ obj = {
 === コールシグニチャ（Call Signatures）
 
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{object-type-literal/call-signature}）。
-#@# OK REVIEW muo: ひとつ前と揃えて「示す書き方」→「示す記法」が良いかも
 
 //list[object-type-literal/call-signature][関数として利用できる]{
 #@mapfile(../code/types-basic/object-type-literal/call-signature.ts)
@@ -164,7 +161,6 @@ console.log(num);
 
 #@# @suppress ParenthesizedSentence
 3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
-#@# OK REVIEW muo: 例によって「示す書き方」→「示す記法」が良いかも
 
 //list[object-type-literal/constructor-signature-invalid][newできるんじゃよ]{
 #@mapfile(../code/types-basic/object-type-literal/constructor-signature-invalid.ts)
@@ -245,7 +241,6 @@ objB = {
 };
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 インデックスシグニチャの型と、インデックスシグニチャ以外（たとえばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。
 
@@ -345,7 +340,6 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
 TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。
 インタフェースの中で許される記法はオブジェクト型リテラルそのまんまです。
-#@# OK REVIEW muo: 〜に書ける→〜で許される かなー
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
@@ -454,7 +448,6 @@ double({
 とおるにはとおりますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうがよいコーディングスタイルになります。
 
 なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structural-subtypings/optional}）。
-#@# OK REVIEW muo: 基礎のところでだいぶ「オプショナル」という表記をしてたけどこれは統一すべきなのか悩ましい感じ
 
 //list[structural-subtypings/optional][optional(?)なプロパティはなくてもよい]{
 #@mapfile(../code/types-basic/structural-subtypings/optional.ts)
@@ -525,7 +518,6 @@ var str = "str";
 var num: number = <number> str;
 #@end
 //}
-#@# OK REVIEW muo: これ右端あふれてます
 
 ダウンキャストも実行できます（@<list>{type-assertions/class}）。
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
