@@ -1,7 +1,9 @@
-= 型の国のTypeScript
+#@# @suppress JapaneseAmbiguousNounConjunction
+={index} 型の国のTypeScript
 
 == 本書について
 
+#@# @suppress SentenceLength ParenthesizedSentence
 あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c87/#typescript,C87で頒布されたTypeScript in Definitelyland}の全文です。
 内容は（筆者のやる気次第で）随時更新されていく可能性があります。
 誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
@@ -14,10 +16,10 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 この表紙のおかげで書名が決まりました。
 可愛い表紙を本当にありがとうございます！
 
-本書は、ECMAScript 5レベルのJavaScriptの言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
+本書は、ECMAScript 5レベルのJavaScriptについての言語仕様と、JavaScriptによるOOPのいろはを理解している人を対象にしています。
 また、解説するTypeScriptの内容には執筆時点（1.3.0）ではまだ未リリースの構文についての解説も含みます。
 
-本書のすべてのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの次に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
+本書に登場するすべてのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの次に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
 本書で利用しているTypeScriptコンパイラは次のものです。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
@@ -55,7 +57,7 @@ TypeScriptリファレンスはTypeScript 1.0.0対応の書籍です。
 TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（JavaScript）に静的な型付けによる検証を導入したものです。
 現実を見据えた言語仕様で、"未来のJavaScriptそのもの"になることを目指しているようです。
 
-実際に、TypeScriptはECMAScriptのsuper set（上位互換）であることを標榜しています。
+実際に、TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜しています。
 つまり、ECMAScript+静的型付け=TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けてきています。
 

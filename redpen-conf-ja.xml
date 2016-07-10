@@ -1,22 +1,32 @@
 <redpen-conf lang="ja">
     <validators>
         <validator name="SentenceLength">
-            <property name="max_len" value="100"/>
+            <property name="max_len" value="120"/>
         </validator>
         <validator name="CommaNumber" />
         <validator name="SuccessiveWord" />
 
-        <validator name="KatakanaEndHyphen" />
+        <validator name="KatakanaEndHyphen">
+          <property name="list" value="コンパイルエラー,トリッキー"/>
+        </validator>
         <validator name="KatakanaSpellCheck" />
         <validator name="InvalidExpression" />
         <validator name="JapaneseStyle" />
         <validator name="DoubleNegative" />
         <validator name="FrequentSentenceStart" />
         <validator name="JapaneseAmbiguousNounConjunction" />
-        <validator name="JapaneseNumberExpression" />
-        <validator name="LongKanjiChain" />
+        <!-- てくぶルールとバージョンナンバーの記述で相性が悪かったため
+        <validator name="JapaneseNumberExpression">
+          <property name="mode" value="hiragana"/>
+        </validator>
+          -->
+        <validator name="LongKanjiChain">
+          <property name="max_len" value="7"/> <!-- 6で見つかるものがだいたいvalidだった -->
+        </validator>
 
-        <validator name="ParagraphNumber" />
+        <validator name="ParagraphNumber">
+          <property name="max_num" value="10"/>
+        </validator>
         <validator name="SectionLength" />
         <validator name="DuplicatedSection" />
         <validator name="VoidSection" />

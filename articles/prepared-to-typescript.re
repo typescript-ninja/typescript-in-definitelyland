@@ -1,4 +1,4 @@
-= 戦闘準備だ！TypeScript！
+={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
 == まずはインストールしてみよう
 
@@ -9,6 +9,7 @@ TypeScriptのインストールには、Node.jsのパッケージマネージャ
 TypeScriptをインストールすると、tscというコマンドが利用可能になります。
 tscコマンドでTypeScriptコードのコンパイルを行います。
 
+#@# prh:disable
 //cmd{
 # -g をつけるとグローバルなコマンドとしてインストールする
 $ npm install -g typescript
@@ -68,13 +69,14 @@ Windowsの方は素直にVisual Studioを使うのがよいでしょう。
 WebStormの他にもEclipse用TypeScriptプラグインもあるため、自分に馴染むものを探してみるのがよいでしょう。
 
 WebStormは正式にTypeScriptに対応しています。
-WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラが持つIDE実装用API（俗にいうLanguageService）を利用していません。
+WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラがもつIDE実装用API（俗にいうLanguageService）を利用していません。
 
 このため、型推論の行われ方がTypeScriptコンパイラそのものほどは頭がよくありません。
 しかし、実用上はあまり問題にならないと思うので我慢できる範囲です。
 最近ではTypeScript側の開発が早すぎて、WebStorm側の対応が後手に回っている状態です。
 TypeScript関連技術にもうちょっと要員割いてください！お願いですJetBrains様！！
 
+#@# prh:disable
 @<href>{https://youtrack.jetbrains.com/issue/WEB-14149,1.3.0対応の要望}@<fn>{webstorm-support-1.3.0}は執筆時には実装が行われ、リリース待ちになっています。
 @<href>{https://youtrack.jetbrains.com/issue/WEB-14151,1.4.0対応の要望}@<fn>{webstorm-support-1.4.0}はすでにあげてありますが対応はいつになるかな…？
 という感じです。
@@ -87,7 +89,9 @@ TypeScript関連技術にもうちょっと要員割いてください！お願�
 もし、WebStormの操作に困ったときはShiftキーを2回ほど連続で押すと"なんでも検索"の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
 WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
 
+#@# prh:disable
 //footnote[webstorm-support-1.3.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14149}]
+#@# prh:disable
 //footnote[webstorm-support-1.4.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14151}]
 
 === File Watchersの設定
@@ -146,7 +150,7 @@ WebStormで開発する場合、File Watchersは常に有効にするように�
 この理由は単純明快ですね。
 プロジェクト毎に開発速度や更新頻度も違います。
 ゆえに、新しいTypeScriptコンパイラがリリースされたとしてもそれへの対応にはばらつきが出ます。
-足並みを揃えて全部のプロジェクトのTypeScriptコンパイラのバージョンを一気にあげるなど、不可能です。
+足並みを揃えてすべてのプロジェクトに対してTypeScriptコンパイラのバージョンを一気にあげるなど、不可能です。
 これを解決するため、プロジェクトローカルにTypeScriptコンパイラをインストールする必要があります。
 プロジェクトトップで次のコマンドを実行しましょう。
 
@@ -186,6 +190,7 @@ get, setアクセサを使うために必要です。
 
  * コンパイルするときの対象ファイルを1ファイルに固定
 
+#@# @suppress JapaneseAmbiguousNounConjunction SentenceLength CommaNumber
 これは筆者の経験則によるものです。
 ファイルのコンパイル対象をデフォルトの"現在編集しているファイル（$FileName$）"にするためには、プロジェクト内のすべてのファイルが単独でコンパイルできるようになっている必要があります。
 つまり、ある1つのファイルの中にすべての依存関係を解決するreference commentを書いてまわらないといけないのです。
@@ -206,10 +211,11 @@ File Watcherやgruntなどのツールでは、このrootとして設計した�
 ==== コンパイルの単位をメインの実装系とテストコード系に2分割したい
 
 単一のrootとなるファイルを構成する方針にした場合、本チャンの実装とテストコードはさすがに分割してコンパイルする必要がありますね。
-File Watcher1つでは、1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
+File Watcher1つでは1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
 
 ==== 総括
 
+#@# @suppress CommaNumber ParenthesizedSentence
 Scopeを使ってプロジェクトを2つに区切って、File Watcherをそれに対応させて2つ作って、コンパイルオプションを変えよう！
 （@<img>{main-and-test-structure}、@<img>{scope-main}、@<img>{scope-test}、@<img>{main-watcher}、@<img>{test-watcher}）
 

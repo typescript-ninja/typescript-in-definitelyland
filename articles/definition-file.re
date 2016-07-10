@@ -1,14 +1,14 @@
-= JS資産と型定義ファイル
+={definition-file} JS資産と型定義ファイル
 
 == JavaScriptの資産が使いたい！
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
-とはいえ、現時点のWebアプリの世界はJavaScriptで成り立っていますし、すでに莫大な資産があります。
+とはいえ、現時点ではWebアプリの世界はJavaScriptで成り立っていますし、すでに莫大な資産があります。
 それらを放り出してしまうのはあまりにもったいないので、TypeScriptでも活用していきたいところです。
 そのためにTypeScriptは既存のJavaScript用資産を活用するための仕組みを持っています。
 それが、型定義ファイルです。
 
-通常のTypeScriptのコードの拡張子が.tsなのに対して、型定義ファイルは拡張子を.d.tsとします。
+通常のTypeScriptコードは拡張子が.tsなのに対して、型定義ファイルは拡張子を.d.tsとします。
 拡張子を.d.tsとしたファイルに実装を含むようなコードを書くとtscがエラーにするので、ケアレスミス予防のためにも型定義ファイルの拡張子は必ず.d.tsにします。
 #@# OK REVIEW muo: 少々言葉不足でつながり悪く感じた。「拡張子を.d.tsとしたファイルに実装を含むようなコードを書くと」かなぁ
 
@@ -31,7 +31,7 @@ $ npm install -g tsd
 $ npm install -g dtsm
 //}
 
-まずは、プロジェクトで使う型定義ファイルを記録するために依存関係保存用のファイルを生成します。
+まずは、プロジェクトで使う型定義ファイルを記録するために依存関係を保存するための設定ファイルを生成します。
 
 //cmd{
 # どちらか！
@@ -139,7 +139,7 @@ describe("lib", () => {
 #@end
 //}
 
-mochaでは、describeで何に対してのテストかを宣誓し、itでどういう性質を持つべきかを宣誓します。
+mochaでは、describeで何に対してのテストかを宣誓し、itでどういう性質をもつべきかを宣誓します。
 power-assertは、適当にassertに真になってほしい式を突っ込んでおけばそれが本当に真になっているかを検証して報告してくれます。
 
 ここで問題なのは、mochaとpower-assertについての情報がソースコード上に存在していないことです。
@@ -186,13 +186,14 @@ declare module "power-assert" {
 
 == 型定義ファイルを書こう
 
-さて、型定義ファイルの取得の仕方、使い方はわかりました。
+さて、型定義ファイルの取得方法、使い方はわかりました。
 しかし、世の中にあるJavaScriptライブラリのうち、まだまだ型定義ファイルが書かれていないものは数多くあります。
 特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地に違いありません。
 #@# OK REVIEW muo: 社内製 内製 社内 は良いけど社内内製はいけない
 
+#@# @suppress InvalidExpression
 しからば！自分で書くしかあるまいよ！
-ぶっちゃけた話、めんどくさいのですが、後々の安心・安全のための投資として割りきりましょう。
+ぶっちゃけた話、めんどくさいのですが、後々の安心・安全を得るための投資として割りきりましょう。
 
 なお、自分で型定義ファイルを書く覚悟無しにTypeScriptをやるのは茨の道だと思いますので頑張ってください。
 「誰かがやってくれないと自分ではできません」なんて甘えた根性では型サバンナでは到底生きていけないのです（DefinitelyTypedメンテナの意見です）。
@@ -203,12 +204,14 @@ TypeScriptはJavaScriptに対して後付で型による制約をつけたした
 そのため、JavaやC#のような最初から型ありきの言語より少し考え方が複雑です。
 具体的にいえば、型と実体（値）というものが分かれています。
 
+#@# @suppress InvalidExpression
 すべてがTypeScriptで書かれたプログラムであれば、型と実体は基本的には一致しています。
 #@# OK REVIEW muo: 書かれている→書かれた かな
 クラスの定義を書いたとき、JavaScriptプログラムとしてのクラス（OOPするためのコンストラクタ関数）と、TypeScriptで使う型としてのクラスが一度に誕生します。
 これは非常に素直かつ簡単で、型と実体をひとつの記述から作成しているので、この2つが乖離してしまうことはありません。
 
-一方、JavaScriptでコードを書いて、TypeScriptで型定義ファイルを作成して使う場合は、実装と型が個別に定義されることになります。
+#@# @suppress CommaNumber
+一方、JavaScriptでコードを書いてTypeScriptで型定義ファイルを作成して使う場合、実装と型が個別に定義されることになります。
 #@# OK REVIEW muo: JavaScriptで書いて→JavaScriptでコードを書いて
 #@# OK REVIEW muo: 「当てて使う」の表現は少々感覚寄りすぎかなーと
 そのため、型と実体の2つが分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、というありさまになるわけです。
@@ -225,14 +228,15 @@ TypeScriptはJavaScriptに対して後付で型による制約をつけたした
 
 こんな感じです。
 
-正しいライブラリの使い方を導く、というのは、裏を返せば間違った使い方ができないようにする、ということです。
+正しいライブラリの使い方を導く、というのは裏を返せば間違った使い方ができないようにする、ということです。
 これには、型と実体の定義に乖離が存在せず、コンパイルが通ったら実行時エラーが簡単には起こらないことも含まれます。
 
 他のコードや型定義ファイルに意図せぬ干渉を引き起こさないこと、というのは、意図せぬインタフェースの統合などが起こらないことです。
-このためには、あまりにも汎用的な名前を避けたり、可読性が高く理解しやすい型定義を作り、干渉を容易に判断できるようにすることも含まれます。
+このためには、あまりにも汎用的な名前を避けたり、可読性が高く理解しやすい型定義を作り干渉を容易に判断できるようにすることも含まれます。
 
 IDE上で使いやすいこと、というのは、Visual StudioやWebStorm上で入力補完の候補が不用意に出過ぎないようにして見通しのよい開発を助けることなどが含まれます。
 
+#@# prh:disable
 これら3つを守ることが"良い品質であること"に繋がるというのは、TypeScript自体が型指定を行うことで間違ったコードを書きにくいようにするツールであると考えると納得がいくでしょう。
 #@# OK REVIEW muo: 「型を使って間違ったコードを書きにくいように」の部分が構文解析しづらいので、ちょい冗長になるけど「型指定をおこなうことで間違った」のほうが良さそう
 #@# OK REVIEW muo: 納得できると思います→納得できるでしょう(または、納得がいくでしょう)
@@ -241,12 +245,15 @@ IDE上で使いやすいこと、というのは、Visual StudioやWebStorm上�
 #@# OK REVIEW muo: 人は誰しも→人間、どうしても あたり
 DefinitelyTypedにpull requestを送ってくれる人にもそういう人は多くいます。
 
+#@# prh:disable
 これから説明するベストプラクティスを踏まえて、より良い型定義ファイルを作成できるように鍛錬していきましょう。
 
+#@# @suppress ParagraphNumber SectionLength
 == 型定義ファイルのベストプラクティス
 
+#@# @suppress SentenceLength JapaneseStyle
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
-基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式のHandbookのWriting .d.ts files}@<fn>{official-handbook}にしたがっておけばよいです。
+基本的には@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}と@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,公式HandbookのWriting .d.ts files}@<fn>{official-handbook}にしたがっておけばよいです。
 本書では、そこに書かれていることや筆者の経験則などを説明していきます。
 
 //footnote[dt-best-practice][@<href>{http://definitelytyped.org/guides/best-practices.html}]
@@ -357,10 +364,10 @@ var notExists = ghost;
 #@end
 //}
 
-これを活用して、大量のインタフェースを持つようなライブラリの定義をひとまとまりにできます。
+これを活用して、大量のインタフェースをもつようなライブラリの定義をひとまとまりにできます。
 
 実際の例を見てみましょう。
-@<list>{ghost-module/jquery-without-ghost-module}はjQueryの型定義ファイルの抜粋（＆一部改変）です。
+@<list>{ghost-module/jquery-without-ghost-module}はjQueryの型定義ファイルからの抜粋（＆一部改変）です。
 
 //list[ghost-module/jquery-without-ghost-module][実際のjQueryの型定義の例]{
 #@mapfile(../code/definition-file/ghost-module/jquery-without-ghost-module.d.ts)
@@ -405,9 +412,10 @@ declare var $: JQueryStatic;
 
 トップレベルに複数の型がいくつも散乱してしまうのがよくありません。
 それに、@<code>{JQuery}というprefixが乱舞していて目を惑わせます。
-ライブラリ内部のAPI同士の参照でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。
+ライブラリ内部でAPI同士が参照する場合でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。
 IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。
 
+#@# @suppress ParenthesizedSentence
 これを幽霊モジュールを使って書きなおしてみます（@<list>{ghost-module/jquery-with-ghost-module}）。
 
 //list[ghost-module/jquery-with-ghost-module][幽霊モジュールを使ってみた]{
@@ -453,16 +461,19 @@ declare var $: jquery.Static;
 //}
 #@# OK REVIEW muo: これ右端あふれてます
 
+#@# @suppress SuccessiveWord
 インタフェース名が短く、かつわかりやすくなりました。
 そうそう、こういうのでいいんだよこういうので！
 
 もちろん、無理に幽霊モジュールを使う必要はありません。
-クラスや変数、関数などを持ち、通常の実体を持つモジュールが存在している場合は、そのモジュールに相乗りしてしまったほうが楽でしょう。
+クラスや変数や関数などを持ち、通常の実体をもつモジュールが存在している場合は、そのモジュールに相乗りしてしまったほうが楽でしょう。
 #@# OK REVIEW muo: 実体のある→実体を持つ
 #@# OK REVIEW muo: 相乗りしていってしまったほうが→相乗りしてしまったほうが
 
+#@# @suppress JapaneseStyle
+#@# prh:disable
 …なんでDefinitelyTyped上にある型定義ファイルでそうなってないものが多いかって？
-良い質問です。
+よい質問です。
 ひとつは幽霊モジュールの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
 先で説明しましたが、インタフェースは定義の統合ができます。
 この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまうのです。
@@ -475,11 +486,13 @@ declare var $: jquery.Static;
 
 //footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記されたのでそちらに統一]
 
+#@# @suppress JapaneseStyle ParagraphNumber SectionLength
 === なんでもかんでもインタフェースにしてはならない
 
 おうお前少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？
 と、思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
+#@# @suppress ParenthesizedSentence
 具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{interface-antipattern/module-by-interface-bad}）。
 
 //list[interface-antipattern/module-by-interface-bad][インタフェースでモジュールを表現してしまう。何故なのか…]{
@@ -502,6 +515,7 @@ declare var foo: Foo;
 #@end
 //}
 
+#@# @suppress InvalidExpression
 この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。
 #@# OK REVIEW muo: 使える人は→使えるのは
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
@@ -529,7 +543,7 @@ assert.ok(value);
 #@end
 //}
 
-呼び出し可能で、プロパティを持つ。ふむ、じゃあ@<list>{interface-antipattern/callable-module-bad1}か、@<list>{interface-antipattern/callable-module-bad2}だ！
+呼び出し可能で、プロパティをもつ。ふむ、じゃあ@<list>{interface-antipattern/callable-module-bad1}か、@<list>{interface-antipattern/callable-module-bad2}だ！
 
 //list[interface-antipattern/callable-module-bad1][こうしてしまいたい、気持ち]{
 #@mapfile(../code/definition-file/interface-antipattern/callable-module-bad1.d.ts)
@@ -551,9 +565,10 @@ interface Assert {
 #@end
 //}
 
+#@# @suppress ParenthesizedSentence
 たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。
 
-しかし、これには別の良いやり方があるのです（@<list>{interface-antipattern/callable-module-good}）。
+しかし、これには別のよいやり方があるのです（@<list>{interface-antipattern/callable-module-good}）。
 
 //list[interface-antipattern/callable-module-good][関数と内部モジュール 両方やらなきゃいけないのが(ry]{
 #@mapfile(../code/definition-file/interface-antipattern/callable-module-good.d.ts)
@@ -568,6 +583,7 @@ declare module assert {
 これの効能は、階層構造を素直に表現できることと、前項で説明した幽霊モジュールの書き方を併用できるところです。
 #@# OK REVIEW muo: 層構造→階層構造 かな、ここの流れだと。
 
+#@# @suppress SentenceLength
 この手法は、実際に@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
 @<list>{interface-antipattern/power-assert-abst}に抜粋&改変したものを示します。
 
@@ -610,7 +626,7 @@ module test {
 #@end
 //}
 
-コンパイル結果の@<list>{interface-antipattern/callable-module-js}を見ると、なぜ関数が先、内部モジュールが後、という決まりになっているかがわかりますね。
+コンパイル結果の@<list>{interface-antipattern/callable-module-js}を見ると、なぜ関数が先で内部モジュールが後、という決まりになっているかがわかりますね。
 
 //list[interface-antipattern/callable-module-js][コンパイル結果を見れば、理由が分かる。これ、正しいJSだ！]{
 #@mapfile(../code/definition-file/interface-antipattern/callable-module.js)
@@ -663,6 +679,7 @@ interface TestB {
  ** 別ライブラリが（プラグインなどで）拡張する設計のライブラリには向かない
  * 別途インタフェースの実装を型定義に盛り込むときめんどくさい（定義の二重記述が必要）
 
+#@# @suppress InvalidExpression
 @<list>{declare-class/declare-vanilla-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
 
@@ -698,6 +715,7 @@ declare class FooListenerImpl implements FooListener {
  * インタフェース定義の統合が使えるので別ライブラリの拡張にも対応できる！
  * インタフェースを実装するのが（継承するだけなので）めっちゃ簡単
 
+#@# @suppress InvalidExpression
 @<list>{declare-class/declare-decompose-class-invalid}みたいな感じです。
 #@# OK REVIEW muo: 感じ。→感じです。
 
@@ -735,6 +753,7 @@ interface FooListenerImpl extends FooListener {
 
 ==== まとめ
 
+#@# @suppress SentenceLength
 クラスの型定義がopen endedになって定義を拡張可能にして、@<href>{https://github.com/Microsoft/TypeScript/issues/371,インタフェースのオプショナルな実装}@<fn>{optional-interface}サポートしてくれたらクラス定義で全部賄える！
 
 今のところはどうしようもないので、用途に応じて適切なほうを選びましょう。
@@ -766,7 +785,7 @@ declare var valueC: Function;
 答え：一番最初のやつ。
 
 JavaScriptのライブラリは1つの関数にさまざまな使い方をさせようとする場合が多くあります。
-つまり、1つの関数が複数の顔を持つということです。
+つまり、1つの関数が複数の顔をもつということです。
 その顔ひとつひとうに個別の型定義を割り振ってやるテクニックをオーバーロードと呼びます。
 
 なお、普通にTypeScriptコードを書くときにオーバーロードはあまり使わないのがよいスタイルです。
@@ -792,10 +811,12 @@ bye(() => "function");
 #@end
 //}
 
+#@# @suppress SectionLength JapaneseAmbiguousNounConjunction
 === 外部モジュールの定義の統合
 
 @<strong>{利用可能になったバージョン 1.3.0}
 
+#@# @suppress SentenceLength
 あんまり言及されることがないのでここで触れておきます。
 1.1.0-1までの時代は、外部モジュールがopen endedじゃありませんでした。
 1.3.0からはopen endedになったので、@<list>{external-module-declaration-merging/basic}と@<list>{external-module-declaration-merging/usage}のようなコードが書けます。
@@ -824,6 +845,7 @@ foo.num;
 #@end
 //}
 
+#@# @suppress SuccessiveWord SentenceLength
 ちなみに、それまでは内部モジュールとして拡張ポイントを@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b66f2750b10f262a698098cabbf210f7f2a/express/express.d.ts#L15,外出しして用意}@<fn>{extract-module}し、@<href>{https://github.com/borisyankov/DefinitelyTyped/blob/e3b19b66f2750b10f262a698098cabbf210f7f2a/passport/passport.d.ts#L8,他所で拡張する}@<fn>{use-internal-module}という頑張り方をしていました。
 泣けますね。
 既存ライブラリにメソッドを生やすという黒魔術はNode.js上でもできてしまうのが辛いところです。
@@ -918,6 +940,7 @@ optionalとは、値が渡されるかどうかの指標であって、コール
 
 C#やJavaよりも、広い範囲でインタフェースが利用されるので"実装を強制させるパーツ"扱いしてはいけないからである。
 
+#@# @suppress InvalidExpression
 らしいが、そもそもC#の文化持ち込んでIつけるのやってたのMicrosoftさんじゃないんですかぁー！？
 という気持ちになるがまぁ広い心で受け入れていこうなのだ。
 過去にもboolをbooleanに変えたり、先頭大文字のメソッド名を先頭小文字にしたり、C#文化をWeb界隈にあわせようとしてくれてますからね…。
@@ -1055,9 +1078,11 @@ var bar: any;
 #@end
 //}
 
+#@# @suppress InvalidExpression
 このコードの悪いところは、クラス名が先頭大文字じゃない！一回も参照していない変数がある！というところです。
 その両方とも、tslintは検出してくれています。
 
+#@# @suppress SentenceLength
 tslintは必ず設定ファイルを必要とします。
 今のところ、TypeScript界における統一見解は存在していないので、@<href>{https://github.com/palantir/tslint/blob/master/tslint.json,tslintが使ってる設定ファイル}@<fn>{tslint-example-config}を参考にしてみるのがよいかもしれません。
 
@@ -1091,7 +1116,7 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加、修正につ�
 
 ここでは、筆者がDefinitelyTypedに送られてきたときにどういう考えでpull requestのレビューをしているかを示したいと思います。
 あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことを言われる場合もあるでしょう。
-実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーの言うことを尊重して議論していただきたいと思います。
+実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーのいうことを尊重して議論していただきたいと思います。
 
 とはいえ、メンテナは全員@<href>{http://definitelytyped.org/guides/contributing.html,DefinitelyTypedのContribution guide}@<fn>{dt-contrib-guide}は読んでいるはずなので、こちらには目を通しておくとよいでしょう。
 

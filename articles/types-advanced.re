@@ -8,9 +8,10 @@
 
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
 タプル型（tuple types）や直和型（union types）についての解説もありますよ！
-なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそ良い設計だと筆者は考えています@<fn>{bad-code}。
+なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています@<fn>{bad-code}。
 #@# OK REVIEW muo: ちょい文の構造をつかみにくいと感じた
 
+#@# @suppress InvalidExpression
 TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
 #@# OK REVIEW muo: ここも多少構造がわかりにくかった。「TypeScriptコードを書く中では、」などで始めると軽減されるかも
 そういったときに本章の内容が活きてきます。
@@ -27,6 +28,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 
 @<strong>{消滅したバージョン 1.4.0}
 
+#@# @suppress LongKanjiChain
 後述のtuple types、及びunion typesが導入されたので、Best Common Typeの概念がどうなったのか調べてみてびっくりしました。
 現在の最新仕様ではBCTという概念そのものが消滅してますね…。
 こぇー…。
@@ -38,7 +40,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 
 消える仕様のことを書いても詮無いことなので、ここではざっくり書くにとどめます。
 
-Best Common Typeの名の響きどおり、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
+Best Common Typeという名の響きどおり、複数要素の間で型の統一がされない場合、共通最適型のアルゴリズムによって型が決定されていました。
 #@# OK REVIEW muo: アルゴリズムの元に→アルゴリズムによって
 たとえば、@<list>{bct-basic-1.3.0}のようになります。
 #@# OK REVIEW muo: 感じ→感じです
@@ -60,9 +62,11 @@ function test() {
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 ひとつ目は配列の要素の型が一致しないため、BCTを求めた結果、共通のsuper typeがなかったので {} になっています。
 ふたつ目は関数のreturnステートメントが2つありますが、両者で型が一致しなかったので {} になり、結果コンパイルエラーとして怒られています。
 
+#@# @suppress CommaNumber
 本当に共通の要素がある場合、それに収束します。
 たとえば、親クラスA、その子クラスB, Cがある場合、BCTはAになります（@<list>{bct-class-1.3.0}）。
 
@@ -87,7 +91,7 @@ var array = [new A(), new B(), new C()];
 == 型クエリ（Type Queries）
 
 型クエリは指定した変数（やメソッドなど）の型をコピーします。
-たとえば、@<list>{type-queries/basic}のような、クラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
+たとえば、@<list>{type-queries/basic}のようなクラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
 そういうときに、型クエリを使います。
 
 //list[type-queries/basic][クラスそのものの型だよ！]{
@@ -131,6 +135,7 @@ obj.bye = obj.hello;
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合があります。
 @<list>{type-queries/copy-invalid}では、ひとつ目の引数の型をふたつ目の引数や返り値の型にもコピーして使っています。
 
@@ -165,6 +170,7 @@ rect.z1;
 
 ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがいいですね。
 
+#@# @suppress ParagraphNumber SectionLength
 == タプル型（Tuple Types）
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
@@ -175,11 +181,12 @@ rect.z1;
 
 @<strong>{導入されたバージョン 1.3.0}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 tuple（タプル）は、任意の数の要素の組です。
 #@# OK REVIEW muo: 他の用語は基本カタカナだけどここだけひらがななのは何か意図あります?
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleもただのArrayになります。
 
-既存のJavaScriptの資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
+既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
 タプル型はおそらくそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではないでしょう。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。
 
@@ -247,7 +254,7 @@ tuple[1].charAt(0); // string は charAt を持つ！
 #@end
 //}
 
-さて、タプル型の重箱の隅を見ていきましょう。
+さて、タプル型について重箱の隅を見ていきましょう。
 要素数が多すぎる場合、指定されていない値の型はBCT（1.3.0まで）か、union types（1.4.0以降）になります。
 その例を見てみましょう(@<list>{tuple/many-values})。
 
@@ -308,6 +315,7 @@ tuple[0].charAt(0);
 
 結論：タプル型を過信するのはやめろ。繰り返す、タプル型を過信するのはやめろ！
 
+#@# @suppress ParagraphNumber SectionLength
 == 直和型（Union Types）
 
 @<strong>{導入されるバージョン 1.4.0}
@@ -317,13 +325,14 @@ tuple[0].charAt(0);
 
 一番最初に書いておくけど@<strong>{TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！}
 
+#@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
 じゃあ解説していきましょう。
 union typesはいわゆる直和型でございます。
 この変数の値の型は、アレか、コレか、ソレ！のどれか。
 どれかはわからない。
 みたいな感じ。
 
-なんのために入ったのか？というと、既存JavaScriptにより良い型定義を与えるために入った…！！と言ってしまっていいでしょう。
+なんのために入ったのか？というと、既存JavaScriptによりよい型定義を与えるために入った…！！と言ってしまっていいでしょう。
 実際、自分でTypeScriptコード書いてるときに欲しくなる機能ではあまりありません。
 ECMAScriptさん、パターンマッチもないしー。
 
@@ -384,7 +393,7 @@ base = new Inherit();
 この辺り、仕様書上は若干小難しく書かれているのですが、単にもっとも少ない要素数になるように型がまとめられていくだけです。
 
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
-|| 演算子を使ったとき、条件(三項)演算子を使ったとき、配列リテラルを使ったときです(@<list>{union-types/inferred})。
+|| 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです(@<list>{union-types/inferred})。
 
 //list[union-types/inferred][こういうときは目にしますね]{
 #@mapfile(../code/types-advanced/union-types/inferred.ts)
@@ -502,7 +511,7 @@ ECMAScript 5の範囲では、変換ルールは次のとおりです。
 
 これを利用して、変数の型を狭めます。
 
-==== 使い方
+===={typeof-typeguards-usage} 使い方
 
 一番簡単な使い方から見ていきましょう（@<list>{type-guards/typeof-basic}）。
 TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。
@@ -520,6 +529,7 @@ if (typeof obj === "string") {
 #@end
 //}
 
+#@# @suppress SentenceLength JapaneseAmbiguousNounConjunction
 TypeScript 1.4.0 以前のTypeScriptであれば、このif文のthen節の中でも変数objの型は型注釈したものから変わらずそのままでした。
 #@# OK REVIEW muo: どのまま?明示したほうがいい
 type guardsが導入された後は"変数objがtypeofで調べたときにstringであるという条件を満たすとき、変数objの型はstringである"というルールに基づき、if文のthen節の中では変数objはstringと型付けされます。
@@ -560,6 +570,7 @@ if (typeof obj === "string") {
 
 まぁ、指定した型どおりの値が入ってくるのであればなにも問題はないな！
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 ==== 後続の型の絞込み
 
 typeofによるtype guards特有の仕様として、後続の型の絞込みがあります（@<list>{type-guards/typeof-removes}）。
@@ -660,6 +671,7 @@ typeofのtype guardsと違って、else句が自動的に絞込まれたりは�
 まぁ、primitiveな型の値と違って、親子関係があるので後続の型を絞ってよいと断言できないパターンがちょいちょいありますからね。
 仕方ないね。
 
+#@# @suppress ParagraphNumber SectionLength
 ==== 自分で定義した型で使うには？
 
 TypeScriptが標準で提供する（lib.d.tsに書いてある）型や、TypeScript上で定義したクラスだけがtype guardsの対象になる、そんなの悲しすぎ！
@@ -689,21 +701,27 @@ if (obj instanceof A) {
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction CommaNumber
 instanceofの右側の値の、その型の、prototypeプロパティの、型！
-つまり、instanceofの右側のAの型のAStaticのprototypeプロパティの、型(AInstance)！
+つまり、instanceofの右側のAの型のAStaticのprototypeプロパティの、型（AInstance）！
 …まわりくどい！
 
+#@# @suppress SentenceLength CommaNumber InvalidExpression
 そもそも、公式のTypeScript Handbookの@<href>{http://www.typescriptlang.org/Handbook#writing-dts-files,Writing .d.ts files}@<fn>{writing-dts-files}の項目、クラスの分割定義について言及している箇所でも、prototypeプロパティなんかわざわざ定義してないんですよね…。
 #@# OK REVIEW muo: ののののの
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 このため、この原稿を執筆している時点でlib.d.tsに組み込みのRegExpにprototypeプロパティが定義されておらずinstanceofによるtype guardsができないという事態がありました。
-これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたものが奇しくも筆者の初のコードのコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
+これをTypeScriptコンパイラのリポジトリに報告し、pull requestしたものが奇しくも筆者の初のコントリビュートになりました@<fn>{missing-prototype-properties}。やったぜ！
 
 だがしかし、それでは根本的な解決になっていなくて、そもそもこれだとDefinitelyTypedのほぼすべての型定義ファイルがtype guards未対応になってしまいます。今あるものを頑張って対応したとしても、今後送られてくる型定義ファイルについてすべてのpull requestでprototypeプロパティを実装してください！と指摘して回るのはダルすぎるでしょ…！
 
+#@# @suppress InvalidExpression
+#@# prh:disable
 というわけで、prototype propertyの代わりに、construct signatureを持っている場合はそちらの返り値を参照するのはどう？という@<href>{https://github.com/Microsoft/TypeScript/issues/1283,提案}@<fn>{type-guards-by-construct-signature}を行っています。
 コレがそのまま通るかはわからないけど、1.4.0リリース時に仕様が改善されていたら俺のことめっちゃ褒めてもいいと思います( ｰ`дｰ´)ｷﾘｯ
 
+#@# @suppress CommaNumber
 話を戻しましょう。
 prototypeプロパティを持っているだけではダメで、Functionとの互換性を持たせる必要があります。
 一番簡単なのは、インタフェースにconstruct signatureかcall signatureのどちらか、または両方を持たせることです。
@@ -755,10 +773,12 @@ if (obj instanceof A) {
 #@end
 //}
 
+#@# @suppress SuccessiveWord
 instanceofを使ってtype guardsで型の絞込みをしたつもりのシチュエーションです。
 しかし、AStaticはprototypeプロパティを持っていません。
 つまり、type guardsは効力を発揮しなかったんだよ！ΩΩΩ＜な、なんだってー！
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 ここでのエラーの根本的な原因は、変数objの型をAInstanceに絞ることに失敗したことです。
 ですが、実際に表示されるエラーメッセージは"AInstance | Dateだとstrプロパティにアクセスして安全かわかんなかったっす…"というメッセージです。
 type guardsの失敗が、別のエラーとなって間接的に表れてしまっています。
@@ -796,6 +816,7 @@ interface Array<T> {
 #@end
 //}
 
+#@# @suppress SentenceLength CommaNumber
 instanceofでtype guardsで型を狭めたとき、any[]になるのかな…？と一瞬思いますが、ことはそう簡単ではありません(@<list>{type-guards/instanceof-array-invalid}、@<list>{type-guards/instanceof-array}、@<list>{type-guards/instanceof-empty-array-invalid})。
 
 //list[type-guards/instanceof-array-invalid][絞込み、失敗！]{
@@ -890,7 +911,7 @@ if (!(typeof obj !== "string")) {
 type guardsは型システム上の仕組みだということを忘れてはいけません。
 JavaScriptの実行環境とは全く関係がないのです。
 
-TypeScriptでは、構造的部分型の仕組みにより、クラスが要求されている箇所に、互換性のある別の値を代入することができます。
+TypeScriptでは構造的部分型の仕組みにより、クラスが要求されている箇所に互換性のある別の値を代入することができます。
 
 その仕組みを使って、@<list>{type-guards/weakspot}のようなコードが書けてしまいます。
 
@@ -913,6 +934,7 @@ if (obj instanceof Sample) {
 #@end
 //}
 
+#@# @suppress SentenceLength CommaNumber
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
 コンパイル後のJavaScriptコード(@<list>{type-guards/weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
 
@@ -972,8 +994,10 @@ var obj: Sample = {
 //}
 #@# OK REVIEW muo: これ右端あふれてます
 
+#@# @suppress JapaneseStyle
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することですね。
 
+#@# @suppress ParagraphNumber
 == 型の別名（type alias）
 
 @<strong>{導入されるバージョン 1.4.0}
@@ -1047,6 +1071,7 @@ var strArray = new StringArray();
 #@end
 //}
 
+#@# @suppress CommaNumber
 TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{type-alias/spec-example})。
 union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
 
@@ -1075,6 +1100,7 @@ interface AltRecFunc {
 #@end
 //}
 
+#@# @suppress InvalidExpression
 また、type aliasではGenericsを使った名前を定義することができません。
 #@# OK REVIEW muo: 「〜定義することができません。」のほうが良いかな。前の段落でそのように書いてるので統一したほうが良い
 つまり、@<list>{type-alias/with-type-parameters-invalid}みたいなコードは文法的に正しくないためコンパイルがとおりません。

@@ -1,5 +1,6 @@
 = TypeScriptの基本
 
+#@# @suppress SentenceLength ParenthesizedSentence
 JavaScriptの（TypeScriptではなく）仕様まで踏み込んだ解説については、拙著TypeScriptリファレンス（@<href>{http://www.amazon.co.jp/gp/product/484433588X?tag=damenako-22,Amazon}@<fn>{ts-reference-amazon}、@<href>{http://tatsu-zine.com/books/typescript-reference,達人出版会}@<fn>{ts-reference-tatsujin}）を参照してください。
 TypeScriptリファレンスをお持ちの場合（TypeScript 1.3.0現在）、この章は読まなくても問題ありません。
 #@# OK REVIEW muo: 大丈夫ですか
@@ -13,7 +14,7 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。
 
 型周りの基本は@<chapref>{types-basic}を、難しいこととか便利なことは@<chapref>{types-advanced}を見てください。
-既存のJavaScriptの資産やライブラリを使いたい場合は@<chapref>{definition-file}の最初のほうを見てください。
+既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
 
 #@# TODO enum と const enum どっか
 
@@ -22,6 +23,7 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 
 == 変数
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 違うのは、@<list>{variable/with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
@@ -76,14 +78,16 @@ var obj = {};
 #@end
 //}
 
+#@# @suppress KatakanaEndHyphen
 これで手で型注釈を与えずに済むぞ！しかも、書き方がJavaScriptと全く同じになりました。
 楽 + コンパイルによる型チェック = TypeScriptサイキョー。
 ということがご納得いただけたでしょう。
 #@# OK REVIEW muo: 「いただけたと思います」よりは「いただけたでしょう」あたりかな
 
+#@# @suppress ParagraphNumber SectionLength
 == クラス
 
-TypeScriptには一般的な構文でのクラスの定義が備わっています（@<list>{class/basic}）。
+TypeScriptには一般的な構文でクラスを定義する構文が備わっています（@<list>{class/basic}）。
 
 //list[class/basic][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class/basic.ts)
@@ -144,10 +148,11 @@ obj.dateA;
 上から順に見て行きましょう。
 
 まずはクラス変数、インスタンス変数です。
-クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽく言うとプロパティですね。
+クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽくいうとプロパティですね。
 
+#@# @suppress CommaNumber
 アクセス修飾子として、private、public、protected（TypeScript 1.3.0より）などの可視性を制御するアクセス修飾子を利用できます。
-何も指定していないときのデフォルトの可視性はpublicになります。
+何も指定していないとき、デフォルトの可視性はpublicになります。
 しかし、コンパイル後のJSを見るとわかりますが@<code>{<any>}などを使うと簡単にそれらの要素にアクセスできてしまうので過信は禁物です。
 そのため筆者はアクセス修飾子を使わず、アクセスされたくない要素はprefixに_を使うなどの（JavaScriptでもよく見られた）運用をしています。
 
@@ -185,6 +190,7 @@ console.log(obj.str);
 次はメソッドです。
 これも特に特筆すべき要素はありませんね。普通です。
 
+#@# @suppress SentenceLength CommaNumber ParenthesizedSentence
 最後に、get、setアクセサです。
 これを含んだコードをコンパイルするときは、@<code>{--target es5}オプションが必要です。
 なかなかめんどくさいJavaScriptコードが生成されるようになりますが、便利です。
@@ -195,7 +201,7 @@ console.log(obj.str);
 
 次に、クラスの継承も見て行きましょう。
 継承も普通にできます@<list>{class/inherit}。
-superを使った親クラスのメソッドの参照も一応普通に使えます。
+superを使い親クラスのメソッドを参照することも一応普通に使えます。
 
 //list[class/inherit][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
@@ -217,7 +223,7 @@ console.log(obj.greeting("TypeScript"));
 #@end
 //}
 
-TypeScript以外のオブジェクト指向の世界でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
+TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
 
 #@# TODO 引数プロパティ宣言はES6に入らないよなぁ？
@@ -273,6 +279,7 @@ console.log(hello("TS", "JS"));
 #@end
 //}
 
+#@# @suppress LongKanjiChain
 なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function/invalid}）。
 
 //list[function/invalid][こういうのはアカン]{
@@ -291,7 +298,7 @@ function funcB(...args: string, rest: string) {
 #@end
 //}
 
-ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドの記述のときも同様に利用できます。
+ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドを記述するときも同様に利用できます。
 
 === アロー関数式
 
@@ -386,18 +393,21 @@ JavaScriptに慣れている人も、慣れていない人も、特別に理由�
 そのための武器として、TypeScriptにはモジュールがあります。
 おおむね、JavaのpackageやC#のnamespaceと類似のものと考えてよいでしょう。
 
+#@# @suppress LongKanjiChain
 TypeScriptでは2種類のモジュールがあり、それぞれ内部モジュールと外部モジュールと呼ばれています。
 複数の種類が必要な理由は、JavaScript実行環境自体が複数あるためです。
 
+#@# @suppress JapaneseNumberExpression
 ひとつは、ブラウザです。
-ブラウザ上では複数のJavaScriptのファイルが連結され、まるでひとつのファイルであるかのように解釈され実行されます。
+ブラウザ上では複数のJavaScriptファイルが連結され、まるでひとつのファイルであるかのように解釈され実行されます。
 これに対して階層構造を与えるための仕組みが内部モジュールです。
 
 もうひとつは、Node.jsです。
 Node.jsでは、ひとつのファイルを独立した構造と見なす仕組みが備わっています。
 この、1ファイル＝1モジュールと見なした仕組みが外部モジュールです。
-階層構造は普通のファイルシステムのようにディレクトリで構成します。
+階層構造はファイルシステム上でディレクトリを使って構成します。
 
+#@# @suppress
 内部モジュール・外部モジュール、どちらの形式でプロジェクトを管理するかを決めるのは、非常に、非常に重要な決めごとです。
 しかも、プロジェクトの途中で内部モジュールと外部モジュールを切り替えるのは大変な苦痛を伴うため、最初によくよく調査、検証する必要があります。
 そして、内部モジュールと外部モジュールを混在させてプロジェクトを管理するのはあまりよい決断とはいえません。
@@ -460,7 +470,7 @@ console.log(d.e.hello());
 #@# OK REVIEW muo: 「内部モジュール内部」は少々読みづらいので別の表現が良い感じ
 
 長い名前を使うのが嫌なときは@<list>{internal-module/import}のように、import句を使うこともできます。
-外部モジュールではまた別のimport句の使い方が出てくるので区別するようにしましょう。
+外部モジュールではこれとは異なるimport句の使い方が出てくるので区別するようにしましょう。
 
 //list[internal-module/import][import句で別名を作る]{
 #@mapfile(../code/typescript-basic/internal-module/import.ts)
@@ -553,13 +563,14 @@ var b;
 @<code>{import foo = require("./foo")}のように書くと、そのファイルから ./foo.ts@<fn>{require-ext}を参照することができます。
 ここでは、./fooがひとつのモジュールとして扱われます。
 
-外部モジュールはTypeScriptでは2つの方式に対応していて、その両方の形式ともTypeScript上では同じ文法で書けます。
+外部モジュールはTypeScriptではふたつの方式に対応していて、その両方の形式ともTypeScript上では同じ文法で書けます。
 コンパイル時に--module commonjsとするか--module amdとするかだけの違いです。
 
 なので、ここでは細かいことは解説しません。
 ひとつ目のCommonJSはNode.jsが採用している仕組みです。
 ふたつ目のAMDはブラウザ上で外部モジュールを利用するための仕組みです。
 
+#@# @suppress SentenceLength CommaNumber
 さて、実際のコード例を見てみましょう。
 foo.ts（@<list>{external-module/foo}）、bar.ts（@<list>{external-module/bar}）、buzz.ts（@<list>{external-module/buzz}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
 
@@ -642,4 +653,5 @@ console.log(sub.hello());
 
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
 
-//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かく言うと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索されます]
+#@# prh:disable
+//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索されます]

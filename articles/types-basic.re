@@ -6,6 +6,7 @@
 TypeScriptの華はやはり型！
 @<chapref>{typescript-basic}など所詮児戯に過ぎぬッ！！
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
 TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
 
@@ -82,7 +83,7 @@ console.log(JSON.stringify(result, null, 2));
 
 では、オブジェクト型リテラルで使える書き方5つを見ていきましょう。
 
-//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密に言うと型を指定する箇所ではありません]
+//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません]
 
 === プロパティシグニチャ（Property Signatures）
 
@@ -127,6 +128,7 @@ console.log(str);
 #@end
 //}
 
+#@# @suppress ParenthesizedSentence
 オーバーロードも表現できます（@<list>{object-type-literal/call-signature-overload}）。
 
 //list[object-type-literal/call-signature-overload][オーバーロードも表現できる]{
@@ -160,6 +162,7 @@ console.log(num);
 
 === コンストラクトシグニチャ（Construct Signatures）
 
+#@# @suppress ParenthesizedSentence
 3つ目は、そのオブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{object-type-literal/constructor-signature-invalid}）。
 #@# OK REVIEW muo: 例によって「示す書き方」→「示す記法」が良いかも
 
@@ -185,9 +188,11 @@ new Hello();
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptのコードの書き方の範疇では、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。
 型アサーションを使って@<code>{<any>}で無理やり回避する方法はありますが、あまり使わないほうがよいでしょう。
 
+#@# @suppress SuccessiveWord
 コンストラクトシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能です。
 しかし、実装するのがしちめんどくさいどころの話ではないので、ほどほどにしましょう。
 
@@ -331,6 +336,7 @@ func = (v1: string, v2 = "JavaScript") => "Hello, " + v1 + " & " + v2;
 #@end
 //}
 
+#@# @suppress SentenceLength ParenthesizedSentence JapaneseAmbiguousNounConjunction
 アロー関数式の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く場所の@<code>{=>}の前後が違うので間違えないように気をつけましょう。
 
 == インタフェース（Interfaces）
@@ -341,6 +347,7 @@ TypeScriptでの一番基本的な使い方は名前付きオブジェクト型�
 インタフェースの中で許される記法はオブジェクト型リテラルそのまんまです。
 #@# OK REVIEW muo: 〜に書ける→〜で許される かなー
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
 
 //list[interface/basic][酷使されるインタフェースさん]{
@@ -385,7 +392,7 @@ var objC: C = {
 
 == 構造的部分型（Structural Subtyping）
 
-構造的部分型は、乱暴に言うと静的型付け用のduck typingです。
+構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
 TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structural-subtypings/basic}）。
 そこに実際の継承関係は必要ありません。
 
@@ -444,7 +451,7 @@ double({
 #@end
 //}
 
-とおるにはとおりますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうが良いコーディングスタイルになります。
+とおるにはとおりますが、コードの堅牢性としては、きちんとimplements節を使いクラスの仕様であると明示したほうがよいコーディングスタイルになります。
 
 なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structural-subtypings/optional}）。
 #@# OK REVIEW muo: 基礎のところでだいぶ「オプショナル」という表記をしてたけどこれは統一すべきなのか悩ましい感じ
@@ -577,6 +584,7 @@ Javaなどでは総称型とも呼ばれます。
 ジェネリクスなんて知らんわい！
 という人も、実はすでに色々なところでお世話になっています。
 
+#@# @suppress SectionLength
 === ジェネリクスの基本
 
 TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
@@ -611,14 +619,15 @@ ArrayだけはTypeScriptの中で特別扱いされています。
 @<code>{Array<string>}を声に出して読むと、"stringのArray"になります。
 ただのArrayではないのです。
 "stringの"という所が重要です。
-stringを別のものにして"numberのArray"とか"RegExpのArray"と言うこともできます。
-つまり、色々な型に対して、"○○のArray"と言うことができるのです。
+stringを別のものにして"numberのArray"とか"RegExpのArray"ということもできます。
+つまり、色々な型に対して、"○○のArray"ということができるのです。
 これをプログラム上で表現すると@<code>{Array<T>}という表現になります。
 
+#@# @suppress InvalidExpression JapaneseAmbiguousNounConjunction
 ここで新しく出てきた@<code>{T}を@<kw>{型パラメータ,type parameters}と呼びます。
 実際、ここで出てくるアルファベットは@<code>{T}じゃなくてもかまいせん。
 @<code>{Type}でもいいですし、なんでもよいです。
-ただ、慣習として他の既存の型とかぶらないようにアルファベット大文字1文字を使う場合が多いです。
+ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
 代表的な例ではTypeの頭文字であるTや、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。
 
 さて、ではlib.d.tsから一部を抜粋した@<list>{generic-types/array-declaration-invalid}を見てみます@<fn>{array-forEach}。
@@ -639,6 +648,7 @@ interface Array<T> {
 #@end
 //}
 
+#@# @suppress SuccessiveWord SentenceLength CommaNumber
 色々な所でTが使われています。
 pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach"などの、汎用化された要素がたくさんあります。
 
@@ -660,6 +670,7 @@ interface Array {
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction SentenceLength CommaNumber
 "stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach"などになりました。
 ジェネリクス、使う分にはめっちゃ簡単ですね！
 
@@ -752,11 +763,12 @@ var objC: Sample<{ str: string; }>;
 
 === 自分でジェネリクス有りのコードを書く
 
+#@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
 ジェネリクスで一番難しいのは、使うことではなく、使わせることです。
-何故ならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。
+なぜならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。
 たとえば、"○○のArray"のように、型パラメータ部分が何になっても上手く動くような設計です。
 
-逆に言うと、実際に使うときには具体化しなければいけないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
+逆にいうと、実際に使うときには具体化しなければいけないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
 これを上手に使いこなすには一段上の設計力が要求されます。
 
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
