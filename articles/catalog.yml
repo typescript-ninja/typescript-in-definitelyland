@@ -7,8 +7,5 @@ CHAPS:
   - types-basic.re
   - types-advanced.re
   - definition-file.re
-#  - es6.re
-#  - another-transpiler.re
-#  - antipattern.re
 
 POSTDEF:
