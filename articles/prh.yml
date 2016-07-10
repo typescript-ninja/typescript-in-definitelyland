@@ -1,0 +1,8 @@
+version: 1
+
+imports:
+  - prh-techbooster.yml
+
+rules:
+  - expected: 型
+    pattern: 方

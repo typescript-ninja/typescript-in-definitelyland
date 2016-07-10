@@ -1,4 +1,4 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem 'review', '1.4.0'
+gem 'review', '2.0.0'

@@ -7,9 +7,11 @@
     "npm": "3.0.0"
   },
   "scripts": {
+    "setup": "gem install bundler",
     "preinstall": "git submodule update --init",
     "postinstall": "bundle install",
-    "update": "git submodule update"
+    "update": "git submodule update",
+    "build": "grunt pdf"
   },
   "dependencies": {},
   "devDependencies": {

@@ -1,10 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    review (1.4.0)
+    review (2.0.0)
+      rubyzip
+    rubyzip (1.2.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  review (= 1.4.0)
+  review (= 2.0.0)
+
+BUNDLED WITH
+   1.12.5
