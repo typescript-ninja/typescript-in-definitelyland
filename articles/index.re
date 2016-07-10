@@ -19,14 +19,9 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 
 本書のすべてのサンプルコードは公式にリリースされている最新のTypeScriptコンパイラか、TypeScriptリポジトリの次に示したコミットハッシュの時点での@<kw>{LKG, Last Known Good}のコンパイラを使ってコンパイルの確認をしています。
 
-現時点で最新のTypeScriptコンパイラは次のとおり。
-#@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/message TS[0-9]*: //")
-Version 1.8.10
-#@end
-
-現時点でTypeScriptリポジトリのmaster/HEADは次のとおり。
-#@mapoutput(git --git-dir=../typescript/.git --work-tree=../typescript rev-parse HEAD)
-1e8e65c8396c29403023ad52bf3501f13b08f3f4
+本書で利用しているTypeScriptコンパイラは次のものです。
+#@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
+Version 2.0.0-dev.20160707
 #@end
 
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]

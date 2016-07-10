@@ -27,7 +27,7 @@
     "grunt-typescript-formatter": "^0.4.1",
     "load-grunt-tasks": "^3.5.0",
     "tslint": "^3.13.0",
-    "typescript": "^1.8.10",
+    "typescript": "^2.0.0-dev.20160707",
     "typescript-formatter": "^2.2.1"
   }
 }

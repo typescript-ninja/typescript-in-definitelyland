@@ -171,12 +171,11 @@ console.log(obj.str);
 
 //list[class/constructor.js][コンパイルするとこんなの]{
 #@mapfile(../code/typescript-basic/class/constructor.js)
-var Sample = (function () {
-    function Sample(str) {
+class Sample {
+    constructor(str) {
         this.str = str;
     }
-    return Sample;
-})();
+}
 var obj = new Sample("TypeScript");
 console.log(obj.str);
 #@end
@@ -603,23 +602,24 @@ Node.jsに慣れている人なら、見覚えのある形式のコードが出�
 $ tsc --module commonjs foo.ts
 $ cat foo.js
 #@mapfile(../code/typescript-basic/external-module/foo.js)
-var bar = require("./bar");
+"use strict";
+const bar = require("./bar");
 console.log(bar.hello());
-var bye = require("./buzz");
+const bye = require("./buzz");
 console.log(bye());
 #@end
 $ cat bar.js
 #@mapfile(../code/typescript-basic/external-module/bar.js)
-function hello(word) {
-    if (word === void 0) { word = "TypeScript"; }
+"use strict";
+function hello(word = "TypeScript") {
     return "Hello, " + word;
 }
 exports.hello = hello;
 #@end
 $ cat buzz.js
 #@mapfile(../code/typescript-basic/external-module/buzz.js)
-function bye(word) {
-    if (word === void 0) { word = "TypeScript"; }
+"use strict";
+function bye(word = "TypeScript") {
     return "Good bye, " + word;
 }
 module.exports = bye;
@@ -634,7 +634,7 @@ Node.jsに慣れている人に不可解な仕様をひとつ紹介しておき�
 // Node.jsだと sub/ で自動的に sub/index と同じ扱いになるのだが…
 // import sub = require("sub/");
 // TypeScript上では index が省略不可になっている
-import sub = require("sub/index");
+import sub = require("./sub/index");
 
 console.log(sub.hello());
 #@end

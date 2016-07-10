@@ -15,8 +15,8 @@ module.exports = function (grunt) {
 			var task = tasks[taskName] = {
 				src: file,
 				options: {
-					compiler: './typescript/bin/tsc',
-					target: 'es5',
+					compiler: './node_modules/.bin/tsc',
+					target: 'es6',
 					module: 'commonjs',
 					noImplicitAny: true,
 					sourceMap: false,

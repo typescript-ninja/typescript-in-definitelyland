@@ -4,5 +4,8 @@ imports:
   - prh-techbooster.yml
 
 rules:
-  - expected: 型
-    pattern: 方
+  - expected: 型$1
+    pattern:  /方(注釈|推論)/
+    specs:
+      - from: 方注釈
+        to:   型注釈

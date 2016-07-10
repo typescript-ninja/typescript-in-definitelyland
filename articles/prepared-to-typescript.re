@@ -15,7 +15,7 @@ $ npm install -g typescript
 # 省略
 $ tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 1.8.10
+Version 2.0.0-dev.20160707
 #@end
 $ echo "class Sample {}" > sample.ts
 $ tsc --noImplicitAny sample.ts
@@ -35,8 +35,8 @@ cutting edgeな最新版コンパイラを利用したい場合は次の手順�
 $ npm install -g Microsoft/TypeScript
 # 省略
 $ tsc -v
-#@mapoutput(node ../typescript/bin/tsc.js -v)
-message TS6029: Version 1.4.0.0
+#@mapoutput(../node_modules/.bin/tsc -v)
+Version 2.0.0-dev.20160707
 #@end
 //}
 
@@ -49,8 +49,8 @@ $ npm init
 $ ls package.json                                                                                                                package.json
 $ npm install Microsoft/TypeScript --save-dev
 $ ./node_modules/.bin/tsc -v
-#@mapoutput(node ../typescript/bin/tsc.js -v)
-message TS6029: Version 1.4.0.0
+#@mapoutput(../node_modules/.bin/tsc -v)
+Version 2.0.0-dev.20160707
 #@end
 //}
 
@@ -157,7 +157,7 @@ $ npm install typescript --save-dev
 # 省略
 $ ./node_modules/.bin/tsc --version
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 1.8.10
+Version 2.0.0-dev.20160707
 #@end
 //}
 #@# OK REVIEW muo: コマンド実行へのコメント、前のほうは#無しだったけどここでは付いてる。揃えたほうがいい

@@ -223,7 +223,7 @@ function zip<T1, T2>(v1: T1, v2: T2): [T1, T2] {
   return [v1, v2];
 }
 
-var tuple = zip("str", { hello: () => "Hello!" });
+var tuple = zip("str", { hello(): string { return "Hello!"; } });
 tuple[0].charAt(0); // おー、静的に検証される！
 tuple[1].hello(); // おー、静的に検証される！
 #@end
@@ -553,7 +553,7 @@ var obj: number;
 if (typeof obj === "string") {
   // numberをstringに"狭める"ことはできない…
   // コンパイル通っちゃう
-  obj.toFixed(0);
+  // obj.toFixed(0); // TODO ここはneverになるようになった
 }
 #@end
 //}
@@ -918,11 +918,8 @@ objはSampleを型として持ち、その値として互換性のあるオブ�
 
 //list[type-guards/weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/types-advanced/type-guards/weakspot.js)
-var Sample = (function () {
-    function Sample() {
-    }
-    return Sample;
-})();
+class Sample {
+}
 var obj = {
     str: "Hi!"
 };
