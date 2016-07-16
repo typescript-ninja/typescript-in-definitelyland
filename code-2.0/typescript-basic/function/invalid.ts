@@ -6,6 +6,8 @@ function funcA(arg1?: string, arg2: string) {
 
 // 可変長引数は必ず最後じゃないといけない
 // error TS1014: A rest parameter must be last in a parameter list.
-function funcB(...args: string, rest: string) {
+function funcB(...args: string[], rest: string) {
 	return "Hello, " + args.join(", ") + " and " + rest;
 }
+
+export {}

@@ -11,7 +11,7 @@
     "preinstall": "git submodule update --init",
     "postinstall": "bundle install",
     "update": "git submodule update",
-    "build": "grunt pdf"
+    "build": "tsc -p ./ && grunt pdf"
   },
   "dependencies": {},
   "devDependencies": {

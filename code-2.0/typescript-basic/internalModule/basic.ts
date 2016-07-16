@@ -1,4 +1,4 @@
-module a {
+namespace a {
 	// export してないものは外部からは見えない
 	class Sample {
 		hello(word = "TypeScript") {
@@ -6,26 +6,26 @@ module a {
 		}
 	}
 
-	export var obj = new Sample();
+	export let obj = new Sample();
 }
-module a {
+namespace a {
 	export function bye(word = "JavaScript") {
-		return "Bye, " + word;
+		return `Bye, ${word}`;
 	}
 
 	// 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
 	// error TS2304: Cannot find name 'Sample'.
-	// var tmp = new Sample();
+	// let tmp = new Sample();
 }
 
-module b {
+namespace b {
 	export module c {
 		export function hello() {
 			return a.obj.hello();
 		}
 	}
 }
-module d.e {
+namespace d.e {
 	export function hello() {
 		return a.obj.hello();
 	}

@@ -8,4 +8,5 @@ node_modules/
 npm-debug.log
 
 code/**/*.js
+code-2.0/**/*.js
 public/

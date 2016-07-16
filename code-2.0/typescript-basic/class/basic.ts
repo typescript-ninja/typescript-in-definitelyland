@@ -19,6 +19,8 @@ class Base {
 		public boolB: boolean,
 		private boolC: boolean,
 		protected boolD: boolean) {
+			// エラー消し 一回も使われない可能性があると怒られる
+			console.log(boolA, this.numC, this.boolC, Base.numC);
 	}
 
 	// メソッド
@@ -28,7 +30,8 @@ class Base {
 
 	// get, setアクセサ
 	// コンパイル時に --target es5 以上が必要
-	_date: Date;
+	/** @internal **/
+	private _date: Date;
 	get dateA(): Date {
 		return this._date;
 	}
@@ -37,15 +40,17 @@ class Base {
 	}
 }
 
-var obj = new Base(true, false, true, false);
+let obj = new Base(true, false, true, false);
 obj.numA;
 obj.strA;
 obj.numB;
-// obj.numC; // private   なメンバにはアクセスできぬ
-// obj.numD; // protected なメンバにもアクセスできぬ
+// obj.numC; // private   なメンバにはアクセスできない
+// obj.numD; // protected なメンバにもアクセスできない
 obj.boolB;
-// obj.boolC; // private   なメンバにはアクセスできぬ
-// obj.boolD; // protected なメンバにもアクセスできぬ
+// obj.boolC; // private   なメンバにはアクセスできない
+// obj.boolD; // protected なメンバにもアクセスできない
 obj.hello("TypeScript");
 obj.dateA = new Date();
 obj.dateA;
+
+export {}

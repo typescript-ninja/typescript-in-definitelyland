@@ -113,7 +113,8 @@ $ cat tsconfig.json
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "moduleResolution": "node",
+        "target": "es6",
         "lib": [
             "dom",
             "es2017"
@@ -125,7 +126,7 @@ $ cat tsconfig.json
         "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
@@ -134,14 +135,16 @@ $ cat tsconfig.json
         "stripInternal": true,
         "skipDefaultLibCheck": true,
         "skipLibCheck": false,
-        "pretty": true,
+        "pretty": false,
         "noEmitOnError": true
     },
     "include": [
         "code-2.0/**/*.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "code-2.0/**/*-invalid.ts",
+        "code-2.0/**/invalid.ts"
     ]
 }
 #@end

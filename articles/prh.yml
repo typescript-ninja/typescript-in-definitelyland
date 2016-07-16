@@ -20,6 +20,17 @@ rules:
     pattern:  /JavaScri(ot|op|tp)/
   - expected: ECMAScript $1
     pattern:  /ECMAScript(3|5|2015|2016|2017)/
+  - expected: ECMAScript 2015
+    pattern:  ECMAScript 6
+  - expected: Arrow Functions
+    pattern:  /arrow.function.expression/i
+    prh:      ECMAScript 2015の言葉遣いに揃える
+  - expected: アロー関数
+    pattern:  アロー関数式
+    prh:      ECMAScript 2015の言葉遣いに揃える
+  - expected: ネームスペース
+    pattern:  内部モジュール
+
   - expected: Visual Studio code
     pattern:  VisualStudioCode
   - expected: Microsoft
