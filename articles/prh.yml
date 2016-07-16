@@ -9,3 +9,18 @@ rules:
     specs:
       - from: 方注釈
         to:   型注釈
+  - expected: TypeScript
+  - expected: TypeScript
+    pattern:  /TypeScri(ot|op|tp)/
+  - expected: ECMAScript
+  - expected: ECMAScript
+    pattern:  /ECMAScri(ot|op|tp)/
+  - expected: JavaScript
+  - expected: JavaScript
+    pattern:  /JavaScri(ot|op|tp)/
+  - expected: ECMAScript $1
+    pattern:  /ECMAScript(3|5|2015|2016|2017)/
+  - expected: Visual Studio code
+    pattern:  VisualStudioCode
+  - expected: Microsoft
+    pattern:  MicroSoft
