@@ -53,17 +53,6 @@ module.exports = function (grunt) {
 				]
 			}
 		},
-		'typescript-formatter': {
-			options: {
-				configuration: grunt.file.readJSON("tsfmt.json")
-			},
-			files: {
-				src: [
-					'code/**/*.ts'
-				],
-				dest: "code"
-			}
-		},
 		dtsm: {
 			client: {
 				options: {
