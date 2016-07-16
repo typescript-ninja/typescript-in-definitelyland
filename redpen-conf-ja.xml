@@ -6,9 +6,11 @@
         <validator name="CommaNumber" />
         <validator name="SuccessiveWord" />
 
+        <!-- 対応がめんどくさい場合が多い prh側で巻き取る
         <validator name="KatakanaEndHyphen">
           <property name="list" value="コンパイルエラー,トリッキー"/>
         </validator>
+          -->
         <validator name="KatakanaSpellCheck" />
         <validator name="InvalidExpression" />
         <validator name="JapaneseStyle" />
