@@ -1,5 +1,6 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
+#@# @suppress SectionLength
 == まずはインストールしてみよう
 
 Node.jsのセットアップはすでに完了しているものとします。
@@ -16,7 +17,7 @@ $ npm install -g typescript
 # 省略
 $ tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.0.0-dev.20160707
+Version 2.0.0
 #@end
 $ echo "class Sample {}" > sample.ts
 $ tsc --noImplicitAny sample.ts
@@ -25,207 +26,149 @@ var Sample = (function () {
     function Sample() {
     }
     return Sample;
-})();
+}());
 //}
 
-これで準備は整いました。
+なお、本書執筆時点では@<code>{npm install -g typescript}で導入されるTypeScriptバージョンは1.8.10です。
+2.0.0以降が使いたい場合はしばらくの間は@<code>{npm install -g typescript@beta}とする必要があります。
+ともあれ、これで準備は整いました。
 
 cutting edgeな最新版コンパイラを利用したい場合は次の手順で行います。
 
 //cmd{
-$ npm install -g Microsoft/TypeScript
+$ npm install -g typescript@next
 # 省略
 $ tsc -v
-#@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.0.0-dev.20160707
-#@end
+Version 2.1.0-dev.20160716
 //}
 
-未リリースのTypeScriptを常用するのは怖いので、一般的にはプロジェクトローカルで利用するのがよいでしょう。
+実際にはプロジェクトごとに利用するTypeScriptのバージョンを変えたい場合がほとんどでしょう。
+常に最新のバージョンだけを使い続けるのは自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。
 その方法を次に示します。
 
 //cmd{
 $ npm init
 # Enter連打
 $ ls package.json                                                                                                                package.json
-$ npm install Microsoft/TypeScript --save-dev
+$ npm install --save-dev typescript
 $ ./node_modules/.bin/tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.0.0-dev.20160707
+Version 2.0.0
 #@end
 //}
 
-このやり方の場合、npm installするときに100MB近くもあるリポジトリをまるまるcloneしてこようとするため、ものすごく処理に時間がかかります。
-複数人で作業するようなプロジェクトでは素直にリリースされているバージョンを利用するのがよいでしょう。
-
-//footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
-
-== WebStormで開発環境を整えよう
-
-Windowsの方は素直にVisual Studioを使うのがよいでしょう。
-11月13日、Visual Studio Community Editionが発表されましたので、そちらがよいかもしれません。
-しかし、筆者はMac OS XユーザなのでVisual Studioが選択肢から外れてしまいます。
-そのため、本ガイドでは開発環境としてWebStormを紹介していきます。
-WebStormの他にもEclipse用TypeScriptプラグインもあるため、自分に馴染むものを探してみるのがよいでしょう。
-
-WebStormは正式にTypeScriptに対応しています。
-WebStormのTypeScript対応は独自のもので、TypeScriptコンパイラがもつIDE実装用API（俗にいうLanguageService）を利用していません。
-
-このため、型推論の行われ方がTypeScriptコンパイラそのものほどは頭がよくありません。
-しかし、実用上はあまり問題にならないと思うので我慢できる範囲です。
-最近ではTypeScript側の開発が早すぎて、WebStorm側の対応が後手に回っている状態です。
-TypeScript関連技術にもうちょっと要員割いてください！お願いですJetBrains様！！
-
-#@# prh:disable
-@<href>{https://youtrack.jetbrains.com/issue/WEB-14149,1.3.0対応の要望}@<fn>{webstorm-support-1.3.0}は執筆時には実装が行われ、リリース待ちになっています。
-@<href>{https://youtrack.jetbrains.com/issue/WEB-14151,1.4.0対応の要望}@<fn>{webstorm-support-1.4.0}はすでにあげてありますが対応はいつになるかな…？
-という感じです。
-
-とはいえIDEとして非常に完成度の高いWebStormなので是非使っていきましょう。
-
-ここでは、WebStormを使う上で行うべき設定を解説します。
-執筆時に利用しているWebStormのバージョンは9.0.1です。
-
-もし、WebStormの操作に困ったときはShiftキーを2回ほど連続で押すと"なんでも検索"の小窓が開くので、Preferencesとかで検索して開いて、さらに左上の小窓でFile WatcherとかScopeとかで検索してみてください。
-WebStormはIDE内部の機能検索の機能が充実しているので、これでたいていのことはなんとかなるでしょう。
-
-#@# prh:disable
-//footnote[webstorm-support-1.3.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14149}]
-#@# prh:disable
-//footnote[webstorm-support-1.4.0][@<href>{https://youtrack.jetbrains.com/issue/WEB-14151}]
-
-=== File Watchersの設定
-
-WebStorm上でTypeScriptなファイルを新規作成すると、@<img>{project-open}のような表示がでます。
-
-//image[project-open][File Watcher追加のお誘い]{
-プロジェクト開いて Add watcher のバーが出てるとこ
-//}
-
-File Watcherの初期設定は@<img>{new-watcher-default}のようになります。
-設定を読み取ると次のようになります。
-
- * TypeScriptファイルが更新されたらコンパイル
- * 使うコンパイラはシステムデフォルトのもの
- * コンパイルオプションは --sourcemap のみ
- ** --noImplicitAny なし！（必須でしょ！）
- ** --target es5 なし！
- ** --out なし！
-
-//image[new-watcher-default][File Watcher初期設定]{
-File Watcherの初期設定の画面
-//}
-
-初期値に不満はあります。
-とはいえ、変なコードを書くと@<img>{flymake}のようにちゃんとエラーが引っかかってきます。
-便利です。
-
-//image[flymake][即座にコンパイル！]{
-flymakeっぽく動作してる画面
-//}
-
-WebStormは独自にTypeScriptコードの解析をしているのですが、精度が微妙に悪くて正しいコードにエラーだ！といったり、不正なコードを見逃したりします。
-そんなとき、File Watcherが設定してあるとtscが報告するエラーのみを画面に表示してくれるため、使いやすくなります。
-WebStormで開発する場合、File Watchersは常に有効にするようにしたほうがよいでしょう。
-
-=== 設定の改良
-
-デフォルトの設定には色々と不満があります。
-設定を次のように変えたいところです。
-
- * 使うコンパイラはプロジェクトローカルのもの
- ** 具体的には ./node_modules/.bin/tsc
- * コンパイルオプションは必要なもの全部盛り
- ** --noImplicitAny を追加
- ** --target es5 を追加
- ** コンパイルするときの対象ファイルを1ファイルに固定
- ** 必要があれば --out を設定
- * コンパイルの単位をメインの実装系とテストコード系に2分割したい
-
-それぞれ、理由を説明していきます。
-
-==== 使うコンパイラはプロジェクトローカルのもの
-
-この理由は単純明快ですね。
-プロジェクト毎に開発速度や更新頻度も違います。
-ゆえに、新しいTypeScriptコンパイラがリリースされたとしてもそれへの対応にはばらつきが出ます。
-足並みを揃えてすべてのプロジェクトに対してTypeScriptコンパイラのバージョンを一気にあげるなど、不可能です。
-これを解決するため、プロジェクトローカルにTypeScriptコンパイラをインストールする必要があります。
-プロジェクトトップで次のコマンドを実行しましょう。
+この、@<code>{node_modules/.bin}にはnpmの動作上色々な活用方法があります。
+たとえば、@<code>{npm bin}コマンドでプロジェクトローカルな実行ファイルのパスが得られます。
+このため、macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが得られます。
+さらに、npm scriptsでは$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
+このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
 
 //cmd{
-$ npm init
-# 設問全部とりあえずEnterでOK
-$ npm install typescript --save-dev
-# 省略
-$ ./node_modules/.bin/tsc --version
+$ npm bin
+$PWD/node_modules/.bin 的なパスが表示される
+$ $(npm bin)/tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.0.0-dev.20160707
+Version 2.0.0
 #@end
 //}
 
-これを、File WatcherのProgram欄に指定します。
-見た目上絶対パスで指定されているように見えますが、プロジェクト内部にあるファイルを指定したら内部的には次のように保存されるので気にする必要はありません。
+//footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
+//footnote[npm-scripts][@<href>{https://docs.npmjs.com/misc/scripts}]
 
+== tsconfig.jsonを準備する
 
-@<code>{<option name="program" value="$PROJECT_DIR$/node_modules/.bin/tsc" />}
+TypeScriptではtsconfig.jsonという設定ファイルを利用します。
+必要なコンパイルオプションやコンパイル対象となるファイルはすべてtsconfig.jsonに記述します。
+すべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。
 
-==== コンパイルオプションは必要なもの全部盛り
+まずはtsconfig.jsonを作成してみましょう。
+@<code>{tsc --init}で作成できます。
 
-1つずつ解説していきましょう。
-
- * --noImplicitAny を追加
-
-これはTypeScript開発時の必須オプションですね。
-型注釈が漏れていたり、実は型推論にミスっていたときにエラーにしてくれるオプションです。
-かならず利用しましょう。
-
- * --target es5 を追加
-
-get, setアクセサを使うために必要です。
-古いブラウザのことをうじうじと考えるのはやめましょう。
-
- * コンパイルするときの対象ファイルを1ファイルに固定
-
-#@# @suppress JapaneseAmbiguousNounConjunction SentenceLength CommaNumber
-これは筆者の経験則によるものです。
-ファイルのコンパイル対象をデフォルトの"現在編集しているファイル（$FileName$）"にするためには、プロジェクト内のすべてのファイルが単独でコンパイルできるようになっている必要があります。
-つまり、ある1つのファイルの中にすべての依存関係を解決するreference commentを書いてまわらないといけないのです。
-筆者も最初はこの方針で作業していたのですが、管理がものすごくめんどくさいこと、循環依存が発生したときに--outオプションを併用した時の出力順制御が難しいこと、TypeScript 1.1.0-1からコンパイル速度が大幅に改善されたのでコンパイル対象が大きくても気にならなくなったこと、上記3点を踏まえて、rootになるファイルを1つ定め、それを頂点としてtree上に依存関係を定義するようにしました。
-File Watcherやgruntなどのツールでは、このrootとして設計したファイルのみを常にコンパイルするようにします。
-
- * 必要があれば --out を設定
-
-依存関係をtree状にきれいに定義すると、結果としてファイルの出力を予想しやすくなります。
-なので、コンパイラに結合処理を任せてしまったほうが、あとで順番を手動で制御する作業をもう一回やるよりも楽です。
-
-以上を踏まえて、Argumentsの所に次を指定します。
-
-@<code>{--sourcemap --noImplicitAny --target es5 --out lib/index.js lib/index.ts}
-
-==== コンパイルの単位をメインの実装系とテストコード系に2分割したい
-
-単一のrootとなるファイルを構成する方針にした場合、本チャンの実装とテストコードはさすがに分割してコンパイルする必要がありますね。
-File Watcher1つでは1系統しか同時に面倒を見ることができないため、Scopesという機能で監視する範囲を区切り、Scope単位でFile Watcherを指定します。
-
-==== 総括
-
-#@# @suppress CommaNumber ParenthesizedSentence
-Scopeを使ってプロジェクトを2つに区切って、File Watcherをそれに対応させて2つ作って、コンパイルオプションを変えよう！
-（@<img>{main-and-test-structure}、@<img>{scope-main}、@<img>{scope-test}、@<img>{main-watcher}、@<img>{test-watcher}）
-
-//image[main-and-test-structure][lib/ と test/ 配下にコードとテストコードを入れる]{
-プロジェクト全体図
+//cmd{
+$ tsc --init
+message TS6071: Successfully created a tsconfig.json file.
+$ cat tsconfig.json
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": false
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
 //}
 
-//image[scope-main][lib/ に対するScopeの設定]{
+この設定ではTypeScriptが利用できる制約の多くをONにしていないため、完全にガバガバな設定です。
+一番最初に利用する例としてはいいかもしれませんが、運用するにあたってこのままではTypeScriptが与える堅牢さのすべてを享受することはできません。
+
+本書のサンプルコード用tsconfig.jsonを@<list>{tsconfig.json}に示します。
+まずはこの設定をベースに自分たちにとって都合のよいように設定値を変更したり制限を緩めたりすることをお勧めします。
+とりあえず、"include"や"exclude"の値は一般的なフォルダ構成ではないので変更したほうがよいでしょう。
+
+//list[tsconfig.json][本書サンプルコード用のtsconfig.json]{
+#@mapfile(../tsconfig.json)
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "traceResolution": false,
+        "listFiles": false,
+        "stripInternal": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": false,
+        "pretty": true,
+        "noEmitOnError": true
+    },
+    "include": [
+        "code-2.0/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
+#@end
 //}
 
-//image[scope-test][tests/ に対するScopeの設定]{
-//}
+#@# TODO 各オプションの細かい解説は@<chapref>{learning-tsc}を参照してください
+#@# TODO allowJsについてどこかに書きたい
 
-//image[main-watcher][mainのScopeに対するWatcherの設定]{
-//}
+== エディタ・IDEの環境を整えよう
 
-//image[test-watcher][testのScopeに対するWatcherの設定]{
-//}
+Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
+
+TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういうメソッドがあるかどうかなどさまざまな情報を得ることができます。
+そのため、多くのIDE・エディタでVisual Studioに負けるとも劣らないサポートを得ることができます。
+
+興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
+
+//footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
+
+== Visual Studio Codeで開発環境を整えよう
+
+C87版ではWebStormを利用するよう案内しましたが、現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
+Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
+Visual Studioの名を冠していますがElectronを利用して組まれているマルチプラットフォームなエディタで、Window以外でも利用できます。
+筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。
+
+tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。
+つまり、設定に手間をかけることなくTypeScriptコードを書くことを始められます。
+
+//footnote[vscode][@<href>{https://code.visualstudio.com/}]

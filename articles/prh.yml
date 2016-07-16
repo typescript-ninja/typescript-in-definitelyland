@@ -24,3 +24,5 @@ rules:
     pattern:  VisualStudioCode
   - expected: Microsoft
     pattern:  MicroSoft
+#  - expected: macOS
+#    pattern:  Mac OS X
