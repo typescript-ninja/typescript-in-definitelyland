@@ -24,4 +24,4 @@ let obj2: {
 obj2 = obj;
 obj = obj2;
 
-export {}
+export { }

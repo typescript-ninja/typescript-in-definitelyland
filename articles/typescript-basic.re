@@ -41,10 +41,10 @@ let obj: any; // なんでも型
 str = "文字列";
 num = 1;
 bool = true;
-func = () => {};
+func = () => { };
 obj = {};
 
-export {}
+export { }
 #@end
 //}
 
@@ -85,7 +85,7 @@ let func = () => {
 };
 let obj = {};
 
-export {str,num,bool,func,obj}
+export { str, num, bool, func, obj }
 #@end
 //}
 
@@ -121,8 +121,8 @@ class Base {
     public boolB: boolean,
     private boolC: boolean,
     protected boolD: boolean) {
-      // エラー消し 一回も使われない可能性があると怒られる
-      console.log(boolA, this.numC, this.boolC, Base.numC);
+    // エラー消し 一回も使われない可能性があると怒られる
+    console.log(boolA, this.numC, this.boolC, Base.numC);
   }
 
   // メソッド
@@ -155,7 +155,7 @@ obj.hello("TypeScript");
 obj.dateA = new Date();
 obj.dateA;
 
-export {}
+export { }
 #@end
 //}
 
@@ -192,7 +192,7 @@ let obj = new Sample("TypeScript");
 // TypeScript と表示される
 console.log(obj.str);
 
-export {}
+export { }
 #@end
 //}
 
@@ -241,7 +241,7 @@ let obj = new Inherit();
 // Hi! TypeScript. How are you? と出力される
 console.log(obj.greeting("TypeScript"));
 
-export {}
+export { }
 #@end
 //}
 
@@ -283,7 +283,7 @@ function ahoy(word = "TypeScript") {
 }
 ahoy();
 
-export {}
+export { }
 #@end
 //}
 
@@ -297,7 +297,7 @@ function hello(...args: string[]) {
 // Hello, TS & JS と表示される
 console.log(hello("TS", "JS"));
 
-export {}
+export { }
 #@end
 //}
 
@@ -318,7 +318,7 @@ function funcB(...args: string[], rest: string) {
   return "Hello, " + args.join(", ") + " and " + rest;
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -355,7 +355,7 @@ asyncModoki(value => console.log(`Hello, ${value}`));
 // アロー関数に型付をする場合
 asyncModoki((value: string): void => console.log(`Hello, ${value}`));
 
-export {}
+export { }
 #@end
 //}
 
@@ -411,7 +411,7 @@ foo.ts（@<list>{externalModule/foo}）、bar.ts（@<list>{externalModule/bar}�
 //list[externalModule/foo][foo.ts]{
 #@mapfile(../code-2.0/typescript-basic/externalModule/foo.ts)
 // defaultをbarに hello関数をそのままimport
-import bar, {hello} from "./bar";
+import bar, { hello } from "./bar";
 // モジュール全体をbar2に束縛
 import * as bar2 from "./bar";
 // ECMAScript 2015形式のモジュールでもCommonJS形式でimportできる
@@ -457,7 +457,7 @@ function bye(word = "TypeScript") {
 }
 // foo.ts でECMAScript 2015形式でimportする時に次のエラーが出るのを抑制するためのハック
 // error TS2497: Module '"略/buzz"' resolves to a non-module entity and cannot be imported using this construct.
-namespace bye{}
+namespace bye { }
 
 // CommonJS向け ECMAScript 2015では×
 export = bye;

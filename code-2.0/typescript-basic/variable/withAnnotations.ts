@@ -8,7 +8,7 @@ let obj: any; // なんでも型
 str = "文字列";
 num = 1;
 bool = true;
-func = () => {};
+func = () => { };
 obj = {};
 
-export {}
+export { }

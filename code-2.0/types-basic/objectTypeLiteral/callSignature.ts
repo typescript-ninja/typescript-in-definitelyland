@@ -13,4 +13,4 @@ obj = function(word: string): string {
 let str = obj("TypeScript");
 console.log(str);
 
-export {}
+export { }

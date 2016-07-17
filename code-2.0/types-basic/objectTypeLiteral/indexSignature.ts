@@ -22,7 +22,7 @@ objA = {
 	// error TS2322: Type
 	//  '{ 0: string; str: string; }'
 	//     is not assignable to type '{ [index: number]: string; }'.
-  	//  Object literal may only specify known properties,
+	//  Object literal may only specify known properties,
 	//     and 'str' does not exist in type '{ [index: number]: string; }'.
 	// str: "str",
 };
@@ -42,9 +42,9 @@ objB = {
 	//  '{ 0: string; str: string; num: number; }'
 	//     is not assignable to type
 	//  '{ [index: string]: string; }'.
-    //  Property 'num' is incompatible with index signature.
-    //    Type 'number' is not assignable to type 'string'.
+	//  Property 'num' is incompatible with index signature.
+	//    Type 'number' is not assignable to type 'string'.
 	// num: 1,
 };
 
-export {s1, s3, s4}
+export { s1, s3, s4 }

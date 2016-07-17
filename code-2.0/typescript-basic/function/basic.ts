@@ -22,4 +22,4 @@ function ahoy(word = "TypeScript") {
 }
 ahoy();
 
-export {}
+export { }

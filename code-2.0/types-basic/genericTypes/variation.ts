@@ -36,4 +36,4 @@ let ctor: new <T>(value: T) => any;
 ctor = SampleA;
 new ctor<string>("str");
 
-export {objA, objB, obj}
+export { objA, objB, obj }

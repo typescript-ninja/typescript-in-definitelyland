@@ -6,4 +6,4 @@ let func = () => {
 };
 let obj = {};
 
-export {str,num,bool,func,obj}
+export { str, num, bool, func, obj }

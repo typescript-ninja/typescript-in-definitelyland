@@ -44,13 +44,13 @@ let objB: {
   x: number;
   y: number;
 };
-objB = {x:1,y:2};
+objB = { x: 1, y: 2 };
 
 // おんなじ！
 objA = objB;
 objB = objA;
 
-export {}
+export { }
 #@end
 //}
 
@@ -63,9 +63,9 @@ export {}
 #@mapfile(../code-2.0/types-basic/objectTypeLiteral/basicUsage.ts)
 // 関数の仮引数や返り値に対して
 function move(
-      value: { x: number; y: number; },
-      delta: { dx?: number; dy?: number; }
-    ): { x: number; y: number } {
+  value: { x: number; y: number; },
+  delta: { dx?: number; dy?: number; }
+): { x: number; y: number } {
   if (delta.dx) {
     value.x += delta.dx;
   }
@@ -103,7 +103,7 @@ obj = {
   property: "Hi!",
 };
 
-export {}
+export { }
 #@end
 //}
 
@@ -130,7 +130,7 @@ obj = function(word: string): string {
 let str = obj("TypeScript");
 console.log(str);
 
-export {}
+export { }
 #@end
 //}
 
@@ -162,7 +162,7 @@ let num = obj();
 // 42 と表示される
 console.log(num);
 
-export {}
+export { }
 #@end
 //}
 
@@ -186,7 +186,7 @@ clazz = Sample;
 let obj = new clazz();
 
 // クラス式だとこんな感じ
-clazz = class {};
+clazz = class { };
 obj = new clazz();
 #@end
 //}
@@ -232,7 +232,7 @@ objA = {
   // error TS2322: Type
   //  '{ 0: string; str: string; }'
   //     is not assignable to type '{ [index: number]: string; }'.
-    //  Object literal may only specify known properties,
+  //  Object literal may only specify known properties,
   //     and 'str' does not exist in type '{ [index: number]: string; }'.
   // str: "str",
 };
@@ -252,12 +252,12 @@ objB = {
   //  '{ 0: string; str: string; num: number; }'
   //     is not assignable to type
   //  '{ [index: string]: string; }'.
-    //  Property 'num' is incompatible with index signature.
-    //    Type 'number' is not assignable to type 'string'.
+  //  Property 'num' is incompatible with index signature.
+  //    Type 'number' is not assignable to type 'string'.
   // num: 1,
 };
 
-export {s1, s3, s4}
+export { s1, s3, s4 }
 #@end
 //}
 
@@ -290,7 +290,7 @@ let propertyName2: "str" = "str";
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let str3 = obj[propertyName2];
 
-export {str,num, propertyName1, propertyName2}
+export { str, num, propertyName1, propertyName2 }
 #@end
 //}
 
@@ -329,7 +329,7 @@ let obj2: {
 obj2 = obj;
 obj = obj2;
 
-export {}
+export { }
 #@end
 //}
 
@@ -434,7 +434,7 @@ let obj: Foo = {
   num: 42,
 };
 
-export {obj}
+export { obj }
 #@end
 //}
 
@@ -547,7 +547,7 @@ num = <any>str;
 // 後置のキャストもあります as 型名という形式
 num = str as any;
 
-export {}
+export { }
 #@end
 //}
 
@@ -558,7 +558,7 @@ export {}
 let str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
 // error TS2352: Type 'string' cannot be converted to type 'number'.
-var num: number = <number> str;
+var num: number = <number>str;
 #@end
 //}
 
@@ -594,7 +594,7 @@ if (obj instanceof InheritA) {
   obj.str;
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -615,7 +615,7 @@ let obj = new Base();
 // でも、本当は型定義のほうを修正するのが正しいです
 let num: number = (obj as any).num;
 
-export {num}
+export { num }
 #@end
 //}
 
@@ -769,7 +769,7 @@ let ctor: new <T>(value: T) => any;
 ctor = SampleA;
 new ctor<string>("str");
 
-export {objA, objB, obj}
+export { objA, objB, obj }
 #@end
 //}
 
@@ -805,7 +805,7 @@ let objA: Sample<InheritA>;
 // これはOK 指定したオブジェクト型リテラルはBaseクラスの要件を満たす
 let objC: Sample<{ str: string; }>;
 
-export {objA, objC};
+export { objA, objC };
 #@end
 //}
 

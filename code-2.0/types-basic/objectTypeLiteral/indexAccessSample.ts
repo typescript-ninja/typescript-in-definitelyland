@@ -21,4 +21,4 @@ let propertyName2: "str" = "str";
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let str3 = obj[propertyName2];
 
-export {str,num, propertyName1, propertyName2}
+export { str, num, propertyName1, propertyName2 }

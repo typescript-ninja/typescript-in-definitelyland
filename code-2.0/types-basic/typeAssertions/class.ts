@@ -25,4 +25,4 @@ if (obj instanceof InheritA) {
 	obj.str;
 }
 
-export {}
+export { }

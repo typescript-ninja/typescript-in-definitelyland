@@ -10,4 +10,4 @@ let obj = new Base();
 // でも、本当は型定義のほうを修正するのが正しいです
 let num: number = (obj as any).num;
 
-export {num}
+export { num }

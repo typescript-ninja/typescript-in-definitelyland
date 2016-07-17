@@ -10,4 +10,4 @@ num = <any>str;
 // 後置のキャストもあります as 型名という形式
 num = str as any;
 
-export {}
+export { }

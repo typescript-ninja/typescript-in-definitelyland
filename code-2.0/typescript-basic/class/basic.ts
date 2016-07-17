@@ -19,8 +19,8 @@ class Base {
 		public boolB: boolean,
 		private boolC: boolean,
 		protected boolD: boolean) {
-			// エラー消し 一回も使われない可能性があると怒られる
-			console.log(boolA, this.numC, this.boolC, Base.numC);
+		// エラー消し 一回も使われない可能性があると怒られる
+		console.log(boolA, this.numC, this.boolC, Base.numC);
 	}
 
 	// メソッド
@@ -53,4 +53,4 @@ obj.hello("TypeScript");
 obj.dateA = new Date();
 obj.dateA;
 
-export {}
+export { }

@@ -12,4 +12,4 @@ let obj: Foo = {
 	num: 42,
 };
 
-export {obj}
+export { obj }

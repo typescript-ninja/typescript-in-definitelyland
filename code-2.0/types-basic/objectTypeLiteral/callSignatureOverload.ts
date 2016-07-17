@@ -21,4 +21,4 @@ let num = obj();
 // 42 と表示される
 console.log(num);
 
-export {}
+export { }

@@ -20,4 +20,4 @@ asyncModoki(value => console.log(`Hello, ${value}`));
 // アロー関数に型付をする場合
 asyncModoki((value: string): void => console.log(`Hello, ${value}`));
 
-export {}
+export { }

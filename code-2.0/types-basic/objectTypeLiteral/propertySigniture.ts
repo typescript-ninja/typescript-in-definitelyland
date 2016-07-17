@@ -6,4 +6,4 @@ obj = {
 	property: "Hi!",
 };
 
-export {}
+export { }

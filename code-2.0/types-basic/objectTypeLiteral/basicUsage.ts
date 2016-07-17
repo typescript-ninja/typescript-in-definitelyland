@@ -1,8 +1,8 @@
 // 関数の仮引数や返り値に対して
 function move(
-			value: { x: number; y: number; },
-			delta: { dx?: number; dy?: number; }
-		): { x: number; y: number } {
+	value: { x: number; y: number; },
+	delta: { dx?: number; dy?: number; }
+): { x: number; y: number } {
 	if (delta.dx) {
 		value.x += delta.dx;
 	}

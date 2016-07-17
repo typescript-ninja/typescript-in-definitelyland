@@ -10,4 +10,4 @@ function funcB(...args: string[], rest: string) {
 	return "Hello, " + args.join(", ") + " and " + rest;
 }
 
-export {}
+export { }

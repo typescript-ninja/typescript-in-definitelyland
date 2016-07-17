@@ -10,10 +10,10 @@ let objB: {
 	x: number;
 	y: number;
 };
-objB = {x:1,y:2};
+objB = { x: 1, y: 2 };
 
 // おんなじ！
 objA = objB;
 objB = objA;
 
-export {}
+export { }

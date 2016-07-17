@@ -20,4 +20,4 @@ let objA: Sample<InheritA>;
 // これはOK 指定したオブジェクト型リテラルはBaseクラスの要件を満たす
 let objC: Sample<{ str: string; }>;
 
-export {objA, objC};
+export { objA, objC };
