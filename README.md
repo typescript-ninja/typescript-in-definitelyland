@@ -27,13 +27,11 @@
 ## この本のビルドの仕方
 
 ```
-$ npm install -g grunt-cli
 $ gem install bundler
 $ git clone https://github.com/typescript-ninja/typescript-in-definitelyland.git
 $ cd typescript-in-definitelyland
 $ npm install
-# 裏で git submodule init && git submodule update && bundle install が走る
-$ grunt pdf
+$ npm run pdf
 ```
 
 その他細かい準備(tex入れたり)は[FirstStepReVIEW](https://github.com/TechBooster/FirstStepReVIEW)に準じる。

@@ -3,13 +3,17 @@ GEM
   specs:
     review (2.0.0)
       rubyzip
+    review-peg (0.2.2)
     rubyzip (1.2.0)
+    sass (3.4.19)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   review (= 2.0.0)
+  review-peg (= 0.2.2)
+  sass (= 3.4.19)
 
 BUNDLED WITH
    1.12.5

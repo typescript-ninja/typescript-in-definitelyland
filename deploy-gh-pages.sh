@@ -19,7 +19,7 @@ git checkout -b gh-pages origin/gh-pages
 # update
 echo "updating..."
 rm -rf *.html *.css images/
-cp -r ../public/** ./
+cp -r ../publish/** ./
 
 # commit & push
 echo "publishing..."
