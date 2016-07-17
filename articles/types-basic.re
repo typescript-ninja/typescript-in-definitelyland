@@ -82,6 +82,8 @@ let result = move({ x: 1, y: 2 }, { dx: -2 });
 //   "y": 2
 // }
 console.log(JSON.stringify(result, null, 2));
+
+export {}
 #@end
 //}
 

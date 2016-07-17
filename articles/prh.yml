@@ -28,8 +28,13 @@ rules:
   - expected: アロー関数
     pattern:  アロー関数式
     prh:      ECMAScript 2015の言葉遣いに揃える
+  - expected: ???
+    pattern:  BCT
+    prh:      Best Common Type はなくなりました…
   - expected: ネームスペース
     pattern:  内部モジュール
+  - expected: string literal types
+    pattern:  /string types? literals?/
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode
