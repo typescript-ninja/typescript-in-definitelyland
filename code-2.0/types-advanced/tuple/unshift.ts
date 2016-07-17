@@ -7,4 +7,4 @@ tuple.unshift(1);
 // Uncaught TypeError: undefined is not a function
 tuple[0].charAt(0);
 
-export {}
+export { }

@@ -35,6 +35,9 @@ rules:
     pattern:  内部モジュール
   - expected: string literal types
     pattern:  /string types? literals?/
+  - expected: DefinitelyTyped
+    pattern:  borisyankov
+    prh:      リポジトリはリネームされました
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode

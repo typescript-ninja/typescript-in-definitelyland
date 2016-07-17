@@ -144,7 +144,13 @@ $ cat tsconfig.json
     "exclude": [
         "node_modules",
         "code-2.0/**/*-invalid.ts",
-        "code-2.0/**/invalid.ts"
+        "code-2.0/**/*-invalid.d.ts",
+        "code-2.0/**/invalid.ts",
+        "code-2.0/**/invalid.d.ts",
+        "code-2.0/**/*-ignore.ts",
+        "code-2.0/**/*-ignore.d.ts",
+        "code-2.0/**/ignore.ts",
+        "code-2.0/**/ignore.d.ts"
     ]
 }
 #@end

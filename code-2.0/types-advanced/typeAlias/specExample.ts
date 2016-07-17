@@ -22,5 +22,7 @@ interface AltRecFunc {
 	(): AltRecFunc;
 }
 
-export {StringOrNumber, TextObject, Coord, ObjectStatics,
-	 Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback, }
+export {
+	StringOrNumber, TextObject, Coord, ObjectStatics,
+	Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback,
+}

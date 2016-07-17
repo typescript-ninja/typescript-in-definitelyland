@@ -28,4 +28,4 @@ if (!(typeof obj !== "string")) {
 	obj.charAt(0);
 }
 
-export {}
+export { }

@@ -21,4 +21,4 @@ obj = new InheritA();
 // trueと表示される
 console.log(obj instanceof InheritB);
 
-export {}
+export { }

@@ -46,7 +46,7 @@ let alterClazz: {
 alterClazz = clazz;
 clazz = alterClazz;
 
-export {}
+export { }
 #@end
 //}
 
@@ -63,7 +63,7 @@ class Sample {
 let obj = new Sample();
 obj.bye = obj.hello;
 
-export {}
+export { }
 #@end
 //}
 
@@ -75,8 +75,8 @@ export {}
 #@mapfile(../code-2.0/types-advanced/typeQueries/copy.ts)
 // このコードは（死ぬほど読みにくいけど）正しい
 function move(p1: { x1: number; y1: number; x2: number; y2: number; },
-              p2: typeof p1
-             ):   typeof p1 {
+  p2: typeof p1
+): typeof p1 {
   return {
     x1: p1.x1 + p2.x1,
     y1: p1.y1 + p2.y1,
@@ -89,13 +89,13 @@ let rect = move({
   x1: 1, y1: 1, // 無駄に多い
   x2: 2, y2: 2, // プロパティ
 }, {
-  x1: 3, y1: 3,
-  x2: 4, y2: 4,
-});
+    x1: 3, y1: 3,
+    x2: 4, y2: 4,
+  });
 rect.x1;
 rect.x2;
 
-export {}
+export { }
 #@end
 //}
 
@@ -144,7 +144,7 @@ tuple.forEach(v => {
   console.log(v);
 });
 
-export {array}
+export { array }
 #@end
 //}
 
@@ -163,7 +163,7 @@ let tuple = zip("str", { hello(): string { return "Hello!"; } });
 tuple[0].charAt(0); // おー、静的に検証される！
 tuple[1].hello();   // おー、静的に検証される！
 
-export {}
+export { }
 #@end
 //}
 
@@ -199,7 +199,7 @@ tuple.unshift(1);
 // Uncaught TypeError: undefined is not a function
 tuple[0].charAt(0);
 
-export {}
+export { }
 #@end
 //}
 
@@ -254,7 +254,7 @@ let b2: boolean | number | undefined;
 // c の型は string | number | boolean | undefined となる
 let c: typeof b1 | typeof b2;
 
-export {c}
+export { c }
 #@end
 //}
 
@@ -276,7 +276,7 @@ let cond = true ? 1 : "str";
 // array の型は (number | boolean | string)[]
 let array = [1, true, "str"];
 
-export {and, cond, array}
+export { and, cond, array }
 #@end
 //}
 
@@ -301,7 +301,7 @@ let c: { (): string; } | { (): boolean; };
 // union typesじゃないときでも使えるけど見づらいな！
 let d: (() => string);
 
-export {func, b, c, d}
+export { func, b, c, d }
 #@end
 //}
 
@@ -334,7 +334,7 @@ let obj: string | number | Date = null as any;
 //     Property 'exec' is missing in type 'Date'.
 // (<RegExp>obj).test("test");
 
-export {}
+export { }
 #@end
 //}
 
@@ -387,7 +387,7 @@ if (typeof obj === "string") {
   obj.toFixed(2);
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -448,7 +448,7 @@ if (typeof obj === "string") {
   obj;
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -489,7 +489,7 @@ obj = new InheritA();
 // trueと表示される
 console.log(obj instanceof InheritB);
 
-export {}
+export { }
 #@end
 //}
 
@@ -529,13 +529,13 @@ if (obj instanceof C) {
   if (obj instanceof B) {
     // ここではBと確定している
     obj.num;
-  }else{
+  } else {
     // ここではAと確定している
     obj.str;
   }
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -578,7 +578,7 @@ if (!(typeof obj !== "string")) {
   obj.charAt(0);
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -610,7 +610,7 @@ if (obj instanceof Sample) {
   console.log(obj.str);
 }
 
-export {}
+export { }
 #@end
 //}
 
@@ -748,7 +748,7 @@ namespace alternative {
   console.log(c.p, c.r);
 }
 
-export {c, alternative}
+export { c, alternative }
 #@end
 //}
 
@@ -798,8 +798,10 @@ interface AltRecFunc {
   (): AltRecFunc;
 }
 
-export {StringOrNumber, TextObject, Coord, ObjectStatics,
-   Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback, }
+export {
+  StringOrNumber, TextObject, Coord, ObjectStatics,
+  Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback,
+}
 #@end
 //}
 

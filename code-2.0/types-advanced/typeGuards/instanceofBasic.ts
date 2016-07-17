@@ -26,10 +26,10 @@ if (obj instanceof C) {
 	if (obj instanceof B) {
 		// ここではBと確定している
 		obj.num;
-	}else{
+	} else {
 		// ここではAと確定している
 		obj.str;
 	}
 }
 
-export {}
+export { }

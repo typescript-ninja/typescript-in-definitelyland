@@ -18,4 +18,4 @@ namespace alternative {
 	console.log(c.p, c.r);
 }
 
-export {c, alternative}
+export { c, alternative }

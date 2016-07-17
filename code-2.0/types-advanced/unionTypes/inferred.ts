@@ -5,4 +5,4 @@ let cond = true ? 1 : "str";
 // array の型は (number | boolean | string)[]
 let array = [1, true, "str"];
 
-export {and, cond, array}
+export { and, cond, array }

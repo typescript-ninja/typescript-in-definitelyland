@@ -20,4 +20,4 @@ let alterClazz: {
 alterClazz = clazz;
 clazz = alterClazz;
 
-export {}
+export { }

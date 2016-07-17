@@ -7,4 +7,4 @@ let tuple = zip("str", { hello(): string { return "Hello!"; } });
 tuple[0].charAt(0); // おー、静的に検証される！
 tuple[1].hello();   // おー、静的に検証される！
 
-export {}
+export { }

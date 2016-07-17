@@ -100,8 +100,8 @@ module.exports = function (grunt) {
 		clean: {
 			ts: {
 				src: [
-					'code/**/*.js',
-					'code/**/*.js.map'
+					'code-2.0/**/*.js',
+					'code-2.0/**/*.js.map'
 				]
 			},
 			review: {
@@ -178,7 +178,7 @@ module.exports = function (grunt) {
 
 	function generateTask(target, pretask) {
 		pretask = pretask || [];
-		return ['clean', /* 'typescript-formatter', */ 'ts'].concat(pretask).concat(['exec:preprocess', 'exec:compile2' + target]);
+		return [/* 'clean' */, /* 'typescript-formatter', */ 'ts'].concat(pretask).concat(['exec:preprocess', 'exec:compile2' + target]);
 	}
 
 	grunt.registerTask(

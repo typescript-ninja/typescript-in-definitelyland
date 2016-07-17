@@ -6,4 +6,4 @@ class Sample {
 let obj = new Sample();
 obj.bye = obj.hello;
 
-export {}
+export { }

@@ -16,4 +16,4 @@ tuple.forEach(v => {
 	console.log(v);
 });
 
-export {array}
+export { array }

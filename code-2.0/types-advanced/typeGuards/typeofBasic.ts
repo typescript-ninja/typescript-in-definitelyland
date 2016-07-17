@@ -7,4 +7,4 @@ if (typeof obj === "string") {
 	obj.toFixed(2);
 }
 
-export {}
+export { }

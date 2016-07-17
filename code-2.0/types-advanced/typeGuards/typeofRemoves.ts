@@ -19,4 +19,4 @@ if (typeof obj === "string") {
 	obj;
 }
 
-export {}
+export { }

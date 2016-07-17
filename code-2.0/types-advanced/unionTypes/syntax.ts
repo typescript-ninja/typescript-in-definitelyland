@@ -12,4 +12,4 @@ let c: { (): string; } | { (): boolean; };
 // union typesじゃないときでも使えるけど見づらいな！
 let d: (() => string);
 
-export {func, b, c, d}
+export { func, b, c, d }

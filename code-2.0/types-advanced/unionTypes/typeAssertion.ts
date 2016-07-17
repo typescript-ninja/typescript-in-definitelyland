@@ -18,4 +18,4 @@ let obj: string | number | Date = null as any;
 //     Property 'exec' is missing in type 'Date'.
 // (<RegExp>obj).test("test");
 
-export {}
+export { }

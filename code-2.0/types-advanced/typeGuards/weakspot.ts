@@ -13,4 +13,4 @@ if (obj instanceof Sample) {
 	console.log(obj.str);
 }
 
-export {}
+export { }
