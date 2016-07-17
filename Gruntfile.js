@@ -1,215 +1,163 @@
-module.exports = function (grunt) {
-	function generateTypeScriptCompileSettings() {
-		var srcFileList = grunt.file.expand([
-			'code/**/*.ts',
-			'!code/**/*-invalid.ts', // コンパイルが通らないコード
-			'!code/**/invalid.ts', // コンパイルが通らないコード
-			'!code/**/*-invalid.d.ts', // コンパイルが通らないコード
-			'!code/**/invalid.d.ts', // コンパイルが通らないコード
-			'!code/**/*-1.3.0.ts', // 1.3.0 限定コード
-			'!code/**/node_modules/**/*.ts'
-		]);
-		var tasks = {};
-		srcFileList.forEach(function (file) {
-			taskName = file.replace(/\./g, "-dot-");
-			var task = tasks[taskName] = {
-				src: file,
-				options: {
-					compiler: './node_modules/.bin/tsc',
-					target: 'es6',
-					module: 'commonjs',
-					noImplicitAny: true,
-					sourceMap: false,
-					declaration: false
-				}
-			};
-			switch (file) {
-				case "notExists/hogehoge.ts":
-					task.options.declaration = true;
-					break;
-				default:
-					break;
-			}
-			switch (file) {
-				case "notExists/fugafuga.ts":
-					task.options.module = "amd";
-					break;
-				default:
-					break;
-			}
-		});
-		return tasks;
-	}
+"use strict";
 
+let fs = require("fs");
+let yaml = require("js-yaml");
+
+const articles = "articles";
+const publish = 'publish';
+const bookConfig = yaml.safeLoad(fs.readFileSync(`${articles}/config.yml`, "utf8"));
+
+const reviewPrefix = process.env["REVIEW_PREFIX"] || "bundle exec ";
+const reviewPostfix = process.env["REVIEW_POSTFIX"] || "";             // REVIEW_POSTFIX="-peg" npm run pdf とかするとPEGでビルドできるよ
+const reviewPreproc = `${reviewPrefix}review-preproc${reviewPostfix}`;
+const reviewCompile = `${reviewPrefix}review-compile${reviewPostfix}`;
+const reviewWebMaker = `${reviewPrefix}review-webmaker${reviewPostfix}`;
+const reviewPdfMaker = `${reviewPrefix}review-pdfmaker${reviewPostfix}`;
+const reviewEpubMaker = `${reviewPrefix}review-epubmaker${reviewPostfix}`;
+
+module.exports = grunt => {
 	grunt.initConfig({
-		ts: generateTypeScriptCompileSettings(),
-		tslint: {
-			options: {
-				configuration: grunt.file.readJSON("tslint.json")
-			},
-			files: {
+		clean: {
+			review: {
 				src: [
-					'code/**/*.ts'
+					`${articles}/${bookConfig.bookname}-*/`, // pdf, epub temp dir
+					`${articles}/*.pdf`,
+					`${articles}/*.epub`,
+					`${articles}/*.html`,
+					`${articles}/*.xml`,
+					`${articles}/*.txt`
 				]
-			}
-		},
-		dtsm: {
-			client: {
-				options: {
-					// optional: specify config file
-					confog: './dtsm.json'
-				}
-			}
-		},
-		less: {
-			blog: {
-				options: {
-					paths: ["articles"]
-				},
-				files: {
-					"articles/style.css": "articles/style.less"
-				}
 			},
-			epub: {
+			publish: {
+				src: `${publish}/`
+			}
+		},
+		sass: {
+			dist: {
 				options: {
-					paths: ["articles"]
+					bundleExec: true,
+					sourcemap: 'none'
 				},
 				files: {
-					"articles/epub.css": "articles/review.less"
+					'articles/style.css': 'articles/style.scss',
+					'articles/style-web.css': 'articles/style-web.scss',
 				}
 			}
 		},
 		copy: {
-			blog: {
+			publish: {
 				files: [
-					{src: 'articles/_review-ext.rb', dest: 'articles/review-ext.rb'},
-					{src: 'articles/layouts/_layout.html.erb', dest: 'articles/layouts/layout.html.erb'}
-				]
-			},
-			public: {
-				expand: true,
-				cwd: 'articles/',
-				src: [
-					'*.html',
-					'style.css',
-					'images/**'
-				],
-				dest: 'public/'
-			}
-		},
-		clean: {
-			ts: {
-				src: [
-					'code-2.0/**/*.js',
-					'code-2.0/**/*.js.map'
-				]
-			},
-			review: {
-				src: [
-					'articles/c87-typescript-pdf/',
-					'articles/*.pdf',
-					'articles/*.epub',
-					'articles/*.html',
-					'articles/*.css',
-					// grifletがgruntを叩けないので
-					'!articles/epub.css',
-					// epubとhtmlでカスタムテンプレ利用有無を切り替える
-					'articles/layouts/layout.html.erb',
-					'articles/review-ext.rb'
-				]
-			},
-			public: {
-				src: [
-					'public/'
+					{expand: true, cwd: `${articles}/webroot/`, src: ['**'], dest: `${publish}/`}
 				]
 			}
 		},
-		exec: {
+		shell: {
 			preprocess: {
-				cwd: "./articles",
-				cmd: function () {
-					var command = "bundle exec review-preproc";
-					var files = [
-						"articles"
-					];
-					var exec = command + " -r --tabwidth=2 *.re";
-					console.log(exec);
-					return exec;
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewPreproc} -r --tabwidth=2 *.re`
 			},
 			compile2text: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-compile --all --target=text --footnotetext --stylesheet=style.css";
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewCompile} --target=text`
 			},
 			compile2html: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-compile --all --target=html --footnotetext --stylesheet=style.css --chapterlink";
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewCompile} --target=html --yaml=config.yml --chapterlink --footnotetext`
 			},
 			compile2latex: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-compile --all --target=latex --footnotetext --stylesheet=style.css";
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewCompile} --target=latex --footnotetext`
 			},
 			compile2idgxml: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-compile --all --target=idgxml --footnotetext --stylesheet=style.css";
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewCompile} --target=idgxml`
+			},
+			compile2web: {
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewWebMaker} config.yml`
 			},
 			compile2pdf: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-pdfmaker config.yml";
-				}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewPdfMaker} config.yml`
 			},
 			compile2epub: {
-				cwd: "./articles",
-				cmd: function () {
-					return "bundle exec review-epubmaker config.yml";
-				}
-			}
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `${reviewEpubMaker} config.yml`
+			},
 		}
 	});
 
 	function generateTask(target, pretask) {
 		pretask = pretask || [];
-		return [/* 'clean' */, /* 'typescript-formatter', */ 'ts'].concat(pretask).concat(['exec:preprocess', 'exec:compile2' + target]);
+		return ["clean"].concat(pretask).concat(["shell:preprocess", `shell:compile2${target}`]);
 	}
 
 	grunt.registerTask(
-		'default',
+		"default",
 		"原稿をコンパイルしてPDFファイルにする",
 		"pdf");
 
 	grunt.registerTask(
-		'text',
+		"text",
 		"原稿をコンパイルしてTextファイルにする",
 		generateTask("text"));
 
 	grunt.registerTask(
-		'html',
+		"html",
 		"原稿をコンパイルしてHTMLファイルにする",
-		generateTask("html", ['less:blog', 'copy:blog']).concat(['copy:public']));
+		generateTask("html", ["sass"]));
 
 	grunt.registerTask(
-		'idgxml',
+		"idgxml",
 		"原稿をコンパイルしてInDesign用XMLファイルにする",
 		generateTask("idgxml"));
 
 	grunt.registerTask(
-		'pdf',
+		"web",
+		"原稿をコンパイルしてwebページにする",
+		generateTask("web", ["sass"]).concat(['copy:publish']));
+
+	grunt.registerTask(
+		"pdf",
 		"原稿をコンパイルしてpdfファイルにする",
 		generateTask("pdf"));
 
 	grunt.registerTask(
-		'epub',
+		"epub",
 		"原稿をコンパイルしてepubファイルにする",
-		generateTask("epub", ['less:epub']));
+		generateTask("epub"));
 
 	require('load-grunt-tasks')(grunt);
 };

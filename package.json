@@ -7,23 +7,24 @@
     "npm": "3.0.0"
   },
   "scripts": {
-    "setup": "gem install bundler",
-    "preinstall": "git submodule update --init",
+    "global": "gem install bundler",
     "postinstall": "bundle install",
-    "update": "git submodule update",
-    "build": "tsc -p ./ && grunt pdf"
+    "pdf": "grunt pdf",
+    "web": "grunt web",
+    "html": "grunt html",
+    "build:ts": "tsc -p ./"
   },
   "dependencies": {},
   "devDependencies": {
     "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.3.0",
-    "grunt-dtsm": "^1.0.0",
-    "grunt-exec": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
     "grunt-open": "^0.2.3",
-    "grunt-ts": "^5.5.1",
-    "grunt-tslint": "^3.1.1",
+    "grunt-shell": "^1.3.0",
+    "js-yaml": "^3.6.1",
     "load-grunt-tasks": "^3.5.0",
     "tslint": "^3.13.0",
     "typescript": "^2.0.0",
