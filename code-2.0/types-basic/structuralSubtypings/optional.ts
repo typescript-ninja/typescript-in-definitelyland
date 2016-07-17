@@ -4,9 +4,9 @@ interface Point {
 	color?: string; // なくてもいい
 }
 function printPoint(p: Point): void {
-	var message = "x=" + p.x + ", y=" + p.y;
+	let message = `x=${p.x}, y=${p.y}`;
 	if (p.color) {
-		message = p.color + "(" + message + ")";
+		message = `${p.color}(${message})`;
 	}
 	console.log(message);
 }
@@ -14,13 +14,13 @@ function printPoint(p: Point): void {
 // x=1, y=2 と表示される
 printPoint({
 	x: 1,
-	y: 2
+	y: 2,
 });
 // red(x=1, y=2) と表示される
 printPoint({
 	x: 1,
 	y: 2,
-	color: "red"
+	color: "red",
 });
 // とはいえ、型が不一致だと怒られる。
 // error TS2345: Argument of type '{ x: number; y: number; color: boolean; }'
@@ -30,5 +30,5 @@ printPoint({
 // printPoint({
 //   x: 1,
 //   y: 2,
-//   color: true
+//   color: true,
 // });

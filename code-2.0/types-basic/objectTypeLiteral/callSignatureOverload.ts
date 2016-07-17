@@ -1,4 +1,4 @@
-var obj: {
+let obj: {
 	// overloadもできるよ
 	(word: string): string;
 	(): number;
@@ -13,10 +13,12 @@ obj = (word?: string): any => {
 	}
 };
 // 呼び出してみよう！
-var str = obj("TypeScript");
+let str = obj("TypeScript");
 // Hello, TypeScript と表示される
 console.log(str);
 
-var num = obj();
+let num = obj();
 // 42 と表示される
 console.log(num);
+
+export {}

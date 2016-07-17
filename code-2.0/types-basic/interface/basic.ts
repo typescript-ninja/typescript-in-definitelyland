@@ -6,7 +6,7 @@ interface A {
 class AImpl implements A {
 	str: string;
 }
-var objA: A = new AImpl();
+let objA: A = new AImpl();
 
 // インタフェースは他のインタフェースを拡張できる
 interface B1 {
@@ -15,13 +15,13 @@ interface B1 {
 interface B2 extends B1 {
 	num: number;
 }
-// 代入する値は実装したクラスとかじゃなくてもええんじゃ！
-var objB: B2 = {
+// 代入する値はインタフェースを実装したクラスに限らない
+let objB: B2 = {
 	str: "string",
-	num: 42
+	num: 42,
 };
 
-// interfaceはクラスすら拡張する！(実装はなかったことになる
+// interfaceはクラスすら拡張できる！(実装はなかったことになる
 class FooClass {
 	constructor(public num: number) {
 	}
@@ -29,7 +29,7 @@ class FooClass {
 interface C extends FooClass {
 	str: string;
 }
-var objC: C = {
+let objC: C = {
 	num: 42,
-	str: "string"
+	str: "string",
 };

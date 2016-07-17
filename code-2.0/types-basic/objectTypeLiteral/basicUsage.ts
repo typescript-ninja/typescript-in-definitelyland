@@ -1,3 +1,4 @@
+// 関数の仮引数や返り値に対して
 function move(
 			value: { x: number; y: number; },
 			delta: { dx?: number; dy?: number; }
@@ -11,7 +12,7 @@ function move(
 	return value;
 }
 
-var result = move({ x: 1, y: 2 }, { dx: -2 });
+let result = move({ x: 1, y: 2 }, { dx: -2 });
 // 次のように表示される
 // {
 //   "x": -1,

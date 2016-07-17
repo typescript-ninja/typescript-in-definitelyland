@@ -1,4 +1,4 @@
-var obj: {
+let obj: {
 	hello(word: string): string;
 };
 
@@ -18,8 +18,10 @@ obj = {
 };
 
 // プロパティシグニチャ + 関数型 の別の書き方なだけだな！
-var obj2: {
+let obj2: {
 	hello: (word: string) => string;
 };
-obj = obj2;
 obj2 = obj;
+obj = obj2;
+
+export {}

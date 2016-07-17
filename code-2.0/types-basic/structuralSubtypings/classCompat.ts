@@ -17,7 +17,7 @@ class PointImpl2 {
 function double(p: Point): Point {
 	return {
 		x: p.x * 2,
-		y: p.y * 2
+		y: p.y * 2,
 	};
 }
 // 次のすべては正しいコードとなります
@@ -26,5 +26,10 @@ double(new PointImpl2(3, 4));
 double({
 	x: 5,
 	y: 6,
-	// z: 7  // TODO 要素が多すぎるのもダメになりました
 });
+let p = {
+	x: 7,
+	y: 8,
+	z: 9,
+};
+double(p); // オブジェクトリテラルを直で渡す場合余計な要素があると怒られる

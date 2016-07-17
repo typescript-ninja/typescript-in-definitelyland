@@ -5,3 +5,5 @@ let bool = true;
 let func = () => {
 };
 let obj = {};
+
+export {str,num,bool,func,obj}
