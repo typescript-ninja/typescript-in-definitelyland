@@ -19,7 +19,7 @@ namespace a {
 }
 
 namespace b {
-	export module c {
+	export namespace c {
 		export function hello() {
 			return a.obj.hello();
 		}

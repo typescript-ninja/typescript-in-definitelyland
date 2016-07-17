@@ -9,10 +9,10 @@
   "scripts": {
     "global": "gem install bundler",
     "postinstall": "bundle install",
-    "pdf": "grunt pdf",
-    "web": "grunt web",
-    "html": "grunt html",
-    "build:ts": "tsc -p ./"
+    "pdf": "npm run build && grunt pdf",
+    "web": "npm run build && grunt web",
+    "html": "npm run build && grunt html",
+    "build": "tsc -p ./"
   },
   "dependencies": {},
   "devDependencies": {

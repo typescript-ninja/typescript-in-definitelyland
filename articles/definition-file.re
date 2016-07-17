@@ -579,10 +579,10 @@ declare namespace assert {
 この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
 @<list>{interfaceAntipattern/powerAssertAbst-ignore}に抜粋&改変したものを示します。
 
-//list[interfaceAntipattern/powerAssertAbst-ignore][関数+内部モジュールの実例]{
+//list[interfaceAntipattern/powerAssertAbst-ignore][関数+namespaceの実例]{
 #@mapfile(../code/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
 declare function assert(value: any, message?: string): void;
-declare module assert {
+declare namespace assert {
 
   export function deepEqual(actual: any, expected: any): void;
   export function notDeepEqual(acutal: any, expected: any): void;

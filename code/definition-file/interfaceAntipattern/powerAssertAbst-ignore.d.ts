@@ -1,5 +1,5 @@
 declare function assert(value: any, message?: string): void;
-declare module assert {
+declare namespace assert {
 
 	export function deepEqual(actual: any, expected: any): void;
 	export function notDeepEqual(acutal: any, expected: any): void;
