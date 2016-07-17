@@ -23,7 +23,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 そういうときに、型クエリを使います。
 
 //list[typeQueries/basic][クラスそのものの型だよ！]{
-#@mapfile(../code-2.0/types-advanced/typeQueries/basic.ts)
+#@mapfile(../code/types-advanced/typeQueries/basic.ts)
 class Sample {
   str: string;
 }
@@ -54,7 +54,7 @@ export { }
 @<list>{typeQueries/cheapTrick}の例は、prototypeプロパティを使っているためJavaScript力が多少ないと思いつかないかもしれません。
 
 //list[typeQueries/cheapTrick][prototypeを参照するとメソッドの型が取れる]{
-#@mapfile(../code-2.0/types-advanced/typeQueries/cheapTrick.ts)
+#@mapfile(../code/types-advanced/typeQueries/cheapTrick.ts)
 class Sample {
   hello = (word = "TypeScript") => "Hello, " + word;
   bye: typeof Sample.prototype.hello;
@@ -72,7 +72,7 @@ export { }
 @<list>{typeQueries/copy}では、ひとつ目の引数の型をふたつ目の引数や返り値の型にもコピーして使っています。
 
 //list[typeQueries/copy][ここまで複雑にするならインタフェース使って]{
-#@mapfile(../code-2.0/types-advanced/typeQueries/copy.ts)
+#@mapfile(../code/types-advanced/typeQueries/copy.ts)
 // このコードは（死ぬほど読みにくいけど）正しい
 function move(p1: { x1: number; y1: number; x2: number; y2: number; },
   p2: typeof p1
@@ -125,7 +125,7 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 例を見てみましょう（@<list>{tuple/basic}）。
 
 //list[tuple/basic][基本的な例]{
-#@mapfile(../code-2.0/types-advanced/tuple/basic.ts)
+#@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
 // これは別の箇所で解説している union typesで表現され (number | string | boolean)[]
 let array = [1, "str", true];
@@ -153,7 +153,7 @@ export { array }
 もちろん、タプル型はGenericsと組み合わせて利用できます(@<list>{tuple/withGenerics})。
 
 //list[tuple/withGenerics][Genericsでの利用も可]{
-#@mapfile(../code-2.0/types-advanced/tuple/withGenerics.ts)
+#@mapfile(../code/types-advanced/tuple/withGenerics.ts)
 // Genericsを使ってtupleを生成して返す
 function zip<T1, T2>(v1: T1, v2: T2): [T1, T2] {
   return [v1, v2];
@@ -174,7 +174,7 @@ Good！いいですね。
 その例を見てみましょう(@<list>{tuple/manyValues})。
 
 //list[tuple/manyValues][値の要素数が多すぎる場合]{
-#@mapfile(../code-2.0/types-advanced/tuple/manyValues.ts)
+#@mapfile(../code/types-advanced/tuple/manyValues.ts)
 // 要素が多い分にはOKだ！
 let tuple: [string, number] = ["str", 1, "test"];
 
@@ -189,7 +189,7 @@ let value = tuple[2];
 お次は要素の順序がズレた場合、どうなるかを見てみましょう(@<list>{tuple/unshift})。
 
 //list[tuple/unshift][絶望に身をよじれ…！]{
-#@mapfile(../code-2.0/types-advanced/tuple/unshift.ts)
+#@mapfile(../code/types-advanced/tuple/unshift.ts)
 let tuple: [string, number] = ["str", 1];
 
 // 先頭をnumberに…
@@ -239,7 +239,7 @@ JavaScriptという現実と、安全な世界を構築するTypeScriptの橋渡
 まずは簡単な例から見ていきましょう(@<list>{unionTypes/basic})。
 
 //list[unionTypes/basic][型A | 型B でAかBのどちらかを表す]{
-#@mapfile(../code-2.0/types-advanced/unionTypes/basic.ts)
+#@mapfile(../code/types-advanced/unionTypes/basic.ts)
 let a: string | boolean | undefined;
 // string | boolean なので次はオッケー！
 a = "str";
@@ -268,7 +268,7 @@ export { c }
 || 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです(@<list>{unionTypes/inferred})。
 
 //list[unionTypes/inferred][こういうときは目にしますね]{
-#@mapfile(../code-2.0/types-advanced/unionTypes/inferred.ts)
+#@mapfile(../code/types-advanced/unionTypes/inferred.ts)
 // and の型は string | boolean
 let and = "str" || true;
 // cond の型は number | string
@@ -286,7 +286,7 @@ TypeScript一般のベストプラクティスとして1つの配列で複数の
 型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります(@<list>{unionTypes/syntax})。
 
 //list[unionTypes/syntax][型名をカッコで囲うんです？]{
-#@mapfile(../code-2.0/types-advanced/unionTypes/syntax.ts)
+#@mapfile(../code/types-advanced/unionTypes/syntax.ts)
 // 引数無しの返り値stringな関数 な型注釈
 let func: () => string;
 
@@ -313,7 +313,7 @@ union typesな値を使うときは、一応型アサーションも使えます
 次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
 
 //list[unionTypes/typeAssertion][一応使えるよ こうすれば]{
-#@mapfile(../code-2.0/types-advanced/unionTypes/typeAssertion.ts)
+#@mapfile(../code/types-advanced/unionTypes/typeAssertion.ts)
 // 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
 // 型アサーションは悪い。常に悪い。なるべく使わないこと。
 
@@ -377,7 +377,7 @@ ECMAScript 5の範囲では、変換ルールは次のとおりです。
 TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。
 
 //list[typeGuards/typeofBasic][実際の型がわからないなら調べるしかないじゃない！]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/typeofBasic.ts)
+#@mapfile(../code/types-advanced/typeGuards/typeofBasic.ts)
 let obj: number | string = null as any;
 if (typeof obj === "string") {
   // ここでは string と確定されている！
@@ -399,7 +399,7 @@ export { }
 #@# TODO never型についての説明をどこかに
 
 //list[typeGuards/typeof-invalid][変なコードを書くとコンパイラが教えてくれる]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/typeof-invalid.ts)
+#@mapfile(../code/types-advanced/typeGuards/typeof-invalid.ts)
 let objA: any;
 if (typeof objA === "string") {
   // ここでは string と確定されている！
@@ -426,7 +426,7 @@ if (typeof objB === "string") {
 typeofによるtype guards特有の仕様として、後続の型の絞込みがあります（@<list>{typeGuards/typeofRemoves}）。
 
 //list[typeGuards/typeofRemoves][型の絞込み！]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/typeofRemoves.ts)
+#@mapfile(../code/types-advanced/typeGuards/typeofRemoves.ts)
 let obj: number | string | boolean = null as any;
 
 if (typeof obj === "string") {
@@ -465,7 +465,7 @@ JavaScriptにおけるinstanceofは、ある値が指定した関数のインス
 動作例を確認してみましょう(@<list>{typeGuards/instanceof})。
 
 //list[typeGuards/instanceof][instanceof の挙動]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/instanceof.ts)
+#@mapfile(../code/types-advanced/typeGuards/instanceof.ts)
 class Base {
 }
 
@@ -500,7 +500,7 @@ export { }
 instanceofで型を絞り込みます(@<list>{typeGuards/instanceofBasic})。
 
 //list[typeGuards/instanceofBasic][instanceofの挙動]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/instanceofBasic.ts)
+#@mapfile(../code/types-advanced/typeGuards/instanceofBasic.ts)
 class A {
   str: string;
 }
@@ -547,7 +547,7 @@ export { }
 type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています(@<list>{typeGuards/operator})。
 
 //list[typeGuards/operator][ブール代数みたいな演算に対応してる]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/operator.ts)
+#@mapfile(../code/types-advanced/typeGuards/operator.ts)
 let obj: number | boolean | string = null as any;
 
 // &&演算子で絞込み
@@ -594,7 +594,7 @@ TypeScriptでは構造的部分型の仕組みにより、クラスが要求さ�
 その仕組みを使って、@<list>{typeGuards/weakspot}のようなコードが書けてしまいます。
 
 //list[typeGuards/weakspot][構造的部分型とtype guards]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/weakspot.ts)
+#@mapfile(../code/types-advanced/typeGuards/weakspot.ts)
 class Sample {
   str: string;
 }
@@ -619,7 +619,7 @@ objはSampleを型として持ち、その値として互換性のあるオブ�
 コンパイル後のJavaScriptコード(@<list>{typeGuards/weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
 
 //list[typeGuards/weakspot.js][コンパイル後のJS]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/weakspot.js)
+#@mapfile(../code/types-advanced/typeGuards/weakspot.js)
 "use strict";
 class Sample {
 }
@@ -641,7 +641,7 @@ if (obj instanceof Sample) {
 この書き方をした場合、返り値はbooleanでなければなりません。
 
 //list[typeGuards/userDefined][ユーザ定義のtype guards]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/userDefined.ts)
+#@mapfile(../code/types-advanced/typeGuards/userDefined.ts)
 class Sample {
   str: string;
 }
@@ -672,7 +672,7 @@ export { }
 ふたつ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{typeGuards/vsWeakspot2-invalid})。
 
 //list[typeGuards/vsWeakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
-#@mapfile(../code-2.0/types-advanced/typeGuards/vsWeakspot2-invalid.ts)
+#@mapfile(../code/types-advanced/typeGuards/vsWeakspot2-invalid.ts)
 class Sample {
   private _tmp: any;
   str: string;
@@ -710,7 +710,7 @@ type aliasは仕様上、interfaceと同じように利用できる場面もあ�
 代表例を見てみましょう(@<list>{typeAlias/basic})。
 
 //list[typeAlias/basic][頻出するunion typesに名前をつける]{
-#@mapfile(../code-2.0/types-advanced/typeAlias/basic.ts)
+#@mapfile(../code/types-advanced/typeAlias/basic.ts)
 type FooReturns = string | number | boolean;
 
 interface Foo {
@@ -727,7 +727,7 @@ interface Foo {
 tuple typesに名前をつけることもできます(@<list>{typeAlias/tuple})。
 
 //list[typeAlias/tuple][tuple typesに名前をつける]{
-#@mapfile(../code-2.0/types-advanced/typeAlias/tuple.ts)
+#@mapfile(../code/types-advanced/typeAlias/tuple.ts)
 // tuple typesに名前をつける
 type Point = [number, number];
 type Circle = [Point, number];
@@ -758,7 +758,7 @@ type aliasは型に別名をつけるだけで、コンパイルされると消�
 そのため、@<list>{typeAlias/doNotHaveInstance-invalid}のようなコードは書くことができません。
 
 //list[typeAlias/doNotHaveInstance-invalid][type aliasは値を作らない]{
-#@mapfile(../code-2.0/types-advanced/typeAlias/doNotHaveInstance-invalid.ts)
+#@mapfile(../code/types-advanced/typeAlias/doNotHaveInstance-invalid.ts)
 // 型の別名を作るだけで何かの値を作るわけではない…！
 type StringArray = string[];
 
@@ -773,7 +773,7 @@ TypeScriptの仕様書にのっているtype aliasの利用例について、int
 union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
 
 //list[typeAlias/specExample][interfaceを使うんだ！]{
-#@mapfile(../code-2.0/types-advanced/typeAlias/specExample.ts)
+#@mapfile(../code/types-advanced/typeAlias/specExample.ts)
 // これらはinterfaceで表現不可 type aliasで正解
 type StringOrNumber = string | number;
 type TextObject = string | { text: string };

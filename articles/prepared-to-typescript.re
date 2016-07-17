@@ -139,18 +139,18 @@ $ cat tsconfig.json
         "noEmitOnError": true
     },
     "include": [
-        "code-2.0/**/*.ts"
+        "code/**/*.ts"
     ],
     "exclude": [
         "node_modules",
-        "code-2.0/**/*-invalid.ts",
-        "code-2.0/**/*-invalid.d.ts",
-        "code-2.0/**/invalid.ts",
-        "code-2.0/**/invalid.d.ts",
-        "code-2.0/**/*-ignore.ts",
-        "code-2.0/**/*-ignore.d.ts",
-        "code-2.0/**/ignore.ts",
-        "code-2.0/**/ignore.d.ts"
+        "code/**/*-invalid.ts",
+        "code/**/*-invalid.d.ts",
+        "code/**/invalid.ts",
+        "code/**/invalid.d.ts",
+        "code/**/*-ignore.ts",
+        "code/**/*-ignore.d.ts",
+        "code/**/ignore.ts",
+        "code/**/ignore.d.ts"
     ]
 }
 #@end

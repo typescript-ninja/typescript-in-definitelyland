@@ -31,7 +31,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic}）。
 
 //list[objectTypeLiteral/basic][基本的な例]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/basic.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/basic.ts)
 // オブジェクトリテラルで値を作成！
 let objA = {
   x: 1,
@@ -60,7 +60,7 @@ export { }
 オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basic-usage}）。
 
 //list[objectTypeLiteral/basic-usage][でも、正直読みづらい]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/basicUsage.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/basicUsage.ts)
 // 関数の仮引数や返り値に対して
 function move(
   value: { x: number; y: number; },
@@ -96,7 +96,7 @@ export { }
 1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture}）。
 
 //list[objectTypeLiteral/propertySigniture][大将！いつものやつ！]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/propertySigniture.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/propertySigniture.ts)
 let obj: {
   property: string;
 };
@@ -116,7 +116,7 @@ export { }
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature}）。
 
 //list[objectTypeLiteral/callSignature][関数として利用できる]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/callSignature.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/callSignature.ts)
 let obj: {
   (word: string): string;
 };
@@ -140,7 +140,7 @@ export { }
 オーバーロードも表現できます（@<list>{objectTypeLiteral/call-signature-overload}）。
 
 //list[objectTypeLiteral/call-signature-overload][オーバーロードも表現できる]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/callSignatureOverload.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/callSignatureOverload.ts)
 let obj: {
   // overloadもできるよ
   (word: string): string;
@@ -176,7 +176,7 @@ export { }
 3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature}）。
 
 //list[objectTypeLiteral/constructorSignature][newできる]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/constructorSignature.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/constructorSignature.ts)
 let clazz: {
   new (): any;
 };
@@ -209,7 +209,7 @@ TypeScriptでできるコードの書き方の範疇では、クラスを定義�
 添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{objectTypeLiteral/indexSignature}）。
 
 //list[objectTypeLiteral/indexSignature][プロパティアクセスの例]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/indexSignature.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/indexSignature.ts)
 let objA: {
   [index: number]: string;
 } = {};
@@ -268,7 +268,7 @@ export { s1, s3, s4 }
 ちなみに、TypeScriptは@<list>{objectTypeLiteral/indexAccessSample}のように、文字列リテラルによるアクセスも許可しています。
 
 //list[objectTypeLiteral/indexAccessSample][実は . アクセスと同じ堅牢さを誇る]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/indexAccessSample.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/indexAccessSample.ts)
 let obj = {
   str: "string",
   num: 1
@@ -304,7 +304,7 @@ export { str, num, propertyName1, propertyName2 }
 あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature}）。
 
 //list[objectTypeLiteral/methodSignature][メソッドの定義っぽい]{
-#@mapfile(../code-2.0/types-basic/objectTypeLiteral/methodSignature.ts)
+#@mapfile(../code/types-basic/objectTypeLiteral/methodSignature.ts)
 let obj: {
   hello(word: string): string;
 };
@@ -342,7 +342,7 @@ export { }
 関数も型として表現できます（@<list>{function-types/basic}）。
 
 //list[function-types/basic][関数も型として表現できる]{
-#@mapfile(../code-2.0/types-basic/functionTypes/basic.ts)
+#@mapfile(../code/types-basic/functionTypes/basic.ts)
 let func: (value: string) => string;
 // 当てはまる値はこんな感じ
 func = word => `Hello, ${word}`;
@@ -375,7 +375,7 @@ TypeScriptでの一番基本的な使い方は名前付きオブジェクト型�
 TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
 
 //list[interface/basic][酷使されるインタフェースさん]{
-#@mapfile(../code-2.0/types-basic/interface/basic.ts)
+#@mapfile(../code/types-basic/interface/basic.ts)
 // 一般的な用法
 interface A {
   str: string;
@@ -421,7 +421,7 @@ TypeScriptでは、構造が一致するかどうかで型の互換性を判定�
 そこに実際の継承関係は必要ありません。
 
 //list[structuralSubtypings/basic][大体一緒ならまぁ一緒ってことでいいよね]{
-#@mapfile(../code-2.0/types-basic/structuralSubtypings/basic.ts)
+#@mapfile(../code/types-basic/structuralSubtypings/basic.ts)
 // クラス Foo はstring型のstrという名前のプロパティと
 // number型のnumという名前のプロパティを持つ
 class Foo {
@@ -443,7 +443,7 @@ export { obj }
 そのため、@<list>{structuralSubtypings/classCompat}のようなコードもTypeScriptとしては正しいです。
 
 //list[structuralSubtypings/classCompat][Pointインタフェースが要求されているが？]{
-#@mapfile(../code-2.0/types-basic/structuralSubtypings/classCompat.ts)
+#@mapfile(../code/types-basic/structuralSubtypings/classCompat.ts)
 interface Point {
   x: number;
   y: number;
@@ -489,7 +489,7 @@ Pointインタフェースに適合させることが目的のクラスであれ
 なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structuralSubtypings/optional}）。
 
 //list[structuralSubtypings/optional][optional(?)なプロパティはなくてもよい]{
-#@mapfile(../code-2.0/types-basic/structuralSubtypings/optional.ts)
+#@mapfile(../code/types-basic/structuralSubtypings/optional.ts)
 interface Point {
   x: number;
   y: number;
@@ -536,7 +536,7 @@ printPoint({
 @<list>{typeAssertions/basic}のように、@<code>{<変換後型名>}と書くだけです。
 
 //list[typeAssertions/basic][型アサーション 基本例]{
-#@mapfile(../code-2.0/types-basic/typeAssertions/basic.ts)
+#@mapfile(../code/types-basic/typeAssertions/basic.ts)
 let obj: any = 1;
 
 // お前は今後 number として生きよ…
@@ -556,7 +556,7 @@ export { }
 もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（@<list>{typeAssertions/invalidAssertions-invalid}）。
 
 //list[typeAssertions/invalidAssertions-invalid][stringはnumberにはなれない]{
-#@mapfile(../code-2.0/types-basic/typeAssertions/invalidAssertions-invalid.ts)
+#@mapfile(../code/types-basic/typeAssertions/invalidAssertions-invalid.ts)
 let str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
 // error TS2352: Type 'string' cannot be converted to type 'number'.
@@ -568,7 +568,7 @@ var num: number = <number>str;
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
 
 //list[typeAssertions/class][親クラスから子クラスへ変換]{
-#@mapfile(../code-2.0/types-basic/typeAssertions/class.ts)
+#@mapfile(../code/types-basic/typeAssertions/class.ts)
 class Base {
   str: string;
 }
@@ -604,7 +604,7 @@ anyに一旦キャストすればなんにでも化けさせられるので、�
 型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{typeAssertions/buggyDefinitionFile}）。
 
 //list[typeAssertions/buggyDefinitionFile][無理やりなんとかする例]{
-#@mapfile(../code-2.0/types-basic/typeAssertions/buggyDefinitionFile.ts)
+#@mapfile(../code/types-basic/typeAssertions/buggyDefinitionFile.ts)
 // こういう、型定義があるとする。実装は他のライブラリなどが与える。
 declare class Base {
   str: string;
@@ -637,7 +637,7 @@ TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arra
 例を見てみましょう(@<list>{genericTypes/basic})。
 
 //list[genericTypes/basic][配列はジェネリクスに支えられております]{
-#@mapfile(../code-2.0/types-basic/genericTypes/basic.ts)
+#@mapfile(../code/types-basic/genericTypes/basic.ts)
 // string[] は実は Array<string> と同じ意味なのだ！(Arrayだけ特別に！
 let strArray: Array<string> = ["a", "b", "c"];
 let numArray: Array<number> = [1, 2, 3];
@@ -682,7 +682,7 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"とするこ
 さて、ではlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid}を見てみます@<fn>{array-forEach}。
 
 //list[genericTypes/arrayDeclaration-invalid][Array<T>が登場する]{
-#@mapfile(../code-2.0/types-basic/genericTypes/arrayDeclaration-invalid.ts)
+#@mapfile(../code/types-basic/genericTypes/arrayDeclaration-invalid.ts)
 interface ArrayConstructor {
   new <T>(...items: T[]): T[];
 };
@@ -704,7 +704,7 @@ pushの定義を見ると、"○○のArrayに対して、○○の値いくつ�
 ここで、型パラメータTを実際にstringで具体化します(@<list>{genericTypes/arrayDeclarationString-invalid})。
 
 //list[genericTypes/arrayDeclarationString-invalid][string専用Arrayに変身]{
-#@mapfile(../code-2.0/types-basic/genericTypes/arrayDeclarationString-invalid.ts)
+#@mapfile(../code/types-basic/genericTypes/arrayDeclarationString-invalid.ts)
 interface ArrayConstructor {
   new (...items: string[]): string[];
 };
@@ -732,7 +732,7 @@ interface Array {
 ここでジェネリクスの書き方を確認しておきます（@<list>{genericTypes/variation}）。
 
 //list[genericTypes/variation][Array<T>が登場する]{
-#@mapfile(../code-2.0/types-basic/genericTypes/variation.ts)
+#@mapfile(../code/types-basic/genericTypes/variation.ts)
 // それぞれのTは独立していて、関連性はない
 
 // クラスとジェネリクス
@@ -784,7 +784,7 @@ export { objA, objB, obj }
 例を見てみましょう（@<list>{genericTypes/limitation}）。
 
 //list[genericTypes/limitation][型パラメータTはBaseを継承していなければならない]{
-#@mapfile(../code-2.0/types-basic/genericTypes/limitation.ts)
+#@mapfile(../code/types-basic/genericTypes/limitation.ts)
 class Base {
   str: string;
 }

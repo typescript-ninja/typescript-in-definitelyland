@@ -30,7 +30,7 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
 //list[variable/with-annotations][型注釈付きの変数]{
-#@mapfile(../code-2.0/typescript-basic/variable/withAnnotations.ts)
+#@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
 let str: string;
 let num: number;
 let bool: boolean;
@@ -53,7 +53,7 @@ export { }
 安心安全！
 
 //list[variable/with-annotations-invalid][型注釈に反することをやってみる]{
-#@mapfile(../code-2.0/typescript-basic/variable/withAnnotations-invalid.ts)
+#@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
 let str: string;
 // 文字列は数値と互換性がない！
 // error TS2322: Type 'number' is not assignable to type 'string'.
@@ -76,7 +76,7 @@ bool = "str";
 @<list>{variable/with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
 
 //list[variable/with-initializer][初期化付き変数 = 最強]{
-#@mapfile(../code-2.0/typescript-basic/variable/withInitializer.ts)
+#@mapfile(../code/typescript-basic/variable/withInitializer.ts)
 let str = "string";
 let num = 1;
 let bool = true;
@@ -99,7 +99,7 @@ export { str, num, bool, func, obj }
 ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic}）。
 
 //list[class/basic][さまざまなクラス要素]{
-#@mapfile(../code-2.0/typescript-basic/class/basic.ts)
+#@mapfile(../code/typescript-basic/class/basic.ts)
 class Base {
   // インスタンス変数
   numA: number;
@@ -182,7 +182,7 @@ JavaScriptっぽくいうとプロパティですね。
 @<list>{class/constructor.ts}のようなコードを書くと@<list>{class/constructor.js}のようなJavaScriptが出てきます。
 
 //list[class/constructor.ts][引数プロパティ宣言！]{
-#@mapfile(../code-2.0/typescript-basic/class/constructor.ts)
+#@mapfile(../code/typescript-basic/class/constructor.ts)
 class Sample {
   constructor(public str: string) {
   }
@@ -197,7 +197,7 @@ export { }
 //}
 
 //list[class/constructor.js][コンパイルするとこんなの]{
-#@mapfile(../code-2.0/typescript-basic/class/constructor.js)
+#@mapfile(../code/typescript-basic/class/constructor.js)
 "use strict";
 class Sample {
     constructor(str) {
@@ -224,7 +224,7 @@ get、setアクセサを使うと、getterしか定義していない場合で�
 superを使い親クラスのメソッドを参照することも普通に使えます。
 
 //list[class/inherit][普通に継承もあるよ]{
-#@mapfile(../code-2.0/typescript-basic/class/inherit.ts)
+#@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
     return "Hi! " + name;
@@ -258,7 +258,7 @@ TypeScript以外のオブジェクト指向言語でもいえることですが�
 型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。
 
 //list[function/basic][色々な関数定義]{
-#@mapfile(../code-2.0/typescript-basic/function/basic.ts)
+#@mapfile(../code/typescript-basic/function/basic.ts)
 function hello(word: string): string {
   return `Hello, ${word}`;
 }
@@ -290,7 +290,7 @@ export { }
 可変長引数もあります！（@<list>{function/args}）
 
 //list[function/args][可変長引数の例]{
-#@mapfile(../code-2.0/typescript-basic/function/args.ts)
+#@mapfile(../code/typescript-basic/function/args.ts)
 function hello(...args: string[]) {
   return "Hello, " + args.join(" & ");
 }
@@ -305,7 +305,7 @@ export { }
 なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function/invalid}）。
 
 //list[function/invalid][こういうパターンはNG]{
-#@mapfile(../code-2.0/typescript-basic/function/invalid.ts)
+#@mapfile(../code/typescript-basic/function/invalid.ts)
 // オプショナルな引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
 function funcA(arg1?: string, arg2: string) {
@@ -332,7 +332,7 @@ ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見て
 アロー関数も普通の関数同様、型注釈の与え方以外ECMAScript 2015との差分は見当たりません。
 
 //list[arrowFunctions/basic][アロー関数 短くてかっこいい]{
-#@mapfile(../code-2.0/typescript-basic/arrowFunctions/basic.ts)
+#@mapfile(../code/typescript-basic/arrowFunctions/basic.ts)
 // 次の2つは(thisが絡まない限り)等価！
 let funcA = () => true;
 let funcB = function() {
@@ -409,7 +409,7 @@ TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015に
 foo.ts（@<list>{externalModule/foo}）、bar.ts（@<list>{externalModule/bar}）、buzz.ts（@<list>{externalModule/buzz}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
 
 //list[externalModule/foo][foo.ts]{
-#@mapfile(../code-2.0/typescript-basic/externalModule/foo.ts)
+#@mapfile(../code/typescript-basic/externalModule/foo.ts)
 // defaultをbarに hello関数をそのままimport
 import bar, { hello } from "./bar";
 // モジュール全体をbar2に束縛
@@ -439,7 +439,7 @@ console.log(buzz2());
 //}
 
 //list[externalModule/bar][bar.ts]{
-#@mapfile(../code-2.0/typescript-basic/externalModule/bar.ts)
+#@mapfile(../code/typescript-basic/externalModule/bar.ts)
 export function hello(word = "TypeScript") {
   return `Hello, ${word}`;
 }
@@ -451,7 +451,7 @@ export default function(word = "default") {
 //}
 
 //list[externalModule/buzz][buzz.ts]{
-#@mapfile(../code-2.0/typescript-basic/externalModule/buzz.ts)
+#@mapfile(../code/typescript-basic/externalModule/buzz.ts)
 function bye(word = "TypeScript") {
   return `Good bye, ${word}`;
 }
@@ -471,7 +471,7 @@ Node.jsに慣れている人なら、見覚えのある形式のコードが出�
 //cmd{
 $ tsc --module commonjs --target es6 foo.ts
 $ cat foo.js
-#@mapfile(../code-2.0/typescript-basic/externalModule/foo.js)
+#@mapfile(../code/typescript-basic/externalModule/foo.js)
 "use strict";
 // defaultをbarに hello関数をそのままimport
 const bar_1 = require("./bar");
@@ -498,7 +498,7 @@ console.log(buzz());
 console.log(buzz2());
 #@end
 $ cat bar.js
-#@mapfile(../code-2.0/typescript-basic/externalModule/bar.js)
+#@mapfile(../code/typescript-basic/externalModule/bar.js)
 "use strict";
 function hello(word = "TypeScript") {
     return `Hello, ${word}`;
@@ -511,7 +511,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 #@end
 $ cat buzz.js
-#@mapfile(../code-2.0/typescript-basic/externalModule/buzz.js)
+#@mapfile(../code/typescript-basic/externalModule/buzz.js)
 "use strict";
 function bye(word = "TypeScript") {
     return `Good bye, ${word}`;
@@ -535,7 +535,7 @@ module.exports = bye;
 まずは簡単な例を見てみましょう（@<list>{internalModule/basic.ts}）。
 
 //list[internalModule/basic.ts][namespaceを使ったコード]{
-#@mapfile(../code-2.0/typescript-basic/internalModule/basic.ts)
+#@mapfile(../code/typescript-basic/internalModule/basic.ts)
 namespace a {
   // export してないものは外部からは見えない
   class Sample {
@@ -582,7 +582,7 @@ namespaceの内側で定義した要素はクラスであれ、関数であれ�
 これをコンパイルした結果を確認してみます（@<list>{internalModule/basic.js}）。
 
 //list[internalModule/basic.js][コンパイルすると関数を使った構文に展開される]{
-#@mapfile(../code-2.0/typescript-basic/internalModule/basic.js)
+#@mapfile(../code/typescript-basic/internalModule/basic.js)
 var a;
 (function (a) {
     // export してないものは外部からは見えない
@@ -635,7 +635,7 @@ console.log(d.e.hello());
 先に説明したモジュールではこれとは異なるimport句の使い方が出てきましたが、区別するようにしましょう。
 
 //list[internalModule/import][import句で別名を作る]{
-#@mapfile(../code-2.0/typescript-basic/internalModule/import.ts)
+#@mapfile(../code/typescript-basic/internalModule/import.ts)
 namespace a {
   export class Sample { }
 }

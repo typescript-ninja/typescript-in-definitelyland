@@ -99,7 +99,7 @@ mocha+power-assertでテストを書く場合を例に、使い方を解説し�
 テスト対象のコードは@<code>{usage/lib/index}です（@<list>{usage/lib/index}）。
 
 //list[usage/lib/index][至って普通の外部モジュール]{
-#@# TODO #@mapfile(../code-2.0/definition-file/usage/lib/index.ts)
+#@# TODO #@mapfile(../code/definition-file/usage/lib/index.ts)
 "use strict";
 
 export function hello(word = "TypeScript") {
@@ -112,7 +112,7 @@ export function hello(word = "TypeScript") {
 普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。
 
 //list[usage/tests/indexSpec][mocha+power-assertでテストを書く]{
-#@# TODO #@mapfile(../code-2.0/definition-file/usage/tests/indexSpec.ts)
+#@# TODO #@mapfile(../code/definition-file/usage/tests/indexSpec.ts)
 /// <reference path="../typings/mocha/mocha.d.ts" />
 /// <reference path="../typings/power-assert/power-assert.d.ts" />
 
@@ -147,7 +147,7 @@ JavaScriptの世界では静的な型検査などありませんので問題あ�
 mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイル（抜粋）を見てみましょう。
 
 //list[usage/abstract/mocha][mocha.d.ts抜粋]{
-#@# TODO #@mapfile(../code-2.0/definition-file/usage/abstract/mocha.d.ts)
+#@# TODO #@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
 interface MochaDone {
   (error?: Error): void;
 }
@@ -167,7 +167,7 @@ declare var it: {
 //}
 
 //list[usage/abstract/power-assert][power-assert.d.ts抜粋]{
-#@# TODO #@mapfile(../code-2.0/definition-file/usage/abstract/power-assert.d.ts)
+#@# TODO #@mapfile(../code/definition-file/usage/abstract/power-assert.d.ts)
 declare function assert(value: any, message?: string): void;
 
 declare module "power-assert" {
@@ -276,7 +276,7 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging}、@<list>{interface/declarationMergingUsage}）。
 
 //list[interface/declarationMerging][定義を分割して書く]{
-#@mapfile(../code-2.0/definition-file/interface/declarationMerging.d.ts)
+#@mapfile(../code/definition-file/interface/declarationMerging.d.ts)
 interface Foo {
   hello(): string;
 }
@@ -289,7 +289,7 @@ interface Foo {
 //}
 
 //list[interface/declarationMergingUsage][定義が統合される！]{
-#@mapfile(../code-2.0/definition-file/interface/declarationMergingUsage.ts)
+#@mapfile(../code/definition-file/interface/declarationMergingUsage.ts)
 /// <reference path="./declarationMerging.d.ts" />
 // ↑ 昔はこのようにreferece commentを使ってファイル間の依存関係を明示していましたが、
 //   最近はtsconfig.jsonに全ての依存関係を書くようにしたため見かける事が大変少なくなりました
@@ -312,7 +312,7 @@ String#trimStartは、文字列の先頭にある空白文字を取り除く機�
 そのため、Stringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart}）
 
 //list[interface/stringTrimStart][String#trimStartを生やす]{
-#@mapfile(../code-2.0/definition-file/interface/stringTrimStart.ts)
+#@mapfile(../code/definition-file/interface/stringTrimStart.ts)
 interface String {
   trimStart(): string;
 }
@@ -340,7 +340,7 @@ namespaceを作ったとしても、即座に実体が生成されるとは限�
 namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghost-module/invalid}）。
 
 //list[ghost-module/invalid][幽霊モジュール]{
-#@mapfile(../code-2.0/definition-file/ghostModule/invalid.ts)
+#@mapfile(../code/definition-file/ghostModule/invalid.ts)
 declare namespace ghost {
   interface Test {
     str: string;
@@ -365,7 +365,7 @@ export { }
 @<list>{ghostModule/jqueryWithoutGhostModule-ignore}はjQueryの型定義ファイルからの抜粋（＆一部改変）です。
 
 //list[ghostModule/jqueryWithoutGhostModule-ignore][実際のjQueryの型定義の例]{
-#@mapfile(../code-2.0/definition-file/ghostModule/jqueryWithoutGhostModule-ignore.d.ts)
+#@mapfile(../code/definition-file/ghostModule/jqueryWithoutGhostModule-ignore.d.ts)
 interface JQuery {
   addClass(className: string): JQuery;
   html(htmlString: string): JQuery;
@@ -413,7 +413,7 @@ IDE上で型注釈を手書きするときも候補がたくさんサジェス�
 これを幽霊モジュールを使って書きなおしてみます（@<list>{ghostModule/jqueryWithGhostModule-ignore}）。
 
 //list[ghostModule/jqueryWithGhostModule-ignore][幽霊モジュールを使ってみた]{
-#@mapfile(../code-2.0/definition-file/ghostModule/jqueryWithGhostModule-ignore.d.ts)
+#@mapfile(../code/definition-file/ghostModule/jqueryWithGhostModule-ignore.d.ts)
 declare namespace jquery {
   interface Element {
     addClass(className: string): Element;
@@ -486,7 +486,7 @@ declare var $: jquery.Static;
 具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore}）。
 
 //list[interfaceAntipattern/moduleByInterfaceBad-ignore][インタフェースでモジュールを表現してしまう。何故なのか…]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts)
 interface Foo {
   bar: FooBar;
 }
@@ -512,7 +512,7 @@ declare var foo: Foo;
 普通に、@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore}のように書きましょう。
 
 //list[interfaceAntipattern/moduleByInterfaceGood-ignore][素直にこうしよう]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
 // 普通にコレでいいだろ！！
 declare namespace foo.bar.buzz {
   var str: string;
@@ -527,7 +527,7 @@ declare namespace foo.bar.buzz {
 #@# TODO 内部モジュールで全文を検索 module とか declare module でも
 
 //list[interfaceAntipattern/callableModuleUsage-ignore][関数・namespace どっちなの？]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModuleUsage-ignore.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModuleUsage-ignore.ts)
 // assertは関数としても呼べるしnamespaceのようにも見える
 assert(foo === "foo");
 assert.ok(value);
@@ -538,7 +538,7 @@ assert.ok(value);
 この場合、すぐに考えつく型定義は@<list>{interfaceAntipattern/callableModuleBad1-ignore}か、@<list>{interfaceAntipattern/callableModuleBad2-ignore}でしょう。
 
 //list[interfaceAntipattern/callableModuleBad1-ignore][こうしてしまいたい、気持ち]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModuleBad1-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModuleBad1-ignore.d.ts)
 declare var assert: {
   (value: any): void;
   ok(value: any): void;
@@ -547,7 +547,7 @@ declare var assert: {
 //}
 
 //list[interfaceAntipattern/callableModuleBad2-ignore][匿名型注釈よりはマシ]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModuleBad2-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModuleBad2-ignore.d.ts)
 declare var assert: Assert;
 
 interface Assert {
@@ -563,7 +563,7 @@ interface Assert {
 しかし、これには別のよいやり方があるのです（@<list>{interfaceAntipattern/callableModuleGood-ignore}）。
 
 //list[interfaceAntipattern/callableModuleGood-ignore][関数とnamespace 両方やらなきゃいけないのが辛いところだ]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModuleGood-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModuleGood-ignore.d.ts)
 declare function assert(value: any): void;
 declare namespace assert {
   function ok(value: any): void;
@@ -580,7 +580,7 @@ declare namespace assert {
 @<list>{interfaceAntipattern/powerAssertAbst-ignore}に抜粋&改変したものを示します。
 
 //list[interfaceAntipattern/powerAssertAbst-ignore][関数+内部モジュールの実例]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
 declare function assert(value: any, message?: string): void;
 declare module assert {
 
@@ -605,7 +605,7 @@ declare module assert {
 実は、このやり方は型定義ファイルだけではなく、通常のTypeScriptコードでも使えます（@<list>{interfaceAntipattern/callableModule.ts}）。
 
 //list[interfaceAntipattern/callableModule.ts][関数が先、namespaceは後！絶対！]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModule.ts)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModule.ts)
 function test() {
   return "test!";
 }
@@ -620,7 +620,7 @@ namespace test {
 コンパイル結果の@<list>{interfaceAntipattern/callableModule.js}を見ると、なぜ関数が先でnamespaceが後、という決まりになっているかがわかりますね。
 
 //list[interfaceAntipattern/callableModule.js][JSとして正しい構造だ]{
-#@mapfile(../code-2.0/definition-file/interfaceAntipattern/callableModule.js)
+#@mapfile(../code/definition-file/interfaceAntipattern/callableModule.js)
 function test() {
     return "test!";
 }
@@ -643,7 +643,7 @@ var test;
 まずはその2つのやり方を見てみましょう（@<list>{declareClass/basic}）。
 
 //list[declareClass/basic][素直にクラス定義 vs インタフェース+変数]{
-#@mapfile(../code-2.0/definition-file/declareClass/basic.d.ts)
+#@mapfile(../code/definition-file/declareClass/basic.d.ts)
 // A. 普通にクラスを定義する
 declare class TestA {
 }
@@ -666,7 +666,7 @@ interface TestB {
 よい時代になったものです。
 
 //list[declareClass/stretch][相互運用性がある！]{
-#@mapfile(../code-2.0/definition-file/declareClass/stretch.ts)
+#@mapfile(../code/definition-file/declareClass/stretch.ts)
 // classはopen-endedになったため同名のinterfaceで拡張可能に
 class Person {
   name: string;
@@ -723,7 +723,7 @@ export { }
 どれが一番、元々の関数の仕様がわかりやすいですか？
 
 //list[overload/useOverload][普通に使えます]{
-#@mapfile(../code-2.0/definition-file/overload/useOverload.ts)
+#@mapfile(../code/definition-file/overload/useOverload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 // 1関数でget, set両方の役目を果たす場合…
 
@@ -753,7 +753,7 @@ union typesを使うと、@<list>{overload/overloadVsUnionTypes}のように書�
 簡単な例だとunion typesのほうがよいと思いますが、このケースではどっちがいいかは、今の知見ではまだわからないですね。
 
 //list[overload/overloadVsUnionTypes][うーん、どっちがいいかは難しい]{
-#@mapfile(../code-2.0/definition-file/overload/overloadVsUnionTypes.ts)
+#@mapfile(../code/definition-file/overload/overloadVsUnionTypes.ts)
 // union types未使用
 declare function hello(word: string): string;
 declare function hello(callback: () => string): string;
@@ -780,7 +780,7 @@ bye(() => "function");
 めでたい。
 
 //list[externalModuleDeclarationMerging/basic][モジュール定義を後から拡張可能]{
-#@mapfile(../code-2.0/definition-file/externalModuleDeclarationMerging/basic.d.ts)
+#@mapfile(../code/definition-file/externalModuleDeclarationMerging/basic.d.ts)
 // モジュールの定義の統合ができます
 declare module "foo" {
   let str: string;
@@ -793,7 +793,7 @@ declare module "foo" {
 //}
 
 //list[externalModuleDeclarationMerging/usage][普通に使えます]{
-#@mapfile(../code-2.0/definition-file/externalModuleDeclarationMerging/usage.ts)
+#@mapfile(../code/definition-file/externalModuleDeclarationMerging/usage.ts)
 import * as foo from "foo";
 foo.str;
 foo.num;
@@ -848,7 +848,7 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 まずは例を見てみましょう（@<list>{callback/basic}）。
 
 //list[callback/basic][optionalはもしかしたら値がないことを表す]{
-#@mapfile(../code-2.0/definition-file/callback/basic.ts)
+#@mapfile(../code/definition-file/callback/basic.ts)
 // 良い例
 declare function readFile(filePath: string, listener: (data: string) => void): void;
 // 悪い例
@@ -906,7 +906,7 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、@<list>{export/sample1}のように書きます。
 
 //list[export/sample1][実はインタフェースBarも外から見えない]{
-#@mapfile(../code-2.0/definition-file/export/sample1.d.ts)
+#@mapfile(../code/definition-file/export/sample1.d.ts)
 declare module "bar" {
   interface Bar {
     num: number;
@@ -923,7 +923,7 @@ declare module "bar" {
 importした値がインタフェースFooのインスタンスになっていることがわかります。
 
 //list[export/sample1Usage][使うとき。インタフェースBarのインスタンスが得られる]{
-#@mapfile(../code-2.0/definition-file/export/sample1Usage.ts)
+#@mapfile(../code/definition-file/export/sample1Usage.ts)
 // b は "bar" の Barのインスタンス だよ！
 import * as b from "bar";
 b.num;
@@ -934,7 +934,7 @@ b.num;
 インタフェースのインスタンスをexportしたつもりが型がexportされてしまうのです。
 
 //list[export/sample2][それは値ではなくて型だけexportしているぞ！]{
-#@mapfile(../code-2.0/definition-file/export/sample2.d.ts)
+#@mapfile(../code/definition-file/export/sample2.d.ts)
 declare module "buzz" {
   interface Buzz {
     num: number;
@@ -964,7 +964,7 @@ TypeScriptコンパイラの最重要オプション、--noImplicitAnyを使っ�
 @<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
 
 //list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
-#@mapfile(../code-2.0/definition-file/noImplicitAny/basic-invalid.d.ts)
+#@mapfile(../code/definition-file/noImplicitAny/basic-invalid.d.ts)
 declare class Sample {
   // 返り値の型を指定し忘れている！
   // error TS7010: 'method', which lacks return-type annotation,
