@@ -542,6 +542,40 @@ export { }
 昔のTypeScriptと違って、instanceofのelse句でも型の絞込が行われます。
 挙動として納得感があり大変よいですね。
 
+=== ユーザ定義のtype guards（User-defined Type Guards）
+
+ユーザが定義した関数によって、ある値がなんの型なのかをTypeScriptコンパイラに教える方法があります（@<list>{typeGuards/userDefined}）。
+型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
+この書き方をした場合、返り値はbooleanでなければなりません。
+
+//list[typeGuards/userDefined][ユーザ定義のtype guards]{
+#@mapfile(../code/types-advanced/typeGuards/userDefined.ts)
+class Sample {
+  str: string;
+}
+
+// 構造的部分型！
+let obj: Sample = {
+  str: "Hi!",
+};
+
+// 独自にSample型である事の判定を実装する
+function isSample(s: Sample): s is Sample {
+  if (!s) {
+    return false;
+  }
+  // とりあえず、strプロパティがあって値がstringならSample型コンパチということでOK という基準にする
+  return typeof s.str === "string";
+}
+
+if (isSample(obj)) {
+  console.log(obj.str);
+}
+
+export { }
+#@end
+//}
+
 === type guardsと論理演算子
 
 type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています(@<list>{typeGuards/operator})。
@@ -636,39 +670,8 @@ if (obj instanceof Sample) {
 //}
 
 これを回避する方法がいくつかあります。
-ひとつ目はユーザ定義のtype guardを利用することです(@<list>{typeGuards/userDefined})。
-型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
-この書き方をした場合、返り値はbooleanでなければなりません。
 
-//list[typeGuards/userDefined][ユーザ定義のtype guards]{
-#@mapfile(../code/types-advanced/typeGuards/userDefined.ts)
-class Sample {
-  str: string;
-}
-
-// 構造的部分型！
-let obj: Sample = {
-  str: "Hi!",
-};
-
-// 独自にSample型である事の判定を実装する
-function isSample(s: Sample): s is Sample {
-  if (!s) {
-    return false;
-  }
-  // とりあえず、strプロパティがあって値がstringならSample型コンパチということでOK という基準にする
-  return typeof s.str === "string";
-}
-
-if (isSample(obj)) {
-  console.log(obj.str);
-}
-
-
-export { }
-#@end
-//}
-
+ひとつ名は、ユーザ定義のtype guardを使う方法。
 ふたつ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{typeGuards/vsWeakspot2-invalid})。
 
 //list[typeGuards/vsWeakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{

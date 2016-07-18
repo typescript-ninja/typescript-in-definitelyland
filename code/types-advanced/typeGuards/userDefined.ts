@@ -20,5 +20,4 @@ if (isSample(obj)) {
 	console.log(obj.str);
 }
 
-
 export { }
