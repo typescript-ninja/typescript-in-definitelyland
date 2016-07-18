@@ -1,5 +1,9 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
+//comment{
+--module と --target が個別に掛けあわせできるようになった話とか
+//}
+
 #@# @suppress SectionLength
 == まずはインストールしてみよう
 

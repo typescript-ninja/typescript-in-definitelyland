@@ -461,6 +461,7 @@ intersection typesを使いこなした書き方のほうが、圧倒的に謎�
 #@# TODO 和訳が微妙…
 #@# @<strong>{導入されるバージョン 1.4.0}
 
+#@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
 type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（条件チェックなど）の後の文脈で変数の型を××に狭めることができます。
 
@@ -471,7 +472,7 @@ type guardsは"変数Aが○○という条件を満たすとき、変数Aの型
 
 例を見ていきましょう。
 TypeScriptを書いていて一番対処に迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か+undefinedの形式でしょう。
-if文を用いてundefinedの場合の対処を入れてみます（@<list>{typeGuards/controlFlowBasedBasic}）。
+if文を用いてundefinedのな値について対処を入れてみます（@<list>{typeGuards/controlFlowBasedBasic}）。
 
 //list[typeGuards/controlFlowBasedBasic][undefinedの可能性を潰す]{
 #@mapfile(../code/types-advanced/typeGuards/controlFlowBasedBasic.ts)
@@ -1016,6 +1017,69 @@ export {
  ** type aliasは無理
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
+
+== 多態性のあるthis型（Polymorphic 'this' type）
+
+@<code>{this}を型として用いることができます。
+たとえば@<list>{polymorphicThisType/basic}のようなコードです。
+
+//list[polymorphicThisType/basic][thisを型として用いる]{
+#@mapfile(../code/types-advanced/polymorphicThisType/basic.ts)
+// 自分自身を型として表す時、this を利用する
+class A {
+  _this: this;
+  a(): this {
+    return this;
+  }
+
+  d(arg: this): this {
+    return arg;
+  }
+
+  e() { // thisをreturnした場合暗黙的に返り値もthisとなる
+    return this;
+  }
+}
+
+class B extends A {
+  b() {
+    console.log("B");
+  }
+}
+
+interface C extends A {
+  c(): void;
+}
+
+// a() はクラスAのメソッドだが返り値の型はB自身だ！
+new B().a().e().b();
+
+// d() もクラスAのメソッドだが引数はBでなければならぬ
+new B().d(new B()).b();
+
+// d() はクラスAのメソッドだが、Bに生えている限りAを渡したら怒られてしまう
+// error TS2345: Argument of type 'A' is not assignable to parameter of type 'B'.
+//   Property 'b' is missing in type 'A'.
+// new B().d(new A()).b();
+
+// プロパティについても同様にB自身になる
+new B()._this.b();
+
+// インタフェースでもOK C自身になる
+let c: C = null as any;
+c.a().c();
+
+export { }
+#@end
+//}
+
+thisを型として記述するという発想がすごいですね。
+引数や返り値の型として、普通にthisを利用しています。
+fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。
+
+この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。
+とはいえ、便利になる代わりに引数に使ったりすると無駄に制約がきつくなったりする場合があるため、乱用は控えましょう。
+@<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
 
 == ローカル型（Local Types）
 
