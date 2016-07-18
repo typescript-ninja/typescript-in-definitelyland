@@ -156,6 +156,18 @@ $ cat tsconfig.json
 #@end
 //}
 
+== 試しにコンパイルしてみる
+
+tsconfig.jsonの作成ができたら、後はコンパイルするだけです。
+コンパイルの方法はtsconfig.jsonがあれば、どんな環境でも@<code>{--project}オプションを使うだけです。
+それ以外のオプションについてはtsconfig.jsonにすべて記述されています。
+具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
+
+tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
+しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクト1tsconfig.jsonにするようにしましょう。
+
+gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルが通せる環境を維持するのがよいでしょう。
+
 #@# TODO 各オプションの細かい解説は@<chapref>{learning-tsc}を参照してください
 #@# TODO allowJsについてどこかに書きたい
 

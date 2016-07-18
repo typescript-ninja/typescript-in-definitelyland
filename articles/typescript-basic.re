@@ -5,6 +5,7 @@ TODO
 abstract
 enum
 const enum
+decorator
 //}
 
 #@# prh:disable
