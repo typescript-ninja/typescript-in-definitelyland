@@ -349,6 +349,113 @@ export { }
 
 //footnote[spec-example-bug][@<href>{https://github.com/Microsoft/TypeScript/issues/1267}]
 
+== 交差型（Intersection Types）
+
+union typesに続いて、intersection typesです。
+intersection typesは2つの型を合成し、1つの型にすることができます。
+union typesと違って、利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。
+
+まずは例を見てみましょう。
+ある関数に渡したオブジェクトを拡張し、新しいプロパティやメソッドを生やします（@<list>{intersectionTypes/basic}）。
+
+//list[intersectionTypes/basic][型を合成する]{
+#@mapfile(../code/types-advanced/intersectionTypes/basic.ts)
+interface Storage {
+  $save(): void;
+}
+
+function mixinStorage<T>(base: T): T & Storage {
+  let modified = base as any;
+  modified.$save = () => {
+    // めんどいので保存したフリ
+    console.log(`データを保存しました！ ${JSON.stringify(base)}`);
+  };
+
+  return modified;
+}
+
+// 何の変哲もないオブジェクト
+let base = {
+  name: "TypeScript",
+};
+// を、Storageを合成する関数に渡す
+let obj = mixinStorage(base);
+
+// baseに存在しないメソッドが呼べる！
+// データを保存しました！ {"name":"TypeScript"} と表示される
+obj.$save();
+
+// もちろん、baseにあったプロパティにもアクセスできる
+obj.name = "JavaScript";
+// データを保存しました！ {"name":"JavaScript"} と表示される
+obj.$save();
+
+export { }
+#@end
+//}
+
+intersection typesを使うと、型定義ファイルが書きやすくなる場合があります。
+例を見てみます（@<list>{intersectionTypes/angularResource}）。
+intersection typesを使わない書き方とintersection typesを使った書き方、どちらのほうが理解しやすいでしょうか？
+
+//list[intersectionTypes/angularResource][型の合成で素直な定義を作る]{
+#@mapfile(../code/types-advanced/intersectionTypes/angularResource.ts)
+// intersection typesを使わない書き方
+declare namespace angular.resource1 {
+  interface ResourceProvider {
+    create<T extends Resource<any>>(): T;
+  }
+
+  interface Resource<T> {
+    $insert(): T;
+  }
+  let $resource: ResourceProvider;
+}
+// 上の定義を使ってみる
+namespace sample1 {
+  interface Sample {
+    str: string;
+  }
+  // SampleResourceという型を1つ無駄に作らねばならぬ
+  // なぜこれで動くのか、トリックがわかるだろうか？
+  interface SampleResource extends Sample, angular.resource1.Resource<Sample> { }
+
+  let $obj = angular.resource1.$resource.create<SampleResource>();
+  $obj.str = "test";
+  let obj = $obj.$insert();
+  console.log(obj.str);
+}
+
+// intersection typesを使った書き方
+declare namespace angular.resource2 {
+  interface ResourceProvider {
+    create<T>(): T & Resource<T>;
+  }
+
+  interface Resource<T> {
+    $insert(): T;
+  }
+  let $resource: ResourceProvider;
+}
+// 上の定義を使ってみる
+namespace sample2 {
+  interface Sample {
+    str: string;
+  }
+
+  // 超簡単…！！
+  let $obj = angular.resource2.$resource.create<Sample>();
+  $obj.str = "test";
+  let obj = $obj.$insert();
+  console.log(obj.str);
+}
+
+export { sample1, sample2 }
+#@end
+//}
+
+intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
+
 =={typeGuards} 型のためのガード（Type Guards）
 
 #@# TODO 和訳が微妙…
