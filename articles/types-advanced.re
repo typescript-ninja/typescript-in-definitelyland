@@ -813,3 +813,62 @@ export {
  ** type aliasは無理
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
+
+== ローカル型（Local Types）
+
+ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義することができます（@<list>{localType/basic}）。
+
+//list[localType/basic][ローカル型を試す]{
+#@mapfile(../code/types-advanced/localType/basic.ts)
+{
+  type Data = string | boolean;
+  let obj: Data = true;
+
+  console.log(obj);
+}
+{
+  type Data = number | Date;
+  let obj: Data = 1;
+
+  console.log(obj);
+}
+
+// ブロックスコープの外ではもはやData型を参照することはできない
+// error TS2304: Cannot find name 'Data'.
+// let obj: Data;
+
+{
+  // クラス、enum、Buzzなども
+  class Foo { }
+  enum Bar {
+    a,
+    b,
+  }
+  interface Buzz { }
+
+  console.log(Foo, Bar.a, null as any as Buzz); // 警告消し
+}
+// もちろんブロックスコープの外では上記3つは参照できない
+
+export { }
+#@end
+//}
+
+使う機会は少ないかもしれませんが、@<list>{localType/inMethod}のようにメソッドの中で簡易に別名を用意したい場合などに利用できるでしょう。
+
+//list[localType/inMethod][メソッド内でだけ通用する別名]{
+#@mapfile(../code/types-advanced/localType/inMethod.ts)
+// 現実的な活用例
+class Foo {
+  method() {
+    // メソッド内でのみ使えるtype alias！
+    type Data = string | number;
+    let obj: Data = 1;
+
+    console.log(obj);
+  }
+}
+
+export { Foo }
+#@end
+//}
