@@ -94,8 +94,10 @@ export { str, num, bool, func, obj }
 しかも、書き方がJavaScriptと全く同じになりました。
 楽に書ける上に実行する前にコンパイルの段階で不審な臭いのするコードを発見できることがわかります。
 
+=={class} クラス
+
 #@# @suppress ParagraphNumber SectionLength
-== クラス
+=== 普通のクラス
 
 ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic}）。
 
@@ -246,6 +248,78 @@ export { }
 
 TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
+
+=== 抽象クラス（abstract class）
+
+ECMAScriptにはない機能として、抽象クラスが作成できます。
+抽象クラスは単独ではインスタンス化できません。
+その代わり、抽象クラスを継承したクラスに対して、abstractで指定した要素の実装を強制できます。
+例を見てみましょう（@<list>{class/abstract.ts}）。
+
+//list[class/abstract.ts][抽象クラス]{
+#@mapfile(../code/typescript-basic/class/abstract.ts)
+abstract class Animal {
+  abstract name: string;
+  abstract get poo(): string;
+
+  abstract speak(): string;
+  sleep(): string {
+    return "zzzZZZ...";
+  }
+}
+// もちろん、abstract classはそのままではインスタンス化できない
+// error TS2511: Cannot create an instance of the abstract class 'Animal'.
+// new Animal();
+
+class Cat extends Animal {
+  // プロパティの実装を強制される
+  name = "Cat";
+  poo = "poo...";
+
+  // メソッドの実装を強制される
+  speak(): string {
+    return "meow";
+  }
+}
+
+new Cat();
+
+export { }
+#@end
+//}
+
+便利ですね。
+privateやprotectedに比べ、よっぽど使い出があります。
+
+変換後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（@<list>{class/abstract.js}）。
+
+//list[class/abstract.js][コンパイルしてしまえばただのクラス]{
+#@mapfile(../code/typescript-basic/class/abstract.js)
+"use strict";
+class Animal {
+    get poo() { }
+    sleep() {
+        return "zzzZZZ...";
+    }
+}
+// もちろん、abstract classはそのままではインスタンス化できない
+// error TS2511: Cannot create an instance of the abstract class 'Animal'.
+// new Animal();
+class Cat extends Animal {
+    constructor(...args) {
+        super(...args);
+        // プロパティの実装を強制される
+        this.name = "Cat";
+        this.poo = "poo...";
+    }
+    // メソッドの実装を強制される
+    speak() {
+        return "meow";
+    }
+}
+new Cat();
+#@end
+//}
 
 =={function} 関数
 
