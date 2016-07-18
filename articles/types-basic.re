@@ -337,6 +337,63 @@ export { }
 
 "プロパティシグニチャ+関数な型"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
+#@# @suppress
+=== オブジェクトリテラルと厳密なチェック
+
+オブジェクト型リテラルの話とは厳密には関係はないですが、関わりが深いのでここでこの話題に触れていきます。
+
+オブジェクトリテラルでもって値を作る時に、厳密なチェックが行われる場合があります。
+それは、値を直接何らかの型に当てはめた場合です。
+例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid}）。
+
+//list[objectTypeLiteral/strictCheck-invalid][厳密にチェックされる場合、されない場合]{
+#@mapfile(../code/types-basic/objectTypeLiteral/strictCheck-invalid.ts)
+// OK！変数の型に対して、過不足なし
+let obj: { name: string; } = {
+  name: "TypeScript",
+};
+
+// NG… 変数の型に対してプロパティが多すぎる
+// error TS2322: Type '{ name: string; version: string; }'
+//    is not assignable to type '{ name: string; }'.
+//    Object literal may only specify known properties,
+//    and 'version' does not exist in type '{ name: string; }'.
+obj = {
+  name: "JavaScript",
+  version: "2016",
+};
+
+// オブジェクトリテラルの直接代入じゃなければOK 互換性はあるのだ
+let tmp = {
+  name: "JavaScript",
+  version: "2016",
+};
+obj = tmp;
+
+// この制約はオプション名のtypoの検出に役立つ
+interface FooOptions {
+  fileName?: string;
+  checkBar?: boolean;
+}
+declare function foo(opts: FooOptions): void;
+
+// fileName の大文字小文字を間違えている！
+// Object literal may only specify known properties,
+// and 'filename' does not exist in type 'FooOptions'.
+foo({
+  filename: "vvakame.txt",
+  checkBar: true,
+});
+
+export { }
+#@end
+//}
+
+この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからない場合があるかもしれません。
+型定義ファイルを使っている場合、型定義ファイルに不足がある場合などもあり、正規の方法で攻略するのが難しい場合すらあります。
+その場合、型定義ファイルを修正したりしてほしいところですが、急いでいる場合は一旦別の変数に代入してから再代入することで回避できます。
+このやり方だと、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、まだしもマシなやり方だといえます。
+
 == 関数型リテラル（Function Type Literals）
 
 関数も型として表現できます（@<list>{function-types/basic}）。
