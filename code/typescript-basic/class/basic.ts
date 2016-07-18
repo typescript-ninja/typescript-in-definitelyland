@@ -2,10 +2,8 @@ class Base {
 	// インスタンス変数
 	numA: number;
 	strA = "string";
-
 	public numB: number;
 	private numC: number;
-	// TypeScript 1.3.0 から protected 利用可
 	protected numD: number;
 
 	// クラス変数

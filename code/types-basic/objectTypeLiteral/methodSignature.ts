@@ -6,15 +6,15 @@ let obj: {
 obj = {
 	hello(word: string) {
 		return "Hello, " + word;
-	}
+	},
 };
 obj = {
-	hello: (word: string) => "Hello, " + word
+	hello: (word: string) => "Hello, " + word,
 };
 obj = {
 	hello: function(word: string) {
 		return "Hello, " + word;
-	}
+	},
 };
 
 // プロパティシグニチャ + 関数型 の別の書き方なだけだな！

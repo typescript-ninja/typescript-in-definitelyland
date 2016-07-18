@@ -16,11 +16,13 @@ interface AnimalConstructor {
 interface Animal {
 	speak(): string;
 }
+/* tslint:disable:variable-name */
 let Animal: AnimalConstructor = class {
 	speak() {
 		return "???";
 	}
 };
+/* tslint:enable:variable-name */
 // Animalはただの変数だが普通に継承できる！
 class Cat extends Animal {
 	speak() {
@@ -39,7 +41,7 @@ let cat2: Cat = new class extends class {
 	speak() {
 		return "meow";
 	}
-}
+}();
 console.log(cat2.speak());
 
 export { }

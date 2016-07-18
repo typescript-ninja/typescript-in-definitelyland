@@ -515,7 +515,7 @@ declare var foo: Foo;
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
 // 普通にコレでいいだろ！！
 declare namespace foo.bar.buzz {
-  var str: string;
+  let str: string;
 }
 #@end
 //}
@@ -685,11 +685,13 @@ interface AnimalConstructor {
 interface Animal {
   speak(): string;
 }
+/* tslint:disable:variable-name */
 let Animal: AnimalConstructor = class {
   speak() {
     return "???";
   }
 };
+/* tslint:enable:variable-name */
 // Animalはただの変数だが普通に継承できる！
 class Cat extends Animal {
   speak() {
@@ -708,7 +710,7 @@ let cat2: Cat = new class extends class {
   speak() {
     return "meow";
   }
-}
+}();
 console.log(cat2.speak());
 
 export { }
@@ -913,7 +915,7 @@ declare module "bar" {
   }
 
   // この_は外部からは参照できない。exportしてないので。
-  var _: Bar;
+  let _: Bar;
   export = _;
 }
 #@end

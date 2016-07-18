@@ -4,6 +4,6 @@ declare module "bar" {
 	}
 
 	// この_は外部からは参照できない。exportしてないので。
-	var _: Bar;
+	let _: Bar;
 	export = _;
 }

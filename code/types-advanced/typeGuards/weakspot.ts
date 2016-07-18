@@ -4,7 +4,7 @@ class Sample {
 
 // 構造的部分型！
 let obj: Sample = {
-	str: "Hi!"
+	str: "Hi!",
 };
 
 if (obj instanceof Sample) {

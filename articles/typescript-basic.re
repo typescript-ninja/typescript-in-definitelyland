@@ -105,10 +105,8 @@ class Base {
   // インスタンス変数
   numA: number;
   strA = "string";
-
   public numB: number;
   private numC: number;
-  // TypeScript 1.3.0 から protected 利用可
   protected numD: number;
 
   // クラス変数
@@ -649,7 +647,7 @@ namespace b {
   // めんどくさいなら import句 を使えばいい
   import Sample = a.Sample;
   let objB: Sample;
-  objB = new Sample;
+  objB = new Sample();
 
   // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
   import Test = a.Sample;

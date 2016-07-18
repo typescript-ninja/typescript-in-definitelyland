@@ -14,8 +14,8 @@ namespace alternative {
 		constructor(public p: Point, public r: number) {
 		}
 	}
-	let c: Circle = new Circle(new Point(1, 2), 3);
-	console.log(c.p, c.r);
+	let c2: Circle = new Circle(new Point(1, 2), 3);
+	console.log(c2.p, c2.r);
 }
 
 export { c, alternative }

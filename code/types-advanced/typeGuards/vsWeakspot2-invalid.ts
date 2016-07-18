@@ -1,6 +1,6 @@
 class Sample {
-	private _tmp: any;
 	str: string;
+	private _tmp: any;
 }
 
 // privateなインスタンス変数があるクラスのインスタンスは偽造できない！
@@ -8,6 +8,6 @@ class Sample {
 //     assignable to type 'Sample'. Property '_tmp' is private
 //     in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
 let obj: Sample = {
-	_tmp: null,
 	str: "Hi!",
+	_tmp: null,
 };

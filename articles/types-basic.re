@@ -271,7 +271,7 @@ export { s1, s3, s4 }
 #@mapfile(../code/types-basic/objectTypeLiteral/indexAccessSample.ts)
 let obj = {
   str: "string",
-  num: 1
+  num: 1,
 };
 
 // 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
@@ -313,15 +313,15 @@ let obj: {
 obj = {
   hello(word: string) {
     return "Hello, " + word;
-  }
+  },
 };
 obj = {
-  hello: (word: string) => "Hello, " + word
+  hello: (word: string) => "Hello, " + word,
 };
 obj = {
   hello: function(word: string) {
     return "Hello, " + word;
-  }
+  },
 };
 
 // プロパティシグニチャ + 関数型 の別の書き方なだけだな！
@@ -560,7 +560,7 @@ export { }
 let str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
 // error TS2352: Type 'string' cannot be converted to type 'number'.
-var num: number = <number>str;
+let num: number = <number>str;
 #@end
 //}
 

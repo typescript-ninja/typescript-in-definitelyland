@@ -601,7 +601,7 @@ class Sample {
 
 // 構造的部分型！
 let obj: Sample = {
-  str: "Hi!"
+  str: "Hi!",
 };
 
 if (obj instanceof Sample) {
@@ -625,7 +625,7 @@ class Sample {
 }
 // 構造的部分型！
 let obj = {
-    str: "Hi!"
+    str: "Hi!",
 };
 if (obj instanceof Sample) {
     // 型はSampleに絞られている しかし、絶対に到達しない
@@ -647,17 +647,17 @@ class Sample {
 }
 
 // 構造的部分型！
-var obj: Sample = {
-  str: "Hi!"
+let obj: Sample = {
+  str: "Hi!",
 };
 
 // 独自にSample型である事の判定を実装する
-function isSample(obj: Sample): obj is Sample {
-  if (!obj) {
+function isSample(s: Sample): s is Sample {
+  if (!s) {
     return false;
   }
   // とりあえず、strプロパティがあって値がstringならSample型コンパチということでOK という基準にする
-  return typeof obj.str === "string";
+  return typeof s.str === "string";
 }
 
 if (isSample(obj)) {
@@ -674,8 +674,8 @@ export { }
 //list[typeGuards/vsWeakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
 #@mapfile(../code/types-advanced/typeGuards/vsWeakspot2-invalid.ts)
 class Sample {
-  private _tmp: any;
   str: string;
+  private _tmp: any;
 }
 
 // privateなインスタンス変数があるクラスのインスタンスは偽造できない！
@@ -683,8 +683,8 @@ class Sample {
 //     assignable to type 'Sample'. Property '_tmp' is private
 //     in type 'Sample' but not in type '{ _tmp: null; str: string; }'.
 let obj: Sample = {
-  _tmp: null,
   str: "Hi!",
+  _tmp: null,
 };
 #@end
 //}
@@ -744,8 +744,8 @@ namespace alternative {
     constructor(public p: Point, public r: number) {
     }
   }
-  let c: Circle = new Circle(new Point(1, 2), 3);
-  console.log(c.p, c.r);
+  let c2: Circle = new Circle(new Point(1, 2), 3);
+  console.log(c2.p, c2.r);
 }
 
 export { c, alternative }
