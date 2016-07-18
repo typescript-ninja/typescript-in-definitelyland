@@ -10,6 +10,7 @@ rules:
       - from: 方注釈
         to:   型注釈
   - expected: TypeScript
+    pattern:  /typescript(?!lang\.org|.ninja|-in-definitelyland)/
   - expected: TypeScript
     pattern:  /TypeScri(ot|op|tp)/
   - expected: ECMAScript

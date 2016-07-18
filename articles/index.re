@@ -10,7 +10,6 @@
 内容は（筆者のやる気次第で）随時更新されていく可能性があります。
 誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
 
-#@# prh:disable
 Webサイトとして閲覧したい場合は@<href>{http://typescript.ninja/typescript-in-definitelyland/}を参照してください。
 PDF, epubとして入手したい場合は@<href>{https://tcb.mowa-net.jp/griflet/github/typescript-ninja/typescript-in-definitelyland/}を参照してください。
 
@@ -19,7 +18,6 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 この表紙のおかげで書名が決まりました。
 可愛い表紙を本当にありがとうございます！
 
-#@# prh:disable
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
 == 対象読者
@@ -46,6 +44,9 @@ Version 2.0.0
 これはブラウザでの実行にはBrowserifyなりWebPackなりの仕組みを使うことを前提とすることになります。
 また、targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
 
+また、TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。
+興味がある方は@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html,公式のドキュメント}@<fn>{jsx}を参照してください。
+
 #@# prh:disable
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法と、Visual Studio Codeの設定について言及します。
 
@@ -57,6 +58,8 @@ Version 2.0.0
 @<chapref>{types-advanced}では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。
 
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方と、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
+
+//footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
 == なぜTypeScriptを選ぶべきなのか
 

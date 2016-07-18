@@ -1,5 +1,9 @@
 ={definition-file} JS資産と型定義ファイル
 
+//comment{
+npmにpublishする時のベストプラクティス
+//}
+
 == JavaScriptの資産が使いたい！
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
