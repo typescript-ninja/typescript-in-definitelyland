@@ -357,6 +357,99 @@ export { }
 type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（条件チェックなど）の後の文脈で変数の型を××に狭めることができます。
 
+=== 処理フローに基づく型の解析（Control flow based type analysis）
+
+さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
+名前が長いですが、要するに普通にコードを書いていった時に、変数の型が絞り込まれるようなコードを書くと本当に型が絞り込まれるというものです。
+
+例を見ていきましょう。
+TypeScriptを書いていて一番対処に迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か+undefinedの形式でしょう。
+if文を用いてundefinedの場合の対処を入れてみます（@<list>{typeGuards/controlFlowBasedBasic}）。
+
+//list[typeGuards/controlFlowBasedBasic][undefinedの可能性を潰す]{
+#@mapfile(../code/types-advanced/typeGuards/controlFlowBasedBasic.ts)
+function upperA(word?: string) {
+  // wordは省略可能引数なので string | undefined
+  // ここでwordをいきなり使おうとするとエラーになる
+  // Object is possibly 'undefined'.
+  // word.toUpperCase();
+
+  if (word == null) { // word が null か undefined の時
+    // undefinedの可能性をstringで上書き！
+    word = "TypeScript";
+  }
+
+  // undefinedの可能性を潰したのでこの時点でwordはstring確定！
+  console.log(word.toUpperCase());
+}
+
+function upperB(word?: string) {
+  // 別解：JSで || 演算子は最初にtruthyになった値を返す
+  // ので、undefined（falsy）な時は "TypeScript" で上書きされる
+  word = word || "TypeScript";
+
+  // undefinedの可能性を潰したのでこの時点でwordはstring確定！
+  console.log(word.toUpperCase());
+}
+
+function upperC(word = "TypeScript") {
+  // TypeScript的に一番素直なパターン
+  console.log(word.toUpperCase());
+}
+
+export { upperA, upperB, upperC }
+#@end
+//}
+
+もう一例見てみましょう。
+引数に@<code>{string}と@<code>{string[]}を取り、これを@<code>{string[]}に統一して利用します（@<list>{typeGuards/controlFlowBasedArray}）。
+
+//list[typeGuards/controlFlowBasedArray][変数の型を統一していく]{
+#@mapfile(../code/types-advanced/typeGuards/controlFlowBasedArray.ts)
+function upperAll(words: string | string[]) {
+  if (typeof words === "string") {
+    // string なら string[] に変換する
+    words = [words];
+  }
+
+  // この時点ではwordsはstring[]に揃えられる
+  return words.map(word => word.toUpperCase());
+}
+
+console.log(upperAll("TypeScript"));
+console.log(upperAll(["TypeScript", "JavaScript"]));
+
+export { }
+#@end
+//}
+
+最後に、関数が絡んだ場合の例を見ておきます（@<list>{typeGuards/controlFlowBasedFunction-invalid}）。
+関数の内側と外側では、処理フローは別世界です。
+言われてみれば当然ですが、関数はいつ実行されるかわからないため、関数の内側で別途絞込を行う必要があります。
+
+//list[typeGuards/controlFlowBasedFunction-invalid][関数の外側でのフローは内側では関係ない]{
+#@mapfile(../code/types-advanced/typeGuards/controlFlowBasedFunction-invalid.ts)
+let v: string | number;
+
+v = "string";
+
+let f = () => {
+  // これはエラーになる！
+  // プログラムの字面的にはstringに確定されていそうだが、関数はいつ実行されるかわからない
+  // error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
+  console.log(v.toUpperCase());
+};
+// ここではvはまだstring
+f();
+
+// ここでvがnumberに！
+v = 1;
+f();
+#@end
+//}
+
+さて、次以降の項でどういう処理が絞り込みに繋がるのかの例を見ていきます。
+
 === typeofによるtype guards
 
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
@@ -671,7 +764,7 @@ if (obj instanceof Sample) {
 
 これを回避する方法がいくつかあります。
 
-ひとつ名は、ユーザ定義のtype guardを使う方法。
+ひとつ名は、ユーザ定義のtype guardsを使う方法。
 ふたつ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{typeGuards/vsWeakspot2-invalid})。
 
 //list[typeGuards/vsWeakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{

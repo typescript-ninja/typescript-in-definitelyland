@@ -38,6 +38,8 @@ rules:
   - expected: DefinitelyTyped
     pattern:  borisyankov
     prh:      リポジトリはリネームされました
+  - expected: type guards
+    pattern:  /type guard(?!s)/
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode
