@@ -520,6 +520,7 @@ export { sample1, sample2 }
 
 intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
 
+#@# @suppress SectionLength ←なんかこれ実装バグってない？
 == 文字列リテラル型（String Literal Types）
 
 文字列リテラルを、型として、使える機能です。
@@ -694,6 +695,34 @@ function upperAll(words: string | string[]) {
 
 console.log(upperAll("TypeScript"));
 console.log(upperAll(["TypeScript", "JavaScript"]));
+
+export { }
+#@end
+//}
+
+変数のプロパティに対してもtype guardsは利用可能です（@<list>{typeGuards/controlFlowBasedProperty}）。
+コンパイラの実装を想像すると、なにげに大変そうなことをやっていて思わず感心してしまいます。
+#@# プロパティアクセスについてtype guardsを行う（Type guards on property access）
+
+//list[typeGuards/controlFlowBasedProperty][変数のプロパティも絞り込める]{
+#@mapfile(../code/types-advanced/typeGuards/controlFlowBasedProperty.ts)
+interface Foo {
+  value: number | string;
+}
+
+let foo: Foo = {
+  value: "TypeScript",
+};
+
+// number | string では toUpperCase があるか確定できない
+// error TS2339: Property 'toUpperCase' does not exist on type 'number | string'.
+// foo.value.toUpperCase();
+
+// 変数直だけではなくて、変数のプロパティでもtype guardsが使える
+if (typeof foo.value === "string") {
+  // ここでは foo.value は string に絞りこまれている！一時変数いらない！
+  foo.value.toUpperCase();
+}
 
 export { }
 #@end
