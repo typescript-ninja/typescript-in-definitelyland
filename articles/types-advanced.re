@@ -1293,6 +1293,94 @@ fluentな、メソッドチェーンで使うAPIを組み立てる場合に役�
 とはいえ、便利になる代わりに引数に使ったりすると無駄に制約がきつくなったりする場合があるため、乱用は控えましょう。
 @<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
 
+#@# @suppress JapaneseAmbiguousNounConjunction
+== 関数のthisの型の指定（Specifying this types for functions）
+
+JavaScriptでは@<code>{Function.prototype.bind}や@<code>{Function.prototype.call}、@<code>{Function.prototype.apply}などの関数により、関数呼び出し時のthisの型を変更することができます。
+この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。
+TypeScriptではこの変更も頑張ってサポートしようとしています。
+
+まずは簡単な例を見てみます（@<list>{thisTypeForFunctions/basic}）。
+
+//list[thisTypeForFunctions/basic][thisの型を指定する]{
+#@mapfile(../code/types-advanced/thisTypeForFunctions/basic.ts)
+// 関数内部でのthisの型を偽の第一引数で指定
+function testA(this: string) {
+  console.log(this.toUpperCase());
+}
+
+// こういう利用を想定しているはず
+// TYPESCRIPT と表示される
+testA.bind("TypeScript")();
+
+// 普通に呼び出すとエラーになる
+// error TS2684: The 'this' context of type 'void'
+//   is not assignable to method's 'this' of type 'string'.
+// testA();
+
+// 1つ目の仮引数がthisの型指定だった場合、それは偽物の仮引数
+// 実際に何かを渡すとエラーになってしまう
+// error TS2346: Supplied parameters do not match any signature of call target.
+// testA("TypeScript");
+
+function testB() {
+  // --noImplicitThisオプション利用時、関数内でthisにアクセスすると怒られる
+  // error TS2683: 'this' implicitly has type 'any'
+  //   because it does not have a type annotation.
+  // console.log(this.toUpperCase());
+}
+
+function testC(this: string, postfix: string) {
+  console.log(`${this.toUpperCase()}${postfix}`);
+}
+// TYPESCRIPT! と表示される
+testC.bind("TypeScript")("!");
+
+export { testB }
+#@end
+//}
+
+thisの値がすり替えられるときの挙動に対応できています。
+@<code>{--noImplicitThis}オプションを利用すると、thisの型指定がない関数内でthisへアクセスするとエラーになります。
+thisを使わない限りはエラーにならないため、常用してしまってよいでしょう。
+
+この仕様が現実世界でどう役に立つかを紹介します（@<list>{thisTypeForFunctions/eventListener}）。
+
+//list[thisTypeForFunctions/eventListener][thisの値が差し替えられるAPIに対応]{
+#@mapfile(../code/types-advanced/thisTypeForFunctions/eventListener.ts)
+// lib.dom.d.ts から抜粋
+// listenerの仮引数の先頭が偽の仮引数で、thisの型の指定が行われている
+interface HTMLBodyElement extends HTMLElement {
+  addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+let el1: HTMLBodyElement = null as any;
+el1.addEventListener("click", function() {
+  // thisの型はHTMLBodyElement
+  this.innerText = "Hi!";
+});
+el1.addEventListener("click", () => {
+  // アロー関数の場合thisの値は変えられない
+  // error TS2683: 'this' implicitly has type 'any'
+  //   because it does not have a type annotation.
+  // this.innerText = "Hi!";
+});
+
+let el2: HTMLDivElement = null as any;
+el2.addEventListener("click", function() {
+  // thisの型はHTMLDivElement
+  this.innerText = "Hi!";
+});
+
+export { }
+#@end
+//}
+
+イベント発生時のコールバック関数でthisが差し替えられる場合に対応できています。
+自分でTypeScriptコードを書く時に必要になる場合は少なくありたいものです。
+しかし、型定義ファイルを作成する時にはお世話にならざるをえないときがあるでしょう。
+
 == ローカル型（Local Types）
 
 ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義することができます（@<list>{localType/basic}）。

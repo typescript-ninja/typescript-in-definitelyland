@@ -1145,6 +1145,8 @@ definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
 anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScriptコードの意義が薄れてしまいます。
 型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
 
+#@# TODO 他のオプションについても触れたほうが
+
 ==== tslint
 
 lintという種類のプログラムがあります。
