@@ -959,3 +959,38 @@ export { objA, objC, f };
 
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
 ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。
+
+== "ありえない"型（The never type）
+
+ありえないなんてことはありえない！はずだけれど、"ありえない"ことを示す型があります。
+具体的に、到達不可能なコードはnever型となります。
+例を見てみましょう（@<list>{neverType/basic-invalid}）。
+
+//list[neverType/basic-invalid]["ありえない"ことが型として示される]{
+#@mapfile(../code/types-basic/neverType/basic-invalid.ts)
+let str = "TypeScript";
+if (typeof str === "number") {
+  // string型な変数の値がnumberだったら… ありえん！never！
+  // error TS2339: Property 'toUpperCase' does not exist on type 'never'.
+  str.toUpperCase();
+}
+
+function test(): never {
+  // returnないし関数のおしりに到達できないので返り値の型はneverになる
+  throw new Error();
+}
+
+let obj: never = test();
+// ここに到達する事は…ありえん！
+// error TS2339: Property 'test' does not exist on type 'never'.
+obj.test();
+
+export { }
+#@end
+//}
+
+変数の型がstringなのにif文ではnumberでなければ突入できない…。
+関数を実行すると必ず例外が発生する…。
+そんな、到達できないコードではnever型が利用されます。
+コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。
+基本的にはnever型を見かけることがあったら、何かミスをしているな…と考えたほうがよいでしょう。

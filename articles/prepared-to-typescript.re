@@ -161,6 +161,8 @@ $ cat tsconfig.json
 #@end
 //}
 
+#@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
+
 == 試しにコンパイルしてみる
 
 tsconfig.jsonの作成ができたら、後はコンパイルするだけです。
