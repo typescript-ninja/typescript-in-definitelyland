@@ -881,6 +881,50 @@ export { }
 #@end
 //}
 
+面白い記法として、isの左辺にthisを用いることもできます（@<list>{typeGuards/userDefinedWithThis}）。
+
+//list[typeGuards/userDefinedWithThis][isの左辺にthisを使う]{
+#@mapfile(../code/types-advanced/typeGuards/userDefinedWithThis.ts)
+abstract class Node {
+  isStringNode(): this is StringNode {
+    return this instanceof StringNode;
+  }
+  isNumberNode(): this is NumberNode {
+    return this instanceof NumberNode;
+  }
+}
+
+class StringNode extends Node {
+  constructor(public text: string) {
+    super();
+  }
+}
+
+class NumberNode extends Node {
+  constructor(public value: number) {
+    super();
+  }
+}
+
+let nodes: Node[] = [new StringNode("TypeScript"), new NumberNode(8)];
+// TypeScript と 8 と表示される
+nodes.forEach(n => {
+  if (n.isStringNode()) {
+    // n is StringNode!
+    console.log(n.text);
+  } else if (n.isNumberNode()) {
+    // n is NumberNode!
+    console.log(n.value);
+  }
+});
+
+export { }
+#@end
+//}
+
+引数として渡された値の型名を明示する代わりに、thisの型を指定するわけです。
+これも利用する機会は少なさそうですが、ツリー状の構造を作るときなどに活躍しそうです。
+
 === type guardsと論理演算子
 
 type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています(@<list>{typeGuards/operator})。
