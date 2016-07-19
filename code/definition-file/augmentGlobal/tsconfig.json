@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "baseUrl": "./",
+        "paths": {
+            "strutil": ["./typings/strutil/"],
+            "strutil-extra": ["./typings/strutil-extra/"]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

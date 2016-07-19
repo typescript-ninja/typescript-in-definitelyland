@@ -957,6 +957,159 @@ declare module "buzz" {
 
 #@# TODO ES2015とCommonJSの書き方の違いと正しい選択について
 
+#@# @suppress SectionLength ParagraphNumber
+=== グローバルに展開される型定義とモジュールの両立
+
+グローバルに変数が展開されるのと、モジュールとしての利用が両立しているタイプのライブラリについて考えます。
+具体的に、@<kw>{UMD,Universal Module Definition}と呼ばれる形式@<fn>{umd}です。
+ライブラリ内部でモジュールとしての使い方が想定されているのか、そうではないのかを判断し展開の方法を変えます。
+
+#@# @suppress JapaneseAmbiguousNounConjunction ParenthesizedSentence
+TypeScriptではこういうパターンのときに使いやすい型定義ファイルの記述方法があります。
+しかし、TypeScript 2.0.0までは任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識される方法がなかったため、役に立ってはいませんでした。
+この形式が使われているのはDefinitelyTypedの@typesパッケージシリーズ（本書執筆時点ではtypes-2.0ブランチ）だけではないでしょうか。
+
+説明のために、strutilとstrutil-extraという架空のライブラリについて考えてみます。
+strutilはrandomizeString関数を提供します。
+strutil-extraはhappy関数を提供し、strutilを拡張します。
+
+まずは型定義ファイルを見てみましょう（@<list>{augmentGlobal/typings/strutil/}、@<list>{augmentGlobal/typings/strutil-extra/}）。
+ちょっと見慣れない書き方ですね。
+
+//list[augmentGlobal/typings/strutil/][typings/strutil/index.d.ts]{
+#@mapfile(../code/definition-file/augmentGlobal/typings/strutil/index.d.ts)
+// importされなかった場合、globalにstrutilという名前で展開する
+export as namespace strutil;
+
+// 普通の型定義 declare module "..." の中と同じ書き味でよい
+export interface Options {
+  i?: number;
+}
+export declare function randomizeString(str: string, opts?: Options): string;
+
+// グローバルな要素の拡張
+declare global {
+  // 既存のstring型にメソッドを生やす
+  interface String {
+    randomizeString(opts?: Options): string;
+  }
+}
+#@end
+//}
+
+//list[augmentGlobal/typings/strutil-extra/][typings/strutil-extra/index.d.ts]{
+#@mapfile(../code/definition-file/augmentGlobal/typings/strutil-extra/index.d.ts)
+// 他のモジュールの型定義を参照する
+import * as strutil from "strutil";
+
+export as namespace strutilExtra;
+
+export declare function happy(str: string): string;
+
+// 他のモジュールの拡張
+declare module "strutil" {
+  // 既存の要素を拡張できる
+  interface Options {
+    reverse?: boolean;
+  }
+
+  // 自分ではないモジュールに勝手に新規の変数や関数を生やしたりはできない
+  // 定義の拡張のみ可能
+  // error TS1038: A 'declare' modifier cannot be used
+  //   in an already ambient context.
+  // export declare let test: any;
+}
+
+declare global {
+  interface String {
+    happy(): string;
+  }
+}
+#@end
+//}
+
+既存モジュールの定義の拡張もできています。
+この形式だと、どのライブラリを拡張しているのか明示されるところが利点となります。
+
+さて、これらを@<code>{import ... from "strutil";}したりするためのtsconfig.jsonを確認しておきます（@<list>{augmentGlobal/tsconfig.json}）。
+baseUrlとpathsの指定があります。
+TypeScript 2.0.0からこうして任意の場所の型定義ファイルを任意の名前に紐付けられるようになったため、ローカル環境でも利用しやすくなりました。
+
+//list[augmentGlobal/tsconfig.json][tsconfig.jsonの例]{
+#@mapfile(../code/definition-file/augmentGlobal/tsconfig.json)
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "baseUrl": "./",
+        "paths": {
+            "strutil": ["./typings/strutil/"],
+            "strutil-extra": ["./typings/strutil-extra/"]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+#@end
+//}
+
+次に前述の型定義ファイルを利用する例を見てみます。
+まずはグローバルに展開される例です（@<list>{augmentGlobal/lib/bare}）。
+
+//list[augmentGlobal/lib/bare][lib/bare.ts]{
+#@mapfile(../code/definition-file/augmentGlobal/lib/bare.ts)
+// UMD形式のライブラリがglobalに展開されたときの動作に相当する
+// import, export句がない場合、globalのstrutilが参照できる
+strutil.randomizeString("TypeScript");
+strutilExtra.happy("TypeScript");
+
+// globalのStringも拡張されている
+"TypeScript".randomizeString();
+"TypeScript".happy();
+
+// import、export が存在すると、ちゃんと読み込め！と怒られる
+// error TS2686: Identifier 'strutil' must be imported from a module
+// error TS2686: Identifier 'strutilExtra' must be imported from a module
+#@end
+//}
+
+なるほど。
+@<code>{export as namespace ...}形式を使わないUMD形式の対応方法もありますが、importと混ぜるとエラーになるところがよいですね。
+
+モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module}）。
+普通にモジュールであるかのように利用できますね。
+
+//list[augmentGlobal/lib/module][lib/module.ts]{
+#@mapfile(../code/definition-file/augmentGlobal/lib/module.ts)
+// UMD形式のライブラリがglobaに展開されたときの動作に相当する
+// importした時、普通のモジュールとして振る舞う
+import { randomizeString } from "strutil";
+import { happy } from "strutil-extra";
+
+randomizeString("TypeScript");
+happy("TypeScript");
+
+// strutil-extra で追加したパラメータも反映されている
+randomizeString("TypeScript", {
+  i: 11,
+  reverse: true, // これ
+});
+
+// globalのStringも拡張されている
+"TypeScript".randomizeString();
+"TypeScript".happy();
+#@end
+//}
+
+この形式がどこまで普及するかはわかりませんが、時とともにDefinitelyTyped内部でも見かける頻度が増えていくでしょう。
+ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけ、注意が必要です。
+
+#@# TODO /// <reference types="jquery" /> 的な記述の調査
+
+//footnote[umd][@<href>{https://github.com/umdjs/umd}]
+
 === 最終チェック！
 
 やった！型定義ファイルが書けたぞ！
