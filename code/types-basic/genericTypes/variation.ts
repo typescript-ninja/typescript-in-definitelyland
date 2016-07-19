@@ -36,4 +36,8 @@ let ctor: new <T>(value: T) => any;
 ctor = SampleA;
 new ctor<string>("str");
 
-export { objA, objB, obj }
+// type alias
+type SampleC<T> = { data: T; };
+let objC: SampleC<number> = { data: 1 };
+
+export { objA, objB, obj, objC }

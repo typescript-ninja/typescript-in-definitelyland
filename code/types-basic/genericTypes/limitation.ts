@@ -5,11 +5,12 @@ class InheritA extends Base {
 	num: number;
 }
 
+// TはBaseを継承済の型でなければならない制約
 interface Sample<T extends Base> {
 	method(): T;
 }
 
-// これはOK
+// これはOK InheritAはBaseを継承している
 let objA: Sample<InheritA>;
 
 // これはダメ RegExpはBaseを継承していない
@@ -20,4 +21,14 @@ let objA: Sample<InheritA>;
 // これはOK 指定したオブジェクト型リテラルはBaseクラスの要件を満たす
 let objC: Sample<{ str: string; }>;
 
-export { objA, objC };
+interface Service<T> {
+	service(t: T): T;
+}
+
+// F-Bounded Polymorphism の例
+// 制約の内容に自分自身の参照を含む 極稀に使う
+function f<T extends Service<T>>(x: T) {
+	return x.service(x);
+}
+
+export { objA, objC, f };
