@@ -456,6 +456,110 @@ export { sample1, sample2 }
 
 intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
 
+== 文字列リテラル型（String Literal Types）
+
+文字列リテラルを、型として、使える機能です。
+パッと聞き、意味がわからないですね。
+まずは例を見てみましょう（@<list>{stringLiteralTypes/basic}）。
+
+//list[stringLiteralTypes/basic][カードのスートを型として表す]{
+#@mapfile(../code/types-advanced/stringLiteralTypes/basic.ts)
+// "文字列" が 型 です。値ではない！
+let suit: "Heart" | "Diamond" | "Club" | "Spade";
+
+// OK
+suit = "Heart";
+// NG suitの型に含まれていない
+// error TS2322: Type '"Joker"' is not assignable to type '"Heart" | "Diamond" | "Club" | "Spade"'.
+// suit = "Joker";
+
+export { }
+#@end
+//}
+
+文字列が型、というのは見慣れないとすごく気持ちが悪いですね。
+しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
+たとえば、DOMのaddEventListenerなどです。
+指定するイベント名によって、リスナーが受け取れるイベント名が変わります（@<list>{stringLiteralTypes/eventListener}）。
+
+//list[stringLiteralTypes/eventListener][イベント名によって型が変わる]{
+#@mapfile(../code/types-advanced/stringLiteralTypes/eventListener.d.ts)
+// lib.dom.d.ts から抜粋
+// 第一引数で指定するイベントによってリスナーで得られるイベントの型が違う
+interface HTMLBodyElement extends HTMLElement {
+  addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+  addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+#@end
+//}
+
+これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。
+こんなものが必要になってしまうJavaScriptの複雑さよ…。
+
+また、union typesと文字列リテラル型を組み合わせ、switchで条件分岐ができます（@<list>{stringLiteralTypes/switch}）。
+switch文によるtype guards（後述）はTypeScript 2.1.0からのサポートが予定されているので、現時点で若干えこひいきされていますね。
+
+//list[stringLiteralTypes/switch][Union Typesはswitchでえこひいきされている]{
+#@mapfile(../code/types-advanced/stringLiteralTypes/switch.ts)
+// 足し算
+interface Add {
+  type: "add";
+  left: Tree;
+  right: Tree;
+}
+// 末端の値
+interface Leaf {
+  type: "leaf";
+  value: number;
+}
+
+type Tree = Add | Leaf;
+
+// (10 + 3) + 5 を表現する
+let node: Tree = {
+  type: "add",
+  left: {
+    type: "add",
+    left: { type: "leaf", value: 10 },
+    right: { type: "leaf", value: 3 },
+  },
+  right: {
+    type: "leaf",
+    value: 5,
+  },
+};
+
+// 18 と表示される
+console.log(calc(node));
+
+function calc(root: Tree): number {
+  // プロパティの値で型の絞込ができる！
+  switch (root.type) {
+    case "leaf":
+      // 型は Leaf で決定！
+      return root.value;
+    case "add":
+      // 型は Add で決定！
+      return calc(root.left) + calc(root.right);
+    default:
+      throw new Error("unknown node");
+  }
+}
+
+export { }
+#@end
+//}
+
+なお、執筆時点でアンダース・ヘルスバーグ御大が@<i>{Number, enum, and boolean literal types}というpull requestを作成、作業しています@<fn>{primitive-literal-types}。
+
+//footnote[primitive-literal-types][@<href>{https://github.com/Microsoft/TypeScript/pull/9407}]
+
+#@# @suppress JapaneseAmbiguousNounConjunction
 =={typeGuards} 型のためのガード（Type Guards）
 
 #@# TODO 和訳が微妙…
