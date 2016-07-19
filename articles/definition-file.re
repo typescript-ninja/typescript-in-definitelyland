@@ -2,6 +2,7 @@
 
 //comment{
 npmにpublishする時のベストプラクティス
+@types
 //}
 
 == JavaScriptの資産が使いたい！
