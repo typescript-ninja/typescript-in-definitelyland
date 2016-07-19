@@ -5,12 +5,14 @@ class Base {
 	public numB: number;
 	private numC: number;
 	protected numD: number;
+	regexpA?: RegExp;
 
 	// クラス変数
 	static numA: number;
 	public static numB: number;
 	private static numC: number;
 	protected static numD: number;
+	static regexpA?: RegExp;
 
 	// コンストラクタ
 	constructor(boolA: boolean,
@@ -35,6 +37,16 @@ class Base {
 	}
 	set dateA(value: Date) {
 		this._date = value;
+	}
+
+	optional() {
+		// 省略可能なプロパティは値の存在チェックが必要
+		if (this.regexpA != null) {
+			this.regexpA.test("Hi!");
+		}
+		if (Base.regexpA != null) {
+			Base.regexpA.test("Hi!");
+		}
 	}
 }
 
