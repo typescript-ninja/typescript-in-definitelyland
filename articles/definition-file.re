@@ -275,6 +275,66 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 
 //footnote[atom-dts][なお、筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
+==== 最高に雑な型定義ファイルを作る
+
+テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid}）。
+モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。
+
+//list[wildcard/basic-invalid][雑な型定義ファイルの例]{
+#@mapfile(../code/definition-file/wildcard/basic-invalid.d.ts)
+// 名前だけ定義すると全てanyでとりあえず使える
+declare module "lodash";
+
+// 必要な変数をとりあえずanyで生やす
+declare let $: any;
+
+// 特定のパッケージ配下をとりあえず全部anyで
+declare module "sample/*";
+
+
+// WebPackなど特殊なローダー用
+declare module "json!*";
+
+// 同上
+// モジュール読んだらモジュールは文字列
+declare module "*!text" {
+  const _: string;
+  export = _;
+}
+#@end
+//}
+
+この例だと、@<code>{--noImplicitAny}オプションを有効にするとエラーになってしまいます。
+そのため、コンパイルエラーを通したらなるべく早く@<code>{--noImplicitAny}を有効にできるように頑張りたいところです。
+
+この型定義ファイルの利用例を見てみます（@<code>{wildcard/basicUsage-ignore}）。
+
+#@# tsc code/definition-file/wildcard/basicUsage-ignore.ts code/definition-file/wildcard/basic-invalid.d.ts
+
+//list[wildcard/basicUsage-ignore][型定義ファイルの利用例]{
+#@mapfile(../code/definition-file/wildcard/basicUsage-ignore.ts)
+import * as _ from "lodash";
+import * as sample from "sample/foobar";
+import * as data from "json!./bar.json";
+import * as text from "./foo.txt!text";
+
+// _はany
+_.map([1, 2, 3], n => n * 3);
+// $はany
+$("#id");
+// sampleはany
+sample;
+// dataもany
+data;
+// textはstring
+text.toUpperCase();
+#@end
+//}
+
+anyばっかりですね。
+しかし、コンパイルはとおります。
+
+#@# @suppress ParagraphNumber SectionLength
 === インタフェースを活用する
 
 インタフェースは大変使いやすいパーツです。
