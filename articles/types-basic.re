@@ -394,6 +394,67 @@ export { }
 その場合、型定義ファイルを修正したりしてほしいところですが、急いでいる場合は一旦別の変数に代入してから再代入することで回避できます。
 このやり方だと、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、まだしもマシなやり方だといえます。
 
+=== readonly修飾子
+
+TypeScript固有の機能であるreadonly修飾子について紹介します。
+readonlyと指定したプロパティは、読み取り専用となり変更を禁止することができます（@<list>{objectTypeLiteral/readonly}）。
+readonlyと変更された該当箇所が変更不可になるだけなので迂回路を使うと値は変更できてしまいます。
+
+//list[objectTypeLiteral/readonly][readonlyで読み取り専用にする]{
+#@mapfile(../code/types-basic/objectTypeLiteral/readonly.ts)
+interface Foo {
+  // readonly を使うと直接は書き換えできなくなる
+  readonly str: string;
+}
+
+let objA: Foo = {
+  str: "TypeScript",
+};
+// 上書きはできない！
+// error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+// objA.str = "JavaScript";
+
+// 別にconstではないので迂回路から変更できてしまう
+let objB = {
+  str: "Mutable",
+};
+objA = objB;
+// objB経由でobjA.strを書き換える
+objB.str = "Modified!";
+// Modified! と表示される
+console.log(objA.str);
+
+export { }
+#@end
+//}
+
+クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（@<list>{objectTypeLiteral/readonlyWithClass}）。
+Javaのfinalに似ていますね。
+
+//list[objectTypeLiteral/readonlyWithClass][readonlyの変更はconstructorだけ]{
+#@mapfile(../code/types-basic/objectTypeLiteral/readonlyWithClass.ts)
+class Foo {
+  readonly str: string;
+
+  constructor() {
+    // 変更可能
+    this.str = "TypeScript";
+  }
+
+  modify() {
+    // readonly が変更できるのはconstructorだけ！
+    // error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    // this.str = "JavaScript";
+  }
+}
+
+export { Foo }
+#@end
+//}
+
+もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは普通に変更可能なコードが出力されてきます。
+使うとある程度TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
+
 == 関数型リテラル（Function Type Literals）
 
 関数も型として表現できます（@<list>{function-types/basic}）。
