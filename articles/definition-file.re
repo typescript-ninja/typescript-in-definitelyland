@@ -1,7 +1,6 @@
 ={definition-file} JS資産と型定義ファイル
 
 #@# TODO npmにpublishする時のベストプラクティス
-#@# TODO @types
 
 == JavaScriptの資産が使いたい！
 
@@ -19,169 +18,199 @@ TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り
 一方、型定義ファイルはすでに実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。
 そこのところを十分に気をつけないといけません。
 
-== ツールを使って検索だ！
-
-#@# TODO @types について書く
+#@# @suppress ParagraphNumber SectionLength
+== @typesを使う
 
 さて、まずは自分で型定義ファイルを作るよりも、既存のものを使ってみましょう。
-有名どころはひととおり揃っています。
+jQueryやlodashなどの有名どころはひととおり揃っています。
 
-そのために、まずはtsdまたはdtsmというツールを導入しましょう@<fn>{tsd}@<fn>{dtsm}@<fn>{NuGet}。
+稀にライブラリの作者がTypeScriptユーザで、npm package自体に型定義ファイルがバンドルされていて何も考えずにTypeScriptから使える場合もありますが、今のところまだ稀です。
+基本的にはDefinitelyTyped@<fn>{definitelytyped}というコミュニティベースの型定義ファイル集積リポジトリを利用することになるでしょう。
 
-//cmd{
-# どちらか！
-$ npm install -g tsd
-$ npm install -g dtsm
-//}
+#@# @suppress JapaneseStyle
+DefinitelyTypedから型定義ファイルをダウンロードしてくるための方法は複数用意されています。
+TypeScript 2.0.0からは@typesというnpmのscoped package@<fn>{scoped-package}を使って型定義ファイルを利用するようになります。
+2.0.0以前では、tsd@<fn>{tsd}やdtsm@<fn>{dtsm}やtypings@<fn>{typings}というツールを使っていましたが、これらが不要になります。
 
-まずは、プロジェクトで使う型定義ファイルを記録するために依存関係を保存するための設定ファイルを生成します。
+しばらくは過渡期になるため、混乱があったり利用の仕方がわかりにくかったり壊れていたりする場合があるかもしれません。
+もし、ここで紹介する方法でうまくいかない場合、利用事例やブログ記事などが出回っている旧ツール群のいずれかを使ってみるとよいでしょう。
+しかし、コミュニティの力によって徐々に前進し、やがてみんなが@typesを使うようになるでしょう。
 
-//cmd{
-# どちらか！
-$ tsd init
-$ dtsm init
-//}
-
-ここではテストを書くときに使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードし、保存してみます。
+さて、前置きが長くなりましたが実際に型定義ファイルをダウンロードしてきて使ってみましょう。
+ここではテストを書くときに使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードしてみます。
 
 //cmd{
-# どちらか！
-$ tsd query power-assert --action install --save --resolve
-
->> tsd 0.5.7
-
- - power-assert/power-assert.d.ts : <head> : 2014-11-14 02:03
-
-   >> empower/empower.d.ts : <head> : 2014-11-14 02:03
-   >> power-assert-formatter/power-assert-formatter.d.ts : <head> : (略)
-
->> running install..
-
->> written 3 files:
-
-    - empower/empower.d.ts
-    - power-assert-formatter/power-assert-formatter.d.ts
-    - power-assert/power-assert.d.ts
-
-$ dtsm install power-assert --save
-power-assert/power-assert.d.ts
-empower/empower.d.ts
-power-assert-formatter/power-assert-formatter.d.ts
+# 型定義ファイルをinstall
+$ npm install --save-dev @types/power-assert
+└─┬ @types/power-assert@0.0.27
+  ├── @types/empower@0.0.28
+  └── @types/power-assert-formatter@0.0.26
 //}
+#@# TODO power-assertの型定義ファイルに記載のライブラリ本体のバージョン更新しないと…
 
-デフォルトでは、typings/ フォルダに型定義ファイルが保存されます。
-tsdとdtsmでは微妙に生成されるファイルが異なりますが、おおむね次のような構成になっているはずです。
+power-assertの型定義ファイルが依存しているモジュールの型定義も芋づる式に取得できています。
+便利ですね。
+型定義ファイルのパッケージには残念ながらライブラリの実体は含まれていないため、@<code>{npm install power-assert}で別途インストールする必要があります。
 
-//cmd{
-$ tree typings
-typings
-├── empower
-│   └── empower.d.ts
-├── power-assert
-│   └── power-assert.d.ts
-└── power-assert-formatter
-    └── power-assert-formatter.d.ts
-//}
+既存ライブラリに対する型定義ファイルは、基本的に@types/の下に元ライブラリのnpmでのパッケージ名と同じ名前で公開される運用です。
+パッケージの検索は@<href>{https://microsoft.github.io/TypeSearch/,TypeSearch}@<fn>{typesearch}で行うか、npm searchを使うとよいでしょう。
 
-あとは、これら型定義ファイルを自分の使うコードから参照するだけでコンパイルが可能になります。
-残念ながらライブラリの実体は含まれていないため、npmやbowerなどで別途取得する必要があるでしょう。
+//footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
+//footnote[scoped-package][@xxx/ から始まる名前空間が区切られたnpm packageのこと @<href>{https://docs.npmjs.com/misc/scope}]
+//footnote[tsd][@<href>{https://www.npmjs.com/package/tsd}]
+//footnote[dtsm][@<href>{https://www.npmjs.com/package/dtsm}]
+//footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
+//footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
 
-//footnote[tsd][tsdはbartvdsがメインに開発している型定義ファイル管理ツールで、広く使われています]
-//footnote[dtsm][dtsmは筆者（vvakame）が作っているツールで、まだあまり宣伝していないためユーザは少ないです。みんな使ってね！]
-//footnote[NuGet][WindowsユーザにはNuGetというツールもあるのですが、全然知らないため割愛します]
+===[column] @typesとDefinitelyTypedの今
+
+@typesの対応はMicrosoftのTypeScriptチームが主体となって始めました。
+DefinitelyTypedは規模は大きくなっていくもののアクティブにメンテを続けるメンバーが少なく、運用上徐々に無理が生じてきていたと思います。
+現在、TypeScript 2.0.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。
+彼らは給料を貰い、仕事の時間内にコミュニティを回すための時間を割いてくれているため、今後は今までよりも回転が早くなるでしょう。
+
+執筆時点（2016年07月21日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0.0対応が行われています。
+もし、@typesへ変更を反映してほしい人がいる場合、現時点ではtypes-2.0ブランチにpull requestを送ってください。
+また、TypeScript 2.0.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。
+
+参考になるURLを示しておきます。
+
+ * types-publisher @<href>{https://github.com/Microsoft/types-publisher}
+ * TypeSearch @<href>{https://microsoft.github.io/TypeSearch/}
+   * 上記サイトのリポジトリ @<href>{https://github.com/Microsoft/TypeSearch}
+
+===[/column]
 
 == 型定義ファイルを参照してみよう！
 
-型定義ファイルを参照するには、tscコマンドでソースコードをコンパイルするときに一緒に指定するか、ソースコード中からリファレンスコメントで参照する必要があります。
-リファレンスコメントとして参照するほうがコンパイル手順を簡素に保てるため、プロジェクトの構成をシンプルに保つことができます。
+型定義ファイルを参照するには、tscコマンドでコンパイルするときにコンパイル対象に含める必要があります。
+node_modules/@types にある型定義ファイルは特別扱いされ、モジュールをimportした時や、tsconfig.jsonのtypesに記述したモジュールの解決時に自動的に走査されます。
+要するに、npm installしたら、後は何も気にしなくてもTypeScriptコンパイラが型定義ファイルを探しだしてきてくれるのです。
 
-リファレンスコメントはソースコードの先頭に@<code>{/// <reference path="相対パスor絶対パス" />}の形式で指定します。
+古くはリファレンスコメントとして、ソースコードの先頭に@<code>{/// <reference path="相対パスor絶対パス" />}の形式で書く方法もありましたがtsconfig.jsonの登場により廃れました。
+基本として、依存性の解決などはtsconfig.jsonで行うようにします。
 
 mocha+power-assertでテストを書く場合を例に、使い方を解説していきます。
 
 テスト対象のコードは@<code>{usage/lib/index}です（@<list>{usage/lib/index}）。
 
 //list[usage/lib/index][至って普通の外部モジュール]{
-#@# TODO #@mapfile(../code/definition-file/usage/lib/index.ts)
-"use strict";
-
+#@mapfile(../code/definition-file/usage/lib/index.ts)
 export function hello(word = "TypeScript") {
-  return "Hello, " + word;
+  return `Hello, ${word}`;
 }
-#@# TODO #@end
+#@end
 //}
 
-これに対して、テストコードを書いてみましょう（@<list>{usage/tests/indexSpec}）。
+これに対して、テストコードを書いてみましょう（@<list>{usage/test/indexSpec}）。
 普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。
 
-//list[usage/tests/indexSpec][mocha+power-assertでテストを書く]{
-#@# TODO #@mapfile(../code/definition-file/usage/tests/indexSpec.ts)
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/power-assert/power-assert.d.ts" />
+//list[usage/test/indexSpec][mocha+power-assertでテストを書く]{
+#@mapfile(../code/definition-file/usage/test/indexSpec.ts)
+import * as assert from "power-assert";
 
-import assert = require("power-assert");
-
-import lib = require("../lib/index");
+import { hello } from "../lib/";
 
 describe("lib", () => {
   describe("hello function", () => {
     it("generate string with default value", () => {
-      var str = lib.hello();
+      let str = hello();
       assert(str === "Hello, TypeScript");
     });
     it("generate string with parameter", () => {
-      var str = lib.hello("JavaScript");
+      let str = hello("JavaScript");
       assert(str === "Hello, JavaScript");
     });
   });
 });
-#@# TODO #@end
+#@end
 //}
 
-mochaでは、describeで何に対してのテストかを宣誓し、itでどういう性質をもつべきかを宣誓します。
-power-assertは、適当にassertに真になってほしい式を突っ込んでおけばそれが本当に真になっているかを検証して報告してくれます。
-
-ここで問題なのは、mochaとpower-assertについての情報がソースコード上に存在していないことです。
+ここで問題なのは、TypeScriptコンパイラが安全にコードを処理するためには、mochaとpower-assertについての情報が必要であることです。
 たとえば、assert関数はpower-assertが提供するものですし、describeとitはmochaが提供しています。
-JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため型情報をぶっこんでやる必要があります。
+JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため型情報をどうにかして教えてあげる必要があります。
 そこで使われるのが型定義ファイルです。
 
-型定義ファイルの抜粋を示します。
-mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイル（抜粋）を見てみましょう。
+mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイルを抜粋・簡略化したものを見てみましょう。
 
 //list[usage/abstract/mocha][mocha.d.ts抜粋]{
-#@# TODO #@mapfile(../code/definition-file/usage/abstract/mocha.d.ts)
+#@mapfile(../code/definition-file/usageAbstract/mocha.d.ts)
 interface MochaDone {
   (error?: Error): void;
 }
-
-declare var describe: {
-  (description: string, spec: () => void): void;
-  only(description: string, spec: () => void): void;
-  skip(description: string, spec: () => void): void;
+declare let describe: {
+  (description: string, spec: () => void): any;
 };
-
-declare var it: {
-  (expectation: string, assertion?: (done: MochaDone) => void): void;
-  only(expectation: string, assertion?: (done: MochaDone) => void): void;
-  skip(expectation: string, assertion?: (done: MochaDone) => void): void;
+declare let it: {
+  (expectation: string, assertion?: () => void): any;
+  (expectation: string, assertion?: (done: MochaDone) => void): any;
 };
-#@# TODO #@end
+#@end
 //}
 
 //list[usage/abstract/power-assert][power-assert.d.ts抜粋]{
-#@# TODO #@mapfile(../code/definition-file/usage/abstract/power-assert.d.ts)
-declare function assert(value: any, message?: string): void;
+#@mapfile(../code/definition-file/usageAbstract/power-assert.d.ts)
+export = assert;
+export as namespace assert;
 
-declare module "power-assert" {
-  export = assert;
-}
-#@# TODO #@end
+declare function assert(value: any, message?: string): void;
+#@end
 //}
 
 型定義ファイルを見るとmocha, power-assertそれぞれのAPIが表現されています。
-@<list>{usage/tests/indexSpec}から「これらのAPIを使います！」と宣言すれば、矛盾なくコンパイルを通すことができそうです。
-その意思を表すためにリファレンスコメントを使います。
+TypeScriptコンパイラがこれらの型定義ファイルを認識できれば、矛盾なくコンパイルを通すことができそうです。
+そのためのpackage.json（@<list>{usage/package.json}）とtsconfig.json（@<list>{usage/tsconfig.json}）を確認します。
+
+//list[usage/package.json][package.json]{
+#@mapfile(../code/definition-file/usage/package.json)
+{
+  "name": "typescript-in-definitelyland-sample",
+  "private": true,
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc -p ./",
+    "pretest": "npm run build",
+    "test": "mocha"
+  },
+  "author": "vvakame",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^2.2.28",
+    "@types/power-assert": "0.0.27",
+    "mocha": "^2.5.3",
+    "power-assert": "^1.4.1"
+  }
+}
+#@end
+//}
+
+//list[usage/tsconfig.json][tsconfig.json]{
+#@mapfile(../code/definition-file/usage/tsconfig.json)
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "types": [
+            "mocha"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+#@end
+//}
+
+power-assertはテストコード中でimportしますが、実行時にテストランナーからセットアップされるmochaはソースコード中からの参照がありません。
+これはpower-assertはTypeScriptコンパイラが型定義を探しに行ってくれる契機があるが、mochaにはその機会がないわけです。
+そのため、このままコンパイルするとdescribeやitなどが見つからないと言われてしまいます。
+これを解決するために、tsconfig.jsonのtypesプロパティ中でmochaを参照するよう指定してやります。
+
+もしも、@typesを利用した型定義への参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。
+コンパイルに利用したファイルをリスト表示する@<code>{--listFiles}オプションと、型定義ファイルを見つけるためにコンパイラがどういう探索を行ったかを表示する@<code>{--traceResolution}オプションを試してみてください。
 
 == 型定義ファイルを書こう
 
@@ -1233,8 +1262,7 @@ tslintは必ず設定ファイルを必要とします。
 メンテナのvvakameです。
 
 DefinitelyTypedではさまざまな型定義ファイルを取り揃えてございます！
-世界中の人々が作った型定義ファイルは集積され、tsdや、NuGetや、dtsmなどを介して広く利用されています。
-#@# TODO @types
+世界中の人々が作った型定義ファイルは集積され、@typesなどを介して広く利用されています。
 
 貴方が作った型定義ファイルも、DefinitelyTypedでホストして世界中の人々に使ってほしいとは思いませんか？
 もしくは、あなたがいつも使っている型定義ファイルのバグを治したい…そんな気持ちになることもあるでしょう。

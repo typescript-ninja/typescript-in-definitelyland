@@ -145,6 +145,7 @@ $ cat tsconfig.json
     ],
     "exclude": [
         "node_modules",
+        "code/definition-file/usage/",
         "code/definition-file/augmentGlobal/",
         "code/**/*-invalid.ts",
         "code/**/*-invalid.d.ts",
