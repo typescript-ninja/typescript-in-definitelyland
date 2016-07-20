@@ -1282,8 +1282,6 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加、修正につ�
 //footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
 //footnote[dt-contrib-guide][@<href>{http://definitelytyped.org/guides/contributing.html}]
 
-#@# TODO TypeScript teamが参加してきていて今は彼らのほうが作業量が多いという話
-
 === 新規型定義ファイルの追加のレビューの観点
 
 まずは今までなかった、新しいライブラリに対する型定義ファイルのレビューの観点を解説していきます。
