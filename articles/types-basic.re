@@ -647,7 +647,6 @@ printPoint({
 
 == 型アサーション（Type Assertions）
 
-#@# TODO 後置の as any 的な奴の記述を追加する
 #@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
 
 型アサーションは他の言語でいうところのキャストです。

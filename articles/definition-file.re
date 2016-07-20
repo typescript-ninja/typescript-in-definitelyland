@@ -1,9 +1,7 @@
 ={definition-file} JS資産と型定義ファイル
 
-//comment{
-npmにpublishする時のベストプラクティス
-@types
-//}
+#@# TODO npmにpublishする時のベストプラクティス
+#@# TODO @types
 
 == JavaScriptの資産が使いたい！
 
@@ -589,8 +587,6 @@ declare namespace foo.bar.buzz {
 普通、@<list>{interfaceAntipattern/callableModuleUsage-ignore}のような型定義ファイルを書こうとは思わないと思いますが、こういうコードが必要になる場合が稀にあります。
 関数としても呼べるし、namespaceのようにも振る舞うオブジェクトの型定義を作成したいときです。
 
-#@# TODO 内部モジュールで全文を検索 module とか declare module でも
-
 //list[interfaceAntipattern/callableModuleUsage-ignore][関数・namespace どっちなの？]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleUsage-ignore.ts)
 // assertは関数としても呼べるしnamespaceのようにも見える
@@ -1175,10 +1171,11 @@ randomizeString("TypeScript", {
 
 やった！型定義ファイルが書けたぞ！
 己の出来高に満足する前に、もう少しだけやっておきたいことがあります。
-それが、--noImplicitAnyをつけての試しコンパイルとtslintによるチェックです。
-#@# TODO --strictNullChecks とかへの言及
+それが、--noImplicitAnyや--strictNullChecksをつけての試しコンパイルとtslintによるチェックです。
 
 ==== --noImplicitAny
+
+#@# TODO ここにあるべき節ではないのでは…
 
 TypeScriptコンパイラの最重要オプション、--noImplicitAnyを使って型定義ファイルをコンパイルしてみましょう。
 @<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。

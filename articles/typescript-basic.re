@@ -1,13 +1,10 @@
 = TypeScriptの基本
 
-//comment{
-TODO
-abstract
-enum
-const enum
-decorator
-暗黙的なインデックスシグニチャ（Implicit index signatures）
-//}
+#@# TODO enum
+#@# TODO const enum
+#@# TODO decorator
+#@# TODO 暗黙的なインデックスシグニチャ（Implicit index signatures）
+#@# TODO --noUnusedLocals と --noUnusedParameters
 
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。

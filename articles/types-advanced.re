@@ -1,9 +1,7 @@
 = アドバンスド型戦略
 
 #@# TODO 文脈依存型
-#@# TODO 文字列により特殊化されたオーバーロード
-#@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.10.7
-#@# TODO || 演算子あたりのだるさ
+#@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8
 #@# TODO オーバーロードの選択アルゴリズム
 
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
@@ -222,8 +220,6 @@ unshiftやpopなど、配列の要素を操作する方法は色々あります�
 一番最初に書いておくけど@<strong>{TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！}
 という感じなんですが、@<code>{--strictNullChecks}オプションを使う場合に避けて通れない要素であるためしっかり覚えましょう。
 
-#@# TODO intersection types 書かなきゃどこかで
-
 #@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
 じゃあ解説していきましょう。
 union typesはいわゆる直和型です。
@@ -307,8 +303,6 @@ export { func, b, c, d }
 
 見づらいです。適切に型にも名前をつけることの重要さが偲ばれます。
 
-#@# TODO この辺にcontrol flow based type analysisの話あってもいいかも？
-
 union typesな値を使うときは、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{unionTypes/typeAssertion})。
 次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
 
@@ -337,8 +331,6 @@ let obj: string | number | Date = null as any;
 export { }
 #@end
 //}
-
-#@# TODO Contextual Union Types https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.4.1
 
 #@# NOTE http://togetter.com/li/749889
 #@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと
@@ -625,14 +617,13 @@ export { }
 //footnote[primitive-literal-types][@<href>{https://github.com/Microsoft/TypeScript/pull/9407}]
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-=={typeGuards} 型のためのガード（Type Guards）
+=={typeGuards} 型の番人（Type Guards）
 
-#@# TODO 和訳が微妙…
 #@# @<strong>{導入されるバージョン 1.4.0}
 
 #@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
 type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
-type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（条件チェックなど）の後の文脈で変数の型を××に狭めることができます。
+type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（番人となる条件式など）の後の文脈で変数の型を××に狭めることができます。
 
 === 処理フローに基づく型の解析（Control flow based type analysis）
 
@@ -793,8 +784,7 @@ export { }
 
 もう一例見てみましょう。
 @<list>{typeGuards/typeof-invalid}では、anyやnumberと指定された変数をtype guardsでstringに絞り込んでいます。
-そのため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドを呼びだそうとするとコンパイルの段階でエラーにしてくれます。
-#@# TODO never型についての説明をどこかに
+この操作を行うと"ありえない"ことを表すnever型になるため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドの呼び出しはコンパイルエラーとなります。
 
 //list[typeGuards/typeof-invalid][変なコードを書くとコンパイラが教えてくれる]{
 #@mapfile(../code/types-advanced/typeGuards/typeof-invalid.ts)
@@ -1140,7 +1130,7 @@ let obj: Sample = {
 #@# @suppress ParagraphNumber
 == 型の別名（type alias）
 
-#@# TODO @<strong>{導入されるバージョン 1.4.0}
+#@# @<strong>{導入されるバージョン 1.4.0}
 
 最初に書いておきます。@<strong>{可能な限りtype aliasを使うな！interface使え！}
 筆者はtype aliasの乱用を恐れています！
