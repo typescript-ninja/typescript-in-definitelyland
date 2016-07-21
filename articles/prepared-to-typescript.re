@@ -162,6 +162,8 @@ $ cat tsconfig.json
 
 #@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
 
+#@# REVIEW lc: ↑めっちゃ読みたい
+
 == 試しにコンパイルしてみる
 
 tsconfig.jsonの作成ができたら、後はコンパイルするだけです。
@@ -184,15 +186,22 @@ Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScrip
 TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういうメソッドがあるかどうかなどさまざまな情報を得ることができます。
 そのため、多くのIDE・エディタでVisual Studioに負けるとも劣らないサポートを得ることができます。
 
+#@# REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
+
 興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 
 == Visual Studio Codeで開発環境を整えよう
 
+#@# REVIEW lc: 節にしては薄すぎる気がする・・・これはエディタ・IDE節の中の項なのでは？むしろ、話の展開として先にVCSがTSサポート厚いから使う話をして、同様のサポートが他のエディタでもあります、その理由は〜という展開のほうが読みやすい気がする？
+
+#@# REVIEW lc: 初めて読むひとにとってはC87の話はどうでもいいはずなので「現時点」あたりにfn打っておまけ程度で良いんじゃないでしょうか
+
 C87版ではWebStormを利用するよう案内しましたが、現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
 Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
 Visual Studioの名を冠していますがElectronを利用して組まれているマルチプラットフォームなエディタで、Window以外でも利用できます。
+#@# REVIEW lc: s/Window/Windows/
 筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。
 
 tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。

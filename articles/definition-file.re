@@ -67,6 +67,7 @@ power-assertの型定義ファイルが依存しているモジュールの型�
 @typesの対応はMicrosoftのTypeScriptチームが主体となって始めました。
 DefinitelyTypedは規模は大きくなっていくもののアクティブにメンテを続けるメンバーが少なく、運用上徐々に無理が生じてきていたと思います。
 現在、TypeScript 2.0.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。
+#@# REVIEW lc: s/2.0/2.0.0/ のほうが適切？
 彼らは給料を貰い、仕事の時間内にコミュニティを回すための時間を割いてくれているため、今後は今までよりも回転が早くなるでしょう。
 
 執筆時点（2016年07月21日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0.0対応が行われています。
@@ -807,6 +808,8 @@ export { }
 #@end
 //}
 
+#@# REVIEW lc: s/以下のような分/以下のような文/
+
 === オーバーロードを上手く使おう！
 
 #@# @suppress JapaneseAmbiguousNounConjunction
@@ -863,6 +866,8 @@ bye(() => "function");
 
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
 === モジュールの定義の統合
+
+#@# REVIEW lc: なんか「ベストプラクティス」からずれている気がする・・・
 
 #@# @<strong>{利用可能になったバージョン 1.3.0}
 
@@ -1046,6 +1051,8 @@ declare module "buzz" {
 #@# @suppress SectionLength ParagraphNumber
 === グローバルに展開される型定義とモジュールの両立
 
+#@# REVIEW lc: これも「ベストプラクティス」からずれている気がする・・・
+
 グローバルに変数が展開されるのと、モジュールとしての利用が両立しているタイプのライブラリについて考えます。
 具体的に、@<kw>{UMD,Universal Module Definition}と呼ばれる形式@<fn>{umd}です。
 ライブラリ内部でモジュールとしての使い方が想定されているのか、そうではないのかを判断し展開の方法を変えます。
@@ -1197,6 +1204,8 @@ randomizeString("TypeScript", {
 //footnote[umd][@<href>{https://github.com/umdjs/umd}]
 
 === 最終チェック！
+
+#@# REVIEW lc: もはや「型定義ファイルのベストプラクティス」節であることを忘れている気がする
 
 やった！型定義ファイルが書けたぞ！
 己の出来高に満足する前に、もう少しだけやっておきたいことがあります。

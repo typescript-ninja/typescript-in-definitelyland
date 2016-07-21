@@ -19,6 +19,8 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 
 また、本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
 
+#@# REVIEW lc: tsconfigの設定状態を出したほうがわかりやすい？
+
 #@# TODO enum と const enum どっか
 
 == 変数
@@ -98,6 +100,9 @@ export { str, num, bool, func, obj }
 === 普通のクラス
 
 ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic}）。
+
+#@# REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
+#@# REVIEW lc: spec読んだら「class members」と「static class members」だった
 
 //list[class/basic][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class/basic.ts)
@@ -180,10 +185,13 @@ JavaScriptっぽくいうとプロパティですね。
 アクセス修飾子として、private、public、protectedなどの可視性を制御するアクセス修飾子を利用できます。
 何も指定していないとき、デフォルトの可視性はpublicになります。
 
+#@# REVIEW lc: s/100/100%/
+
 コンパイル後のJSを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100防げる！と考えるのは禁物です。
 そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
 
 また、プロパティには省略可能（optional）かを明示する@<code>{?}を指定できます。
+#@# REVIEW lc: s/旨/旨を/
 コンストラクタで値を設定せず、値がundefinedである可能性のある期間がある場合、省略可能である旨指定したほうがよいかもしれません。
 #@# クラスのプロパティが省略可能かどうか指定の追加（Optional properties in classes）
 
