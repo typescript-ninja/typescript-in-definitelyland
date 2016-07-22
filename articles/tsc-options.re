@@ -18,7 +18,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --forceConsistentCasingInFileNames
 #@#   --noEmitOnError
 #@#   --noFallthroughCasesInSwitch
-#@#   --noImplicitThis
 #@#   --pretty
 #@#   --traceResolution
 #@#   --types
@@ -229,6 +228,33 @@ export { }
 
 プログラミングのスタイルとして、elseの漏れや値の返し忘れがあるコードはミスである可能性が高いです。
 そういったコードを書くとエラーになるのは便利ですね。
+
+== --noImplicitThis
+
+#@# @suppress JapaneseAmbiguousNounConjunction
+@<code>{--noImplicitThis}オプションについておさらいします。
+@<chapref>{types-advanced}の「関数のthisの型の指定」で述べたとおり、このオプションを利用すると、thisの型指定がない関数内でthisへアクセスするとエラーになります。
+
+例を見てみます（@<list>{noImplicitThis/basic-invalid}）。
+
+//list[noImplicitThis/basic-invalid][型指定無しのthisの利用を禁じる]{
+#@mapfile(../code/tsc-options/noImplicitThis/basic-invalid.ts)
+// 関数内部でのthisの型を偽の第一引数で指定
+function testA(this: string) {
+  console.log(this.toUpperCase());
+}
+testA.bind("TypeScript")();
+
+function testB() {
+  // --noImplicitThisオプション利用時、関数内でthisにアクセスすると怒られる
+  // error TS2683: 'this' implicitly has type 'any'
+  //   because it does not have a type annotation.
+  console.log(this.toUpperCase());
+}
+
+export { testB }
+#@end
+//}
 
 == --target
 
