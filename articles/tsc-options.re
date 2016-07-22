@@ -19,7 +19,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --noUnusedParameters
 #@#   --listFiles
 #@#   --forceConsistentCasingInFileNames
-#@#   --lib
 #@#   --moduleResolution
 #@#   --noEmitOnError
 #@#   --noImplicitReturns
@@ -31,9 +30,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --allowJs
 #@#   --experimentalDecorators
 #@#   --emitDecoratorMetadata
-
-#@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
-#@# REVIEW lc: ↑めっちゃ読みたい
 
 ==== --noImplicitAny
 
@@ -140,3 +136,45 @@ export { }
 きっちりコードを書けば、この状態でも堅牢なアプリケーションを構築することはできます。
 しかし、それはプログラマの努力の賜物であります。
 できれば、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さがより確かなものになりますね。
+
+== --lib
+
+#@# lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
+#@# OK REVIEW lc: ↑めっちゃ読みたい
+
+@<code>{--lib}オプションについて解説します。
+TypeScriptのコンパイルを行う際、標準の型定義として何を使うかを個別に指定できます。
+たとえ、@<code>{--target es5}としてダウンパイルする場合でも、利用する型定義はes2015にできるのです。
+最近はPromiseを使ったAPIは珍しくないですし、かつIE11でも動かしたい場合というのはザラにあります。
+
+利用可能なオプションの値は次のとおりです。
+複数指定したい場合、コマンドラインオプションの場合は@<code>{,}で区切ります。
+tsconfig.jsonの場合は素直に配列にしましょう。
+
+#@# prh:disable
+ * dom
+ * webworker
+ * es5
+ * es6 / es2015
+ * es2015.core
+ * es2015.collection
+ * es2015.iterable
+ * es2015.promise
+ * es2015.proxy
+ * es2015.reflect
+ * es2015.generator
+ * es2015.symbol
+ * es2015.symbol.wellknown
+ * es2016
+ * es2016.array.include
+ * es2017
+ * es2017.object
+ * es2017.sharedmemory
+ * scripthost
+
+自分のプロジェクトが何用途なのかを考え、適切なものを選びましょう。
+たとえば、Node.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
+多くのプロジェクトではes2017か、+domの指定があれば十分でしょう。
+
+es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
+どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
