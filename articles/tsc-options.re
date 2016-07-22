@@ -14,7 +14,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --init
 #@#   --project
 #@#   --declaration
-#@#   --noUnusedLocals
 #@#   --noUnusedParameters
 #@#   --listFiles
 #@#   --forceConsistentCasingInFileNames
@@ -134,6 +133,38 @@ export { }
 きっちりコードを書けば、この状態でも堅牢なアプリケーションを構築することはできます。
 しかし、それはプログラマの努力の賜物であります。
 できれば、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さがより確かなものになりますね。
+
+== --noUnusedLocals
+
+@<code>{--noUnusedLocals}オプションについて解説します。
+その名のとおり、使っていないローカル変数があったらエラーにしてくれます。
+本書のサンプルコードでも有効になっているため、エラー消しのために無意味にexportしてみたりしている箇所があります。
+
+例を見てみます（@<list>{noUnusedLocals/basic-invalid}）。
+
+//list[noUnusedLocals/basic-invalid][未使用変数はちゃんと消そう]{
+#@mapfile(../code/tsc-options/noUnusedLocals/basic-invalid.ts)
+// importした後、一回も使わないのはエラー
+// error TS6133: 'readFile' is declared but never used.
+import { readFile } from "fs";
+
+// 1回も参照されていないとエラーになる
+// error TS6133: 'objA' is declared but never used.
+let objA = {};
+
+// どこかで参照されていればOK
+let objB = {};
+export { objB }
+
+// exportしていればどこかで使われるかもしれないからOK
+export let objC = {};
+#@end
+//}
+
+未使用の変数があるとエラーになります。
+まるでGo言語のようですね。
+エラーを削っていくと、import文自体を削減できるパターンもあるでしょう。
+コードをきれいに保とう！
 
 == --target
 
