@@ -14,7 +14,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --init
 #@#   --project
 #@#   --declaration
-#@#   --noUnusedParameters
 #@#   --listFiles
 #@#   --forceConsistentCasingInFileNames
 #@#   --noEmitOnError
@@ -165,6 +164,35 @@ export let objC = {};
 まるでGo言語のようですね。
 エラーを削っていくと、import文自体を削減できるパターンもあるでしょう。
 コードをきれいに保とう！
+
+== --noUnusedParameters
+
+@<code>{--noUnusedParameters}オプションについて解説します。
+関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
+エラーにせず残しておきたい場合、変数名の頭に@<code>{_}（アンダースコア）をつけることでエラーを抑制することができます。
+
+例を見てみます（@<list>{noUnusedParameters/basic-invalid}）。
+
+//list[noUnusedParameters/basic-invalid][使っていない仮引数はできれば削除したい]{
+#@mapfile(../code/tsc-options/noUnusedParameters/basic-invalid.ts)
+// 仮引数 b は利用されていないのでエラー _c はプリフィクス_なのでエラーにならない
+// error TS6133: 'b' is declared but never used.
+export function foo(a: string, b: number, _c: boolean) {
+  console.log(a);
+}
+
+export class Sample {
+  // 仮引数 a は利用されていないのでエラー
+  // error TS6133: 'a' is declared but never used.
+  method(a: string) {
+  }
+}
+#@end
+//}
+
+#@# @suppress JapaneseAmbiguousNounConjunction
+未使用の仮引数があるとエラーになります。
+関数の引数の数や型を後から変更するのはめんどくさいので、なるべく早めに検出し修正してしまいたいものです。
 
 == --target
 
