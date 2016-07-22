@@ -11,7 +11,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
 #@# TODO 以下のオプションについてじわじわ書く
-#@#   --moduleと--target 掛けあわせの話
 #@#   --init
 #@#   --project
 #@#   --declaration
@@ -19,7 +18,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --noUnusedParameters
 #@#   --listFiles
 #@#   --forceConsistentCasingInFileNames
-#@#   --moduleResolution
 #@#   --noEmitOnError
 #@#   --noImplicitReturns
 #@#   --noFallthroughCasesInSwitch
@@ -136,6 +134,58 @@ export { }
 きっちりコードを書けば、この状態でも堅牢なアプリケーションを構築することはできます。
 しかし、それはプログラマの努力の賜物であります。
 できれば、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さがより確かなものになりますね。
+
+== --target
+
+@<code>{--target}オプションについて解説します。
+TypeScriptのコンパイルを行う際、ECMAScript 3（超古い！）、ECMAScript 5（古い！）、ECMAScript 2015（最近）のどのバージョンをターゲットとするかを指定します。
+これは、"TypeScriptコードをどのバージョンで書くか"ではなく、"書いたTypeScriptをどのバージョンに変換するか"の指定です。
+TypeScriptでは基本的に最新の記法で書き、ダウンパイル（古い書き方へ変換）します。
+
+利用可能なオプションの値は次のとおりです。
+
+ * es3
+ * es5
+ * es6 / es2015
+
+基本的に、IE11などの少し古いブラウザのサポートを切らないのであればes5を選択すればよいでしょう。
+es3の利用はもはやお勧めしません。
+
+一部、Generatorやasync/awaitなどの記法はダウンパイルできません。
+これらは2.1.0でサポートされる予定なので、延期されないようにみんなで祈りましょう。
+
+== --module, --moduleResolution
+
+@<code>{--module}オプションについて解説します。
+TypeScriptはモジュールをコンパイルする際に、どの形式に変換するかを選ぶことができます。
+
+利用可能なオプションの値は次のとおりです。
+
+ * none
+ * commonjs
+ * system（SystemJS）
+ * umd
+ * es6 / es2015
+
+これも明確な事情がない限り、今のところはcommonjsでよいでしょう。
+
+#@# @suppress JapaneseAmbiguousNounConjunction
+@<code>{--moduleResolution}オプションについて少し触れておきます。
+モジュールの名前解決の方法について指定できます。
+
+利用可能なオプションの値は次のとおりです。
+
+ * node
+ * classic（TypeScript 1.6以前の形式）
+
+基本としてnode一択でよいでしょう。
+
+前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module es6}とすることもできます。
+この組み合わせが可能になったのはTypeScript 2.0.0からなので、Rollup.js@<fn>{rollup.js}との組み合わせの運用などの検討はまだ未知数です。
+TypeScript+Rollup.jsをプロジェクトに導入してみてブログ記事などにしてみると話題になるかもしれません。
+お待ちしています！
+
+//footnote[rollup.js][@<href>{http://rollupjs.org/}]
 
 == --lib
 
