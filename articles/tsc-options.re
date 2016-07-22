@@ -15,7 +15,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --project
 #@#   --declaration, --declarationDir
 #@#   --listFiles
-#@#   --forceConsistentCasingInFileNames
 #@#   --noEmitOnError
 #@#   --noFallthroughCasesInSwitch
 #@#   --pretty
@@ -349,3 +348,10 @@ tsconfig.jsonの場合は素直に配列にしましょう。
 
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
 どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
+
+== --forceConsistentCasingInFileNames
+
+@<code>{--forceConsistentCasingInFileNames}オプションについて解説します。
+このオプションを有効にすると、ファイル名の参照について、大文字小文字の食い違いがあるとエラーにします。
+macOSのような非ケースセンシティブな環境と、Linuxのようなケースセンシティブな環境が混在しているとき、macOSではエラーにならないけどLinuxではエラーになる…のようなシチュエーションを防止してくれます。
+チーム内でmacOSに統一されていても、外部の人やCIサーバなどはLinuxを使っている場合などはかなり多いため、とりあえず有効にしてしまってよいでしょう。
