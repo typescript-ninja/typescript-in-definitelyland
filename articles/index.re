@@ -57,6 +57,8 @@ Version 2.0.0
 
 @<chapref>{types-advanced}では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。
 
+@<chapref>{tsc-options}では、tscコマンドやtsconfig.jsonで利用可能なオプションについて、重要なオプションを中心に解説します。
+
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方と、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
 //footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]

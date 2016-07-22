@@ -9,6 +9,9 @@
 
 #@# TODO 以下のオプションについてじわじわ書く
 #@#   --moduleと--target
+#@#   --init
+#@#   --project
+#@#   --declaration
 #@#   --noUnusedLocals
 #@#   --noUnusedParameters
 #@#   --listFiles
