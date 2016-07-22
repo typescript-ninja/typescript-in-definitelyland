@@ -126,6 +126,7 @@ $ cat tsconfig.json
         "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "noImplicitUseStrict": false,
         "sourceMap": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,

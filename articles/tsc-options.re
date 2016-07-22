@@ -13,11 +13,10 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@# TODO 以下のオプションについてじわじわ書く
 #@#   --init
 #@#   --project
-#@#   --declaration
+#@#   --declaration, --declarationDir
 #@#   --listFiles
 #@#   --forceConsistentCasingInFileNames
 #@#   --noEmitOnError
-#@#   --noImplicitReturns
 #@#   --noFallthroughCasesInSwitch
 #@#   --noImplicitThis
 #@#   --pretty
@@ -26,6 +25,11 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --allowJs
 #@#   --experimentalDecorators
 #@#   --emitDecoratorMetadata
+#@#   --sourceMap, --inlineSources, --inlineSourceMap
+#@#   --skipLibCheck, --skipDefaultLibCheck
+#@#   --out, --outDir, --outFile
+#@#   --noImplicitUseStrict
+#@# TODO 短縮形の紹介
 
 ==== --noImplicitAny
 
@@ -193,6 +197,38 @@ export class Sample {
 #@# @suppress JapaneseAmbiguousNounConjunction
 未使用の仮引数があるとエラーになります。
 関数の引数の数や型を後から変更するのはめんどくさいので、なるべく早めに検出し修正してしまいたいものです。
+
+== --noImplicitReturns
+
+@<code>{--noImplicitReturns}オプションについて解説します。
+関数やメソッドの返り値について、returnで値を返すパターンとreturnしないパターンがある場合、エラーにしてくれます。
+
+例を見てみます（@<list>{noImplicitReturns/basic-invalid}）。
+
+//list[noImplicitReturns/basic-invalid][暗黙のreturnを禁じる]{
+#@mapfile(../code/tsc-options/noImplicitReturns/basic-invalid.ts)
+// returnがない（暗黙的にundefinedが返る）パターンを検出してくれる
+// error TS7030: Not all code paths return a value.
+function a(v: number) {
+  if (v < 0) {
+    return "negative";
+  } else if (0 < v) {
+    return "positive";
+  }
+
+  // return がない！
+}
+
+function b() {
+  // そもそも常にreturnがないならOK
+}
+
+export { }
+#@end
+//}
+
+プログラミングのスタイルとして、elseの漏れや値の返し忘れがあるコードはミスである可能性が高いです。
+そういったコードを書くとエラーになるのは便利ですね。
 
 == --target
 
