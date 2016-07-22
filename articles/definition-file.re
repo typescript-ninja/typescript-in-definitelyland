@@ -1226,9 +1226,6 @@ tslintはちょくちょく新しいルールが追加されたりするため�
 tslintは必ず設定ファイルを必要とします。
 今のところ、TypeScript界における統一見解は存在していないので@<href>{https://github.com/palantir/tslint/blob/master/tslint.json,tslintが使ってる設定ファイル}@<fn>{tslint-example-config}か、@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json,TypeScript本体のtslint.json}@<fn>{tsc-tslint}を参照するとよいでしょう。
 
-#@# TODO できれば本書お勧めの設定くらいは書きたい
-#@# TODO 全設定項目解説とおすすめ設定を書きたいなぁ
-
 //footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
 //footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 //footnote[tsc-tslint][@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json}]

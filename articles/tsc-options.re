@@ -8,7 +8,7 @@
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
 #@# TODO 以下のオプションについてじわじわ書く
-#@#   --moduleと--target
+#@#   --moduleと--target 掛けあわせの話
 #@#   --init
 #@#   --project
 #@#   --declaration
@@ -25,6 +25,9 @@
 #@#   --pretty
 #@#   --traceResolution
 #@#   --types
+
+#@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
+#@# REVIEW lc: ↑めっちゃ読みたい
 
 ==== --noImplicitAny
 

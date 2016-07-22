@@ -1,7 +1,5 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
-#@# TODO --module と --target が個別に掛けあわせできるようになった話とか
-
 #@# @suppress SectionLength
 == まずはインストールしてみよう
 
@@ -160,9 +158,11 @@ $ cat tsconfig.json
 #@end
 //}
 
-#@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
+#@# @suppress SentenceLength
+tsconfig.jsonで利用可能なcompilerOptionsについては、@<chapref>{tsc-options}や@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html,公式ハンドブックの解説}@<fn>{handbook-tsconfig}、@<href>{http://json.schemastore.org/tsconfig,JSON Schemaの定義}@<fn>{schemastore-tsconfig}を参照してください。
 
-#@# REVIEW lc: ↑めっちゃ読みたい
+//footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
+//footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
 
 == 試しにコンパイルしてみる
 
