@@ -982,6 +982,7 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではないのです。
 そのことに留意しておきましょう。
 
+#@# @suppress SectionLength ParagraphNumber
 === インタフェースのプリフィクスとしてIをつけるのはやめよう！
 
 #@# prh:disable
@@ -995,6 +996,188 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 
 #@# prh:disable
 //footnote[writing-dts-files][@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions}]
+
+=== ECMAScript 2015とCommonJSでのモジュールの互換性について
+
+最初にまとめを書いておきます。
+まとめ：@<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
+
+さて、現在JavaScriptのモジュールの仕様は過渡期にあります。
+ECMAScript 2015でモジュールの記法や考え方は定義されましたが、実際にはブラウザにはまだ実装されていません。
+ブラウザ上でのスクリプトの読み込みは煩雑で、まだ実装のための仕様も固まっていない段階です。
+
+もちろん、CommonJS形式のモジュールとの互換性なんて、ECMAScriptの仕様には含まれていません。
+そのため、TypeScriptやBabelなど、各種トランスパイラ毎にECMAScript 2015とCommonJS間の変換方法は食い違っています。
+TypeScriptが正しいのか、Babelが正しいのかなんて、そもそも仕様がないのだから正しいもへったくれもありません。
+TypeScriptもBabelもECMAScript 2015なモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。
+
+まずはTypeScriptで書いたコードがどのようなCommonJS形式のコードに変換されるかを見てみます（@<list>{commonJSCompat/basic/basic.ts}、@<list>{commonJSCompat/basic/basic.js}）。
+
+//list[commonJSCompat/basic/basic.ts][関数などを素直にexportする]{
+#@mapfile(../code/definition-file/commonJSCompat/basic/basic.ts)
+export function hello(word = "TypeScript") {
+  console.log(`Hello, ${word}`);
+}
+
+export function bye(word = "JavaScript") {
+  console.log(`Bye, ${word}`);
+}
+#@end
+//}
+
+//list[commonJSCompat/basic/basic.js][CommonJS形式ではexports.xxx = となる]{
+#@mapfile(../code/definition-file/commonJSCompat/basic/basic.js)
+"use strict";
+function hello(word = "TypeScript") {
+    console.log(`Hello, ${word}`);
+}
+exports.hello = hello;
+function bye(word = "JavaScript") {
+    console.log(`Bye, ${word}`);
+}
+exports.bye = bye;
+#@end
+//}
+
+単純でわかりやすいですね。
+
+#@# @suppress SentenceLength ParenthesizedSentence
+次にCommonJSでの@<code>{exports.module = ...;}形式（export.moduleへの代入）の記法を見てみます（@<list>{commonJSCompat/exportsAssignment1/util.ts}、@<list>{commonJSCompat/exportsAssignment1/util.js}）。
+
+//list[commonJSCompat/exportsAssignment1/util.ts][export = ... と書く]{
+#@mapfile(../code/definition-file/commonJSCompat/exportsAssignment1/util.ts)
+function hello(word = "TypeScript") {
+  console.log(`Hello, ${word}`);
+}
+
+// CommonJSの exports.module = hello; 相当
+// 外からこのモジュールを参照した時のオブジェクト自体を差し替える
+export = hello;
+#@end
+//}
+
+//list[commonJSCompat/exportsAssignment1/util.js][exports.module = ... となる]{
+#@mapfile(../code/definition-file/commonJSCompat/exportsAssignment1/util.js)
+"use strict";
+function hello(word = "TypeScript") {
+    console.log(`Hello, ${word}`);
+}
+module.exports = hello;
+#@end
+//}
+
+この変換は重要です。
+逆に考えると、JavaScriptで@<code>{exports.module = ...;}の形式を見たらTypeScriptでは@<code>{export = ...;}という型定義に書き起こす必要があります。
+
+#@# @suppress JapaneseAmbiguousNounConjunction
+理解を深めるため、Node.jsでのCommonJSの実現方法について該当のコードを抜粋します（@<list>{node-module}）@<fn>{node-module-url}。
+
+//list[node-module][Node.jsのモジュールの実現方法]{
+NativeModule.wrap = function(script) {
+  return NativeModule.wrapper[0] + script + NativeModule.wrapper[1];
+};
+
+NativeModule.wrapper = [
+  '(function (exports, require, module, __filename, __dirname) { ',
+  '\n});'
+];
+//}
+#@# NOTE https://github.com/nodejs/node/blob/ff3ce11894797d031956ca0cb144e600d2b36aa3/lib/internal/bootstrap_node.js#L422-L429
+#@# NOTE https://github.com/nodejs/node/blob/ff3ce11894797d031956ca0cb144e600d2b36aa3/lib/module.js#L538-L541
+
+#@# @suppress KatakanaSpellCheck JapaneseAmbiguousNounConjunction
+めちゃめちゃシンプルなコードが出てきましたね。
+Node.jsに於いて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後にあの2行を付け足して、evalしているだけなのです。
+なので、Node.js初心者がたまにやりがちな@<code>{exports = ...;}というコードは間違いです。
+単に変数の値を差し替えているだけなので当然ですね。
+外部に変更を露出させるには、何かのプロパティの変更（つまり@<code>{module.exports = ...;}）でなければなりません。
+
+互換性の話に戻ります。
+この@<code>{export = ...;}の記法に対応した"正規の"importの書き方は先ほど見た@<code>{import xxx = require("...");}形式です。
+これを無理やりECMAScript 2015形式のimport文に書き直すと@<list>{commonJSCompat/exportsAssignment2/main}になります。
+
+//list[commonJSCompat/exportsAssignment2/main][import モジュール全体 as 名前]{
+#@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/main.ts)
+// モジュール全体をutilに割当て
+import * as util from "./util";
+
+// この書き方は誤り util.ts にdefaultエクスポートはない
+// error TS1192: Module '"略/util"' has no default export.
+// import util from "./util";
+
+// Hello, CommonJS と表示される
+util("CommonJS");
+#@end
+//}
+
+このやり方は若干邪道で、@<code>{export =}する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（@<list>{commonJSCompat/exportsAssignment2/util}）。
+
+//list[commonJSCompat/exportsAssignment2/util][同名のnamespaceを被せてごまかす]{
+#@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/util.ts)
+function hello(word = "TypeScript") {
+  console.log(`Hello, ${word}`);
+}
+// 呼び出し元でエラーになるのを防ぐ 同名のnamespaceを被せてごまかす
+// error TS2497: Module '"略/util"' resolves to a non-module entity
+//   and cannot be imported using this construct.
+namespace hello { }
+
+export = hello;
+#@end
+//}
+
+いまいち優雅ではありませんね。
+この場合は無理にECMAScript 2015のモジュール記法を使わないほうが無難かもしれません。
+世間的にも、これは意見が分かれるところです。
+
+さて、ここで問題になるのがTypeScriptとBabelで@<code>{module.exports = ...;}形式のモジュールを利用する際、どうECMAScript 2015形式にマッピングするかの解釈が異なる点です。
+Babelの変換結果を見てみます。
+@<list>{babel-before}をコンパイルすると@<list>{babel-after}（@<list>{babel-after-rewrite}）となります。
+
+//list[babel-before][Babelで変換する前のコード]{
+import util from "./util";
+util();
+//}
+
+//list[babel-after][Babelで変換した結果のコード]{
+"use strict";
+
+var _util = require("./util");
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _util2.default)();
+//}
+
+//list[babel-after-rewrite][Babelで変換した結果をわかりやすく書き直す]{
+"use strict";
+
+var util = require("./util");
+if (util && util.__esModule) {
+  // そのまま
+} else {
+  util = {
+    default: util
+  };
+}
+
+util.default();
+//}
+
+Babelは、@<code>{module.exports = ...;}形式のコードに対して特別な配慮を行い、@<code>{import util from "./util";}形式でも動作します。
+TypeScriptが@<code>{import * as util from "./util";}形式しか許していないため、ここに齟齬があります。
+
+ECMAScript 2015形式+BabelのコードをTypeScriptから参照したり、ECMAScript 2015+TypeScriptのコードをBabelから参照することには大きな問題はありません。
+しかし、@<code>{module.exports = ...;}なコードの取り扱いには注意が必要なのです。
+この話題はDefinitelyTypedでよくあるトラブルの1つで、TypeScript+Babelの両方を組み合わせて使うユーザからこのあたりがごっちゃになったコードや修正が来ます。
+レビューする側としては「いやお前の環境では動くかもしれんが大抵のビルド手順では動かんのじゃ」となり、修正してくれるまで取り込むことはありません。
+TypeScriptでは@<code>{exports.default = ...}とされているコードのみ@<code>{export default ...}という型定義を与えてよいのです。
+@<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
+ということです。
+
+//footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v6.3.1/lib/internal/bootstrap_node.js#L434-L441}]
 
 === CommonJS形式でちょっと小難しいexport句の使い方
 
@@ -1043,8 +1226,6 @@ declare module "buzz" {
 
 こういう悲しい目を回避するには、型定義ファイルのテストが有効です。
 とりあえず型定義ファイルを書いたら適当なユースケースに当てはめて意図どおりコンパイルできるか確かめてみましょう。
-
-#@# TODO ES2015とCommonJSの書き方の違いと正しい選択について
 
 #@# @suppress SectionLength ParagraphNumber
 === グローバルに展開される型定義とモジュールの両立
