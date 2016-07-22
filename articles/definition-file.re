@@ -663,9 +663,8 @@ declare namespace assert {
 関数とnamespaceを同名で宣言できるのです。
 これの効能は、階層構造を素直に表現できることと、前項で説明した幽霊モジュールの書き方を併用できるところです。
 
-#@# TODO types-2.0がlandしたらパス変わる
 #@# @suppress SentenceLength
-この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
+この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
 @<list>{interfaceAntipattern/powerAssertAbst-ignore}に抜粋&改変したものを示します。
 
 //list[interfaceAntipattern/powerAssertAbst-ignore][関数+namespaceの実例]{
@@ -723,7 +722,7 @@ var test;
 #@end
 //}
 
-//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/power-assert.d.ts}]
+//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
 
 === クラスはクラスとして定義する
 
