@@ -539,6 +539,8 @@ export { }
 たとえば、DOMのaddEventListenerなどです。
 指定するイベント名によって、リスナーが受け取れるイベント名が変わります（@<list>{stringLiteralTypes/eventListener}）。
 
+#@# REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
+
 //list[stringLiteralTypes/eventListener][イベント名によって型が変わる]{
 #@mapfile(../code/types-advanced/stringLiteralTypes/eventListener.d.ts)
 // lib.dom.d.ts から抜粋

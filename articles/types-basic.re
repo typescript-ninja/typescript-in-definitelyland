@@ -455,6 +455,8 @@ export { Foo }
 もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは普通に変更可能なコードが出力されてきます。
 使うとある程度TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
 
+#@# REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
+
 == 関数型リテラル（Function Type Literals）
 
 関数も型として表現できます（@<list>{function-types/basic}）。
