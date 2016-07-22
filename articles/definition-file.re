@@ -1209,37 +1209,6 @@ randomizeString("TypeScript", {
 己の出来高に満足する前に、もう少しだけやっておきたいことがあります。
 それが、--noImplicitAnyや--strictNullChecksをつけての試しコンパイルとtslintによるチェックです。
 
-==== --noImplicitAny
-
-#@# TODO ここにあるべき節ではないのでは…
-
-TypeScriptコンパイラの最重要オプション、--noImplicitAnyを使って型定義ファイルをコンパイルしてみましょう。
-@<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
-
-//list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
-#@mapfile(../code/definition-file/noImplicitAny/basic-invalid.d.ts)
-declare class Sample {
-  // 返り値の型を指定し忘れている！
-  // error TS7010: 'method', which lacks return-type annotation,
-  //               implicitly has an 'any' return type.
-  method();
-}
-#@end
-//}
-
-//cmd{
-$ tsc --noImplicitAny definition.d.ts
-definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
-    annotation, implicitly has an 'any' return type.
-//}
-
-返り値の型を書いていないため暗黙的にanyになってしまいました。
-これに対して、それはあかん！とコンパイラが教えてくれます。
-anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScriptコードの意義が薄れてしまいます。
-型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
-
-#@# TODO 他のオプションについても触れたほうが
-
 #@# @suppress SectionLength
 ==== tslint
 
