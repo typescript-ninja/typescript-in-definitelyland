@@ -1,7 +1,5 @@
 ={definition-file} JS資産と型定義ファイル
 
-#@# TODO npmにpublishする時のベストプラクティス
-
 == JavaScriptの資産が使いたい！
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
@@ -1199,7 +1197,7 @@ randomizeString("TypeScript", {
 この形式がどこまで普及するかはわかりませんが、時とともにDefinitelyTyped内部でも見かける頻度が増えていくでしょう。
 ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけ、注意が必要です。
 
-#@# TODO /// <reference types="jquery" /> 的な記述の調査
+#@# TODO /// <reference types="jquery" /> 的な記述の調査 https://github.com/Microsoft/TypeScript/issues/7156
 
 //footnote[umd][@<href>{https://github.com/umdjs/umd}]
 
@@ -1242,6 +1240,7 @@ anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScri
 
 #@# TODO 他のオプションについても触れたほうが
 
+#@# @suppress SectionLength
 ==== tslint
 
 lintという種類のプログラムがあります。
@@ -1343,3 +1342,46 @@ npm, またはbowerに公開されている名前どおりか。
 しかし、小規模でドキュメントのURLがちゃんと添付されている場合以外は、前項同様、Definitions by:の人たちにレビューの依頼を投げます。
 
 では、皆様のpull request、お待ちしています！
+
+== 自分のライブラリをnpmで公開するときにベストプラクティス
+
+自分の作ったライブラリをnpmに公開する時のベストプラクティスについて説明します。
+ここで説明するのはTypeScriptによってコードが書かれているライブラリを前提とします。
+また、npmにパッケージを公開するための基本的な説明はここでは行いません。
+
+ポイントは、.tsファイルをリリースに含めないこと、.d.tsファイルをTypeScriptコンパイラに生成させること、.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにすることです。
+
+まずは@<strong>{.tsファイルをリリースに含めない}理由について説明します。
+これは、TypeScriptコンパイラの探索順序が.tsファイル、.tsxファイル、.d.tsファイルだからです。
+.d.tsファイルも公開していたとしても、.tsファイルも存在しているとそちらが先に発見され、コンパイル処理が走ってしまいます。
+TypeScriptコンパイラのバージョンが上がった時にソースコード（.ts）の修正が必要になるケースは多いですが、型定義ファイル（.d.ts）が影響を受けるケースは稀です。
+つまり、自分のライブラリをより安定したものとするためには、.tsファイルをリリースに含めないほうがよいわけです。
+そのために、.npmignoreファイルに@<list>{npmignore}の記述を追加します。
+
+//list[npmignore][.npmignoreで.tsコードを排除し.d.tsはパッケージング対象へ]{
+# libディレクトリ配下でコードが管理されている場合
+lib/**/*.ts
+!lib/**/*.d.ts
+//}
+
+@<strong>{.d.tsファイルをTypeScriptコンパイラに生成させる}のは、.tsコードをコンパイルするときに@<code>{--declaration}オプションを利用するだけなので簡単です。
+
+つぎに@<strong>{.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにする}理由ですが、これは単純にそのほうが使いやすいからです。
+これを実現するには、TypeScriptコンパイラの検索パスに自身の型定義ファイルが入るようになればよいです。
+
+そのための方法はいくつかあります。
+
+ 1. パッケージのrootにindex.d.tsを置く
+ 2. package.jsonにtypingsプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く
+ 3. package.jsonにtypesプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く
+
+1番はNode.jsが実行時にパッケージのrootにあるindex.jsを最初に読み込もうとする動作に似せた動作です。
+2番と3番はほぼおなじやり方ですが、3番のほうが最近追加されたやり方のため、2番か3番を選ぶのであれば3番にするのがよいでしょう。
+ちなみに、typingsとtypesプロパティの両方が存在する場合はtypingsプロパティが優先されます。
+
+筆者はもっぱら、1番の方法を使いindex.d.tsとindex.jsを手書きしています。
+これはpackage.jsonに色々と書くよりも一般的なルールに従うのを良しとしているためです。
+
+もし、実際の例が見たい場合、筆者の@<href>{https://github.com/vvakame/typescript-formatter,typescript-formatter}@<fn>{tsfmt}リポジトリなどを参照してみてください。
+
+//footnote[tsfmt][https://github.com/vvakame/typescript-formatter]
