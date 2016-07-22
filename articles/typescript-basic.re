@@ -2,9 +2,7 @@
 
 #@# TODO enum
 #@# TODO const enum
-#@# TODO decorator
 #@# TODO 暗黙的なインデックスシグニチャ（Implicit index signatures）
-#@# TODO --noUnusedLocals と --noUnusedParameters
 
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。
@@ -20,8 +18,6 @@ TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそう�
 また、本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
 
 #@# REVIEW lc: tsconfigの設定状態を出したほうがわかりやすい？
-
-#@# TODO enum と const enum どっか
 
 == 変数
 

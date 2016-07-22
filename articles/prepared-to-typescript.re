@@ -176,9 +176,6 @@ tsconfig.jsonではない名前のファイルを使って、プロジェクト�
 
 gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルが通せる環境を維持するのがよいでしょう。
 
-#@# TODO 各オプションの細かい解説は@<chapref>{learning-tsc}を参照してください
-#@# TODO allowJsについてどこかに書きたい
-
 == エディタ・IDEの環境を整えよう
 
 Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。

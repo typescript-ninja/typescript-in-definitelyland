@@ -3,6 +3,9 @@
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
 
+本章記載のオプションはtsconfig.jsonのcompilerOptionsに記載可能なプロパティ名と同一です。
+tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できないことに注意してください。
+
 ここに記載されていないオプションで、知りたいものがあればIssue@<fn>{issue}にお寄せください。
 
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
@@ -25,6 +28,9 @@
 #@#   --pretty
 #@#   --traceResolution
 #@#   --types
+#@#   --allowJs
+#@#   --experimentalDecorators
+#@#   --emitDecoratorMetadata
 
 #@# TODO lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
 #@# REVIEW lc: ↑めっちゃ読みたい
