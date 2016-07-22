@@ -7,10 +7,21 @@
 
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
-#@# TODO --moduleと--target
-#@# TODO --noUnusedLocals
-#@# TODO --noUnusedParameters
-#@# TODO --listFiles
+#@# TODO 以下のオプションについてじわじわ書く
+#@#   --moduleと--target
+#@#   --noUnusedLocals
+#@#   --noUnusedParameters
+#@#   --listFiles
+#@#   --forceConsistentCasingInFileNames
+#@#   --lib
+#@#   --moduleResolution
+#@#   --noEmitOnError
+#@#   --noImplicitReturns
+#@#   --noFallthroughCasesInSwitch
+#@#   --noImplicitThis
+#@#   --pretty
+#@#   --traceResolution
+#@#   --types
 
 ==== --noImplicitAny
 
