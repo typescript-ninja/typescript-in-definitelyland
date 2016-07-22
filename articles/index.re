@@ -39,7 +39,7 @@ Version 2.0.0
 
 == 本書の内容
 
-本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
+本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{--noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
 また、Node.js、ブラウザを問わずECMAScript 2015のモジュールの仕組みか、TypeScript独自のCommonJS向けの文法を使います。
 これはブラウザでの実行にはBrowserifyなりWebPackなりの仕組みを使うことを前提とすることになります。
 また、targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
