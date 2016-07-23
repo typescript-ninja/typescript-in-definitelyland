@@ -9,4 +9,5 @@ node_modules/
 npm-debug.log
 
 code/**/*.js
+code/**/*.d.ts
 publish/

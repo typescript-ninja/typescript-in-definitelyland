@@ -11,3 +11,5 @@ let obj = new clazz();
 // クラス式だとこんな感じ
 clazz = class { };
 obj = new clazz();
+
+export { }

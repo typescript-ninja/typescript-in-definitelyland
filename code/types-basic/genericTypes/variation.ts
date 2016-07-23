@@ -40,4 +40,4 @@ new ctor<string>("str");
 type SampleC<T> = { data: T; };
 let objC: SampleC<number> = { data: 1 };
 
-export { objA, objB, obj, objC }
+export { SampleA, objA, SampleB, objB, obj, SampleC, objC }

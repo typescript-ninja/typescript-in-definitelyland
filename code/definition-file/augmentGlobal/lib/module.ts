@@ -1,4 +1,4 @@
-// UMD形式のライブラリがglobaに展開されたときの動作に相当する
+// UMD形式のライブラリがglobalに展開されたときの動作に相当する
 // importした時、普通のモジュールとして振る舞う
 import { randomizeString } from "strutil";
 import { happy } from "strutil-extra";

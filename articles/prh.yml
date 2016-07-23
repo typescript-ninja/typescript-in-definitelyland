@@ -41,6 +41,8 @@ rules:
     prh:      リポジトリはリネームされました
   - expected: type guards
     pattern:  /type guard(?!s)/
+  - expected: 省略可能
+    pattern:  オプショナル
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode

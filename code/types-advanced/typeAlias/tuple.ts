@@ -18,4 +18,4 @@ namespace alternative {
 	console.log(c2.p, c2.r);
 }
 
-export { c, alternative }
+export { Point, Circle, c, alternative }

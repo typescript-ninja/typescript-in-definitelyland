@@ -7,7 +7,7 @@ let obj: {
 // すべての引数と返り値に矛盾しないようにしなければならない…
 obj = (word?: string): any => {
 	if (typeof word === "string") {
-		return "Hello, " + word;
+		return `Hello, ${word}`;
 	} else {
 		return 42;
 	}

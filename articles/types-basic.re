@@ -5,7 +5,7 @@
 
 #@# prh:disable
 TypeScriptの華はやはり型！
-@<chapref>{typescript-basic}など所詮児戯に過ぎぬッ！！
+@<chapref>{typescript-basic}など所詮児戯に過ぎぬわッ！！
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
@@ -57,14 +57,14 @@ export { }
 値の代わりに型名を、要素の終わりに,ではなく;を書くだけです。
 簡単ですね。
 
-オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basic-usage}）。
+オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basicUsage}）。
 
-//list[objectTypeLiteral/basic-usage][でも、正直読みづらい]{
+//list[objectTypeLiteral/basicUsage][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/objectTypeLiteral/basicUsage.ts)
 // 関数の仮引数や返り値に対して
 function move(
   value: { x: number; y: number; },
-  delta: { dx?: number; dy?: number; }
+  delta: { dx?: number; dy?: number; },
 ): { x: number; y: number } {
   if (delta.dx) {
     value.x += delta.dx;
@@ -150,7 +150,7 @@ let obj: {
 // すべての引数と返り値に矛盾しないようにしなければならない…
 obj = (word?: string): any => {
   if (typeof word === "string") {
-    return "Hello, " + word;
+    return `Hello, ${word}`;
   } else {
     return 42;
   }
@@ -190,12 +190,14 @@ let obj = new clazz();
 // クラス式だとこんな感じ
 clazz = class { };
 obj = new clazz();
+
+export { }
 #@end
 //}
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptでできるコードの書き方の範疇では、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。
-関数+型アサーションを使って@<code>{<any>}で無理やり回避する方法はありますが、使わないほうがよいでしょう。
+関数+型アサーションを使ってanyに変換し無理やり回避する方法はありますが、使わないほうがよいでしょう。
 
 #@# @suppress SuccessiveWord
 コンストラクトシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能です。
@@ -219,6 +221,7 @@ let objB: {
 
 // どういった使い方ができるの？
 let s1 = objA[1];
+
 // --noImplicitAny 付きだとちゃんとエラーになる
 // error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
 // var s2 = objA["test"];
@@ -312,15 +315,15 @@ let obj: {
 // 当てはまる値はこんな感じ
 obj = {
   hello(word: string) {
-    return "Hello, " + word;
+    return `Hello, ${word}`;
   },
 };
 obj = {
-  hello: (word: string) => "Hello, " + word,
+  hello: (word: string) => `Hello, ${word}`,
 };
 obj = {
   hello: function(word: string) {
-    return "Hello, " + word;
+    return `Hello, ${word}`;
   },
 };
 
@@ -392,7 +395,7 @@ export { }
 この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからない場合があるかもしれません。
 型定義ファイルを使っている場合、型定義ファイルに不足がある場合などもあり、正規の方法で攻略するのが難しい場合すらあります。
 その場合、型定義ファイルを修正したりしてほしいところですが、急いでいる場合は一旦別の変数に代入してから再代入することで回避できます。
-このやり方だと、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、まだしもマシなやり方だといえます。
+一旦別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、まだしもマシなやり方です。
 
 === readonly修飾子
 
@@ -455,7 +458,32 @@ export { Foo }
 もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは普通に変更可能なコードが出力されてきます。
 使うとある程度TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
 
-#@# REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
+#@# @suppress ParenthesizedSentence SentenceLength CommaNumber KatakanaSpellCheck
+また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます（@<list>{objectTypeLiteral/autoReadonly.ts}、@<list>{objectTypeLiteral/autoReadonly.d.ts}）。
+
+//list[objectTypeLiteral/autoReadonly.ts][getアクセサのみの実装]{
+#@mapfile(../code/types-basic/objectTypeLiteral/autoReadonly.ts)
+class Sample {
+  get name() {
+    return "TypeScript";
+  }
+}
+
+export { Sample }
+#@end
+//}
+
+//list[objectTypeLiteral/autoReadonly.d.ts][readonly修飾子に変換される]{
+#@mapfile(../code/types-basic/objectTypeLiteral/autoReadonly.d.ts)
+declare class Sample {
+    readonly name: string;
+}
+export { Sample };
+#@end
+//}
+
+#@# OK REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
+#@# vv: これ知らんかった… 入れるか迷ったけどとりあえず入れてみるか！
 
 == 関数型リテラル（Function Type Literals）
 
@@ -556,7 +584,7 @@ let obj: Foo = {
   num: 42,
 };
 
-export { obj }
+export { Foo, obj }
 #@end
 //}
 
@@ -602,12 +630,12 @@ double(p); // オブジェクトリテラルを直で渡す場合余計な要素
 #@end
 //}
 
-コンパイル自体は成功します。
+このコードはコンパイルがちゃんと成功します。
 Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図的な仕様であることが明示できるためより好ましいです。
 
 なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structuralSubtypings/optional}）。
 
-//list[structuralSubtypings/optional][optional(?)なプロパティはなくてもよい]{
+//list[structuralSubtypings/optional][省略可能な（?がある）プロパティは値がなくてもよい]{
 #@mapfile(../code/types-basic/structuralSubtypings/optional.ts)
 interface Point {
   x: number;
@@ -651,7 +679,7 @@ printPoint({
 #@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
 
 型アサーションは他の言語でいうところのキャストです。
-@<list>{typeAssertions/basic}のように、@<code>{<変換後型名>}と書くだけです。
+キャストの書き方は2種類あり、@<list>{typeAssertions/basic}のように@<code>{<変換後型名>値}か@<code>{値 as 変換後型名}と書くだけです。
 
 //list[typeAssertions/basic][型アサーション 基本例]{
 #@mapfile(../code/types-basic/typeAssertions/basic.ts)
@@ -678,7 +706,7 @@ export { }
 let str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
 // error TS2352: Type 'string' cannot be converted to type 'number'.
-let num: number = <number>str;
+let num: number = str as number;
 #@end
 //}
 
@@ -752,7 +780,7 @@ Javaなどでは総称型とも呼ばれます。
 === ジェネリクスの基本
 
 TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
-例を見てみましょう(@<list>{genericTypes/basic})。
+例を見てみましょう（@<list>{genericTypes/basic}）。
 
 //list[genericTypes/basic][配列はジェネリクスに支えられております]{
 #@mapfile(../code/types-basic/genericTypes/basic.ts)
@@ -819,7 +847,7 @@ interface Array<T> {
 色々な所でTが使われています。
 pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach"などの、汎用化された要素がたくさんあります。
 
-ここで、型パラメータTを実際にstringで具体化します(@<list>{genericTypes/arrayDeclarationString-invalid})。
+ここで、型パラメータTを実際にstringで具体化します（@<list>{genericTypes/arrayDeclarationString-invalid}）。
 
 //list[genericTypes/arrayDeclarationString-invalid][string専用Arrayに変身]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclarationString-invalid.ts)
@@ -893,7 +921,7 @@ new ctor<string>("str");
 type SampleC<T> = { data: T; };
 let objC: SampleC<number> = { data: 1 };
 
-export { objA, objB, obj, objC }
+export { SampleA, objA, SampleB, objB, obj, SampleC, objC }
 #@end
 //}
 
@@ -940,7 +968,7 @@ function f<T extends Service<T>>(x: T) {
   return x.service(x);
 }
 
-export { objA, objC, f };
+export { Base, InheritA, Sample, objA, objC, Service, f };
 #@end
 //}
 
@@ -960,7 +988,7 @@ export { objA, objC, f };
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
 ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。
 
-== "ありえない"型（The never type）
+== "ありえない"型（The Never Type）
 
 ありえないなんてことはありえない！はずだけれど、"ありえない"ことを示す型があります。
 具体的に、到達不可能なコードはnever型となります。
@@ -994,3 +1022,5 @@ export { }
 そんな、到達できないコードではnever型が利用されます。
 コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。
 基本的にはnever型を見かけることがあったら、何かミスをしているな…と考えたほうがよいでしょう。
+
+#@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる

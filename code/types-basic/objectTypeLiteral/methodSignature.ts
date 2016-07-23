@@ -5,15 +5,15 @@ let obj: {
 // 当てはまる値はこんな感じ
 obj = {
 	hello(word: string) {
-		return "Hello, " + word;
+		return `Hello, ${word}`;
 	},
 };
 obj = {
-	hello: (word: string) => "Hello, " + word,
+	hello: (word: string) => `Hello, ${word}`,
 };
 obj = {
 	hello: function(word: string) {
-		return "Hello, " + word;
+		return `Hello, ${word}`;
 	},
 };
 

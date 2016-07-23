@@ -6,27 +6,30 @@
 
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。
-それらは現在では標準的なJavaScriptの知識になっていくべきです。
+それらは現在では標準的なJavaScriptの知識になっていくべきで、TypeScript固有の知識ではないですからね。
 
-この章ではTypeScriptの基本的な構文を解説します。
-TypeScriptの懐は広く、巨大で、ともすれば沼に落ち込みそうになります。
+この章ではTypeScriptでの基本的な構文を解説します。
 まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。
 
-型周りの基本は@<chapref>{types-basic}を、難しいこととか便利なことは@<chapref>{types-advanced}を見てください。
+型周りの基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
 既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
 
-また、本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
+#@# @suppress CommaNumber
+また、本書は@<code>{--noImplicitAny}、@<code>{--strictNullChecks}、@<code>{--noImplicitReturns}、@<code>{--noImplicitThis}を有効にした状態を基本として解説します。
+各オプションの詳細については@<chapref>{tsc-options}を参照してください。
 
-#@# REVIEW lc: tsconfigの設定状態を出したほうがわかりやすい？
+#@# OK REVIEW lc: tsconfigの設定状態を出したほうがわかりやすい？
+#@# vv: ここはこのままにしておきます…。
 
+#@# @suppress ParagraphNumber SectionLength
 == 変数
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{variable/with-annotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
+違うのは、@<list>{variable/withAnnotations}@<fn>{suppress-warning}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
-//list[variable/with-annotations][型注釈付きの変数]{
+//list[variable/withAnnotations][型注釈付きの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
 let str: string;
 let num: number;
@@ -46,10 +49,10 @@ export { }
 //}
 
 これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
-たとえば@<list>{variable/with-annotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
+たとえば@<list>{variable/withAnnotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
-//list[variable/with-annotations-invalid][型注釈に反することをやってみる]{
+//list[variable/withAnnotations-invalid][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
 let str: string;
 // 文字列は数値と互換性がない！
@@ -70,9 +73,9 @@ bool = "str";
 
 安心・安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。
 そんなあなたのために、TypeScriptは型推論の機能を備えています。
-@<list>{variable/with-initializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
+@<list>{variable/withInitializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
 
-//list[variable/with-initializer][初期化付き変数 = 最強]{
+//list[variable/withInitializer][初期化付き変数 = 最強]{
 #@mapfile(../code/typescript-basic/variable/withInitializer.ts)
 let str = "string";
 let num = 1;
@@ -88,7 +91,9 @@ export { str, num, bool, func, obj }
 
 これで手で型注釈を与えずに済みます。
 しかも、書き方がJavaScriptと全く同じになりました。
-楽に書ける上に実行する前にコンパイルの段階で不審な臭いのするコードを発見できることがわかります。
+楽に書ける上に実行する前にコンパイルの段階で不審な臭いのするコードを発見できるようになる、第一歩です。
+
+//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
 =={class} クラス
 
@@ -97,8 +102,9 @@ export { str, num, bool, func, obj }
 
 ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic}）。
 
-#@# REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
-#@# REVIEW lc: spec読んだら「class members」と「static class members」だった
+#@# OK REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
+#@# OK REVIEW lc: spec読んだら「class members」と「static class members」だった
+#@# vv: ES.next的には定まった呼称はなさそう syntax的にはClassElement。若干Java方言だけどここはとりあえずこのままにしときます。
 
 //list[class/basic][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class/basic.ts)
@@ -181,15 +187,15 @@ JavaScriptっぽくいうとプロパティですね。
 アクセス修飾子として、private、public、protectedなどの可視性を制御するアクセス修飾子を利用できます。
 何も指定していないとき、デフォルトの可視性はpublicになります。
 
-#@# REVIEW lc: s/100/100%/
-
-コンパイル後のJSを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100防げる！と考えるのは禁物です。
+コンパイル後のJSを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100%防げる！と考えるのは禁物です。
 そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
 
+#@# OK REVIEW lc: s/100/100%/
+
 また、プロパティには省略可能（optional）かを明示する@<code>{?}を指定できます。
-#@# REVIEW lc: s/旨/旨を/
-コンストラクタで値を設定せず、値がundefinedである可能性のある期間がある場合、省略可能である旨指定したほうがよいかもしれません。
+コンストラクタで値を設定せず、値がundefinedである可能性のある期間がある場合、省略可能である旨を指定したほうがよいかもしれません。
 #@# クラスのプロパティが省略可能かどうか指定の追加（Optional properties in classes）
+#@# OK REVIEW lc: s/旨/旨を/
 
 次はコンストラクタです。
 コンストラクタ自体にも前述のprivate、protectedなどのアクセス修飾子を利用することができます。
@@ -229,7 +235,7 @@ console.log(obj.str);
 #@end
 //}
 
-@<list>{class/basic}に戻ります。
+@<list>{class/basic}の解説に戻ります。
 次はメソッドです。
 これも特に特筆すべき要素はありませんね。普通です。
 
@@ -238,9 +244,8 @@ console.log(obj.str);
 これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定する必要があります。
 get、setアクセサを使うと、getterしか定義していない場合でもプログラム上は値の代入処理が記述できてしまうので、"use strict"を併用して実行時にエラーを検出するようにしましょう。
 
-次に、クラスの継承も見て行きましょう。
-継承も普通にできます@<list>{class/inherit}。
-superを使い親クラスのメソッドを参照することも普通に使えます。
+次に、クラスの継承も見て行きましょう（@<list>{class/inherit}）。
+superを使い親クラスのメソッドを参照することも普通にできます。
 
 //list[class/inherit][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
@@ -346,7 +351,7 @@ new Cat();
 === 普通の関数
 
 いたって普通です（@<list>{function/basic}）。
-型注釈の与え方や、引数をオプショナルにする方法だけがJavaScriptと違いますね。
+型注釈の与え方や、引数を省略可能にする方法だけがJavaScriptと違いますね。
 
 //list[function/basic][色々な関数定義]{
 #@mapfile(../code/typescript-basic/function/basic.ts)
@@ -383,7 +388,7 @@ export { }
 //list[function/args][可変長引数の例]{
 #@mapfile(../code/typescript-basic/function/args.ts)
 function hello(...args: string[]) {
-  return "Hello, " + args.join(" & ");
+  return `Hello, ${args.join(" & ")}`;
 }
 // Hello, TS & JS と表示される
 console.log(hello("TS", "JS"));
@@ -400,20 +405,20 @@ export { }
 // オプショナルな引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
 function funcA(arg1?: string, arg2: string) {
-  return "Hello, " + arg1 + ", " + arg2;
+  return `Hello, ${arg1}, ${arg2}`;
 }
 
 // 可変長引数は必ず最後じゃないといけない
 // error TS1014: A rest parameter must be last in a parameter list.
 function funcB(...args: string[], rest: string) {
-  return "Hello, " + args.join(", ") + " and " + rest;
+  return `Hello, ${args.join(", ")} and ${rest}`;
 }
 
 export { }
 #@end
 //}
 
-ここまで見てきたオプショナルな引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドを記述するときも同様に利用できます。
+ここまで見てきた省略可能な引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドを記述するときも同様に利用できます。
 
 === アロー関数
 
@@ -460,12 +465,11 @@ export { }
 
 == モジュールのあれこれ
 
-プログラムの複雑さというのはクラスや関数だけではいかんともしがたく立ち向かいにくいものです。
 プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
-
 そのための武器として、ECMAScript 2015にはモジュールがあります。
-これはCommonJS形式のモジュールと同様、1つのJSファイルを1つのモジュールと捉えます。
-つまり、別ファイルになれば別モジュールと考え、モジュールから値をexportしたりimportしたりして大きなプログラムを分割統治します。
+1つのJSファイルを1つのモジュールと捉えます。
+Node.jsで使われているCommonJS形式のモジュールと考え方は一緒です。
+つまり、別ファイルになれば別モジュールと考え、モジュールから値をexportしたりimportしたりして大きなプログラムを分割し統治します。
 
 #@# @suppress SentenceLength CommaNumber
 #@# prh:disable
@@ -484,7 +488,7 @@ export { }
 === モジュール
 
 モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。
-@<code>{import * as foo from "./foo";}のように書くと、そのファイルから ./foo.ts@<fn>{require-ext}を参照することができます。
+@<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照することができます。
 ここでは、./fooがひとつのモジュールとして扱われます。
 
 #@# @suppress CommaNumber
@@ -631,11 +635,14 @@ namespace a {
   // export してないものは外部からは見えない
   class Sample {
     hello(word = "TypeScript") {
-      return "Hello, " + word;
+      return `Hello, ${word}`;
     }
   }
 
-  export let obj = new Sample();
+  export interface Hello {
+    hello(word?: string): string;
+  }
+  export let obj: Hello = new Sample();
 }
 namespace a {
   export function bye(word = "JavaScript") {
@@ -679,7 +686,7 @@ var a;
     // export してないものは外部からは見えない
     class Sample {
         hello(word = "TypeScript") {
-            return "Hello, " + word;
+            return `Hello, ${word}`;
         }
     }
     a.obj = new Sample();

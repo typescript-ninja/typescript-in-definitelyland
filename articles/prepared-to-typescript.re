@@ -19,7 +19,7 @@ $ tsc -v
 Version 2.0.0
 #@end
 $ echo "class Sample {}" > sample.ts
-$ tsc --noImplicitAny sample.ts
+$ tsc sample.ts
 $ cat sample.js
 var Sample = (function () {
     function Sample() {
@@ -48,7 +48,8 @@ Version 2.1.0-dev.20160716
 //cmd{
 $ npm init
 # Enter連打
-$ ls package.json                                                                                                                package.json
+$ ls package.json
+package.json
 $ npm install --save-dev typescript
 $ ./node_modules/.bin/tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
@@ -56,9 +57,9 @@ Version 2.0.0
 #@end
 //}
 
-この、@<code>{node_modules/.bin}にはnpmの動作上色々な活用方法があります。
-たとえば、@<code>{npm bin}コマンドでプロジェクトローカルな実行ファイルのパスが得られます。
-このため、macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが得られます。
+この、@<code>{node_modules/.bin}にはプロジェクトローカルに導入された実行ファイルが集められています。
+@<code>{npm bin}コマンドを実行するとこのパスが得られます。
+このため、macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが取得できます。
 さらに、npm scriptsでは$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
 このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
 
@@ -114,6 +115,7 @@ $ cat tsconfig.json
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "es6",
+        "declaration": true,
         "lib": [
             "dom",
             "es2017"
@@ -181,24 +183,24 @@ gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.json�
 Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
 TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういうメソッドがあるかどうかなどさまざまな情報を得ることができます。
-そのため、多くのIDE・エディタでVisual Studioに負けるとも劣らないサポートを得ることができます。
+そのため、多くのIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。
 
-#@# REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
+#@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
 
 興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 
-== Visual Studio Codeで開発環境を整えよう
+=== Visual Studio Codeを使ってみる
 
-#@# REVIEW lc: 節にしては薄すぎる気がする・・・これはエディタ・IDE節の中の項なのでは？むしろ、話の展開として先にVCSがTSサポート厚いから使う話をして、同様のサポートが他のエディタでもあります、その理由は〜という展開のほうが読みやすい気がする？
+#@# OK REVIEW lc: 節にしては薄すぎる気がする・・・これはエディタ・IDE節の中の項なのでは？むしろ、話の展開として先にVCSがTSサポート厚いから使う話をして、同様のサポートが他のエディタでもあります、その理由は〜という展開のほうが読みやすい気がする？
+#@# vv: 項に格下げにしました
+#@# OK REVIEW lc: 初めて読むひとにとってはC87の話はどうでもいいはずなので「現時点」あたりにfn打っておまけ程度で良いんじゃないでしょうか
 
-#@# REVIEW lc: 初めて読むひとにとってはC87の話はどうでもいいはずなので「現時点」あたりにfn打っておまけ程度で良いんじゃないでしょうか
-
-C87版ではWebStormを利用するよう案内しましたが、現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
+現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
 Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
-Visual Studioの名を冠していますがElectronを利用して組まれているマルチプラットフォームなエディタで、Window以外でも利用できます。
-#@# REVIEW lc: s/Window/Windows/
+Visual Studioの名を冠していますがElectronを利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。
+#@# OK REVIEW lc: s/Window/Windows/
 筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。
 
 tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。

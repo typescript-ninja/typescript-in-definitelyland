@@ -30,7 +30,7 @@ DefinitelyTypedから型定義ファイルをダウンロードしてくるた�
 TypeScript 2.0.0からは@typesというnpmのscoped package@<fn>{scoped-package}を使って型定義ファイルを利用するようになります。
 2.0.0以前では、tsd@<fn>{tsd}やdtsm@<fn>{dtsm}やtypings@<fn>{typings}というツールを使っていましたが、これらが不要になります。
 
-しばらくは過渡期になるため、混乱があったり利用の仕方がわかりにくかったり壊れていたりする場合があるかもしれません。
+しばらくは過渡期になるため、混乱があったり利用の仕方がわかりにくかったり型定義ファイルが壊れていたりする場合があるかもしれません。
 もし、ここで紹介する方法でうまくいかない場合、利用事例やブログ記事などが出回っている旧ツール群のいずれかを使ってみるとよいでしょう。
 しかし、コミュニティの力によって徐々に前進し、やがてみんなが@typesを使うようになるでしょう。
 
@@ -64,13 +64,14 @@ power-assertの型定義ファイルが依存しているモジュールの型�
 
 @typesの対応はMicrosoftのTypeScriptチームが主体となって始めました。
 DefinitelyTypedは規模は大きくなっていくもののアクティブにメンテを続けるメンバーが少なく、運用上徐々に無理が生じてきていたと思います。
-現在、TypeScript 2.0.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。
-#@# REVIEW lc: s/2.0/2.0.0/ のほうが適切？
+現在、TypeScript 2.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。
 彼らは給料を貰い、仕事の時間内にコミュニティを回すための時間を割いてくれているため、今後は今までよりも回転が早くなるでしょう。
+#@# OK REVIEW lc: s/2.0/2.0.0/ のほうが適切？
+#@# vv: うーん… 悩ましいけど… せっかくアドバイス貰ったから反映だ！
 
-執筆時点（2016年07月21日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0.0対応が行われています。
+執筆時点（2016年07月23日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0対応が行われています。
 もし、@typesへ変更を反映してほしい人がいる場合、現時点ではtypes-2.0ブランチにpull requestを送ってください。
-また、TypeScript 2.0.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。
+また、TypeScript 2.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。
 
 参考になるURLを示しておきます。
 
@@ -91,7 +92,7 @@ node_modules/@types にある型定義ファイルは特別扱いされ、モジ
 
 mocha+power-assertでテストを書く場合を例に、使い方を解説していきます。
 
-テスト対象のコードは@<code>{usage/lib/index}です（@<list>{usage/lib/index}）。
+テスト対象のコードは@<code>{./lib/index.ts}です（@<list>{usage/lib/index}）。
 
 //list[usage/lib/index][至って普通の外部モジュール]{
 #@mapfile(../code/definition-file/usage/lib/index.ts)
@@ -101,7 +102,7 @@ export function hello(word = "TypeScript") {
 #@end
 //}
 
-これに対して、テストコードを書いてみましょう（@<list>{usage/test/indexSpec}）。
+これに対して、テストコードとして@<code>{./test/indexSpec.ts}を書いてみましょう（@<list>{usage/test/indexSpec}）。
 普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。
 
 //list[usage/test/indexSpec][mocha+power-assertでテストを書く]{
@@ -127,7 +128,7 @@ describe("lib", () => {
 
 ここで問題なのは、TypeScriptコンパイラが安全にコードを処理するためには、mochaとpower-assertについての情報が必要であることです。
 たとえば、assert関数はpower-assertが提供するものですし、describeとitはmochaが提供しています。
-JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため型情報をどうにかして教えてあげる必要があります。
+JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため外部ライブラリの型情報をどうにかしてコンパイラに教えてあげる必要があります。
 そこで使われるのが型定義ファイルです。
 
 mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイルを抜粋・簡略化したものを見てみましょう。
@@ -204,7 +205,7 @@ TypeScriptコンパイラがこれらの型定義ファイルを認識できれ�
 //}
 
 power-assertはテストコード中でimportしますが、実行時にテストランナーからセットアップされるmochaはソースコード中からの参照がありません。
-これはpower-assertはTypeScriptコンパイラが型定義を探しに行ってくれる契機があるが、mochaにはその機会がないわけです。
+これはpower-assertはTypeScriptコンパイラが型定義を探しに行ってくれる契機があるけれど、mochaにはその機会がないわけです。
 そのため、このままコンパイルするとdescribeやitなどが見つからないと言われてしまいます。
 これを解決するために、tsconfig.jsonのtypesプロパティ中でmochaを参照するよう指定してやります。
 
@@ -215,7 +216,7 @@ power-assertはテストコード中でimportしますが、実行時にテス�
 
 さて、型定義ファイルの取得方法、使い方はわかりました。
 しかし、世の中にあるJavaScriptライブラリのうち、まだまだ型定義ファイルが書かれていないものは数多くあります。
-特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地に違いありません。
+特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地です。
 
 #@# @suppress InvalidExpression
 しからば！自分で書くしかあるまいよ！
@@ -268,7 +269,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 これから説明するベストプラクティスを踏まえて、より良い型定義ファイルを作成できるように鍛錬していきましょう。
 
 #@# @suppress ParagraphNumber SectionLength
-== 型定義ファイルのベストプラクティス
+== 型定義ファイルを書くための心得
 
 #@# @suppress SentenceLength JapaneseStyle
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
@@ -329,7 +330,7 @@ declare module "*!text" {
 //}
 
 この例だと、@<code>{--noImplicitAny}オプションを有効にするとエラーになってしまいます。
-そのため、コンパイルエラーを通したらなるべく早く@<code>{--noImplicitAny}を有効にできるように頑張りたいところです。
+そのため、コンパイルエラーを無くしたらなるべく早く@<code>{--noImplicitAny}を有効にできるように頑張りたいところです。
 
 この型定義ファイルの利用例を見てみます（@<code>{wildcard/basicUsage-ignore}）。
 
@@ -362,7 +363,7 @@ anyばっかりですね。
 === インタフェースを活用する
 
 インタフェースは大変使いやすいパーツです。
-というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging}、@<list>{interface/declarationMergingUsage}）。
+というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging}、@<list>{interface/declarationMergingUsage}）@<fn>{open-ended-class}。
 
 //list[interface/declarationMerging][定義を分割して書く]{
 #@mapfile(../code/definition-file/interface/declarationMerging.d.ts)
@@ -397,7 +398,7 @@ export { }
 
 例をひとつ見てみましょう。
 String#trimStartは、文字列の先頭にある空白文字を取り除く機能です。
-本章執筆時点（2016年07月17日）では、この提案@<fn>{string-trimStart}はTC39のプロポーサルでstage 1で、TypeScriptにはまだ入ってきていません。
+本章執筆時点（2016年07月23日）では、この提案@<fn>{string-trimStart}はTC39のプロポーサルでstage 1で、TypeScriptにはまだ入ってきていません。
 そのため、Stringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart}）
 
 //list[interface/stringTrimStart][String#trimStartを生やす]{
@@ -418,6 +419,7 @@ console.log(str.trimStart());
 この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。
 相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。
 
+//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能になりました]
 #@# prh:disable
 //footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
 
@@ -787,7 +789,7 @@ class Cat extends Animal {
 let cat: Cat = new Cat();
 console.log(cat.speak());
 
-// ECMAScript 2015だと以下のような分すら書けるのでまぁできて然るべきだった
+// ECMAScript 2015だと次のような文すら書けるのでまぁできて然るべきだった
 let cat2: Cat = new class extends class {
   speak() {
     return "???";
@@ -803,7 +805,7 @@ export { }
 #@end
 //}
 
-#@# REVIEW lc: s/以下のような分/以下のような文/
+#@# OK REVIEW lc: s/以下のような分/以下のような文/
 
 === オーバーロードを上手く使おう！
 
@@ -840,7 +842,7 @@ JavaScriptのライブラリは1つの関数にさまざまな使い方をさせ
 素直にメソッドを分けましょう。
 
 union typesを使うと、@<list>{overload/overloadVsUnionTypes}のように書くこともできます。
-簡単な例だとunion typesのほうがよいと思いますが、このケースではどっちがいいかは、今の知見ではまだわからないですね。
+簡単な例だとunion typesのほうがよいと思いますが、見た目が煩雑になるケースではどっちがいいかは判断が分かれるところです。
 
 //list[overload/overloadVsUnionTypes][うーん、どっちがいいかは難しい]{
 #@mapfile(../code/definition-file/overload/overloadVsUnionTypes.ts)
@@ -859,10 +861,37 @@ bye(() => "function");
 #@end
 //}
 
+もう一例見てみます（@<list>{definition-file/overload/overloadFault-invalid}）。
+union typesとoverloadの両方が選択肢に入る場合、現時点ではunion typesを選んだほうがよい場合があります。
+
+//list[definition-file/overload/overloadFault-invalid][overloadとunion typesは相性がよくない]{
+#@mapfile(../code/definition-file/overload/overloadFault-invalid.ts)
+declare function funcA(word: string): string;
+declare function funcA(num: number): string;
+
+let obj: string | number = null as any;
+
+// stringかnumberを渡さなければならない場合、 string | number はコンパイルエラーになる
+// 本来であれば、受け入れてほしいのだけど…
+// error TS2345: Argument of type 'string | number'
+//   is not assignable to parameter of type 'number'.
+//  Type 'string' is not assignable to type 'number'.
+funcA(obj);
+
+// 元の定義がunion typesならもちろんOK
+declare function funcB(word: string | number): string;
+funcB(obj);
+#@end
+//}
+
+この問題は@<href>{https://github.com/Microsoft/TypeScript/issues/5766}として管理されています。
+"Acceptiong PRs"ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていますがコミュニティの誰かがやる気を出せば修正される、という状態です。
+
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
 === モジュールの定義の統合
 
-#@# REVIEW lc: なんか「ベストプラクティス」からずれている気がする・・・
+#@# OK REVIEW lc: なんか「ベストプラクティス」からずれている気がする・・・
+#@# vv: 心得に変えました
 
 #@# @<strong>{利用可能になったバージョン 1.3.0}
 
@@ -894,20 +923,20 @@ foo.num;
 
 #@# @suppress SuccessiveWord SentenceLength JapaneseAmbiguousNounConjunction
 DefinitelyTypedではモジュールの型定義の外側にnamespaceを使った定義を掃き出し、モジュールの型定義の外側に拡張ポイントを設ける例がありました。
-モジュールを利用しない、namespaceだけの構成。
+モジュールを利用しない、namespaceだけの構成です。
 たとえば、lodashやjQueryのようなグローバルな名前空間に変数を生やすような場合に、未だに有効です。
 
 === anyと{}とObject
 
-もしも、型定義ファイルを書いていて具体的な型がわからなかったりとりあえずコンパイルを脳死状態で通したい場合、素直に@<code>{any}を使うことをお勧めします。
+もしも型定義ファイルを書いていて具体的な型がわからなかったり、脳死状態だけどとりあえずコンパイルをで通したい場合、素直に@<code>{any}を使いましょう。
 こういったシチュエーションで、稀にObjectを指定する人がいます。
 これはJavaScriptの仕様として、プロトタイプチェーンの頂点にいるのでObjectを使おう！と思ったのでしょうが、これはやめたほうがよいです。
 
 関数の引数にObjectや{}を指定するのは、結局どのような引数でも受け入れてしまいます。
 本当にどのような値でも受け入れるのであれば、anyにするべきです。
 
-関数の返り値にObjectや{}を指定するのは、結局どのようなプロパティも存在しないため型アサーションでもって適切な型にするしかありません。
-これは、anyを指定するのと同程度に危険です。
+関数の返り値にObjectや{}を指定するのは、結局どのようなプロパティも存在しないため型アサーションでもって適切な型にキャストするしかありません。
+これは、anyを指定するのと同程度に危険で、なおかつanyより検出しにくいです。
 素直にanyを使いましょう。
 
 筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません。
@@ -937,7 +966,10 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 
 === コールバック関数の引数を無闇に省略可能（optional）にしない
 
-まずは例を見てみましょう（@<list>{callback/basic}）。
+optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではありません。
+ここを稀に勘違いする人がいて、"コールバックに値が渡されるが別に使わなくてもいいよ"マークとして使ってしまうのです。
+
+例を見てみましょう（@<list>{callback/basic}）。
 
 //list[callback/basic][optionalはもしかしたら値がないことを表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
@@ -976,8 +1008,7 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 これがもし、本当にundefinedになりうるのであれば省略可能にするか、union typesでundefinedを与える必要があります。
 しかし、そうではなく必ずdataの値が渡されてくる場合は、無用なチェック処理が発生することになります。
 
-optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではないのです。
-そのことに留意しておきましょう。
+間違えないよう、留意しておきましょう。
 
 #@# @suppress SectionLength ParagraphNumber
 === インタフェースのプリフィクスとしてIをつけるのはやめよう！
@@ -1225,7 +1256,8 @@ declare module "buzz" {
 #@# @suppress SectionLength ParagraphNumber
 === グローバルに展開される型定義とモジュールの両立
 
-#@# REVIEW lc: これも「ベストプラクティス」からずれている気がする・・・
+#@# OK REVIEW lc: これも「ベストプラクティス」からずれている気がする・・・
+#@# vv: 心得 に名称変えました
 
 グローバルに変数が展開されるのと、モジュールとしての利用が両立しているタイプのライブラリについて考えます。
 具体的に、@<kw>{UMD,Universal Module Definition}と呼ばれる形式@<fn>{umd}です。
@@ -1350,7 +1382,7 @@ strutilExtra.happy("TypeScript");
 
 //list[augmentGlobal/lib/module][lib/module.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/lib/module.ts)
-// UMD形式のライブラリがglobaに展開されたときの動作に相当する
+// UMD形式のライブラリがglobalに展開されたときの動作に相当する
 // importした時、普通のモジュールとして振る舞う
 import { randomizeString } from "strutil";
 import { happy } from "strutil-extra";
@@ -1379,7 +1411,8 @@ randomizeString("TypeScript", {
 
 === 最終チェック！
 
-#@# REVIEW lc: もはや「型定義ファイルのベストプラクティス」節であることを忘れている気がする
+#@# OK REVIEW lc: もはや「型定義ファイルのベストプラクティス」節であることを忘れている気がする
+#@# vv: 心得に変えました
 
 やった！型定義ファイルが書けたぞ！
 己の出来高に満足する前に、もう少しだけやっておきたいことがあります。

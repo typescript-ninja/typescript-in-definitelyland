@@ -54,7 +54,7 @@ export { }
 //list[typeQueries/cheapTrick][prototypeを参照するとメソッドの型が取れる]{
 #@mapfile(../code/types-advanced/typeQueries/cheapTrick.ts)
 class Sample {
-  hello = (word = "TypeScript") => "Hello, " + word;
+  hello = (word = "TypeScript") => `Hello, ${word}`;
   bye: typeof Sample.prototype.hello;
 }
 
@@ -73,7 +73,7 @@ export { }
 #@mapfile(../code/types-advanced/typeQueries/copy.ts)
 // このコードは（死ぬほど読みにくいけど）正しい
 function move(p1: { x1: number; y1: number; x2: number; y2: number; },
-  p2: typeof p1
+  p2: typeof p1,
 ): typeof p1 {
   return {
     x1: p1.x1 + p2.x1,
@@ -148,7 +148,7 @@ export { array }
 
 各要素の型を指定すると、その要素のindexでアクセスしたときに適切な型で扱われます。
 
-もちろん、タプル型はGenericsと組み合わせて利用できます(@<list>{tuple/withGenerics})。
+もちろん、タプル型はGenericsと組み合わせて利用できます（@<list>{tuple/withGenerics}）。
 
 //list[tuple/withGenerics][Genericsでの利用も可]{
 #@mapfile(../code/types-advanced/tuple/withGenerics.ts)
@@ -169,7 +169,7 @@ Good！いいですね。
 
 さて、タプル型について重箱の隅を見ていきましょう。
 要素数が多すぎる場合、指定されていない値の型はunion typesになります。
-その例を見てみましょう(@<list>{tuple/manyValues})。
+その例を見てみましょう（@<list>{tuple/manyValues}）。
 
 //list[tuple/manyValues][値の要素数が多すぎる場合]{
 #@mapfile(../code/types-advanced/tuple/manyValues.ts)
@@ -184,7 +184,7 @@ let value = tuple[2];
 #@end
 //}
 
-お次は要素の順序がズレた場合、どうなるかを見てみましょう(@<list>{tuple/unshift})。
+お次は要素の順序がズレた場合、どうなるかを見てみましょう（@<list>{tuple/unshift}）。
 
 //list[tuple/unshift][絶望に身をよじれ…！]{
 #@mapfile(../code/types-advanced/tuple/unshift.ts)
@@ -221,10 +221,9 @@ unshiftやpopなど、配列の要素を操作する方法は色々あります�
 という感じなんですが、@<code>{--strictNullChecks}オプションを使う場合に避けて通れない要素であるためしっかり覚えましょう。
 
 #@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
-じゃあ解説していきましょう。
+では解説していきましょう。
 union typesはいわゆる直和型です。
-この変数の値の型は、アレか、コレか、ソレのどれかです。
-みたいな感じ。
+この変数の値の型は、アレか、コレか、ソレのどれかが入っています！ということを表します。
 
 なんのために入ったのかというと、まずは既存JavaScriptによりよい型定義を与えるためでしょう。
 そして、nullやundefined、string literal typesなどTypeScriptの中でも適用領域が広がっています。
@@ -232,7 +231,7 @@ JavaScriptという現実と、安全な世界を構築するTypeScriptの橋渡
 
 ちなみに、自分でTypeScriptコード書いてるときに欲しくなる機能ではあまりありません。
 
-まずは簡単な例から見ていきましょう(@<list>{unionTypes/basic})。
+まずは簡単な例から見ていきましょう（@<list>{unionTypes/basic}）。
 
 //list[unionTypes/basic][型A | 型B でAかBのどちらかを表す]{
 #@mapfile(../code/types-advanced/unionTypes/basic.ts)
@@ -250,7 +249,7 @@ let b2: boolean | number | undefined;
 // c の型は string | number | boolean | undefined となる
 let c: typeof b1 | typeof b2;
 
-export { c }
+export { b1, b2, c }
 #@end
 //}
 
@@ -261,7 +260,7 @@ export { c }
 ご覧のとおり、union types中の型の順番とかは関係ない（交換可能）し、union typesのunion typesなどは単純にまとめてひとつのunion typesに統合できます。
 
 自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
-|| 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです(@<list>{unionTypes/inferred})。
+|| 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです（@<list>{unionTypes/inferred}）。
 
 //list[unionTypes/inferred][こういうときは目にしますね]{
 #@mapfile(../code/types-advanced/unionTypes/inferred.ts)
@@ -279,7 +278,7 @@ export { and, cond, array }
 一番よくお目にかかるのは配列リテラルでしょうか。
 TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。
 
-型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります(@<list>{unionTypes/syntax})。
+型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります（@<list>{unionTypes/syntax}）。
 
 //list[unionTypes/syntax][型名をカッコで囲うんです？]{
 #@mapfile(../code/types-advanced/unionTypes/syntax.ts)
@@ -301,10 +300,11 @@ export { func, b, c, d }
 #@end
 //}
 
-見づらいです。適切に型にも名前をつけることの重要さが偲ばれます。
+見づらいコードになってしまいました。
+適切に型にも名前をつけることの重要さが偲ばれます。
 
-union typesな値を使うときは、一応型アサーションも使えますがなるべくなら避けてとおりましょう(@<list>{unionTypes/typeAssertion})。
-次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
+union typesな値を使うときは、型アサーションを使うこともできますがなるべくなら避けてとおりましょう（@<list>{unionTypes/typeAssertion}）。
+union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
 
 //list[unionTypes/typeAssertion][一応使えるよ こうすれば]{
 #@mapfile(../code/types-advanced/unionTypes/typeAssertion.ts)
@@ -314,13 +314,13 @@ union typesな値を使うときは、一応型アサーションも使えます
 let obj: string | number | Date = null as any;
 
 // string 扱いしてみる
-(<string>obj).charAt(0);
+(obj as string).charAt(0);
 
 // number 扱いしてみる
-(<number>obj).toFixed(2);
+(obj as number).toFixed(2);
 
 // Date 扱いしてみる
-(<Date>obj).getTime();
+(obj as Date).getTime();
 
 // 値の集合に含まれない型にしてみると普通に怒られる
 // error TS2352: Type 'string | number | Date' cannot be converted to type 'RegExp'.
@@ -339,11 +339,9 @@ export { }
 #@# NOTE 直積型 ??? TypeScriptのtype aliasっぽい…？ type 線 = 点1 * 点2 みたいな たかだか一種類のコンストラクタしかもたないもの(点を2つ取るもののみとか)
 #@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
 
-//footnote[spec-example-bug][@<href>{https://github.com/Microsoft/TypeScript/issues/1267}]
-
 == 交差型（Intersection Types）
 
-union typesに続いて、intersection typesです。
+union typesに続いて、intersection types（交差型）です。
 intersection typesは2つの型を合成し、1つの型にすることができます。
 union typesと違って、利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。
 
@@ -473,9 +471,9 @@ export { }
 文字列が型、というのは見慣れないとすごく気持ちが悪いですね。
 しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
 たとえば、DOMのaddEventListenerなどです。
-指定するイベント名によって、リスナーが受け取れるイベント名が変わります（@<list>{stringLiteralTypes/eventListener}）。
+指定するイベント名によって、イベントリスナーの型が変わります（@<list>{stringLiteralTypes/eventListener}）。
 
-#@# REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
+#@# OK REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
 
 //list[stringLiteralTypes/eventListener][イベント名によって型が変わる]{
 #@mapfile(../code/types-advanced/stringLiteralTypes/eventListener.d.ts)
@@ -566,7 +564,7 @@ type guardsは"変数Aが○○という条件を満たすとき、変数Aの型
 === 処理フローに基づく型の解析（Control flow based type analysis）
 
 さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
-名前が長いですが、要するに普通にコードを書いていった時に、変数の型が絞り込まれるようなコードを書くと本当に型が絞り込まれるというものです。
+名前が長いですが、要するに普通にコードを書いていった時に、値の型を判別するコードを書くとその分岐にしたがって本当に変数の型が絞り込まれるというものです。
 
 例を見ていきましょう。
 TypeScriptを書いていて一番対処に迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か+undefinedの形式でしょう。
@@ -659,7 +657,7 @@ export { }
 
 最後に、関数が絡んだ場合の例を見ておきます（@<list>{typeGuards/controlFlowBasedFunction-invalid}）。
 関数の内側と外側では、処理フローは別世界です。
-言われてみれば当然ですが、関数はいつ実行されるかわからないため、関数の内側で別途絞込を行う必要があります。
+言われてみれば当然ですが、関数はいつ実行されるかわからないため、関数の内側で別途絞込みを行う必要があります。
 
 //list[typeGuards/controlFlowBasedFunction-invalid][関数の外側でのフローは内側では関係ない]{
 #@mapfile(../code/types-advanced/typeGuards/controlFlowBasedFunction-invalid.ts)
@@ -697,8 +695,6 @@ ECMAScript 5の範囲では、変換ルールは次のとおりです。
  * それ以外の場合（nullを含む！）は"object"を返す
 
 これを利用して、変数の型を狭めます。
-
-===={typeof-typeguards-usage} 使い方
 
 一番簡単な使い方から見ていきましょう（@<list>{typeGuards/typeofBasic}）。
 TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。
@@ -746,41 +742,6 @@ if (typeof objB === "string") {
 うーん、便利ですね。
 変数に指定した型どおりの値が入ってくるのが健全なので、コンパイル時にミスが発見されるのは嬉しいことです。
 
-#@# @suppress JapaneseAmbiguousNounConjunction
-==== 後続の型の絞込み
-
-typeofによるtype guards特有の仕様として、後続の型の絞込みがあります（@<list>{typeGuards/typeofRemoves}）。
-
-//list[typeGuards/typeofRemoves][型の絞込み！]{
-#@mapfile(../code/types-advanced/typeGuards/typeofRemoves.ts)
-let obj: number | string | boolean = null as any;
-
-if (typeof obj === "string") {
-  // ここではstringと確定されている！
-  obj.charAt(0);
-} else {
-  // ここではstringが引かれ number | boolean;
-  obj;
-}
-
-if (typeof obj === "string") {
-  // ここではstringと確定されている！
-  obj.charAt(0);
-} else if (typeof obj === "number") {
-  // ここではnumberと確定されている！
-  obj.toFixed(2);
-} else {
-  // ここではstring, numberが引かれbooleanとなる！
-  obj;
-}
-
-export { }
-#@end
-//}
-
-最初にstringとわかったら、後続のelse句ではstringは絶対入ってこないことは、わかりきっています。
-親切な仕様ですね。
-
 === instanceofによるtype guards
 
 primitive typesだけtype guardsが使えてもあんまり嬉しくないので、instanceofを使ったtype guardsももちろんあります。
@@ -788,7 +749,7 @@ primitive typesだけtype guardsが使えてもあんまり嬉しくないので
 JavaScriptにおけるinstanceofは、ある値が指定した関数のインスタンスであるかを調べる演算子です。
 プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。
 
-動作例を確認してみましょう(@<list>{typeGuards/instanceof})。
+動作例を確認してみましょう（@<list>{typeGuards/instanceof}）。
 
 //list[typeGuards/instanceof][instanceof の挙動]{
 #@mapfile(../code/types-advanced/typeGuards/instanceof.ts)
@@ -821,9 +782,7 @@ export { }
 
 オブジェクトのprototypeと一致するか順番どおり見ていくだけですね。
 
-==== 使い方
-
-instanceofで型を絞り込みます(@<list>{typeGuards/instanceofBasic})。
+instanceofで型を絞り込みます（@<list>{typeGuards/instanceofBasic}）。
 
 //list[typeGuards/instanceofBasic][instanceofの挙動]{
 #@mapfile(../code/types-advanced/typeGuards/instanceofBasic.ts)
@@ -948,7 +907,7 @@ export { }
 
 === type guardsと論理演算子
 
-type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています(@<list>{typeGuards/operator})。
+type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています（@<list>{typeGuards/operator}）。
 
 //list[typeGuards/operator][ブール代数みたいな演算に対応してる]{
 #@mapfile(../code/types-advanced/typeGuards/operator.ts)
@@ -1020,7 +979,7 @@ export { }
 
 #@# @suppress SentenceLength CommaNumber
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
-コンパイル後のJavaScriptコード(@<list>{typeGuards/weakspot.js})を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
+コンパイル後のJavaScriptコード（@<list>{typeGuards/weakspot.js}）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
 
 //list[typeGuards/weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/types-advanced/typeGuards/weakspot.js)
@@ -1042,7 +1001,7 @@ if (obj instanceof Sample) {
 これを回避する方法がいくつかあります。
 
 ひとつ名は、ユーザ定義のtype guardsを使う方法。
-ふたつ目はprivateな要素をクラスに突っ込んでしまうことです(@<list>{typeGuards/vsWeakspot2-invalid})。
+ふたつ目はprivateな要素をクラスに突っ込んでしまうことです（@<list>{typeGuards/vsWeakspot2-invalid}）。
 
 //list[typeGuards/vsWeakspot2-invalid][privateな要素があれば構造的部分型で値を偽造できない]{
 #@mapfile(../code/types-advanced/typeGuards/vsWeakspot2-invalid.ts)
@@ -1066,11 +1025,12 @@ let obj: Sample = {
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することです。
 
 #@# @suppress ParagraphNumber
-== 型の別名（type alias）
+== 型の別名（Type Alias）
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
-最初に書いておきます。@<strong>{可能な限りtype aliasを使うな！interface使え！}
+最初に書いておきます。
+@<strong>{可能な限りtype aliasを使うな！interface使え！}
 筆者はtype aliasの乱用を恐れています！
 
 type aliasもunion typesの扱いを便利にするために導入された機能です。
@@ -1080,7 +1040,7 @@ type aliasもunion typesの扱いを便利にするために導入された機�
 type aliasは仕様上、interfaceと同じように利用できる場面もあります。
 ですが、基本的にtype aliasはinterfaceより機能が貧弱であるため、なるべく避けるほうがよいでしょう。
 
-代表例を見てみましょう(@<list>{typeAlias/basic})。
+代表例を見てみましょう（@<list>{typeAlias/basic}）。
 
 //list[typeAlias/basic][頻出するunion typesに名前をつける]{
 #@mapfile(../code/types-advanced/typeAlias/basic.ts)
@@ -1097,7 +1057,7 @@ interface Foo {
 わかりやすいですね。
 1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。
 
-tuple typesに名前をつけることもできます(@<list>{typeAlias/tuple})。
+tuple typesに名前をつけることもできます（@<list>{typeAlias/tuple}）。
 
 //list[typeAlias/tuple][tuple typesに名前をつける]{
 #@mapfile(../code/types-advanced/typeAlias/tuple.ts)
@@ -1121,7 +1081,7 @@ namespace alternative {
   console.log(c2.p, c2.r);
 }
 
-export { c, alternative }
+export { Point, Circle, c, alternative }
 #@end
 //}
 
@@ -1142,7 +1102,7 @@ let strArray = new StringArray();
 //}
 
 #@# @suppress CommaNumber
-TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します(@<list>{typeAlias/specExample})。
+TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します（@<list>{typeAlias/specExample}）。
 union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
 
 //list[typeAlias/specExample][interfaceを使うんだ！]{
@@ -1172,13 +1132,13 @@ interface AltRecFunc {
 }
 
 export {
-  StringOrNumber, TextObject, Coord, ObjectStatics,
+  StringOrNumber, TextObject, Coord, ObjectStatics, Pair,
   Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback,
 }
 #@end
 //}
 
-最後に、type aliasの辛いところを再掲しておきます。
+最後に、type aliasではなくインタフェースを使ったほうがいい理由を掲げておきます。
 
  * interfaceが絡んだときのコンパイルエラーにはinterface名が表示されてわかりやすい
  ** type aliasは展開されて表示されちゃうので無理
@@ -1187,7 +1147,7 @@ export {
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
 
-== 多態性のあるthis型（Polymorphic 'this' type）
+== 多態性のあるthis型（Polymorphic 'this' Type）
 
 @<code>{this}を型として用いることができます。
 たとえば@<list>{polymorphicThisType/basic}のようなコードです。
@@ -1247,7 +1207,7 @@ thisを型として記述するという発想がすごいですね。
 fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。
 
 この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。
-とはいえ、便利になる代わりに引数に使ったりすると無駄に制約がきつくなったりする場合があるため、乱用は控えましょう。
+とはいえ、便利になる代わりに仮引数に対して使ったりすると無駄に制約がきつくなったりする場合があるため、乱用は控えましょう。
 @<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
@@ -1258,6 +1218,7 @@ JavaScriptでは@<code>{Function.prototype.bind}や@<code>{Function.prototype.ca
 TypeScriptではこの変更も頑張ってサポートしようとしています。
 
 まずは簡単な例を見てみます（@<list>{thisTypeForFunctions/basic}）。
+関数の1つ目の仮引数の名前を@<code>{this}にするだけです。
 
 //list[thisTypeForFunctions/basic][thisの型を指定する]{
 #@mapfile(../code/types-advanced/thisTypeForFunctions/basic.ts)

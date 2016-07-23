@@ -2,11 +2,14 @@ namespace a {
 	// export してないものは外部からは見えない
 	class Sample {
 		hello(word = "TypeScript") {
-			return "Hello, " + word;
+			return `Hello, ${word}`;
 		}
 	}
 
-	export let obj = new Sample();
+	export interface Hello {
+		hello(word?: string): string;
+	}
+	export let obj: Hello = new Sample();
 }
 namespace a {
 	export function bye(word = "JavaScript") {

@@ -6,12 +6,12 @@
 #@# TODO 書き直す
 #@# @suppress SentenceLength ParenthesizedSentence JapaneseAmbiguousNounConjunction
 本書はC87で頒布された型の国のTypeScriptの改訂版（C90版）です。
-あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c87/#typescript,C87で頒布されたTypeScript in Definitelyland}の全文です。
+あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c90/#typescript,C90で頒布されたReviced TypeScript in Definitelyland}の全文です。
 内容は（筆者のやる気次第で）随時更新されていく可能性があります。
 誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
 
 Webサイトとして閲覧したい場合は@<href>{http://typescript.ninja/typescript-in-definitelyland/}を参照してください。
-PDF, epubとして入手したい場合は@<href>{https://tcb.mowa-net.jp/griflet/github/typescript-ninja/typescript-in-definitelyland/}を参照してください。
+PDF, epubとして入手したい場合は@<href>{https://griflet.net/github/typescript-ninja/typescript-in-definitelyland/}を参照してください。
 
 無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。
 C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
@@ -24,7 +24,7 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 
 本書はECMAScript 2015について理解しているユーザを対象にしています。
 また、@<kw>{OOP,Object Oriented Programming}についても効能や利点をある程度理解していることが望ましいです。
-もし、これらの理解に不安がある場合、azuさんとlacoが執筆中のECMAScript 2015時代のためのJavaScript入門書、@<href>{js-primer,https://github.com/asciidwango/js-primer}@<fn>{js-primer}などを参考にしてください。
+もし、これらの理解に不安がある場合、azuさんとlacoが執筆中のECMAScript 2015時代のためのJavaScript入門書、@<href>{https://github.com/asciidwango/js-primer,js-primer}@<fn>{js-primer}などを参考にしてください。
 今のところまだ書き終わっていないようですが2016年中くらいには書き終わるのではないでしょうか。
 
 また、解説するTypeScriptの内容は2.0.0（Beta）に準拠するため、現時点での最新の安定版である1.8.10では動作しない内容が多く含まれます。
@@ -40,8 +40,8 @@ Version 2.0.0
 == 本書の内容
 
 本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{--noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
-また、Node.js、ブラウザを問わずECMAScript 2015のモジュールの仕組みか、TypeScript独自のCommonJS向けの文法を使います。
-これはブラウザでの実行にはBrowserifyなりWebPackなりの仕組みを使うことを前提とすることになります。
+また、Node.js、ブラウザを問わずモジュールの仕組みを使います。
+これはブラウザでの実行にはBrowserify@<fn>{browserify}なりWebPack@<fn>{webpack}なりのツールを使うことを前提とすることを意味します。
 また、targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
 
 また、TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。
@@ -59,6 +59,8 @@ Version 2.0.0
 
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方と、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
+//footnote[browserify][@<href>{http://browserify.org/}]
+//footnote[webpack][@<href>{https://webpack.github.io/}]
 //footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
 == なぜTypeScriptを選ぶべきなのか

@@ -7,6 +7,7 @@ let objB: {
 
 // どういった使い方ができるの？
 let s1 = objA[1];
+
 // --noImplicitAny 付きだとちゃんとエラーになる
 // error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
 // var s2 = objA["test"];

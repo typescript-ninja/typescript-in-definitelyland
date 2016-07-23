@@ -31,4 +31,4 @@ function f<T extends Service<T>>(x: T) {
 	return x.service(x);
 }
 
-export { objA, objC, f };
+export { Base, InheritA, Sample, objA, objC, Service, f };

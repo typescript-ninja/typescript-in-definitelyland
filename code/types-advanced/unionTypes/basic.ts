@@ -12,4 +12,4 @@ let b2: boolean | number | undefined;
 // c の型は string | number | boolean | undefined となる
 let c: typeof b1 | typeof b2;
 
-export { c }
+export { b1, b2, c }

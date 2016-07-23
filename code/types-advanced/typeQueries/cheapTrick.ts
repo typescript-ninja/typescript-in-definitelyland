@@ -1,5 +1,5 @@
 class Sample {
-	hello = (word = "TypeScript") => "Hello, " + word;
+	hello = (word = "TypeScript") => `Hello, ${word}`;
 	bye: typeof Sample.prototype.hello;
 }
 

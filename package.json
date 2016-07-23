@@ -12,8 +12,10 @@
     "pdf": "npm run build && grunt pdf",
     "web": "npm run build && grunt web",
     "html": "npm run build && grunt html",
+    "build:sub": "npm run build:sub1 && npm run build:sub2",
     "build:sub1": "tsc -p code/definition-file/augmentGlobal/",
-    "build": "tsc -p ./ && npm run build:sub1"
+    "build:sub2": "tsc -p code/definition-file/usage/",
+    "build": "tsc -p ./ && npm run build:sub"
   },
   "dependencies": {},
   "devDependencies": {
