@@ -271,12 +271,10 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 == 型定義ファイルのベストプラクティス
 
 #@# @suppress SentenceLength JapaneseStyle
-#@# prh:disable
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
-基本的には@<href>{http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html,公式HandbookのWriting Declaration Files}@<fn>{official-handbook}と@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}に従っておけばよいです。
+基本的には@<href>{http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html,公式HandbookのWriting Declaration Files}@<fn>{official-handbook}と@<href>{http://definitelytyped.org/guides/best-practices.html,DefinitelyTypedのbest practices}@<fn>{dt-best-practice}にしたがっておけばよいです。
 本書では、そこに書かれていることや筆者の経験則などを説明していきます。
 
-#@# prh:disable
 //footnote[official-handbook][@<href>{http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html}]
 //footnote[dt-best-practice][@<href>{http://definitelytyped.org/guides/best-practices.html}]
 
@@ -984,8 +982,7 @@ optionalとは、値が渡されるかどうかの指標であって、コール
 #@# @suppress SectionLength ParagraphNumber
 === インタフェースのプリフィクスとしてIをつけるのはやめよう！
 
-#@# prh:disable
-って@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions,明記}@<fn>{writing-dts-files}された。
+と、@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions,明記}@<fn>{writing-dts-files}された。
 
 C#やJavaよりも、広い範囲でインタフェースが利用されるので"実装を強制させるパーツ"扱いしてはいけないからだそうです。
 
@@ -993,7 +990,6 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 古くはTypeScriptコンパイラ本体のコードもC#の伝統に倣いIプリフィクスを使っていましたが、現在では取り除かれています。
 また、DefinitelyTypedでも公式の記述に従い新しい型定義ファイルについてはIプリフィクスを使わぬようレビューしています。
 
-#@# prh:disable
 //footnote[writing-dts-files][@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions}]
 
 === ECMAScript 2015とCommonJSでのモジュールの互換性について

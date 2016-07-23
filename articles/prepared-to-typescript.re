@@ -10,7 +10,6 @@ TypeScriptのインストールには、Node.jsのパッケージマネージャ
 TypeScriptをインストールすると、tscというコマンドが利用可能になります。
 tscコマンドでTypeScriptコードのコンパイルを行います。
 
-#@# prh:disable
 //cmd{
 # -g をつけるとグローバルなコマンドとしてインストールする
 $ npm install -g typescript

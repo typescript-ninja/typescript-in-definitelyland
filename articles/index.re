@@ -1,10 +1,10 @@
+#@# @suppress JapaneseAmbiguousNounConjunction
 ={index} Revised 型の国のTypeScript
 
 == 本書について
 
 #@# TODO 書き直す
-#@# @suppress SentenceLength ParenthesizedSentence
-#@# prh:disable
+#@# @suppress SentenceLength ParenthesizedSentence JapaneseAmbiguousNounConjunction
 本書はC87で頒布された型の国のTypeScriptの改訂版（C90版）です。
 あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c87/#typescript,C87で頒布されたTypeScript in Definitelyland}の全文です。
 内容は（筆者のやる気次第で）随時更新されていく可能性があります。
@@ -47,10 +47,8 @@ Version 2.0.0
 また、TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。
 興味がある方は@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html,公式のドキュメント}@<fn>{jsx}を参照してください。
 
-#@# prh:disable
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法と、Visual Studio Codeの設定について言及します。
 
-#@# prh:disable
 @<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、このあとの章を読み解くための基礎知識を蓄えます。
 
 @<chapref>{types-basic}では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。
