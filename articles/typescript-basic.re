@@ -6,10 +6,11 @@
 
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。
-それらは現在では標準的なJavaScriptの知識になっていくべきで、TypeScript固有の知識ではないですからね。
+ECMAScript 2015の知識はどんどん広まってきていますし、今後は基本的なJavaScriptの知識になっていくでしょう。
+ECMAScriptの基本的な知識は、TypeScript固有の知識ではないですからね。
 
 この章ではTypeScriptでの基本的な構文を解説します。
-まずは、TypeScriptを使える必要最低限の知識を身につけていきましょう。
+まずは、TypeScriptを使うのに必要最低限の知識を身につけていきましょう。
 
 型周りの基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
 既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
@@ -192,13 +193,13 @@ JavaScriptっぽくいうとプロパティですね。
 
 #@# OK REVIEW lc: s/100/100%/
 
-また、プロパティには省略可能（optional）かを明示する@<code>{?}を指定できます。
-コンストラクタで値を設定せず、値がundefinedである可能性のある期間がある場合、省略可能である旨を指定したほうがよいかもしれません。
+また、プロパティには省略可能（optional）かを明示する@<kw>{?}を指定できます。
+コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能である旨を指定したほうがよいかもしれません。
 #@# クラスのプロパティが省略可能かどうか指定の追加（Optional properties in classes）
 #@# OK REVIEW lc: s/旨/旨を/
 
 次はコンストラクタです。
-コンストラクタ自体にも前述のprivate、protectedなどのアクセス修飾子を利用することができます。
+コンストラクタ自体にも前述のprivate、protectedなどのアクセス修飾子を利用できます。
 
 引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
 これを@<kw>{引数プロパティ宣言,parameter property declaration}と呼びます。
@@ -402,7 +403,7 @@ export { }
 
 //list[function/invalid][こういうパターンはNG]{
 #@mapfile(../code/typescript-basic/function/invalid.ts)
-// オプショナルな引数の後に省略不可な引数がきてはいけない
+// 省略可能な引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
 function funcA(arg1?: string, arg2: string) {
   return `Hello, ${arg1}, ${arg2}`;
@@ -474,26 +475,26 @@ Node.jsで使われているCommonJS形式のモジュールと考え方は一�
 #@# @suppress SentenceLength CommaNumber
 #@# prh:disable
 歴史的経緯により、TypeScriptでは先に説明した1つのJavaScriptファイルを1つのモジュールと捉えた形式のことを外部モジュール（External Modules）と呼び、関数を使って1つの名前空間を作り出す形式を内部モジュール（Internal Modules）と呼んでいました。
-しかし、ECMAScript 2015で本格的に"モジュール"の概念が定義されたため、TypeScriptでは今後はモジュールといえば外部モジュールの事を指し、内部モジュールの事は@<code>{namespace}と呼ぶようになりました。
+しかし、ECMAScript 2015で本格的に"モジュール"の概念が定義されたため、TypeScriptでは今後はモジュールといえば外部モジュールを指し、内部モジュールのことは@<code>{namespace}と呼ぶようになりました。
 これにあわせて、内部モジュールの記法も旧来の@<code>{module}から@<code>{namespace}に変更されました。
-未だに@<code>{module}を使う事もできますが、今後は@<code>{namespace}を使ったほうがよいでしょう。
+未だに@<code>{module}を使うこともできますが、今後は@<code>{namespace}を使ったほうがよいでしょう。
 
 #@# prh:disable
 本書でも、これ以降は単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指すこととします。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 仕様としてモジュールが策定され、whatwgでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。
-これから新規にプロジェクトを作成する場合はNode.js、ブラウザにかかわらず、モジュールを使って構成するべきでしょう。
+これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
 
 === モジュール
 
 モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。
-@<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照することができます。
+@<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照できます。
 ここでは、./fooがひとつのモジュールとして扱われます。
 
 #@# @suppress CommaNumber
 TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。
-いずれの形式で出力するかについてはコンパイル時に@<code>{--module commonjs}などの形式で指定することができます。
+いずれの形式で出力するかについてはコンパイル時に@<code>{--module commonjs}などの形式で指定できます。
 
 本書ではNode.jsでもBrowserifyやWebPackで広く利用しやすいCommonJS形式についてのみ言及します。
 対応形式の中ではAMDやSystemJSについては癖が強く、tscに与えることができるオプションの数も多いため興味がある人は自分で調べてみてください。
@@ -505,7 +506,7 @@ foo.ts（@<list>{externalModule/foo}）、bar.ts（@<list>{externalModule/bar}�
 
 //list[externalModule/foo][foo.ts]{
 #@mapfile(../code/typescript-basic/externalModule/foo.ts)
-// defaultをbarに hello関数をそのままimport
+// defaultをbarという名前に hello関数をそのままの名前でimport
 import bar, { hello } from "./bar";
 // モジュール全体をbar2に束縛
 import * as bar2 from "./bar";
@@ -550,8 +551,10 @@ export default function(word = "default") {
 function bye(word = "TypeScript") {
   return `Good bye, ${word}`;
 }
-// foo.ts でECMAScript 2015形式でimportする時に次のエラーが出るのを抑制するためのハック
-// error TS2497: Module '"略/buzz"' resolves to a non-module entity and cannot be imported using this construct.
+// foo.ts でECMAScript 2015形式でimportする際、
+// 次のエラーが出るのを抑制するためのハック
+// error TS2497: Module '"略/buzz"' resolves to a non-module entity
+//   and cannot be imported using this construct.
 namespace bye { }
 
 // CommonJS向け ECMAScript 2015では×
@@ -568,7 +571,7 @@ $ tsc --module commonjs --target es6 foo.ts
 $ cat foo.js
 #@mapfile(../code/typescript-basic/externalModule/foo.js)
 "use strict";
-// defaultをbarに hello関数をそのままimport
+// defaultをbarという名前に hello関数をそのままの名前でimport
 const bar_1 = require("./bar");
 // モジュール全体をbar2に束縛
 const bar2 = require("./bar");
@@ -622,10 +625,11 @@ module.exports = bye;
 
 === namespace
 
-現実的に自分でコードを書く時にはnamespaceを使わないほうがよいので、できればnamespaceについては説明したくないのですが、そうはいかない理由があります。
+現実的にコードを書く時にはnamespaceを使わないほうがよいのです。
+ですので、できればnamespaceについては説明したくないのですが、そうはいかない理由があります。
 それが、型定義ファイルの存在です。
 型定義ファイルの中ではインタフェースや関数などをきれいに取りまとめるためにnamespaceの仕組みを活用する場面がでてきます。
-そのため、TypeScriptのクンフーを積むうえでnamespaceは避けては通れないのです。
+そのため、TypeScriptの習熟度を高めるうえでnamespaceは避けては通れないのです。
 
 まずは簡単な例を見てみましょう（@<list>{internalModule/basic.ts}）。
 
@@ -730,7 +734,7 @@ console.log(d.e.hello());
 
 #@# @suppress JapaneseStyle
 長い名前を使うのが嫌なときは@<list>{internalModule/import}のように、import句を使うこともできます。
-先に説明したモジュールではこれとは異なるimport句の使い方が出てきましたが、区別するようにしましょう。
+先に説明したモジュールではこれとは異なるimport句の使い方が出てきましたが、区別しましょう。
 
 //list[internalModule/import][import句で別名を作る]{
 #@mapfile(../code/typescript-basic/internalModule/import.ts)

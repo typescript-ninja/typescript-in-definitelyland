@@ -3,7 +3,8 @@ let a: string | boolean | undefined;
 a = "str";
 a = true;
 // number はアカン。
-// error TS2322: Type 'number' is not assignable to type 'string | boolean | undefined'.
+// error TS2322: Type 'number' is not assignable
+//   to type 'string | boolean | undefined'.
 // a = 1;
 
 // b1 と b2 を合体させてみよう

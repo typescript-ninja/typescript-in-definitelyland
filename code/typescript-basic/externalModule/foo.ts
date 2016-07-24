@@ -1,4 +1,4 @@
-// defaultをbarに hello関数をそのままimport
+// defaultをbarという名前に hello関数をそのままの名前でimport
 import bar, { hello } from "./bar";
 // モジュール全体をbar2に束縛
 import * as bar2 from "./bar";

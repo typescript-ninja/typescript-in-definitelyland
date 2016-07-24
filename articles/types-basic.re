@@ -14,6 +14,8 @@ TypeScriptコードを書く分には使わない範囲（型定義ファイル�
 #@# NOTE https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#23-declarations
 まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
 別の言い方をすると、型定義と実装の差です。
+#@# OK REVIEW muo: variableなら値というより変数な雰囲気あるけどよくわからぬ
+#@# vv: variableが指す範囲がクラスとかまで含まれてしまうので… あとここは昔のわかめがそう訳したので今変えるのはちょっとつらいという事情もあり
 
 JavaやC#だと、おおむね両者は密接に結びついていて、そこの差で困ることは少ないです。
 筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。
@@ -21,7 +23,8 @@ JavaのGenericsの型パラメータは実行時には消されてしまうた�
 TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 
 情報として型が存在していても、値として存在していない。
-そういう場面はTypeScriptではたくさん遭遇するため、差を理解し積極的に活用できるようになるとTypeScript上級者といえるでしょう。
+そういう場面はTypeScriptではたくさん遭遇します。
+差を理解し積極的に活用できるようになるとTypeScript上級者といえるでしょう。
 
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
 実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
@@ -196,8 +199,10 @@ export { }
 //}
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-TypeScriptでできるコードの書き方の範疇では、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。
-関数+型アサーションを使ってanyに変換し無理やり回避する方法はありますが、使わないほうがよいでしょう。
+TypeScriptでは、クラスを定義しなければコンストラクトシグニチャにマッチするコードを書くことはできません。
+関数+型アサーション（要するにキャスト）を使ってanyに変換し無理やり回避する方法はありますが、使わないほうがよいでしょう。
+#@# OK REVIEW muo: 惜しいけど初出。なのでやるなら脚注へ
+#@# vv: カッコ書きを追加して誤魔化す…！
 
 #@# @suppress SuccessiveWord
 コンストラクトシグニチャも、コールシグニチャ同様にオーバーロードが可能で、引数毎に別々の型が返るような定義も可能です。
@@ -223,7 +228,8 @@ let objB: {
 let s1 = objA[1];
 
 // --noImplicitAny 付きだとちゃんとエラーになる
-// error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+// error TS7015: Element implicitly has an 'any' type
+//   because index expression is not of type 'number'.
 // var s2 = objA["test"];
 
 // インデックスの型指定が string の場合 string でも number でもOK
@@ -233,7 +239,7 @@ let s4 = objB["test"];
 // 当てはまる値はこんな感じ
 objA = {
   0: "str",
-  // オブジェクトリテラルで直接変数に代入する場合、変数の型に存在しない値があるとエラーになる
+  // オブジェクトリテラルで直接変数に代入する場合、型に存在しない値があるとエラーになる
   // error TS2322: Type
   //  '{ 0: string; str: string; }'
   //     is not assignable to type '{ [index: number]: string; }'.
@@ -270,7 +276,7 @@ export { s1, s3, s4 }
 
 ちなみに、TypeScriptは@<list>{objectTypeLiteral/indexAccessSample}のように、文字列リテラルによるアクセスも許可しています。
 
-//list[objectTypeLiteral/indexAccessSample][実は . アクセスと同じ堅牢さを誇る]{
+//list[objectTypeLiteral/indexAccessSample][実はドットによるアクセスと同じ堅牢さを誇る]{
 #@mapfile(../code/types-basic/objectTypeLiteral/indexAccessSample.ts)
 let obj = {
   str: "string",
@@ -327,7 +333,7 @@ obj = {
   },
 };
 
-// プロパティシグニチャ + 関数型 の別の書き方なだけだな！
+// プロパティシグニチャ + 関数型リテラル と実質同じ意味
 let obj2: {
   hello: (word: string) => string;
 };
@@ -338,14 +344,14 @@ export { }
 #@end
 //}
 
-"プロパティシグニチャ+関数な型"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
+"プロパティシグニチャ+関数型リテラル（後述）"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
 #@# @suppress
 === オブジェクトリテラルと厳密なチェック
 
-オブジェクト型リテラルの話とは厳密には関係はないですが、関わりが深いのでここでこの話題に触れていきます。
+オブジェクト型リテラルの話とは厳密には関係はないですが、関わりが深いのでここでこの話題について説明します。
 
-オブジェクトリテラルでもって値を作る時に、厳密なチェックが行われる場合があります。
+オブジェクトリテラルを使って値を作る時に、厳密なチェックが行われる場合があります。
 それは、値を直接何らかの型に当てはめた場合です。
 例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid}）。
 
@@ -394,13 +400,13 @@ export { }
 
 この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからない場合があるかもしれません。
 型定義ファイルを使っている場合、型定義ファイルに不足がある場合などもあり、正規の方法で攻略するのが難しい場合すらあります。
-その場合、型定義ファイルを修正したりしてほしいところですが、急いでいる場合は一旦別の変数に代入してから再代入することで回避できます。
-一旦別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、まだしもマシなやり方です。
+その場合、型定義ファイルを修正して対処してほしいところですが、急いでいる場合は一旦別の変数に代入してから再代入することで回避できます。
+一旦別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。
 
 === readonly修飾子
 
 TypeScript固有の機能であるreadonly修飾子について紹介します。
-readonlyと指定したプロパティは、読み取り専用となり変更を禁止することができます（@<list>{objectTypeLiteral/readonly}）。
+readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（@<list>{objectTypeLiteral/readonly}）。
 readonlyと変更された該当箇所が変更不可になるだけなので迂回路を使うと値は変更できてしまいます。
 
 //list[objectTypeLiteral/readonly][readonlyで読み取り専用にする]{
@@ -414,7 +420,8 @@ let objA: Foo = {
   str: "TypeScript",
 };
 // 上書きはできない！
-// error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+// error TS2450: Left-hand side of assignment expression
+//   cannot be a constant or a read-only property.
 // objA.str = "JavaScript";
 
 // 別にconstではないので迂回路から変更できてしまう
@@ -446,7 +453,8 @@ class Foo {
 
   modify() {
     // readonly が変更できるのはconstructorだけ！
-    // error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    // error TS2450: Left-hand side of assignment expression
+    //   cannot be a constant or a read-only property.
     // this.str = "JavaScript";
   }
 }
@@ -825,7 +833,7 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"とするこ
 ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
 代表的な例ではTypeの頭文字であるT、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。
 
-さて、ではlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid}を見てみます@<fn>{array-forEach}。
+さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid}を見てみます@<fn>{array-forEach}。
 
 //list[genericTypes/arrayDeclaration-invalid][Array<T>が登場する]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclaration-invalid.ts)
@@ -972,7 +980,7 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 #@end
 //}
 
-型パラメータが満たすべき制約をextendsの形式で指定することができます。
+型パラメータが満たすべき制約をextendsの形式で指定できます。
 これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。
 
 === 自分でジェネリクス有りのコードを書く

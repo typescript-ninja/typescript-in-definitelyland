@@ -9,7 +9,8 @@ let objB: {
 let s1 = objA[1];
 
 // --noImplicitAny 付きだとちゃんとエラーになる
-// error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+// error TS7015: Element implicitly has an 'any' type
+//   because index expression is not of type 'number'.
 // var s2 = objA["test"];
 
 // インデックスの型指定が string の場合 string でも number でもOK
@@ -19,7 +20,7 @@ let s4 = objB["test"];
 // 当てはまる値はこんな感じ
 objA = {
 	0: "str",
-	// オブジェクトリテラルで直接変数に代入する場合、変数の型に存在しない値があるとエラーになる
+	// オブジェクトリテラルで直接変数に代入する場合、型に存在しない値があるとエラーになる
 	// error TS2322: Type
 	//  '{ 0: string; str: string; }'
 	//     is not assignable to type '{ [index: number]: string; }'.

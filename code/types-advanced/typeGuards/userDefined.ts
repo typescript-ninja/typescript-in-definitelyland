@@ -12,7 +12,8 @@ function isSample(s: Sample): s is Sample {
 	if (!s) {
 		return false;
 	}
-	// とりあえず、strプロパティがあって値がstringならSample型コンパチということでOK という基準にする	
+	// とりあえず、strプロパティがあって値がstringなら
+	// Sample型に互換性あり！という基準にする	
 	return typeof s.str === "string";
 }
 

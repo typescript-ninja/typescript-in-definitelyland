@@ -106,7 +106,7 @@ $ cat tsconfig.json
 
 本書のサンプルコード用tsconfig.jsonを@<list>{tsconfig.json}に示します。
 まずはこの設定をベースに自分たちにとって都合のよいように設定値を変更したり制限を緩めたりすることをお勧めします。
-とりあえず、"include"や"exclude"の値は一般的なフォルダ構成ではないので変更したほうがよいでしょう。
+具体的に、"include"や"exclude"の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。
 
 //list[tsconfig.json][本書サンプルコード用のtsconfig.json]{
 #@mapfile(../tsconfig.json)
@@ -174,15 +174,15 @@ tsconfig.jsonの作成ができたら、後はコンパイルするだけです�
 具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
 
 tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
-しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクト1tsconfig.jsonにするようにしましょう。
+しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1tsconfig.jsonとなるようにしましょう。
 
-gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルが通せる環境を維持するのがよいでしょう。
+gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
 
 == エディタ・IDEの環境を整えよう
 
 Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
-TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういうメソッドがあるかどうかなどさまざまな情報を得ることができます。
+TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういう変数やメソッドがあるかどうかなどさまざまな情報を得ることができます。
 そのため、多くのIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。
 
 #@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
@@ -199,11 +199,12 @@ TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る
 
 現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
 Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
-Visual Studioの名を冠していますがElectronを利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。
+Visual Studioの名を冠していますがElectron@<fn>{electron}を利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。
 #@# OK REVIEW lc: s/Window/Windows/
 筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。
 
 tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。
-つまり、設定に手間をかけることなくTypeScriptコードを書くことを始められます。
+つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。
 
 //footnote[vscode][@<href>{https://code.visualstudio.com/}]
+//footnote[electron][@<href>{http://electron.atom.io/}]

@@ -1,5 +1,8 @@
 ={definition-file} JS資産と型定義ファイル
 
+#@# REVIEW muo: 6章けっこう長めなので章として切断できないかな。
+#@# REVIEW muo: 基礎編・応用編と分けるのはむずかしいかもしれないけど、「このへんまで頑張ったら一息つける」「ここまでやってくれる人はほめてあげよう」ぐらいに分かれていると、トピック拾いやすいかもしらん
+
 == JavaScriptの資産が使いたい！
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
@@ -204,12 +207,13 @@ TypeScriptコンパイラがこれらの型定義ファイルを認識できれ�
 #@end
 //}
 
-power-assertはテストコード中でimportしますが、実行時にテストランナーからセットアップされるmochaはソースコード中からの参照がありません。
-これはpower-assertはTypeScriptコンパイラが型定義を探しに行ってくれる契機があるけれど、mochaにはその機会がないわけです。
-そのため、このままコンパイルするとdescribeやitなどが見つからないと言われてしまいます。
+power-assertはテストコード中でimportしますが、テストランナーであるmochaの定義はソースコード中からの参照がありません。
+そのため、power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。
+しかし、mochaはそのような機会がないため、TypeScriptコンパイラは型定義を探しに行ってくれません。
+そのため、このままコンパイルするとmochaがグローバルに値を展開しているdescribeやitなどが見つからないと言われてしまいます。
 これを解決するために、tsconfig.jsonのtypesプロパティ中でmochaを参照するよう指定してやります。
 
-もしも、@typesを利用した型定義への参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。
+型定義ファイルへの参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。
 コンパイルに利用したファイルをリスト表示する@<code>{--listFiles}オプションと、型定義ファイルを見つけるためにコンパイラがどういう探索を行ったかを表示する@<code>{--traceResolution}オプションを試してみてください。
 
 == 型定義ファイルを書こう
@@ -281,7 +285,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 
 === テキトーに、やろー！
 
-一番最初にコレを書くのもどうかと思うのですが、まずは"使える"ようにすることが一番大切です。
+一番最初にコレを書くのもどうかと思うのですが、まずは"使える"ようにするのが一番大切です。
 
 型定義ファイルの品質の良さにこだわるあまり、完成しない、使いたいライブラリが使えない、というのがもっともよくない状態です。
 型定義ファイルの良し悪しを判断する力は、TypeScript自体の理解度に大きく依存します。
@@ -371,7 +375,7 @@ interface Foo {
   hello(): string;
 }
 
-// 同名のインタフェースを定義すると、合体される！
+// 同名のインタフェースを定義すると、合成される！
 interface Foo {
   bye(): string;
 }
@@ -398,7 +402,7 @@ export { }
 
 例をひとつ見てみましょう。
 String#trimStartは、文字列の先頭にある空白文字を取り除く機能です。
-本章執筆時点（2016年07月23日）では、この提案@<fn>{string-trimStart}はTC39のプロポーサルでstage 1で、TypeScriptにはまだ入ってきていません。
+本章執筆時点（2016年07月23日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 1@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
 そのため、Stringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart}）
 
 //list[interface/stringTrimStart][String#trimStartを生やす]{
@@ -419,9 +423,10 @@ console.log(str.trimStart());
 この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。
 相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。
 
-//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能になりました]
+//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能になりました @<href>{https://github.com/Microsoft/TypeScript/issues/3332}]
 #@# prh:disable
 //footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
+//footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
 
 === 幽霊モジュール
 
@@ -885,7 +890,7 @@ funcB(obj);
 //}
 
 この問題は@<href>{https://github.com/Microsoft/TypeScript/issues/5766}として管理されています。
-"Acceptiong PRs"ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていますがコミュニティの誰かがやる気を出せば修正される、という状態です。
+"Accepting PRs"ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていないけれどコミュニティの誰かがやる気を出せば修正される、という状態です。
 
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
 === モジュールの定義の統合
@@ -928,7 +933,7 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 
 === anyと{}とObject
 
-もしも型定義ファイルを書いていて具体的な型がわからなかったり、脳死状態だけどとりあえずコンパイルをで通したい場合、素直に@<code>{any}を使いましょう。
+もしも型定義ファイルを書いていて具体的な型がわからなかったり、頭を使わずにとりあえずコンパイルを通したい場合、素直に@<code>{any}を使いましょう。
 こういったシチュエーションで、稀にObjectを指定する人がいます。
 これはJavaScriptの仕様として、プロトタイプチェーンの頂点にいるのでObjectを使おう！と思ったのでしょうが、これはやめたほうがよいです。
 
@@ -954,7 +959,7 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 
 #@# @suppress KatakanaSpellCheck
 サンプルをテスト用コードとしてTypeScriptコードに移植し、ドキュメントどおりの記述が可能かも確かめるとよいです。
-型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例がコンパイルに通らないようであれば、それは悪い型定義であるといえます。
+型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例のコードをコンパイルしてみて失敗するようであれば、それは悪い型定義であるといえます。
 まぁ、たまにドキュメントのほうが間違っている場合があるのでその場合は修正のpull requestを送ったりするチャンスです。
 
 とはいえ、世の中ドキュメントにコストをあまり掛けることのできないプロジェクトも多くあります。
@@ -974,16 +979,20 @@ optionalとは、値が渡されるかどうかの指標であって、コール
 //list[callback/basic][optionalはもしかしたら値がないことを表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
 // 良い例
-declare function readFile(filePath: string, listener: (data: string) => void): void;
+declare function readFileA(
+  filePath: string,
+  listener: (data: string) => void): void;
 // 悪い例
-declare function readFileOpt(filePath: string, listener: (data?: string) => void): void;
+declare function readFileB(
+  filePath: string,
+  listener: (data?: string) => void): void;
 
 // 使ってみよう！
-readFile("./test.txt", data => {
+readFileA("./test.txt", data => {
   // ここでのdataは必ず実体がある
   console.log(data.toUpperCase());
 });
-readFileOpt("./test.txt", data => {
+readFileB("./test.txt", data => {
   // ここでのdataはundefinedかもしれない… チェックしなければダメ
   if (!data) {
     data = "not found";
@@ -992,10 +1001,10 @@ readFileOpt("./test.txt", data => {
 });
 
 // 引数を無視するのは自由 optionalにする理由にはならない
-readFile("./test.txt", () => {
+readFileA("./test.txt", () => {
   console.log("done");
 });
-readFileOpt("./test.txt", () => {
+readFileB("./test.txt", () => {
   console.log("done");
 });
 #@end
@@ -1008,7 +1017,7 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 これがもし、本当にundefinedになりうるのであれば省略可能にするか、union typesでundefinedを与える必要があります。
 しかし、そうではなく必ずdataの値が渡されてくる場合は、無用なチェック処理が発生することになります。
 
-間違えないよう、留意しておきましょう。
+間違えないよう、留意しましょう。
 
 #@# @suppress SectionLength ParagraphNumber
 === インタフェースのプリフィクスとしてIをつけるのはやめよう！
@@ -1031,8 +1040,8 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 さて、現在JavaScriptのモジュールの仕様は過渡期にあります。
 ECMAScript 2015でモジュールの記法や考え方は定義されましたが、実際にはブラウザにはまだ実装されていません。
 ブラウザ上でのスクリプトの読み込みは煩雑で、まだ実装のための仕様も固まっていない段階です。
+さらに、CommonJS形式のモジュールとの互換性なんて、ECMAScriptの仕様には含まれていません。
 
-もちろん、CommonJS形式のモジュールとの互換性なんて、ECMAScriptの仕様には含まれていません。
 そのため、TypeScriptやBabelなど、各種トランスパイラ毎にECMAScript 2015とCommonJS間の変換方法は食い違っています。
 TypeScriptが正しいのか、Babelが正しいのかなんて、そもそも仕様がないのだから正しいもへったくれもありません。
 TypeScriptもBabelもECMAScript 2015なモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。
@@ -1172,7 +1181,9 @@ var _util = require("./util");
 
 var _util2 = _interopRequireDefault(_util);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 (0, _util2.default)();
 //}
@@ -1265,7 +1276,7 @@ declare module "buzz" {
 
 #@# @suppress JapaneseAmbiguousNounConjunction ParenthesizedSentence
 TypeScriptではこういうパターンのときに使いやすい型定義ファイルの記述方法があります。
-しかし、TypeScript 2.0.0までは任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識される方法がなかったため、役に立ってはいませんでした。
+しかし、TypeScript 2.0.0までは任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識させる方法がなかったため、役に立ってはいませんでした。
 この形式が使われているのはDefinitelyTypedの@typesパッケージシリーズ（本書執筆時点ではtypes-2.0ブランチ）だけではないでしょうか。
 
 説明のために、strutilとstrutil-extraという架空のライブラリについて考えてみます。
@@ -1328,7 +1339,7 @@ declare global {
 //}
 
 既存モジュールの定義の拡張もできています。
-この形式だと、どのライブラリを拡張しているのか明示されるところが利点となります。
+この形式だと、どのライブラリを拡張しているのか明示されるところが利点です。
 
 さて、これらを@<code>{import ... from "strutil";}したりするためのtsconfig.jsonを確認しておきます（@<list>{augmentGlobal/tsconfig.json}）。
 baseUrlとpathsの指定があります。
@@ -1428,8 +1439,8 @@ TypeScriptではtslintというプログラムが一般的に使われていま�
 tslintのリポジトリは@<href>{https://github.com/palantir/tslint,こちら}@<fn>{tslint-repo}です。
 
 tslintはコンパイルだけでは見つけきれない、悪いにおいのするコードを検出してくれます。
-tslintはちょくちょく新しいルールが追加されたりするため、本書では詳しくは取り上げません。
-そのときそのときの最適な設定を突き詰めてみてください。
+tslintにはちょくちょく新しいルールが追加されたりするため、本書では詳しくは取り上げません。
+その時々の最適な設定を突き詰めてみてください。
 
 #@# @suppress SentenceLength
 tslintは必ず設定ファイルを必要とします。
@@ -1496,7 +1507,7 @@ npm, またはbowerに公開されている名前どおりか。
 
  1. CIが通っているか
  2. 破壊的変更が含まれていないか
- 3. ライブラリ本体のドキュメントまたは実装からその変更内容が妥当であるかの検証
+ 3. ライブラリ本体のドキュメントまたは実装と照らしあわせてその変更内容が妥当であるか
 
 これだけです。
 新規追加の場合は比較的レビューがガバガバなのですが、既存のものの変更はすでに利用している人に影響があるため、勢い慎重になってしまいます。
@@ -1518,7 +1529,7 @@ npm, またはbowerに公開されている名前どおりか。
 
 では、皆様のpull request、お待ちしています！
 
-== 自分のライブラリをnpmで公開するときにベストプラクティス
+== 自分のライブラリをnpmで公開するときのベストプラクティス
 
 自分の作ったライブラリをnpmに公開する時のベストプラクティスについて説明します。
 ここで説明するのはTypeScriptによってコードが書かれているライブラリを前提とします。
@@ -1528,7 +1539,7 @@ npm, またはbowerに公開されている名前どおりか。
 
 まずは@<strong>{.tsファイルをリリースに含めない}理由について説明します。
 これは、TypeScriptコンパイラの探索順序が.tsファイル、.tsxファイル、.d.tsファイルだからです。
-.d.tsファイルも公開していたとしても、.tsファイルも存在しているとそちらが先に発見され、コンパイル処理が走ってしまいます。
+.d.tsファイルも公開していたとしても、.tsファイルが存在しているとそちらが先に発見され、コンパイル処理が走ってしまいます。
 TypeScriptコンパイラのバージョンが上がった時にソースコード（.ts）の修正が必要になるケースは多いですが、型定義ファイル（.d.ts）が影響を受けるケースは稀です。
 つまり、自分のライブラリをより安定したものとするためには、.tsファイルをリリースに含めないほうがよいわけです。
 そのために、.npmignoreファイルに@<list>{npmignore}の記述を追加します。
@@ -1550,7 +1561,7 @@ lib/**/*.ts
  2. package.jsonにtypingsプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く
  3. package.jsonにtypesプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く
 
-1番はNode.jsが実行時にパッケージのrootにあるindex.jsを最初に読み込もうとする動作に似せた動作です。
+1番はNode.jsが実行時にパッケージのrootにあるindex.jsを最初に読み込もうとする挙動に似せた動作です。
 2番と3番はほぼおなじやり方ですが、3番のほうが最近追加されたやり方のため、2番か3番を選ぶのであれば3番にするのがよいでしょう。
 ちなみに、typingsとtypesプロパティの両方が存在する場合はtypingsプロパティが優先されます。
 

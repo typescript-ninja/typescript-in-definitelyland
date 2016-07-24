@@ -8,7 +8,8 @@ class Foo {
 
 	modify() {
 		// readonly が変更できるのはconstructorだけ！
-		// error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+		// error TS2450: Left-hand side of assignment expression
+		//   cannot be a constant or a read-only property.
 		// this.str = "JavaScript";
 	}
 }

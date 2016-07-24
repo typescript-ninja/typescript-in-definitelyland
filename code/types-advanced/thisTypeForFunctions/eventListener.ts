@@ -1,8 +1,14 @@
 // lib.dom.d.ts から抜粋
 // listenerの仮引数の先頭が偽の仮引数で、thisの型の指定が行われている
 interface HTMLBodyElement extends HTMLElement {
-	addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-	addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+	addEventListener(
+		type: "click",
+		listener: (this: this, ev: MouseEvent) => any,
+		useCapture?: boolean): void;
+	addEventListener(
+		type: string,
+		listener: EventListenerOrEventListenerObject,
+		useCapture?: boolean): void;
 }
 
 let el1: HTMLBodyElement = null as any;

@@ -1,4 +1,4 @@
-// オプショナルな引数の後に省略不可な引数がきてはいけない
+// 省略可能な引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
 function funcA(arg1?: string, arg2: string) {
 	return `Hello, ${arg1}, ${arg2}`;

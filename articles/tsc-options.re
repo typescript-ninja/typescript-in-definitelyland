@@ -6,7 +6,7 @@
 本章記載のオプションはtsconfig.jsonのcompilerOptionsに記載可能なプロパティ名と同一です。
 tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できないことに注意してください。
 
-ここに記載されていないオプションで、知りたいものがあればIssue@<fn>{issue}にお寄せください。
+ここに記載されていないオプションで、知りたいものがあれば本書のIssue@<fn>{issue}にお寄せください。
 
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
@@ -73,7 +73,7 @@ anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScri
 このオプションはnullやundefinedの扱いについてより厳格にし、変数の中身についての曖昧さを積極的に排除するよう振る舞います。
 nullやundefinedを許容させたい場合、union typesや省略可能引数を使って明示的にnullやundefinedである可能性を示さなければなりません。
 
-本書では、@<code>{--strictNullChecks}オプションは常に有効にしている前提で書いています。
+本書は@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
 有効にしている時の挙動は本書のサンプルすべてが該当しますので、この節ではこのオプションを使わないときの挙動について確認します。
 
 まずは、本書標準であるオプションありの例です（@<list>{strictNullChecks/basic}）。
@@ -130,7 +130,7 @@ export { }
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 ゆるゆるですね。
-変数の中身を容易にnullやundefinedにすることができてしまいます。
+変数の中身を容易にnullやundefinedにできてしまいます。
 きっちりコードを書けば、オプション無しでも堅牢なアプリケーションを構築することは不可能ではありません。
 しかし、それはプログラマの不断の努力の上にしか成り立ちません。
 そんな苦労をするよりは、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さがより確かなものになりますね。
@@ -171,7 +171,7 @@ export let objC = {};
 
 @<code>{--noUnusedParameters}オプションについて解説します。
 関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
-エラーにせず残しておきたい場合、変数名の頭に@<code>{_}（アンダースコア）をつけることでエラーを抑制することができます。
+エラーにせず残しておきたい場合、変数名の頭に@<code>{_}（アンダースコア）をつけることでエラーを抑制できます。
 
 例を見てみます（@<list>{noUnusedParameters/basic-invalid}）。
 

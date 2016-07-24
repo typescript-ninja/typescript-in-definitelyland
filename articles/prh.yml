@@ -43,6 +43,8 @@ rules:
     pattern:  /type guard(?!s)/
   - expected: 省略可能
     pattern:  オプショナル
+  - expected: プロポーザル
+    pattern:  プロポーサル
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode
@@ -50,3 +52,11 @@ rules:
     pattern:  MicroSoft
 #  - expected: macOS
 #    pattern:  Mac OS X
+
+# わかめの手癖チェック用
+#  - expected: ""
+#    pattern:  するように
+#    prh:      この"するように"、本当に必要？
+  - expected: ""
+    pattern:  することが
+    prh:      この"することが"、本当に必要？

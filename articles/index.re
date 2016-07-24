@@ -40,6 +40,8 @@ Version 2.0.0
 == 本書の内容
 
 本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{--noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
+各オプションの詳細については@<chapref>{tsc-options}を参照してください。
+
 また、Node.js、ブラウザを問わずモジュールの仕組みを使います。
 これはブラウザでの実行にはBrowserify@<fn>{browserify}なりWebPack@<fn>{webpack}なりのツールを使うことを前提とすることを意味します。
 また、targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
@@ -81,7 +83,7 @@ with構文やtry-catch構文などは、TypeScript的に使いにくい仕様に
 稀に、TypeScriptのリポジトリに「TypeScriptにLINQを導入してほしい」などというECMAScript仕様にない独自の要望が上がってくることがありますが、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。
 どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体に入れるよう努力する必要があるでしょう。
 
-//footnote[jonathandturner-left][過去にTypesの正式な仕様化について@<href>{https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#types,TC39ミーティングで話された}ことがあったがJonathand TurnerがMicrosoftを離れたため以後の進捗はよくない。]
+//footnote[jonathandturner-left][過去にTypesの正式な仕様化について@<href>{https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#types,TC39ミーティングで話された}ことがあったがJonathan TurnerがMicrosoftを離れたため以後の進捗はよくない。]
 
 == TypeScriptを選んだ時のデメリット
 
