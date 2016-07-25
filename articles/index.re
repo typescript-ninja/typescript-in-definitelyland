@@ -3,7 +3,9 @@
 
 == 本書について
 
-#@# TODO 書き直す
+//comment{
+#@# NOTE C90紙版では以下の文章は使わない。Web版を作る時に復活させる。
+
 #@# @suppress SentenceLength ParenthesizedSentence JapaneseAmbiguousNounConjunction
 本書はC87で頒布された型の国のTypeScriptの改訂版（C90版）です。
 あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c90/#typescript,C90で頒布されたReviced TypeScript in Definitelyland}の全文です。
@@ -17,6 +19,21 @@ PDF, epubとして入手したい場合は@<href>{https://griflet.net/github/typ
 C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
 この表紙のおかげで書名が決まりました。
 可愛い表紙を本当にありがとうございます！
+//}
+
+本書はC87で頒布された"型の国のTypeScript"の改訂版（C90版）です。
+前回頒布した時はTypeScript 1.3.0が安定版で、ちらほら1.4.1の形が見えている…という時期だったと記憶しています。
+そこから、本書の扱うTypeScript 2.0.0までの間にいくつもの魅力的な変更がありました。
+本書を改訂するにあたり、様々な「こういう制限に注意するように」や「この方法は使うべきではない」といった文章を削りました。
+こうして振り返ってみるとTypeScriptチームの大きな働き、コードの積み重ねに感謝するばかりです。
+
+本書に記載の内容は次のWebサイトにてC87版を全文を公開しています。
+@<href>{http://typescript.ninja/typescript-in-definitelyland/}
+なるべく夏コミから間をおかず、C90版に差し替えたいと考えています。
+しかしながら、Web公開版では表紙データは含まれませんので、ぜひここで入手していってください。
+内容は筆者のやる気次第で今後も更新されていく可能性がありますが、やる気は今回の売れ行きに左右されます。
+
+誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、本書リポジトリまで@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
 
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
