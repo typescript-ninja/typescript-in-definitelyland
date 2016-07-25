@@ -160,26 +160,22 @@ $ cat tsconfig.json
 #@end
 //}
 
-#@# @suppress SentenceLength
-tsconfig.jsonで利用可能なcompilerOptionsについては、@<chapref>{tsc-options}や@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html,公式ハンドブックの解説}@<fn>{handbook-tsconfig}、@<href>{http://json.schemastore.org/tsconfig,JSON Schemaの定義}@<fn>{schemastore-tsconfig}を参照してください。
-
-//footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
-//footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
+より詳しい説明は@<chapref>{tsc-options}を参照してください。
 
 == 試しにコンパイルしてみる
 
+#@# @suppress KatakanaSpellCheck
 tsconfig.jsonの作成ができたら、後はコンパイルするだけです。
 コンパイルの方法はtsconfig.jsonがあれば、どんな環境でも@<code>{--project}オプションを使うだけです。
 それ以外のオプションについてはtsconfig.jsonにすべて記述されています。
 具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
 
-tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
-しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1tsconfig.jsonとなるようにしましょう。
+これについてもより詳しい説明は@<chapref>{tsc-options}を参照してください。
 
-gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
-
+#@# @suppress KatakanaSpellCheck
 == エディタ・IDEの環境を整えよう
 
+#@# @suppress KatakanaSpellCheck
 Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
 TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういう変数やメソッドがあるかどうかなどさまざまな情報を得ることができます。
@@ -187,6 +183,7 @@ TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る
 
 #@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
 
+#@# @suppress SentenceLength
 興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]

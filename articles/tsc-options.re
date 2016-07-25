@@ -11,8 +11,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
 #@# TODO 以下のオプションについてじわじわ書く
-#@#   --init
-#@#   --project
 #@#   --declaration, --declarationDir
 #@#   --listFiles
 #@#   --noEmitOnError
@@ -29,9 +27,132 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --noImplicitUseStrict
 #@# TODO 短縮形の紹介
 
-==== --noImplicitAny
+== --init
 
-TypeScriptコンパイラの最重要オプション、--noImplicitAnyについて解説します。
+@<code>{--init}オプションについて解説します。
+このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
+生成されたファイルは後述の@<code>{--project}オプションと組み合わせて使います。
+TypeScriptではプロジェクトのビルドに必要なコンパイルオプションや、コンパイル対象の指定などをこのファイルにまとめていきます。
+このファイルはすべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。
+
+まずは@<code>{tsc --init}コマンドで生成されるtsconfig.jsonを見てみます（@<list>{init/default/tsconfig.json}）。
+
+//list[init/default/tsconfig.json][生成されたtsconfig.json]{
+#@mapfile(../code/tsc-options/init/default/tsconfig.json)
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": false
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+#@end
+//}
+
+tsconfig.jsonに記述可能なプロパティは概ね次の4つです。
+
+ * compilerOptions
+ * files
+ * include
+ * exclude
+
+compilerOptionsには、コンパイル時に利用するオプションを指定します。
+コンパイルオプションの名前とcompilerOptionsに記載可能なプロパティ名は一致しています。
+たとえば、@<list>{init/default/tsconfig.json}は@<code>{tsc --module commonjs --target es5}という意味になります。
+@<code>{--noImplicitAny}と@<code>{--sourceMap}の値はfalseなのでオプションとして指定していない状態を指します。
+
+#@# @suppress SentenceLength CommaNumber
+tsconfig.jsonで利用可能なcompilerOptionsについては、本章を読むか@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html,公式ハンドブックの解説}@<fn>{handbook-tsconfig}や@<href>{http://json.schemastore.org/tsconfig,JSON Schemaの定義}@<fn>{schemastore-tsconfig}を参照してください。
+
+残る3つはコンパイル対象にするファイルを指定するためのプロパティです。
+3つすべてに共通の挙動として、コンパイル対象に明示的に含めない場合でもTypeScriptコンパイラが自動的に依存関係を解決し必要なファイルを対象に含めてくれる場合があります。
+この機能は歓迎すべき機能で、余計な設定の手間を減らしてくれます。
+
+filesには、コンパイル対象にするファイルを1つ1つ列挙します。
+これがあまりにも面倒くさいため、tsconfig-cli@<fn>{tsconfig-cli}などのツールを利用する必要がありました。
+これの反省を踏まえ、次に説明するinclude、excludeが導入されました。
+
+include、excludeはコンパイル対象とするファイルやフォルダを大まかに指定します。
+includeとexcludeを全く指定しない場合、TypeScriptコンパイラは処理中のディレクトリやサブディレクトリ配下を調べ、すべての.tsファイルや.tsxファイルをコンパイルしようとします。
+
+そこで、includeで調べるディレクトリやファイルを、excludeで除外するディレクトリやファイルを指定し処理対象を限定します。
+この2つは組み合わせて使うのが一般的です。
+ディレクトリを指定すると、そこに含まれるすべての.tsファイルと.tsxファイルが対象になります。
+また、簡単なワイルドカードも利用できます。
+例を見てみましょう（@<list>{init/globSyntax/tsconfig.json}）。
+
+//list[init/globSyntax/tsconfig.json][使えるワイルドカードの例]{
+#@mapfile(../code/tsc-options/init/globSyntax/_tsconfig.json)
+{
+    "compilerOptions": {
+        "listFiles": true, // コンパイルの処理対象を表示する
+        "noEmit": true     // コンパイル結果の.jsファイルなどを出力しない
+    },
+    "include": [
+        /// ディレクトリのワイルドカード
+        // /**/ で全てのサブフォルダ
+        "libA/**/*",
+        // /*/ で直下のサブフォルダ
+        "libB/*/*",
+
+        /// 文字のワイルドカード
+        // * で0文字以上にマッチする
+        "libC/*.ts",
+        // ? で1文字にマッチする
+        "libD/?b.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        // 除外でも同じようにワイルドカードが使える
+        "libD/b*.ts"
+    ]
+}
+#@end
+//}
+
+このtsconfig.jsonを利用してみます。
+@<list>{init/globSyntax/result}はプロジェクト内部に存在するts関連ファイルと、ファイルが処理されるかされないかを突き合わせたものです。
+
+//list[init/globSyntax/result][ファイル一覧とマッチの結果]{
+libA/a/index.ts    # 対象になる
+libA/a/b/index.ts  # 対象になる
+libB/index.ts      # 対象にならない
+libB/a/index.ts    # 対象になる
+libC/index.ts      # 対象になる
+libC/index.tsx     # 対象にならない
+libD/ab.ts         # 対象になる
+libD/ac.ts         # 対象にならない
+libD/bb.ts         # 対象にならない（exclude）
+//}
+
+なかなか素直な結果です。
+単にワイルドカードであって、正規表現で記述できるわけではない点に注意しましょう。
+
+//footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
+//footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
+//footnote[tsconfig-cli][@<href>{https://www.npmjs.com/package/tsconfig-cli}]
+
+== --project
+
+@<code>{--project}オプションについて解説します。
+短縮記法で@<code>{-p}も利用できます。
+
+このオプションでプロジェクトのコンパイルを行います。
+オプションの値としてtsconfig.jsonがあるディレクトリか、tsconfig.jsonのパスを指定します。
+具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
+
+tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
+しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1tsconfig.jsonとなるようにしましょう。
+
+gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
+
+== --noImplicitAny
+
+TypeScriptコンパイラの最重要オプション、@<code>{--noImplicitAny}について解説します。
 このオプションは"暗黙的なanyを禁ずる"の名が表すとおり、型推論の結果、暗黙的に変数の型がanyになった場合、エラーとしてくれます。
 
 @<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
@@ -258,6 +379,7 @@ export { testB }
 == --target
 
 @<code>{--target}オプションについて解説します。
+短縮記法で@<code>{-t}も利用できます。
 TypeScriptのコンパイルを行う際、ECMAScript 3（超古い！）、ECMAScript 5（古い！）、ECMAScript 2015（最近）のどのバージョンをターゲットとするかを指定します。
 これは、"TypeScriptコードをどのバージョンで書くか"ではなく、"書いたTypeScriptをどのバージョンに変換するか"の指定です。
 TypeScriptでは基本的に最新の記法で書き、ダウンパイル（古い書き方へ変換）します。
@@ -277,6 +399,7 @@ es3の利用はもはやお勧めしません。
 == --module, --moduleResolution
 
 @<code>{--module}オプションについて解説します。
+短縮記法で@<code>{-m}も利用できます。
 TypeScriptはモジュールをコンパイルする際に、どの形式に変換するかを選ぶことができます。
 
 利用可能なオプションの値は次のとおりです。
