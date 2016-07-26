@@ -500,6 +500,8 @@ TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015に
 対応形式の中ではAMDやSystemJSについては癖が強く、tscに与えることができるオプションの数も多いため興味がある人は自分で調べてみてください。
 筆者は両形式はあまり筋がよいとは今のところ思っていませんけれど。
 
+#@# REVIEW lc: s/WebPack/Webpack/
+
 #@# @suppress SentenceLength CommaNumber
 さて、実際のコード例を見てみましょう。
 foo.ts（@<list>{externalModule/foo}）、bar.ts（@<list>{externalModule/bar}）、buzz.ts（@<list>{externalModule/buzz}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
