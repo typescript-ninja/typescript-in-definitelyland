@@ -1,4 +1,3 @@
-#@# @suppress JapaneseAmbiguousNounConjunction
 ={index} Revised 型の国のTypeScript
 
 == 本書について
@@ -24,7 +23,7 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 本書はC87で頒布された"型の国のTypeScript"の改訂版（C90版）です。
 前回頒布した時はTypeScript 1.3.0が安定版で、ちらほら1.4.1の形が見えている…という時期だったと記憶しています。
 そこから、本書の扱うTypeScript 2.0.0までの間にいくつもの魅力的な変更がありました。
-本書を改訂するにあたり、様々な「こういう制限に注意するように」や「この方法は使うべきではない」といった文章を削りました。
+本書を改訂するにあたり、さまざまな「こういう制限に注意するように」や「この方法は使うべきではない」といった文章を削りました。
 こうして振り返ってみるとTypeScriptチームの大きな働き、コードの積み重ねに感謝するばかりです。
 
 本書に記載の内容は次のWebサイトにてC87版を全文を公開しています。
@@ -59,15 +58,18 @@ Version 2.0.0
 本書は@<code>{--noImplicitAny}, @<code>{--strictNullChecks}, @<code>{--noImplicitReturns}, @<code>{--noImplicitThis}を有効にした状態を基本として解説します。
 各オプションの詳細については@<chapref>{tsc-options}を参照してください。
 
+#@# prh:disable
 また、Node.js、ブラウザを問わずモジュールの仕組みを使います。
-これはブラウザでの実行にはBrowserify@<fn>{browserify}なりWebPack@<fn>{webpack}なりのツールを使うことを前提とすることを意味します。
+これはブラウザでの実行にはBrowserify@<fn>{browserify}なりwebpack@<fn>{webpack}なりのツールを使うことを前提とすることを意味します。
 また、targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
 
 また、TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。
 興味がある方は@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html,公式のドキュメント}@<fn>{jsx}を参照してください。
 
+#@# prh:disable
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法と、Visual Studio Codeの設定について言及します。
 
+#@# prh:disable
 @<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、このあとの章を読み解くための基礎知識を蓄えます。
 
 @<chapref>{types-basic}では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。
@@ -79,6 +81,7 @@ Version 2.0.0
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説とその書き方と、ついでにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
 //footnote[browserify][@<href>{http://browserify.org/}]
+#@# prh:disable
 //footnote[webpack][@<href>{https://webpack.github.io/}]
 //footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
@@ -109,6 +112,7 @@ JavaScriptの書き方に加え、TypeScriptで型注釈を与える記法を学
 基本的な書き方はすぐに習得できると思いますが、既存のJavaScriptライブラリと組み合わせようとしたときに専用の知識が必要になります。
 本書ではそのための専用の知識について解説し、TypeScriptを自由自在に使いこなすためのお手伝いをします。
 
+#@# prh:disable
 その他の懸念としてTypeScriptにロックインされてしまうのでは？という不安を耳にすることがあります。
 これについては脱出口が用意されています。
 TypeScriptできれいに書いたコードは@<code>{--target es6}で出力すると、単に型注釈を取り除いただけの素直なJavaScriptが出力されてきます。

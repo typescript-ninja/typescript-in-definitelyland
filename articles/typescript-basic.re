@@ -496,11 +496,12 @@ Node.jsで使われているCommonJS形式のモジュールと考え方は一�
 TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。
 いずれの形式で出力するかについてはコンパイル時に@<code>{--module commonjs}などの形式で指定できます。
 
-本書ではNode.jsでもBrowserifyやWebPackで広く利用しやすいCommonJS形式についてのみ言及します。
+#@# prh:disable
+本書ではNode.jsでもBrowserifyやwebpackで広く利用しやすいCommonJS形式についてのみ言及します。
 対応形式の中ではAMDやSystemJSについては癖が強く、tscに与えることができるオプションの数も多いため興味がある人は自分で調べてみてください。
 筆者は両形式はあまり筋がよいとは今のところ思っていませんけれど。
 
-#@# REVIEW lc: s/WebPack/Webpack/
+#@# OK REVIEW lc: s/WebPack/Webpack/
 
 #@# @suppress SentenceLength CommaNumber
 さて、実際のコード例を見てみましょう。

@@ -8,7 +8,7 @@ declare let $: any;
 declare module "sample/*";
 
 
-// WebPackなど特殊なローダー用
+// webpackなど特殊なローダー用
 declare module "json!*";
 
 // 同上
