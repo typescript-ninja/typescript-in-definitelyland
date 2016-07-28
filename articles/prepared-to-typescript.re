@@ -148,6 +148,7 @@ $ cat tsconfig.json
         "node_modules",
         "code/definition-file/usage/",
         "code/definition-file/augmentGlobal/",
+        "code/definition-file/issue9831/",
         "code/**/*-invalid.ts",
         "code/**/*-invalid.d.ts",
         "code/**/invalid.ts",
