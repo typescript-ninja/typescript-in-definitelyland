@@ -263,6 +263,7 @@ TypeScriptはJavaScriptに対して後付で型による制約を付け足した
 
 IDE上で使いやすいこと、というのは、Visual Studio Codeなどでコードを書く上で入力補完の候補が不用意に出過ぎないようにして見通しのよい開発を助けることなどが含まれます。
 
+#@# @suppress JapaneseStyle
 #@# prh:disable
 これら3つを守ることが"良い品質であること"に繋がるというのは、TypeScript自体が型指定を行うことで間違ったコードを書きにくいようにするツールであると考えると納得がいくでしょう。
 
@@ -959,7 +960,7 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 
 #@# @suppress KatakanaSpellCheck
 サンプルをテスト用コードとしてTypeScriptコードに移植し、ドキュメントどおりの記述が可能かも確かめるとよいです。
-型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例のコードをコンパイルしてみて失敗するようであれば、それは悪い型定義であるといえます。
+型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例のコードをコンパイルしてみて失敗するようであれば、それは悪い型定義だといえます。
 まぁ、たまにドキュメントのほうが間違っている場合があるのでその場合は修正のpull requestを送ったりするチャンスです。
 
 とはいえ、世の中ドキュメントにコストをあまり掛けることのできないプロジェクトも多くあります。
@@ -1010,6 +1011,7 @@ readFileB("./test.txt", () => {
 #@end
 //}
 
+#@# @suppress JapaneseStyle
 両方とも、ファイルの読み取りを行うための関数を型定義として書き起こしたものです。
 readFileはdataが省略不可、readFileOptはdataが省略可能（optional）になっています。
 これは、readFileOptではdataがundefinedになるかもしれないことを表します。
@@ -1388,6 +1390,7 @@ strutilExtra.happy("TypeScript");
 なるほど。
 @<code>{export as namespace ...}形式を使わないUMD形式の対応方法もありますが、importと混ぜるとエラーになるところがよいですね。
 
+#@# @suppress JapaneseStyle
 モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module}）。
 普通にモジュールであるかのように利用できますね。
 

@@ -6,6 +6,7 @@
 Node.jsのセットアップはすでに完了しているものとします。
 筆者はNode.jsのインストールとバージョン管理に@<href>{https://github.com/hokaccha/nodebrew#nodebrew,nodebrew}@<fn>{nodebrew}を利用しています。
 
+#@# @suppress JapaneseStyle
 TypeScriptのインストールには、Node.jsのパッケージマネージャである@<kw>{npm, Node Package Manager}を利用します。
 TypeScriptをインストールすると、tscというコマンドが利用可能になります。
 tscコマンドでTypeScriptコードのコンパイルを行います。
