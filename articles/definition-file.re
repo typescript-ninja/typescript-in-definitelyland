@@ -56,12 +56,16 @@ power-assertの型定義ファイルが依存しているモジュールの型�
 既存ライブラリに対する型定義ファイルは、基本的に@types/の下に元ライブラリのnpmでのパッケージ名と同じ名前で公開される運用です。
 パッケージの検索は@<href>{https://microsoft.github.io/TypeSearch/,TypeSearch}@<fn>{typesearch}で行うか、npm searchを使うとよいでしょう。
 
+また、@typesで導入した型定義ファイルの検索は、モジュールの解決方法（@<code>{--moduleResolution}）がnodeのときのみ行われます@<fn>{issue9831}。
+AMDなどを利用したい場合、現時点では@<code>{--moduleResolution node}を指定するようにしましょう。
+
 //footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
 //footnote[scoped-package][@xxx/ から始まる名前空間が区切られたnpm packageのこと @<href>{https://docs.npmjs.com/misc/scope}]
 //footnote[tsd][@<href>{https://www.npmjs.com/package/tsd}]
 //footnote[dtsm][@<href>{https://www.npmjs.com/package/dtsm}]
 //footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
 //footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
+//footnote[issue9831][@<href>{https://github.com/Microsoft/TypeScript/issues/9831}]
 
 ===[column] @typesとDefinitelyTypedの今
 

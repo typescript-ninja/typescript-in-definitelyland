@@ -1,0 +1,8 @@
+{
+  "name": "issue9831",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/angular": "^1.5.8"
+  }
+}
