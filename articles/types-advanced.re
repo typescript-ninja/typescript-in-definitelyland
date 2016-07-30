@@ -251,26 +251,43 @@ export { }
 
 最後に、関数が絡んだ場合の例を見ておきます（@<list>{typeGuards/controlFlowBasedFunction-invalid}）。
 関数の内側と外側では、処理フローは別世界です。
-言われてみれば当然ですが、関数はいつ実行されるかわからないため、関数の内側で別途絞込みを行う必要があります。
+関数はいつ実行されるかわからないため、変数の再代入が可能な場合、関数の内側で別途絞込みを行う必要があります。
+一方、constを使うと変数の値を変えることができないため、この問題を回避できる場合があります。
 
 //list[typeGuards/controlFlowBasedFunction-invalid][関数の外側でのフローは内側では関係ない]{
 #@mapfile(../code/types-advanced/typeGuards/controlFlowBasedFunction-invalid.ts)
-let v: string | number;
+let v1: string | number;
+if (typeof v1 === "string") {
+  let f = () => {
+    // これはエラーになる！
+    // プログラムの字面的にはstringに確定されていそう…
+    // しかし、関数はいつ実行されるかわからない
+    // error TS2339: Property 'toUpperCase'
+    //   does not exist on type 'string | number'.
+    console.log(v1.toUpperCase());
+  };
+  // ここではvはまだstring
+  f();
 
-v = "string";
+  // ここでvがnumberに！
+  v1 = 1;
+  f();
+}
 
-let f = () => {
-  // これはエラーになる！
-  // プログラムの字面的にはstringに確定されていそうだが、関数はいつ実行されるかわからない
-  // error TS2339: Property 'toUpperCase' does not exist on type 'string | number'.
-  console.log(v.toUpperCase());
-};
-// ここではvはまだstring
-f();
+// letではなくてconstを使うと…
+const v2: string | number = null as any;
+if (typeof v2 === "string") {
+  let f = () => {
+    // v2の中身が入れ替えられる可能性はないのでエラーにならない
+    console.log(v2.toUpperCase());
+  };
+  f();
 
-// ここでvがnumberに！
-v = 1;
-f();
+  // constなので再代入しようとするとエラーになる
+  // error TS2450: Left-hand side of assignment expression
+  //   cannot be a constant or a read-only property.
+  v2 = 1;
+}
 #@end
 //}
 
