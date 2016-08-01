@@ -1416,7 +1416,7 @@ interface Config {
   verbose?: boolean;
 }
 
-// 呼び出し元で値をしっかり代入していても
+// 呼び出し元で値をしっかり代入していても...
 let config: Config = {};
 config.filePath = "settings.json";
 config.verbose = false;
@@ -1426,12 +1426,9 @@ function processA(config: Config = {}) {
   // よって、! で無理やりエラーを消す必要がある
   if (fs.existsSync(config.filePath!)) {
     console.log(fs.readFileSync(config.filePath!, "utf8"));
-  } else {
-    console.error(`${config.filePath} is not exists`);
   }
 }
 
-processB();
 function processB(config: Config = {}) {
   // 関数内で初期値を設定してやるとエラーを解消できる（かしこい）
   config.filePath = config.filePath || "settings.json";
@@ -1440,8 +1437,6 @@ function processB(config: Config = {}) {
   // 初期値設定済なので ! 不要
   if (fs.existsSync(config.filePath)) {
     console.log(fs.readFileSync(config.filePath, "utf8"));
-  } else {
-    console.error(`${config.filePath} is not exists`);
   }
 
   // undefinedではなくした結果は関数をまたいで引き継がれない
@@ -1449,13 +1444,12 @@ function processB(config: Config = {}) {
   processA(config);
 }
 
-// ? 除去版を作ってみる
+// Configのundefinedとnull無し版
 interface ConfigFixed {
   filePath: string;
   verbose: boolean;
 }
 
-processC();
 function processC(config: Config = {}) {
   // ? 除去版に値を詰め替える
   const fixed: ConfigFixed = {
@@ -1465,12 +1459,58 @@ function processC(config: Config = {}) {
 
   if (fs.existsSync(fixed.filePath)) {
     console.log(fs.readFileSync(fixed.filePath, "utf8"));
-  } else {
-    console.error(`${config.filePath} is not exists`);
   }
 }
+
+export { Config, processB, processC }
 #@end
 //}
 
-人間がundefinedやnullではないと確信できる場合、エラーになっている箇所の末尾に@<code>{!}をつけていきます。
+人間がundefinedやnullではないと確信できる場合、エラーとなる箇所の末尾に@<code>{!}をつけていきます。
 これをなるべく使わない手段として、使う前に初期値を代入したり、undefinedやnullを含まない型の値に詰め直すなどが考えられます。
+他の方法も見てみます（@<list>{nonNullAssertionOperator/intersectionTypes}）。
+先に見た@<list>{nonNullAssertionOperator/basic}も併せ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょうか。
+
+//list[nonNullAssertionOperator/intersectionTypes][デフォルト値と付き合う]{
+#@mapfile(../code/types-advanced/nonNullAssertionOperator/intersectionTypes.ts)
+interface Config {
+  filePath?: string | null;
+  verbose?: boolean;
+}
+
+// Configのundefinedとnull無し版
+interface ConfigFixed {
+  filePath: string;
+  verbose: boolean;
+}
+
+let config: Config = {
+  verbose: true,
+};
+// filledの型は {} & ConfigFixed & Config
+// assignの定義が引数4つまではintersection typesで定義されているため
+// assign<T, U, V>(target: T, source1: U, source2: V): T & U & V; が実際の定義
+let defaultConfig: ConfigFixed = { filePath: "settings.json", verbose: false };
+let filled = Object.assign({}, defaultConfig, config);
+
+// ConfigとConfigFixedには直接の互換性はない！
+// error TS2322: Type 'Config' is not assignable to type 'ConfigFixed'.
+//   Types of property 'filePath' are incompatible.
+//     Type 'string | undefined' is not assignable to type 'string'.
+//       Type 'undefined' is not assignable to type 'string'.
+// let fixed: ConfigFixed = config;
+
+// filledはfilePathとverboseが存在することが確定しているのでConfigFixedと互換性がある！
+let fixed: ConfigFixed = filled;
+console.log(fixed);
+
+export { ConfigFixed, fixed }
+#@end
+//}
+
+Control flow based type analysisが賢く処理してくれることに賭けるか、@<code>{Object.assign}などを使い、intersection typesを上手く活用します。
+
+#@# @suppress SentenceLength ParenthesizedSentence
+他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。
+筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリにIssue（@<href>{https://github.com/Microsoft/TypeScript/issues/10065}）を立てています。
+もし興味があれば覗いてみて、何か意見を書いていってください。
