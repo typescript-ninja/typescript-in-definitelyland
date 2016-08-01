@@ -1045,7 +1045,7 @@ fluentな、メソッドチェーンで使うAPIを組み立てる場合に役�
 @<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-== 関数のthisの型の指定（Specifying this types for functions）
+== 関数のthisの型の指定（Specifying This Types For Functions）
 
 JavaScriptでは@<code>{Function.prototype.bind}や@<code>{Function.prototype.call}、@<code>{Function.prototype.apply}などの関数により、関数呼び出し時のthisの値の型を変更できます。
 この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。
