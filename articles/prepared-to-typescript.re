@@ -1,7 +1,7 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
 #@# @suppress SectionLength
-== まずはインストールしてみよう
+== インストールしてみよう
 
 Node.jsのセットアップはすでに完了しているものとします。
 筆者はNode.jsのインストールとバージョン管理に@<href>{https://github.com/hokaccha/nodebrew#nodebrew,nodebrew}@<fn>{nodebrew}を利用しています。
@@ -29,8 +29,9 @@ var Sample = (function () {
 }());
 //}
 
-なお、本書執筆時点では@<code>{npm install -g typescript}で導入されるTypeScriptバージョンは1.8.10です。
+なお、本書執筆時点では@<code>{npm install -g typescript}で導入できるTypeScriptバージョンは1.8.10です。
 2.0.0以降が使いたい場合はしばらくの間は@<code>{npm install -g typescript@beta}とする必要があります。
+
 ともあれ、これで準備は整いました。
 
 cutting edgeな最新版コンパイラを利用したい場合は次の手順で行います。
@@ -59,9 +60,10 @@ Version 2.0.0
 //}
 
 この、@<code>{node_modules/.bin}にはプロジェクトローカルに導入された実行ファイルが集められています。
-@<code>{npm bin}コマンドを実行するとこのパスが得られます。
-このため、macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが取得できます。
-さらに、npm scriptsでは$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
+@<code>{npm bin}コマンドを実行するとパスが得られます。
+macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが取得できます。
+
+さらにnpm scriptsでは$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
 このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
 
 //cmd{
@@ -103,11 +105,11 @@ $ cat tsconfig.json
 //}
 
 この設定ではTypeScriptが利用できる制約の多くをONにしていないため、完全にガバガバな設定です。
-一番最初に利用する例としてはいいかもしれませんが、運用するにあたってこのままではTypeScriptが与える堅牢さのすべてを享受することはできません。
+一番最初に利用する例としてはいいかもしれませんが、運用するにあたってTypeScriptが与える堅牢さのすべてを享受することはできません。
 
 本書のサンプルコード用tsconfig.jsonを@<list>{tsconfig.json}に示します。
-まずはこの設定をベースに自分たちにとって都合のよいように設定値を変更したり制限を緩めたりすることをお勧めします。
-具体的に、"include"や"exclude"の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。
+この設定をベースに自分たちにとって都合がよい設定値へ変更したり制限を緩めたりすることをお勧めします。
+具体的に"include"や"exclude"の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。
 
 //list[tsconfig.json][本書サンプルコード用のtsconfig.json]{
 #@mapfile(../tsconfig.json)
@@ -170,26 +172,26 @@ $ cat tsconfig.json
 == 試しにコンパイルしてみる
 
 #@# @suppress KatakanaSpellCheck
-tsconfig.jsonの作成ができたら、後はコンパイルするだけです。
+tsconfig.jsonができたら、後はコンパイルするだけです。
 コンパイルの方法はtsconfig.jsonがあれば、どんな環境でも@<code>{--project}オプションを使うだけです。
 それ以外のオプションについてはtsconfig.jsonにすべて記述されています。
 具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
 
-これについてもより詳しい説明は@<chapref>{tsc-options}を参照してください。
+本節についてもより詳しい説明は@<chapref>{tsc-options}を参照してください。
 
 #@# @suppress KatakanaSpellCheck
 == エディタ・IDEの環境を整えよう
 
 #@# @suppress KatakanaSpellCheck
-Atom, Eclipse, Emacs, Vim, Visual Studio, WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
+Atom、Eclipse、Emacs、Vim、Visual Studio、WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
-TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体からどういう変数やメソッドがあるかどうかなどさまざまな情報を得ることができます。
-そのため、多くのIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。
+TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体から変数の種類やメソッドの有無などの情報を得えられます。
+そのため多数のIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。
 
 #@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
 
 #@# @suppress SentenceLength
-興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
+language serviceに興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 

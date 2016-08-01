@@ -7,12 +7,12 @@
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。
 ECMAScript 2015の知識はどんどん広まってきていますし、今後は基本的なJavaScriptの知識になっていくでしょう。
-ECMAScriptの基本的な知識は、TypeScript固有の知識ではないですからね。
+ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 この章ではTypeScriptでの基本的な構文を解説します。
 まずは、TypeScriptを使うのに必要最低限の知識を身につけていきましょう。
 
-型周りの基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
+型の基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
 既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
 
 #@# @suppress CommaNumber
@@ -27,8 +27,10 @@ ECMAScriptの基本的な知識は、TypeScript固有の知識ではないです
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{variable/withAnnotations}@<fn>{suppress-warning}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
+違うのは、@<list>{variable/withAnnotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです@<fn>{suppress-warning}。
 これを@<kw>{型注釈,type annotations}と呼びます。
+
+//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
 //list[variable/withAnnotations][型注釈付きの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
@@ -49,7 +51,7 @@ export { }
 #@end
 //}
 
-これの何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
+型注釈の何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
 たとえば@<list>{variable/withAnnotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
@@ -72,9 +74,9 @@ bool = "str";
 #@end
 //}
 
-安心・安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。
+安心安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。
 そんなあなたのために、TypeScriptは型推論の機能を備えています。
-@<list>{variable/withInitializer}のように、型注釈を書かずに変数定義と初期化を同時に行うようにします。
+@<list>{variable/withInitializer}のように、型注釈を書かずに変数定義と初期化を同時に行えます。
 
 //list[variable/withInitializer][初期化付き変数 = 最強]{
 #@mapfile(../code/typescript-basic/variable/withInitializer.ts)
@@ -92,9 +94,7 @@ export { str, num, bool, func, obj }
 
 これで手で型注釈を与えずに済みます。
 しかも、書き方がJavaScriptと全く同じになりました。
-楽に書ける上に実行する前にコンパイルの段階で不審な臭いのするコードを発見できるようになる、第一歩です。
-
-//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
+楽に書ける上に実行前にコンパイルの段階で不審な臭いのするコードを発見できるようになる、第一歩です。
 
 =={class} クラス
 
@@ -188,7 +188,7 @@ JavaScriptっぽくいうとプロパティですね。
 アクセス修飾子として、private、public、protectedなどの可視性を制御するアクセス修飾子を利用できます。
 何も指定していないとき、デフォルトの可視性はpublicになります。
 
-コンパイル後のJSを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100%防げる！と考えるのは禁物です。
+コンパイル後のJSファイルを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100%防げる！と考えるのは禁物です。
 そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
 
 #@# OK REVIEW lc: s/100/100%/
@@ -241,8 +241,8 @@ console.log(obj.str);
 これも特に特筆すべき要素はありませんね。普通です。
 
 #@# @suppress SentenceLength CommaNumber ParenthesizedSentence
-最後に、get、setアクセサです。
-これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定する必要があります。
+最後にget、setアクセサです。
+これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定します。
 get、setアクセサを使うと、getterしか定義していない場合でもプログラム上は値の代入処理が記述できてしまうので、"use strict"を併用して実行時にエラーを検出するようにしましょう。
 
 次に、クラスの継承も見て行きましょう（@<list>{class/inherit}）。
@@ -315,7 +315,7 @@ export { }
 便利ですね。
 privateやprotectedに比べ、よっぽど使い出があります。
 
-変換後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（@<list>{class/abstract.js}）。
+コンパイル後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（@<list>{class/abstract.js}）。
 
 //list[class/abstract.js][コンパイルしてしまえばただのクラス]{
 #@mapfile(../code/typescript-basic/class/abstract.js)
@@ -399,7 +399,7 @@ export { }
 //}
 
 #@# @suppress LongKanjiChain
-なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置するのはNGです（@<list>{function/invalid}）。
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりするのはNGです（@<list>{function/invalid}）。
 
 //list[function/invalid][こういうパターンはNG]{
 #@mapfile(../code/typescript-basic/function/invalid.ts)
@@ -425,8 +425,6 @@ export { }
 
 ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic}）。
 通常の関数とアロー関数の違いについてはECMAScript 2015の範囲であるため、本書では解説しません。
-
-アロー関数も普通の関数同様、型注釈の与え方以外ECMAScript 2015との差分は見当たりません。
 
 //list[arrowFunctions/basic][アロー関数 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrowFunctions/basic.ts)
@@ -456,11 +454,12 @@ export { }
 #@end
 //}
 
+アロー関数も普通の関数同様、型注釈の与え方以外ECMAScript 2015との差分は見当たりません。
 短くてかっこいいですね。
 
 もうひとつの便利な点として、アロー関数は親スコープのthisをそのまま受け継ぎます。
-この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに不要な混乱をおこさずに済みます。
-そのため、特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
+この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。
+特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
 
 #@# TODO argumentsの取り扱いがES6準拠ではない みたいな話も仕様ちゃんと読んで書きたい
 
@@ -480,10 +479,10 @@ Node.jsで使われているCommonJS形式のモジュールと考え方は一�
 未だに@<code>{module}を使うこともできますが、今後は@<code>{namespace}を使ったほうがよいでしょう。
 
 #@# prh:disable
-本書でも、これ以降は単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指すこととします。
+本書でも、これ以降は単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指します。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-仕様としてモジュールが策定され、whatwgでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。
+仕様としてモジュールが策定され、WHATWGでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。
 これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
 
 === モジュール
@@ -624,7 +623,7 @@ module.exports = bye;
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
 
 #@# prh:disable
-//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索されます]
+//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
 
 === namespace
 
