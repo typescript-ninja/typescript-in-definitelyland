@@ -76,7 +76,7 @@ DefinitelyTypedは規模は大きくなっていくもののアクティブに�
 #@# OK REVIEW lc: s/2.0/2.0.0/ のほうが適切？
 #@# vv: うーん… 悩ましいけど… せっかくアドバイス貰ったから反映だ！
 
-執筆時点（2016年07月23日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0対応が行われています。
+執筆時点（2016年08月01日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0対応が行われています。
 もし、@typesへ変更を反映してほしい人がいる場合、現時点ではtypes-2.0ブランチにpull requestを送ってください。
 また、TypeScript 2.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。
 
@@ -407,7 +407,7 @@ export { }
 
 例をひとつ見てみましょう。
 String#trimStartは、文字列の先頭にある空白文字を取り除く機能です。
-本章執筆時点（2016年07月23日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 1@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
+本章執筆時点（2016年08月01日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
 そのため、Stringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart}）
 
 //list[interface/stringTrimStart][String#trimStartを生やす]{
