@@ -1393,3 +1393,84 @@ unshiftやpopなど、配列の要素を操作する方法は色々あります�
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
 なるべくなら、タプルは使いたくないですね。
+
+=={non-null-assertion-operator} 非null指定演算子（Non-null Assertion Operator）
+
+非null指定演算子（@<code>{!}）は、指定した値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
+基本的に、この演算子は使わないにこしたことはありません。
+新規にコードを書き起こすのであればこの演算子は使わないほうがよいでしょう。
+
+しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合も多いです。
+@<code>{--strictNullChecks}オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。
+この警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。
+もちろん、将来的には徐々にリファクタリングしこの演算子の利用箇所を消滅させていくべきです。
+
+例を見てみましょう（@<list>{nonNullAssertionOperator/basic}）。
+
+//list[nonNullAssertionOperator/basic][!演算子を使う]{
+#@mapfile(../code/types-advanced/nonNullAssertionOperator/basic.ts)
+import * as fs from "fs";
+
+interface Config {
+  filePath?: string | null;
+  verbose?: boolean;
+}
+
+// 呼び出し元で値をしっかり代入していても
+let config: Config = {};
+config.filePath = "settings.json";
+config.verbose = false;
+processA(config);
+function processA(config: Config = {}) {
+  // 関数内部ではConfigのプロパティはundefinedの可能性が排除できない…
+  // よって、! で無理やりエラーを消す必要がある
+  if (fs.existsSync(config.filePath!)) {
+    console.log(fs.readFileSync(config.filePath!, "utf8"));
+  } else {
+    console.error(`${config.filePath} is not exists`);
+  }
+}
+
+processB();
+function processB(config: Config = {}) {
+  // 関数内で初期値を設定してやるとエラーを解消できる（かしこい）
+  config.filePath = config.filePath || "settings.json";
+  config.verbose = config.verbose || false;
+
+  // 初期値設定済なので ! 不要
+  if (fs.existsSync(config.filePath)) {
+    console.log(fs.readFileSync(config.filePath, "utf8"));
+  } else {
+    console.error(`${config.filePath} is not exists`);
+  }
+
+  // undefinedではなくした結果は関数をまたいで引き継がれない
+  // 残念だが当然…
+  processA(config);
+}
+
+// ? 除去版を作ってみる
+interface ConfigFixed {
+  filePath: string;
+  verbose: boolean;
+}
+
+processC();
+function processC(config: Config = {}) {
+  // ? 除去版に値を詰め替える
+  const fixed: ConfigFixed = {
+    filePath: config.filePath || "settings.json",
+    verbose: config.verbose || false,
+  };
+
+  if (fs.existsSync(fixed.filePath)) {
+    console.log(fs.readFileSync(fixed.filePath, "utf8"));
+  } else {
+    console.error(`${config.filePath} is not exists`);
+  }
+}
+#@end
+//}
+
+人間がundefinedやnullではないと確信できる場合、エラーになっている箇所の末尾に@<code>{!}をつけていきます。
+これをなるべく使わない手段として、使う前に初期値を代入したり、undefinedやnullを含まない型の値に詰め直すなどが考えられます。

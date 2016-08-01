@@ -225,11 +225,16 @@ objB = void 0; // undefined
 // error TS2339: Property 'getTime' does not exist on type 'never'.
 // objB.getTime();
 
+// 非null指定演算子（!）で無理やりコンパイルを通すこともできる
+objB!.getTime();
+
 export { }
 #@end
 //}
 
 nullやundefinedに対するアクセスが多くの場合未然に防がれ、"コンパイルが通ればもう安全"であるコードが書きやすいことがわかります。
+
+非null指定演算子（@<code>{!}）については@<chapref>{types-advanced}の@<hd>{types-advanced|non-null-assertion-operator}で触れました。
 
 さて、次はオプションなしの例です（@<list>{strictNullChecks/withoutStrictNullCheck-ignore}）。
 

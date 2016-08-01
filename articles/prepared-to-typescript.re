@@ -121,6 +121,9 @@ $ cat tsconfig.json
             "dom",
             "es2017"
         ],
+        "types": [
+            "node"
+        ],
         "noImplicitAny": true,
         "strictNullChecks": true,
         "noFallthroughCasesInSwitch": true,

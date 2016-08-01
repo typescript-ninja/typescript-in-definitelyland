@@ -22,4 +22,7 @@ objB = void 0; // undefined
 // error TS2339: Property 'getTime' does not exist on type 'never'.
 // objB.getTime();
 
+// 非null指定演算子（!）で無理やりコンパイルを通すこともできる
+objB!.getTime();
+
 export { }
