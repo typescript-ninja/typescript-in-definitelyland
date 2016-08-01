@@ -140,7 +140,7 @@ class Base {
   }
 
   // get, setアクセサ
-  // コンパイル時に --target es5 以上が必要
+  // コンパイル時に --target es5 以上が必要です
   /** @internal **/
   private _date: Date;
   get dateA(): Date {
@@ -151,7 +151,7 @@ class Base {
   }
 
   optional() {
-    // 省略可能なプロパティは値の存在チェックが必要
+    // 省略可能なプロパティは値の存在チェックが必要です
     if (this.regexpA != null) {
       this.regexpA.test("Hi!");
     }
