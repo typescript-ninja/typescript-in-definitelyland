@@ -25,7 +25,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --skipLibCheck, --skipDefaultLibCheck
 #@#   --out, --outDir, --outFile
 #@#   --noImplicitUseStrict
-#@# TODO 短縮形の紹介
 
 == --init
 
