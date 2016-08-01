@@ -293,7 +293,7 @@ if (typeof v2 === "string") {
 
 さて、次以降の項でどういう処理が絞り込みに繋がるのかの例を見ていきます。
 
-=== typeofによるtype guards
+=== typeofによるType Guards
 
 JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
 ECMAScript 5の範囲では、変換ルールは次のとおりです。
@@ -353,7 +353,7 @@ if (typeof objB === "string") {
 うーん、便利ですね。
 変数に指定した型どおりの値が入ってくるのが健全なので、コンパイル時にミスが発見されるのは嬉しいことです。
 
-=== instanceofによるtype guards
+=== instanceofによるType Guards
 
 typeofでしかtype guardsが使えないと辛いので、instanceofを使ったtype guardsも、もちろんあります。
 
@@ -438,7 +438,7 @@ export { }
 昔のTypeScriptと違って、instanceofのelse句でも型の絞込が行われます。
 挙動として納得感があり大変よいですね。
 
-=== ユーザ定義のtype guards（User-defined Type Guards）
+=== ユーザ定義のType Guards（User-defined Type Guards）
 
 ユーザが定義した関数によって、ある値がなんの型なのかをTypeScriptコンパイラに教える方法があります（@<list>{typeGuards/userDefined}）。
 型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
@@ -517,7 +517,7 @@ export { }
 引数として渡された値の型名を明示する代わりに、thisの型を指定するわけです。
 これも利用する機会は少なさそうですが、ツリー状の構造を作るときなどに活躍しそうです。
 
-=== type guardsと論理演算子
+=== Type Guardsと論理演算子
 
 type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています（@<list>{typeGuards/operator}）。
 
@@ -559,7 +559,7 @@ export { }
 
 あんまり使わないかもしれませんが、他の人がこの書き方を使った時に戸惑わぬよう頭の片隅にはとどめておいたほうがよいかもしれません。
 
-=== type guardsの弱点
+=== Type Guardsの弱点
 
 type guardsは型システム上の仕組みだということを忘れてはいけません。
 JavaScriptの実行環境とは全く関係がないのです。

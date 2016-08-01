@@ -106,7 +106,7 @@ epubversion: 3
 htmlversion: 5
 
 # 目次として抽出する見出しレベル
-toclevel: 2
+toclevel: 3
 
 # 採番の設定。採番させたくない見出しには「==[nonum]」のようにnonum指定をする
 #
