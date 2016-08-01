@@ -45,6 +45,8 @@ rules:
     pattern:  オプショナル
   - expected: プロポーザル
     pattern:  プロポーサル
+  - expected: 幽霊namespace
+    pattern:  幽霊モジュール
 
   - expected: Visual Studio code
     pattern:  VisualStudioCode

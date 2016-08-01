@@ -101,7 +101,7 @@ mocha+power-assertでテストを書く場合を例に、使い方を解説し�
 
 テスト対象のコードは@<code>{./lib/index.ts}です（@<list>{usage/lib/index}）。
 
-//list[usage/lib/index][至って普通の外部モジュール]{
+//list[usage/lib/index][至って普通のモジュール]{
 #@mapfile(../code/definition-file/usage/lib/index.ts)
 export function hello(word = "TypeScript") {
   return `Hello, ${word}`;
@@ -433,14 +433,14 @@ console.log(str.trimStart());
 //footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
 //footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
 
-=== 幽霊モジュール
+=== 幽霊namespace
 
-幽霊モジュール@<fn>{ghost-module}という考え方があります。
+幽霊namespace@<fn>{ghost-module}という考え方があります。
 
 namespaceを作ったとしても、即座に実体が生成されるとは限りません。
-namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghost-module/invalid}）。
+namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid}）。
 
-//list[ghost-module/invalid][幽霊モジュール]{
+//list[ghostModule/invalid][幽霊namespace]{
 #@mapfile(../code/definition-file/ghostModule/invalid.ts)
 declare namespace ghost {
   interface Test {
@@ -511,9 +511,9 @@ declare var $: JQueryStatic;
 IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。
 
 #@# @suppress ParenthesizedSentence
-これを幽霊モジュールを使って書きなおしてみます（@<list>{ghostModule/jqueryWithGhostModule-ignore}）。
+これを幽霊namespaceを使って書きなおしてみます（@<list>{ghostModule/jqueryWithGhostModule-ignore}）。
 
-//list[ghostModule/jqueryWithGhostModule-ignore][幽霊モジュールを使ってみた]{
+//list[ghostModule/jqueryWithGhostModule-ignore][幽霊namespaceを使ってみた]{
 #@mapfile(../code/definition-file/ghostModule/jqueryWithGhostModule-ignore.d.ts)
 declare namespace jquery {
   interface Element {
@@ -559,23 +559,23 @@ declare var $: jquery.Static;
 インタフェース名が短く、かつわかりやすくなりました。
 やっぱり、こういうのがいいですね。
 
-もちろん、無理に幽霊モジュールを使う必要はありません。
-クラスや変数や関数などを持ち、通常の実体をもつモジュールが存在している場合は、そのモジュールに相乗りしてしまったほうが楽でしょう。
+もちろん、無理に幽霊namespaceを使う必要はありません。
+クラスや変数や関数などを持ち、通常の実体をもつnamespaceが存在している場合は、そのnamespaceに相乗りしてしまったほうが楽でしょう。
 
 #@# @suppress JapaneseStyle
 #@# prh:disable
 …なんでDefinitelyTyped上にある型定義ファイルでそうなってないものが多いかって？
 よい質問です。
-ひとつは幽霊モジュールの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
+ひとつは幽霊namespaceの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
 先で説明しましたが、インタフェースは定義の統合ができます。
 この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまうのです。
 特にjQueryプラグインとかはインタフェースを拡張する形で型定義するのでその量たるや…。
 
-ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊モジュールに切り替えるのは難しい場合があります。
-可能であれば最初から幽霊モジュールを使うようにしましょう。
+ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊namespaceに切り替えるのは難しい場合があります。
+可能であれば最初から幽霊namespaceを使うようにしましょう。
 将来的には、このパターンの検出はtslintなどで機械的に行えるようにしたいところですね。
 
-//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記されたのでそちらに統一]
+//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
 
 #@# @suppress JapaneseStyle ParagraphNumber SectionLength
 === なんでもかんでもインタフェースにしてはならない
@@ -584,9 +584,9 @@ declare var $: jquery.Static;
 と、思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
 #@# @suppress ParenthesizedSentence
-具体的に、モジュール様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore}）。
+具体的に、namespace様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore}）。
 
-//list[interfaceAntipattern/moduleByInterfaceBad-ignore][インタフェースでモジュールを表現してしまう。何故なのか…]{
+//list[interfaceAntipattern/moduleByInterfaceBad-ignore][インタフェースでnamespaceを表現してしまう。何故なのか…]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts)
 interface Foo {
   bar: FooBar;
@@ -671,7 +671,7 @@ declare namespace assert {
 //}
 
 関数とnamespaceを同名で宣言できるのです。
-これの効能は、階層構造を素直に表現できることと、前項で説明した幽霊モジュールの書き方を併用できるところです。
+これの効能は、階層構造を素直に表現できることと、前項で説明した幽霊namespaceの書き方を併用できるところです。
 
 #@# @suppress SentenceLength
 この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
@@ -1486,7 +1486,7 @@ DefinitelyTypedはGitHub上のリポジトリなので、追加、修正につ�
  1. CIが通っているか
  2. npmまたはbowerに公開されている名前と同じになっているか、公開されていない場合は競合が発生しないか
  3. テストが存在しているか
- 4. 幽霊モジュールを使ったほうが構造がきれいになるか
+ 4. 幽霊namespaceを使ったほうが構造がきれいになるか
 
 だいたいこんな感じです。
 
@@ -1519,7 +1519,7 @@ npmに公開されているライブラリはnpmで公開されている名前�
 いくつか補足しましょう。
 
 破壊的変更が含まれていないか。
-たとえば、コードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊モジュールを使っていないスタイルから使っているスタイルへの変更など。
+たとえば、コードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊namespaceを使っていないスタイルから使っているスタイルへの変更など。
 または、ある型定義を別の表現へと書き換える場合。
 これらはレビュアーが妥当かどうかを判断します。
 たいてい判断できないのでヘッダに書いてあるDefinitions by:に名前が書いてある人達にGitHub上でmentionが飛ばされ、レビューしてもらって決めます。
