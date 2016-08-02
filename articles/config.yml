@@ -17,7 +17,7 @@ review_version: 2.0
 # inherit: ["A.yml", "B.yml"]
 
 # ブック名(ファイル名になるもの。ASCII範囲の文字を使用)
-bookname: typescript-in-definitelyland
+bookname: revised-typescript-in-definitelyland
 # 記述言語。省略した場合はja
 language: ja
 

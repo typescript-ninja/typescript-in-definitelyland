@@ -28,13 +28,13 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 #@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
 では解説していきましょう。
 union typesはいわゆる直和型です。
-たとえば、@<code>{string | number | boolean}という型注釈があった場合、この変数の値は、stringか、numberか、booleanかのどれか！ということを表します。
+たとえば@<code>{string | number | boolean}という型注釈があった場合、この変数の値はstringか、numberか、booleanかのどれか！ということを表します。
 
-なんのために入ったのかというと、まずは既存JavaScriptによりよい型定義を与えるためでしょう。
-そして、nullやundefined、string literal typesなどTypeScriptの中でも適用領域が広がっています。
-JavaScriptという現実と、安全な世界を構築するTypeScriptの橋渡しを上手にしてくれる機能といえます。
+なんのために直和型がTypeScriptに導入されたかというと、まずは既存JavaScriptによりよい型定義を与えるためでしょう。
+そしてnullやundefined、string literal typesなどTypeScriptの中でも適用領域が広がっています。
+JavaScriptという現実と安全な世界を構築するTypeScriptの橋渡しを上手にしてくれる機能といえます。
 
-ちなみに、自分でTypeScriptコード書いてるときに欲しくなる機能ではあまりありません。
+ちなみに自分でTypeScriptコード書いてるときにあまり欲しくなる機能ではありません。
 
 まずは簡単な例から見ていきましょう（@<list>{unionTypes/basic}）。
 
@@ -65,7 +65,7 @@ export { b1, b2, c }
 
 ご覧のとおり、union types中の型の順番とかは関係ない（交換可能）し、union typesのunion typesなどは合体させてひとつのunion typesにできます。
 
-自然にTypeScriptを書いていて、union typesを目にする機会は3種類あります。
+TypeScriptを自然に書いていて、union typesを目にする機会は3種類あります。
 || 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです（@<list>{unionTypes/inferred}）。
 
 //list[unionTypes/inferred][こういうときは目にしますね]{
@@ -82,7 +82,7 @@ export { and, cond, array }
 //}
 
 一番よくお目にかかるのは配列リテラルでしょうか。
-TypeScript一般のベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。
+TypeScriptのベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。
 
 型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります（@<list>{unionTypes/syntax}）。
 
@@ -106,11 +106,10 @@ export { func, b, c, d }
 #@end
 //}
 
-見づらいコードになってしまいました。
+読みづらいコードになってしまいました。
 型にも適切な名前をつけることの重要さが偲ばれます。
 
 union typesな値を使うときは、型アサーションを使うこともできますがなるべくなら避けましょう（@<list>{unionTypes/typeAssertion}）。
-union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
 
 //list[unionTypes/typeAssertion][一応使えるよ こうすれば]{
 #@mapfile(../code/types-advanced/unionTypes/typeAssertion.ts)
@@ -138,6 +137,9 @@ export { }
 #@end
 //}
 
+union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
+
+
 #@# NOTE http://togetter.com/li/749889
 #@# NOTE 代数的データ型 algebraic data type 型を組み合わせて作られる型のこと
 #@# NOTE 多相性 (a: any[], b: any) => [].concat(a).concat([b]); みたいな。a, b の型に関係なく関数が操作できる
@@ -158,11 +160,11 @@ type guardsは"変数Aが○○という条件を満たすとき、変数Aの型
 
 #@# @suppress JapaneseStyle
 さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
-名前が長いですが、要するに普通にコードを書いていった時に、値の型を判別するコードを書くとその分岐にしたがって変数の型が絞り込まれるというものです。
+名前が長いですが、要するに普通にコードを書いていった時に、値の型を判別するコードは分岐にしたがって変数の型が絞り込まれるというものです。
 
 例を見ていきましょう。
-TypeScriptを書いていて一番対処に迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か+undefinedの形式でしょう。
-if文を用いてundefinedの値について対処を入れてみます（@<list>{typeGuards/controlFlowBasedBasic}）。
+TypeScriptを書いていて一番対処を迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か＋@<code>{undefined}の形式でしょう。
+if文を用いてundefinedの値について対処してみます（@<list>{typeGuards/controlFlowBasedBasic}）。
 
 //list[typeGuards/controlFlowBasedBasic][undefinedの可能性を潰す]{
 #@mapfile(../code/types-advanced/typeGuards/controlFlowBasedBasic.ts)
@@ -291,11 +293,11 @@ if (typeof v2 === "string") {
 #@end
 //}
 
-さて、次以降の項でどういう処理が絞り込みに繋がるのかの例を見ていきます。
+さて、次項意向でどういう処理が絞り込みに繋がるのかの例を見ていきます。
 
 === typeofによるType Guards
 
-JavaScriptの typeof は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
+JavaScriptの@<code>{typeof}は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
 ECMAScript 5の範囲では、変換ルールは次のとおりです。
 
  * string のときは"string"を返す
@@ -308,7 +310,7 @@ ECMAScript 5の範囲では、変換ルールは次のとおりです。
 これを利用して、変数の型を狭めます。
 
 一番簡単な使い方から見ていきましょう（@<list>{typeGuards/typeofBasic}）。
-TypeScriptのtype guardsでは、typeofの結果がstring, boolean, numberの場合、その型に絞り込むことができます。
+TypeScriptのtype guardsではtypeofの結果がstring、boolean、numberの場合、その型に絞り込むことができます。
 
 //list[typeGuards/typeofBasic][実際の型がわからないなら調べるしかないじゃない！]{
 #@mapfile(../code/types-advanced/typeGuards/typeofBasic.ts)
@@ -329,7 +331,6 @@ export { }
 
 もう一例見てみましょう。
 @<list>{typeGuards/typeof-invalid}では、anyやnumberと指定された変数をtype guardsでstringに絞り込んでいます。
-この操作を行うと"ありえない"ことを表すnever型になるため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドの呼び出しはコンパイルエラーとなります。
 
 //list[typeGuards/typeof-invalid][変なコードを書くとコンパイラが教えてくれる]{
 #@mapfile(../code/types-advanced/typeGuards/typeof-invalid.ts)
@@ -349,6 +350,7 @@ if (typeof objB === "string") {
 }
 #@end
 //}
+この操作を行うと"ありえない"ことを表すnever型になるため、@<code>{obj.toFixed(0)}というstringには存在しないメソッドの呼び出しはコンパイルエラーとなります。
 
 うーん、便利ですね。
 変数に指定した型どおりの値が入ってくるのが健全なので、コンパイル時にミスが発見されるのは嬉しいことです。
@@ -435,7 +437,7 @@ export { }
 #@end
 //}
 
-昔のTypeScriptと違って、instanceofのelse句でも型の絞込が行われます。
+昔のTypeScriptと違って、instanceofのelse句でも型の絞り込みが行われます。
 挙動として納得感があり大変よいですね。
 
 === ユーザ定義のType Guards（User-defined Type Guards）
@@ -591,7 +593,7 @@ export { }
 
 #@# @suppress SentenceLength CommaNumber
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
-コンパイル後のJavaScriptコード（@<list>{typeGuards/weakspot.js}）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすい、ということを頭の片隅においておきましょう。
+コンパイル後のJavaScriptコード（@<list>{typeGuards/weakspot.js}）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすいことを頭の片隅においておきましょう。
 
 //list[typeGuards/weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/types-advanced/typeGuards/weakspot.js)
@@ -640,7 +642,7 @@ let obj: Sample = {
 
 union typesに似た記法のintersection types（交差型）です。
 intersection typesは2つの型を合成し、1つの型にできます。
-union typesと違って、利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。
+union typesと違って利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。
 
 まずは例を見てみましょう。
 ある関数に渡したオブジェクトを拡張し、新しいプロパティやメソッドを生やします（@<list>{intersectionTypes/basic}）。
@@ -746,8 +748,8 @@ intersection typesを使いこなした書き方のほうが、圧倒的に謎�
 #@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
 == 文字列リテラル型（String Literal Types）
 
-文字列リテラルを、型として、使える機能です。
-パッと聞き、意味がわからないですね。
+文字列リテラルを型として使える機能です。
+パッと読んだだけでは、意味がわからないですね。
 まずは例を見てみましょう（@<list>{stringLiteralTypes/basic}）。
 
 //list[stringLiteralTypes/basic][カードのスートを型として表す]{
@@ -766,7 +768,7 @@ export { }
 #@end
 //}
 
-文字列が型、というのは見慣れないとすごく気持ちが悪いですね。
+文字列が型というのは見慣れないとすごく気持ちが悪いですね。
 しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
 たとえば、DOMのaddEventListenerなどです。
 指定するイベント名によって、イベントリスナーの型が変わります（@<list>{stringLiteralTypes/eventListener}）。
@@ -801,8 +803,7 @@ interface HTMLBodyElement extends HTMLElement {
 これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。
 こんなものが必要になってしまうJavaScriptの複雑さよ…。
 
-また、union typesと文字列リテラル型を組み合わせ、switchで条件分岐ができます（@<list>{stringLiteralTypes/switch}）。
-switch文によるtype guards（後述）はTypeScript 2.1.0からのサポートが予定されているので、現時点ではえこひいきされていますね。
+またunion typesと文字列リテラル型を組み合わせ、switchで条件分岐ができます（@<list>{stringLiteralTypes/switch}）。
 
 //list[stringLiteralTypes/switch][Union Typesはswitchでえこひいきされている]{
 #@mapfile(../code/types-advanced/stringLiteralTypes/switch.ts)
@@ -854,6 +855,7 @@ function calc(root: Tree): number {
 export { }
 #@end
 //}
+switch文によるtype guards（後述）はTypeScript 2.1.0からのサポートが予定されているので、現時点ではえこひいきされていますね。
 
 なお、執筆時点でアンダース・ヘルスバーグ御大が@<i>{Number, enum, and boolean literal types}というpull requestを作成、作業しています@<fn>{primitive-literal-types}。
 
@@ -869,7 +871,7 @@ export { }
 筆者はtype aliasの乱用を恐れています！
 
 type aliasもunion typesの扱いを便利にするために導入された機能です。
-機能としてはただ単に、型をひとまとまりにして、それに名前が付けられるだけです。
+機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。
 それだけです。
 
 type aliasは仕様上、interfaceと同じように利用できる場面もあります。
@@ -920,7 +922,7 @@ export { Point, Circle, c, alternative }
 #@end
 //}
 
-素直にクラスでやればいいのに、という感じです。
+こちらは素直にクラスでやればいいのに、という感じです。
 
 type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。
 そのため、@<list>{typeAlias/doNotHaveInstance-invalid}のようなコードは書くことができません。
@@ -937,8 +939,7 @@ let strArray = new StringArray();
 //}
 
 #@# @suppress CommaNumber
-TypeScriptの仕様書にのっているtype aliasの利用例について、interfaceでの書き換えができるものを示します（@<list>{typeAlias/specExample}）。
-union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけが、interfaceで置き換えることができません。
+TypeScriptの仕様書にのっているtype aliasの利用例についてinterfaceでの書き換えができるものを示します（@<list>{typeAlias/specExample}）。
 
 //list[typeAlias/specExample][interfaceを使うんだ！]{
 #@mapfile(../code/types-advanced/typeAlias/specExample.ts)
@@ -972,11 +973,12 @@ export {
 }
 #@end
 //}
+union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけがinterfaceで置き換えることができません。
 
-最後に、type aliasではなくインタフェースを使ったほうがいい理由を掲げておきます。
+最後にtype aliasではなくインタフェースを使ったほうがいい理由を掲げておきます。
 
- * interfaceが絡んだときのコンパイルエラーにはinterface名が表示されてわかりやすい
- ** type aliasは展開されて表示されちゃうので無理
+ * interfaceのコンパイルエラーにはinterface名が表示されてわかりやすい
+ ** type aliasは展開して表示されちゃうので無理
  * interfaceは定義の統合ができるので後から自由に拡張できる
  ** type aliasは無理
 
@@ -1038,7 +1040,7 @@ export { }
 //}
 
 thisを型として記述するという発想がすごいですね。
-引数や返り値の型として、普通にthisを利用しています。
+引数や返り値の型としてthisを利用しています。
 fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。
 
 この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。
@@ -1204,7 +1206,7 @@ export { Foo }
 
 型クエリは指定した変数（やメソッドなど）の型をコピーします。
 たとえば、@<list>{typeQueries/basic}のようなクラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
-そういうときに、型クエリを使います。
+そういうときに型クエリを使います。
 
 //list[typeQueries/basic][クラスそのものの型だよ！]{
 #@mapfile(../code/types-advanced/typeQueries/basic.ts)
@@ -1353,7 +1355,7 @@ export { }
 
 Good！いいですね。
 
-さて、タプル型について重箱の隅を見ていきましょう。
+さて、タプル型について重箱の隅をつついていきましょう。
 要素数が多すぎる場合、指定されていない値の型はunion typesになります。
 その例を見てみましょう（@<list>{tuple/manyValues}）。
 
@@ -1399,11 +1401,11 @@ unshiftやpopなど、配列の要素を操作する方法は色々あります�
 
 非null指定演算子（@<code>{!}）は、指定した値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
 基本的に、この演算子は使わないにこしたことはありません。
-新規にコードを書き起こすのであればこの演算子は使わないほうがよいでしょう。
+新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。
 
 しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合も多いです。
 @<code>{--strictNullChecks}オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。
-この警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。
+警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。
 もちろん、将来的には徐々にリファクタリングしこの演算子の利用箇所を消滅させていくべきです。
 
 例を見てみましょう（@<list>{nonNullAssertionOperator/basic}）。
@@ -1468,7 +1470,7 @@ export { Config, processB, processC }
 //}
 
 人間がundefinedやnullではないと確信できる場合、エラーとなる箇所の末尾に@<code>{!}をつけていきます。
-これをなるべく使わない手段として、使う前に初期値を代入したり、undefinedやnullを含まない型の値に詰め直すなどが考えられます。
+非null指定演算子をなるべく使わない手段として使う前に初期値を代入する、undefinedやnullを含まない型の値に詰め直すなどが考えられます。
 他の方法も見てみます（@<list>{nonNullAssertionOperator/intersectionTypes}）。
 先に見た@<list>{nonNullAssertionOperator/basic}も併せ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょうか。
 
@@ -1513,5 +1515,7 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 
 #@# @suppress SentenceLength ParenthesizedSentence
 他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。
-筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリにIssue（@<href>{https://github.com/Microsoft/TypeScript/issues/10065}）を立てています。
+筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに@<href>{https://github.com/Microsoft/TypeScript/issues/10065,Issue}@<fn>{10065}を立てています。
 もし興味があれば覗いてみて、何か意見を書いていってください。
+
+//footnote[10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]

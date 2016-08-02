@@ -6,7 +6,7 @@
 本章記載のオプションはtsconfig.jsonのcompilerOptionsに記載可能なプロパティ名と同一です。
 tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できないことに注意してください。
 
-ここに記載されていないオプションで、知りたいものがあれば本書のIssue@<fn>{issue}にお寄せください。
+ここに記載されていないオプションで知りたいものがあれば本書のIssue@<fn>{issue}にお寄せください。
 
 //footnote[issue][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
@@ -30,7 +30,7 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 @<code>{--init}オプションについて解説します。
 このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
 生成されたファイルは後述の@<code>{--project}オプションと組み合わせて使います。
-TypeScriptではプロジェクトのビルドに必要なコンパイルオプションや、コンパイル対象の指定などをこのファイルにまとめていきます。
+TypeScriptではプロジェクトのビルドに必要なコンパイルオプションや、コンパイル対象の指定などをtsconfig.jsonファイルにまとめていきます。
 このファイルはすべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。
 
 まずは@<code>{tsc --init}コマンドで生成されるtsconfig.jsonを見てみます（@<list>{init/default/tsconfig.json}）。
@@ -60,7 +60,7 @@ tsconfig.jsonに記述可能なプロパティは概ね次の4つです。
 
 compilerOptionsには、コンパイル時に利用するオプションを指定します。
 コンパイルオプションの名前とcompilerOptionsに記載可能なプロパティ名は一致しています。
-たとえば、@<list>{init/default/tsconfig.json}は@<code>{tsc --module commonjs --target es5}という意味になります。
+たとえば@<list>{init/default/tsconfig.json}は@<code>{tsc --module commonjs --target es5}という意味になります。
 @<code>{--noImplicitAny}と@<code>{--sourceMap}の値はfalseなのでオプションとして指定していない状態を指します。
 
 #@# @suppress SentenceLength CommaNumber
@@ -71,16 +71,16 @@ tsconfig.jsonで利用可能なcompilerOptionsについては、本章を読む�
 この機能は歓迎すべき機能で、余計な設定の手間を減らしてくれます。
 
 filesには、コンパイル対象にするファイルを1つ1つ列挙します。
-これがあまりにも面倒くさいため、tsconfig-cli@<fn>{tsconfig-cli}などのツールを利用する必要がありました。
+あまりにも面倒くさいため、tsconfig-cli@<fn>{tsconfig-cli}などのツールを利用する必要がありました。
 これの反省を踏まえ、次に説明するinclude、excludeが導入されました。
 
 include、excludeはコンパイル対象とするファイルやフォルダを大まかに指定します。
 includeとexcludeを全く指定しない場合、TypeScriptコンパイラは処理中のディレクトリやサブディレクトリ配下を調べ、すべての.tsファイルや.tsxファイルをコンパイルしようとします。
 
-そこで、includeで調べるディレクトリやファイルを、excludeで除外するディレクトリやファイルを指定し処理対象を限定します。
-この2つは組み合わせて使うのが一般的です。
+そこでincludeで調べるディレクトリやファイルを、excludeで除外するディレクトリやファイルを指定し処理対象を限定します。
+include、excludeの2つは組み合わせて使うのが一般的です。
 ディレクトリを指定すると、そこに含まれるすべての.tsファイルと.tsxファイルが対象になります。
-また、簡単なワイルドカードも利用できます。
+簡単なワイルドカードも利用できます。
 例を見てみましょう（@<list>{init/globSyntax/tsconfig.json}）。
 
 //list[init/globSyntax/tsconfig.json][使えるワイルドカードの例]{
@@ -112,7 +112,7 @@ includeとexcludeを全く指定しない場合、TypeScriptコンパイラは�
 #@end
 //}
 
-このtsconfig.jsonを利用してみます。
+例で示したtsconfig.jsonを利用してみます。
 @<list>{init/globSyntax/result}はプロジェクト内部に存在するts関連ファイルと、ファイルが処理されるかされないかを突き合わせたものです。
 
 //list[init/globSyntax/result][ファイル一覧とマッチの結果]{
@@ -137,23 +137,23 @@ libD/bb.ts         # 対象にならない（exclude）
 == --project
 
 @<code>{--project}オプションについて解説します。
-短縮記法で@<code>{-p}も利用できます。
+短縮記法の@<code>{-p}も利用できます。
 
 このオプションでプロジェクトのコンパイルを行います。
 オプションの値としてtsconfig.jsonがあるディレクトリか、tsconfig.jsonのパスを指定します。
-具体的に、@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
+具体的には@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
 
 tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
-しかし、その場合エディタ・IDE側がその設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1tsconfig.jsonとなるようにしましょう。
+しかし、その場合IDE・エディタ側が設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1つのtsconfig.jsonとなるようにしましょう。
 
-gulpやgruntなどのタスクランナーを使う場合でも、tsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
+gulpやgruntなどのタスクランナーを使う場合でもtsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
 
 == --noImplicitAny
 
 TypeScriptコンパイラの最重要オプション、@<code>{--noImplicitAny}について解説します。
 このオプションは"暗黙的なanyを禁ずる"の名が表すとおり、型推論の結果、暗黙的に変数の型がanyになった場合、エラーとしてくれます。
 
-@<list>{noImplicitAny/basic-invalid}のような、メソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
+@<list>{noImplicitAny/basic-invalid}のようなメソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
 
 //list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
 #@mapfile(../code/tsc-options/noImplicitAny/basic-invalid.ts)
@@ -181,21 +181,21 @@ definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
     annotation, implicitly has an 'any' return type.
 //}
 
-返り値の型を書いていなかったり、関数の仮引数の型が指定されていないため暗黙的にanyになってしまいました。
-これに対して、それはあかん！とコンパイラが教えてくれます。
-anyが紛れ込んで、型チェックが意味を成さなくなるとTypeScriptコードの意義が薄れてしまいます。
+返り値の型を書いていなかったり、関数の仮引数の型が指定されていなかったりしたため暗黙的にanyになってしまいました。
+このようなときに、それはダメだ！とコンパイラが教えてくれます。
+anyが紛れ込んで型チェックが意味を成さなくなるとTypeScriptの意義が薄れてしまいます。
 型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
 
 == --strictNullChecks
 
 @<code>{--strictNullChecks}オプションについて解説します。
 このオプションはnullやundefinedの扱いについてより厳格にし、変数の中身についての曖昧さを積極的に排除するよう振る舞います。
-nullやundefinedを許容させたい場合、union typesや省略可能引数を使って明示的にnullやundefinedである可能性を示さなければなりません。
+nullやundefinedを許容したい場合、union typesや省略可能引数を使って明示的にnullやundefinedである可能性を示さなければなりません。
 
 本書は@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
 有効にしている時の挙動は本書のサンプルすべてが該当しますので、この節ではこのオプションを使わないときの挙動について確認します。
 
-まずは、本書標準であるオプションありの例です（@<list>{strictNullChecks/basic}）。
+まずはオプションありの例です（@<list>{strictNullChecks/basic}）。
 
 //list[strictNullChecks/basic][危険なコードがいち早く発見される]{
 #@mapfile(../code/tsc-options/strictNullChecks/basic.ts)
@@ -234,7 +234,7 @@ nullやundefinedに対するアクセスが多くの場合未然に防がれ、"
 
 非null指定演算子（@<code>{!}）については@<chapref>{types-advanced}の@<hd>{types-advanced|non-null-assertion-operator}で触れました。
 
-さて、次はオプションなしの例です（@<list>{strictNullChecks/withoutStrictNullCheck-ignore}）。
+さて次はオプションなしの例です（@<list>{strictNullChecks/withoutStrictNullCheck-ignore}）。
 
 //list[strictNullChecks/withoutStrictNullCheck-ignore][実行時にエラーになるかも]{
 #@mapfile(../code/tsc-options/strictNullChecks/withoutStrictNullCheck-ignore.ts)
@@ -257,13 +257,13 @@ export { }
 変数の中身を容易にnullやundefinedにできてしまいます。
 きっちりコードを書けば、オプション無しでも堅牢なアプリケーションを構築することは不可能ではありません。
 しかし、それはプログラマの不断の努力の上にしか成り立ちません。
-そんな苦労をするよりは、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さがより確かなものになりますね。
+そんな苦労をするよりは、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さが確かなものになりますね。
 
 == --noUnusedLocals
 
 @<code>{--noUnusedLocals}オプションについて解説します。
 その名のとおり、使っていないローカル変数があったらエラーにしてくれます。
-本書のサンプルコードでも有効になっているため、エラー消しのために無意味にexportしてみたりしている箇所がありました。
+本書のサンプルコードでも有効になっているため、エラー消しのために無意味にexportしている箇所がありました。
 
 例を見てみます（@<list>{noUnusedLocals/basic-invalid}）。
 
@@ -323,7 +323,7 @@ export class Sample {
 == --noImplicitReturns
 
 @<code>{--noImplicitReturns}オプションについて解説します。
-関数やメソッドの返り値について、returnで値を返すパターンとreturnしないパターンがある場合、エラーにしてくれます。
+関数やメソッドの返り値について、returnで値を返す場合とreturnしない場合、エラーになります。
 
 例を見てみます（@<list>{noImplicitReturns/basic-invalid}）。
 
@@ -399,7 +399,7 @@ es3の利用はもはやお勧めしません。
 一部、Generatorやasync/awaitなどの記法はダウンパイルできません。
 これらは2.1.0でサポートされる予定なので、延期されないようにみんなで祈りましょう。
 
-== --module, --moduleResolution
+== --module、--moduleResolution
 
 @<code>{--module}オプションについて解説します。
 短縮記法で@<code>{-m}も利用できます。
@@ -427,8 +427,8 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
 基本としてnode一択でよいでしょう。
 
 前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module es6}とすることもできます。
-この組み合わせが可能になったのはTypeScript 2.0.0からなので、Rollup.js@<fn>{rollup.js}との組み合わせの運用などの検討はまだ未知数です。
-TypeScript+Rollup.jsをプロジェクトに導入してみてブログ記事などにしてみると話題になるかもしれません。
+この組み合わせが可能になったのはTypeScript 2.0.0からなので、Rollup.js@<fn>{rollup.js}との組み合わせての運用はまだ未知数です。
+TypeScript＋Rollup.jsをプロジェクトに導入してみてブログ記事などにまとめてみると話題になるかもしれません。
 お待ちしています！
 
 //footnote[rollup.js][@<href>{http://rollupjs.org/}]
@@ -468,9 +468,9 @@ tsconfig.jsonの場合は素直に配列にしましょう。
  * es2017.sharedmemory
  * scripthost
 
-自分のプロジェクトが何用途なのかを考え、適切なものを選びましょう。
-たとえば、Node.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
-多くのプロジェクトではes2017か、+domの指定があれば十分でしょう。
+自分のプロジェクトの用途を考え、適切なものを選びましょう。
+たとえばNode.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
+多くのプロジェクトではes2017か、＋domの指定があれば十分でしょう。
 
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
 どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
@@ -478,20 +478,20 @@ es2017を利用する場合はes2017の型定義にes2016の参照が含まれ�
 == --forceConsistentCasingInFileNames
 
 @<code>{--forceConsistentCasingInFileNames}オプションについて解説します。
-このオプションを有効にすると、ファイル名の参照について、大文字小文字の食い違いがあるとエラーにします。
+このオプションを有効にすると、ファイル名の参照について大文字小文字の食い違いがあるとエラーにします。
 macOSのような非ケースセンシティブな環境と、Linuxのようなケースセンシティブな環境が混在しているとき、macOSではエラーにならないけどLinuxではエラーになる…のようなシチュエーションを防止してくれます。
 チーム内でmacOSに統一されていても、外部の人やCIサーバなどはLinuxを使っている場合などはかなり多いため、とりあえず有効にしてしまってよいでしょう。
 
-== --noEmitOnError, --noEmit
+== --noEmitOnError、--noEmit
 
 @<code>{--noEmitOnError}オプションと@<code>{--noEmit}オプションについて解説します。
 このオプションは成果物である.jsファイル、.js.mapファイル、.d.tsファイルを生成するか否かを制御します。
 
 @<code>{--noEmitOnError}はコンパイルが成功した時のみファイルを生成します。
-これはgruntやgulpなどのタスクランナーを利用する際の「コンパイル成功したつもりだったけど失敗してた。後続のタスクが続いてしまい失敗を見逃した。」というパターンに有効です。
+これはgruntやgulpなどのタスクランナーを利用する際の「コンパイル成功したつもりだったけど失敗してた。後続のタスクが続いてしまい失敗を見逃した」というパターンに有効です。
 前回の生成物を削除してからコンパイルするようにすることで.jsファイルが必要なステップで処理全体が確実に落ちるようにできます。
 「そんなクソみたいなタスク作らないよ！」と思うかもしれないですが、これが案外やりがちなのです。
-プロジェクトの健康を保つためにも、@<code>{--noEmitOnError}オプションは常にしてよいでしょう。
+プロジェクトの健康を保つためにも、@<code>{--noEmitOnError}オプションは常に有効でよいでしょう。
 
 #@# prh:disable
 @<code>{--noEmit}オプションはコンパイルが成功しようが失敗しようが、常に成果物を何も生成しません。
