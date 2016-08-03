@@ -3,7 +3,7 @@ declare function funcA(num: number): string;
 
 let obj: string | number = null as any;
 
-// stringかnumberを渡さなければならない場合、 string | number はコンパイルエラーになる
+// stringかnumberを渡さなければならない場合 string | number はコンパイルエラーになる
 // 本来であれば、受け入れてほしいのだけど…
 // error TS2345: Argument of type 'string | number'
 //   is not assignable to parameter of type 'number'.
