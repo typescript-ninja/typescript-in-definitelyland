@@ -1515,7 +1515,7 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 
 #@# @suppress SentenceLength ParenthesizedSentence
 他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。
-筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに@<href>{https://github.com/Microsoft/TypeScript/issues/10065,Issue}@<fn>{10065}を立てています。
+筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに@<href>{https://github.com/Microsoft/TypeScript/issues/10065,Issue}@<fn>{issue10065}を立てています。
 もし興味があれば覗いてみて、何か意見を書いていってください。
 
-//footnote[10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]
+//footnote[issue10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]
