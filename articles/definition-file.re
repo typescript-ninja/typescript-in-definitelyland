@@ -131,6 +131,7 @@ describe("lib", () => {
 });
 #@end
 //}
+
 普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。
 
 ここで問題なのは、TypeScriptコンパイラが安全にコードを処理するためには、mochaとpower-assertについての情報が必要であることです。
@@ -234,7 +235,8 @@ power-assertはテストコード中でimportしますが、テストランナ�
 なお、自分で型定義ファイルを書く覚悟無しにTypeScriptをやるのは茨の道だと思いますので頑張ってください。
 「誰かがやってくれないと自分ではできません」なんて甘えた根性では型サバンナでは到底生きていけないのです@<fn>{types-savannah}。
 
-//footnote[types-savannah][DefinitelyTypedメンテナ（本書の著者vvakameのことです）の意見です]
+//footnote[types-savannah][DefinitelyTypedメンテナ（＝筆者）の意見です]
+
 === 型、実体、そして42。
 
 TypeScriptはJavaScriptに対して後付で型による制約を付け足した言語です。
@@ -294,7 +296,8 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 
 型定義ファイルの品質の良さにこだわるあまり、完成しない、使いたいライブラリが使えない、というのがもっともよくない状態です。
 型定義ファイルの良し悪しを判断する力は、TypeScript自体への理解度に大きく依存します。
-TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見えてくるのは避けられません。まずは"使える"状態にすることを目指しましょう。
+TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見えてくるのは避けられません。
+まずは"使える"状態にすることを目指しましょう。
 
 品質や"ライブラリ全体をカバーしている"かは気になるところではあります。
 しかし、まずは使いたいところが使えればいいのです。
@@ -568,7 +571,7 @@ declare var $: jquery.Static;
 
 #@# @suppress JapaneseStyle
 #@# prh:disable
-…どうしてDefinitelyTyped上にある型定義ファイルでそうなってないものが多いかって？
+…どうしてDefinitelyTyped上にある型定義ファイルでそうなってないものが多いのかって？
 よい質問です。
 ひとつは幽霊namespaceの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
 先で説明しましたが、インタフェースは定義の統合ができます。
@@ -899,10 +902,11 @@ funcB(obj);
 #@end
 //}
 
-この問題は@<href>{https://github.com/Microsoft/TypeScript/issues/5766,Issue}@<fn>{5766}として管理されています。
+この問題は@<href>{https://github.com/Microsoft/TypeScript/issues/5766,Issue}@<fn>{issue5766}として管理されています。
 "Accepting PRs"ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていないけれどコミュニティの誰かがやる気を出せば修正される、という状態です。
 
-//footnote[5766][@<href>{https://github.com/Microsoft/TypeScript/issues/5766}]
+//footnote[issue5766][@<href>{https://github.com/Microsoft/TypeScript/issues/5766}]
+
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
 === モジュールの定義の統合
 
@@ -1370,6 +1374,7 @@ declare global {
 }
 #@end
 //}
+
 baseUrlとpathsの指定があります。
 TypeScript 2.0.0からこうして任意の場所の型定義ファイルを任意の名前に紐付けられるようになったため、ローカル環境でも利用しやすくなりました。
 
