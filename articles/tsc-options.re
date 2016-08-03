@@ -450,7 +450,7 @@ tsconfig.jsonの場合は素直に配列にしましょう。
 //indepimage[liboptions][]
 
 //comment{
-上記画像はページ調整のために2段組リストを作成。EPUBなどは以下に戻すこと
+TODO 上記画像はページ調整のために2段組リストを作成。EPUBなどは以下に戻すこと
 
 #@# prh:disable
  * dom
