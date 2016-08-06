@@ -2,36 +2,26 @@
 
 == 本書について
 
-//comment{
-#@# NOTE C90紙版では以下の文章は使わない。Web版を作る時に復活させる。
-
-#@# @suppress SentenceLength ParenthesizedSentence JapaneseAmbiguousNounConjunction
-本書はC87で頒布された型の国のTypeScriptの改訂版（C90版）です。
-あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c90/#typescript,C90で頒布されたReviced TypeScript in Definitelyland}の全文です。
-内容は（筆者のやる気次第で）随時更新されていく可能性があります。
-誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
-
-Webサイトとして閲覧したい場合は@<href>{http://typescript.ninja/typescript-in-definitelyland/}を参照してください。
-PDF, epubとして入手したい場合は@<href>{https://griflet.net/github/typescript-ninja/typescript-in-definitelyland/}を参照してください。
-
-無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。
-C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
-この表紙のおかげで書名が決まりました。
-可愛い表紙を本当にありがとうございます！
-//}
-
+#@# prh:disable
 本書はC87で頒布した『型の国のTypeScript』の改訂（C90）版です。
+あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c90/#typescript,C90で頒布されたRevised TypeScript in Definitelyland}の全文です。
+
 前回頒布した時はTypeScript 1.3.0が安定版で、ちらほら1.4.1の形が見えている…という時期だったと記憶しています。
 そこから、本書の扱うTypeScript 2.0.0までの間にいくつもの魅力的な変更がありました。
 本書を改訂するにあたり、さまざまな「こういう制限に注意するように」や「この方法は使うべきではない」といった文章を削りました。
 こうして振り返ってみるとTypeScriptチームの大きな働き、コードの積み重ねに感謝するばかりです。
 
 本書の内容は@<href>{http://typescript.ninja/typescript-in-definitelyland/,Webサイト}@<fn>{wonderland}にて全文を公開しています。
-現在はC87版を提供中です。なるべく夏コミから間をおかず、C90版に差し替えたいと考えています。
-しかしながら、Web公開版では表紙は含まれませんので、ぜひここで入手していってください。
-内容は筆者のやる気次第で今後も更新されていく可能性がありますが、やる気は今回の売れ行きに左右されます。
-
 誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、本書リポジトリまで@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
+
+無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。
+
+C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
+この表紙のおかげで書名が決まりました。
+可愛い表紙を本当にありがとうございます！
+
+C90冊子版の表紙はイラスト：shatiさん（@<href>{http://utata-ne.net/}）、デザイン：siosioさんです。
+C87版から上手に味わいを引き継いだ可愛い表紙をありがとうございます！
 
 //footnote[wonderland][@<href>{http://typescript.ninja/typescript-in-definitelyland/}]
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
