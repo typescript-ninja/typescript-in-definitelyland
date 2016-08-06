@@ -1,19 +1,24 @@
-GEM
-  remote: https://rubygems.org/
+GIT
+  remote: https://github.com/kmuto/review.git
+  revision: 2a20a0904a6380ff44af77ee1224f4035af62ea3
   specs:
     review (2.0.0)
       rubyzip
+
+GEM
+  remote: https://rubygems.org/
+  specs:
     review-peg (0.2.2)
     rubyzip (1.2.0)
-    sass (3.4.19)
+    sass (3.4.22)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  review (= 2.0.0)
+  review!
   review-peg (= 0.2.2)
-  sass (= 3.4.19)
+  sass (= 3.4.22)
 
 BUNDLED WITH
    1.12.5
