@@ -447,11 +447,6 @@ TypeScriptのコンパイルを行う際、標準の型定義として何を使�
 複数指定したい場合、コマンドラインオプションの場合は@<code>{,}で区切ります。
 tsconfig.jsonの場合は素直に配列にしましょう。
 
-//indepimage[liboptions][]
-
-//comment{
-TODO 上記画像はページ調整のために2段組リストを作成。EPUBなどは以下に戻すこと
-
 #@# prh:disable
  * dom
  * webworker
@@ -472,8 +467,6 @@ TODO 上記画像はページ調整のために2段組リストを作成。EPUB�
  * es2017.object
  * es2017.sharedmemory
  * scripthost
-
-//}
 
 自分のプロジェクトの用途を考え、適切なものを選びましょう。
 たとえばNode.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
