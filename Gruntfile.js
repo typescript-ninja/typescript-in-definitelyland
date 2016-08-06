@@ -32,18 +32,6 @@ module.exports = grunt => {
 				src: `${publish}/`
 			}
 		},
-		sass: {
-			dist: {
-				options: {
-					bundleExec: true,
-					sourcemap: 'none'
-				},
-				files: {
-					'articles/style.css': 'articles/style.scss',
-					'articles/style-web.css': 'articles/style-web.scss',
-				}
-			}
-		},
 		copy: {
 			publish: {
 				files: [
@@ -59,6 +47,14 @@ module.exports = grunt => {
 					}
 				},
 				command: `${reviewPreproc} -r --tabwidth=2 *.re`
+			},
+			sass: {
+				options: {
+					execOptions: {
+						cwd: articles,
+					}
+				},
+				command: `node-sass ./ -o ./`
 			},
 			compile2text: {
 				options: {
@@ -137,7 +133,7 @@ module.exports = grunt => {
 	grunt.registerTask(
 		"html",
 		"原稿をコンパイルしてHTMLファイルにする",
-		generateTask("html", ["sass"]));
+		generateTask("html", ["shell:sass"]));
 
 	grunt.registerTask(
 		"idgxml",
@@ -147,7 +143,7 @@ module.exports = grunt => {
 	grunt.registerTask(
 		"web",
 		"原稿をコンパイルしてwebページにする",
-		generateTask("web", ["sass"]).concat(['copy:publish']));
+		generateTask("web", ["shell:sass"]).concat(['copy:publish']));
 
 	grunt.registerTask(
 		"pdf",

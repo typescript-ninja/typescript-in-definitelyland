@@ -10,7 +10,6 @@ GEM
   specs:
     review-peg (0.2.2)
     rubyzip (1.2.0)
-    sass (3.4.22)
 
 PLATFORMS
   ruby
@@ -18,7 +17,6 @@ PLATFORMS
 DEPENDENCIES
   review!
   review-peg (= 0.2.2)
-  sass (= 3.4.22)
 
 BUNDLED WITH
    1.12.5
