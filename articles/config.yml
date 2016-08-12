@@ -331,3 +331,5 @@ pdfmaker:
 #
 webmaker:
     stylesheet: ["style.css","style-web.css"]
+    analytics:
+      google: UA-6628015-6
