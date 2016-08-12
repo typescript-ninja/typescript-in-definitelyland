@@ -99,9 +99,9 @@ node_modules/@types にある型定義ファイルは特別扱いされ、モジ
 
 mocha＋power-assertでテストを書く場合を例に、使い方を解説していきます。
 
-テスト対象のコードは@<code>{./lib/index.ts}です（@<list>{usage/lib/index}）。
+テスト対象のコードは@<code>{./lib/index.ts}です（@<list>{usage/lib/index.ts}）。
 
-//list[usage/lib/index][至って普通のモジュール]{
+//list[usage/lib/index.ts][至って普通のモジュール]{
 #@mapfile(../code/definition-file/usage/lib/index.ts)
 export function hello(word = "TypeScript") {
   return `Hello, ${word}`;
@@ -109,9 +109,9 @@ export function hello(word = "TypeScript") {
 #@end
 //}
 
-これに対してテストコードとして@<code>{./test/indexSpec.ts}を書いてみましょう（@<list>{usage/test/indexSpec}）。
+これに対してテストコードとして@<code>{./test/indexSpec.ts}を書いてみましょう（@<list>{usage/test/indexSpec.ts}）。
 
-//list[usage/test/indexSpec][mocha+power-assertでテストを書く]{
+//list[usage/test/indexSpec.ts][mocha+power-assertでテストを書く]{
 #@mapfile(../code/definition-file/usage/test/indexSpec.ts)
 import * as assert from "power-assert";
 
@@ -139,9 +139,10 @@ describe("lib", () => {
 JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため外部ライブラリの型情報をどうにかしてコンパイラに教えてあげる必要があります。
 そこで使われるのが型定義ファイルです。
 
-mocha（@<list>{usage/abstract/mocha}）とpower-assert（@<list>{usage/abstract/power-assert}）の型定義ファイルを抜粋・簡略化したものを見てみましょう。
+#@# @suppress ParenthesizedSentence
+mocha（@<list>{usage/abstract/mocha.d.ts}）とpower-assert（@<list>{usage/abstract/power-assert.d.ts}）の型定義ファイルを抜粋・簡略化したものを見てみましょう。
 
-//list[usage/abstract/mocha][mocha.d.ts抜粋]{
+//list[usage/abstract/mocha.d.ts][mocha.d.ts抜粋]{
 #@mapfile(../code/definition-file/usageAbstract/mocha.d.ts)
 interface MochaDone {
   (error?: Error): void;
@@ -156,7 +157,7 @@ declare let it: {
 #@end
 //}
 
-//list[usage/abstract/power-assert][power-assert.d.ts抜粋]{
+//list[usage/abstract/power-assert.d.ts][power-assert.d.ts抜粋]{
 #@mapfile(../code/definition-file/usageAbstract/power-assert.d.ts)
 export = assert;
 export as namespace assert;
@@ -212,6 +213,7 @@ TypeScriptコンパイラがこれらの型定義ファイルを認識できれ�
 #@end
 //}
 
+#@# @suppress JapaneseStyle
 power-assertはテストコード中でimportしますが、テストランナーであるmochaの定義はソースコード中からの参照がありません。
 そのため、power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。
 
@@ -316,12 +318,13 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 
 //footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
+#@# @suppress InvalidExpression
 ==== 最高に雑な型定義ファイルを作る
 
-テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid}）。
+テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid.d.ts}）。
 モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。
 
-//list[wildcard/basic-invalid][雑な型定義ファイルの例]{
+//list[wildcard/basic-invalid.d.ts][雑な型定義ファイルの例]{
 #@mapfile(../code/definition-file/wildcard/basic-invalid.d.ts)
 // 名前だけ定義すると全てanyでとりあえず使える
 declare module "lodash";
@@ -352,7 +355,7 @@ declare module "*!text" {
 
 #@# tsc code/definition-file/wildcard/basicUsage-ignore.ts code/definition-file/wildcard/basic-invalid.d.ts
 
-//list[wildcard/basicUsage-ignore][型定義ファイルの利用例]{
+//list[wildcard/basicUsage-ignore.ts][型定義ファイルの利用例]{
 #@mapfile(../code/definition-file/wildcard/basicUsage-ignore.ts)
 import * as _ from "lodash";
 import * as sample from "sample/foobar";
@@ -378,10 +381,11 @@ anyばっかりですね。
 #@# @suppress ParagraphNumber SectionLength
 === インタフェースを活用する
 
+#@# @suppress SentenceLength ParenthesizedSentence
 インタフェースは大変使いやすいパーツです。
-というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging}、@<list>{interface/declarationMergingUsage}）@<fn>{open-ended-class}。
+というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging.d.ts}、@<list>{interface/declarationMergingUsage.ts}）@<fn>{open-ended-class}。
 
-//list[interface/declarationMerging][定義を分割して書く]{
+//list[interface/declarationMerging.d.ts][定義を分割して書く]{
 #@mapfile(../code/definition-file/interface/declarationMerging.d.ts)
 interface Foo {
   hello(): string;
@@ -394,7 +398,7 @@ interface Foo {
 #@end
 //}
 
-//list[interface/declarationMergingUsage][定義が統合される！]{
+//list[interface/declarationMergingUsage.ts][定義が統合される！]{
 #@mapfile(../code/definition-file/interface/declarationMergingUsage.ts)
 /// <reference path="./declarationMerging.d.ts" />
 // ↑ 昔はこのようにreference commentを使ってファイル間の依存関係を明示していましたが、
@@ -415,9 +419,9 @@ export { }
 例をひとつ見てみましょう。
 @<code>{String#trimStart}は、文字列の先頭にある空白文字を取り除く機能です。
 本章執筆時点（2016年08月01日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
-そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart}）
+そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart.ts}）
 
-//list[interface/stringTrimStart][String#trimStartを生やす]{
+//list[interface/stringTrimStart.ts][String#trimStartを生やす]{
 #@mapfile(../code/definition-file/interface/stringTrimStart.ts)
 interface String {
   trimStart(): string;
@@ -445,9 +449,9 @@ console.log(str.trimStart());
 幽霊namespace@<fn>{ghost-module}という考え方があります。
 
 namespaceを作ったとしても、即座に実体が生成されるとは限りません。
-namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid}）。
+namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
 
-//list[ghostModule/invalid][幽霊namespace]{
+//list[ghostModule/invalid.ts][幽霊namespace]{
 #@mapfile(../code/definition-file/ghostModule/invalid.ts)
 declare namespace ghost {
   interface Test {
@@ -470,9 +474,9 @@ export { }
 これを活用して大量のインタフェースをもつようなライブラリの定義をひとまとまりにできます。
 
 実際の例を見てみましょう。
-@<list>{ghostModule/jqueryWithoutGhostModule-ignore}はjQueryの型定義ファイルからの抜粋（＆一部改変）です。
+@<list>{ghostModule/jqueryWithoutGhostModule-ignore.d.ts}はjQueryの型定義ファイルからの抜粋（＆一部改変）です。
 
-//list[ghostModule/jqueryWithoutGhostModule-ignore][実際のjQueryの型定義の例]{
+//list[ghostModule/jqueryWithoutGhostModule-ignore.d.ts][実際のjQueryの型定義の例]{
 #@mapfile(../code/definition-file/ghostModule/jqueryWithoutGhostModule-ignore.d.ts)
 interface JQuery {
   addClass(className: string): JQuery;
@@ -518,9 +522,9 @@ declare var $: JQueryStatic;
 IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。
 
 #@# @suppress ParenthesizedSentence
-これを幽霊namespaceを使って書きなおしてみます（@<list>{ghostModule/jqueryWithGhostModule-ignore}）。
+これを幽霊namespaceを使って書きなおしてみます（@<list>{ghostModule/jqueryWithGhostModule-ignore.d.ts}）。
 
-//list[ghostModule/jqueryWithGhostModule-ignore][幽霊namespaceを使ってみた]{
+//list[ghostModule/jqueryWithGhostModule-ignore.d.ts][幽霊namespaceを使ってみた]{
 #@mapfile(../code/definition-file/ghostModule/jqueryWithGhostModule-ignore.d.ts)
 declare namespace jquery {
   interface Element {
@@ -591,9 +595,9 @@ declare var $: jquery.Static;
 と思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
 #@# @suppress ParenthesizedSentence
-具体的にはnamespace様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore}）。
+具体的にはnamespace様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts}）。
 
-//list[interfaceAntipattern/moduleByInterfaceBad-ignore][インタフェースでnamespaceを表現してしまう。何故なのか…]{
+//list[interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts][インタフェースでnamespaceを表現してしまう。何故なのか…]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts)
 interface Foo {
   bar: FooBar;
@@ -617,9 +621,9 @@ declare var foo: Foo;
 この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
 筆者は絶対に使いません。絶対です。
-普通に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore}のように書きましょう。
+普通に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts}のように書きましょう。
 
-//list[interfaceAntipattern/moduleByInterfaceGood-ignore][素直にこうしよう]{
+//list[interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts][素直にこうしよう]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
 // 普通にコレでいいだろ！！
 declare namespace foo.bar.buzz {
@@ -629,10 +633,10 @@ declare namespace foo.bar.buzz {
 //}
 
 さて次です。
-通常@<list>{interfaceAntipattern/callableModuleUsage-ignore}のような型定義ファイルを書こうとは思わないと思いますが、こういうコードが必要になる場合が稀にあります。
+通常@<list>{interfaceAntipattern/callableModuleUsage-ignore.ts}のような型定義ファイルを書こうとは思わないと思いますが、こういうコードが必要になる場合が稀にあります。
 関数としても呼べるし、namespaceのようにも振る舞うオブジェクトの型定義を作成したいときです。
 
-//list[interfaceAntipattern/callableModuleUsage-ignore][関数・namespace どっちなの？]{
+//list[interfaceAntipattern/callableModuleUsage-ignore.ts][関数・namespace どっちなの？]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleUsage-ignore.ts)
 // assertは関数としても呼べるしnamespaceのようにも見える
 assert(foo === "foo");
@@ -640,10 +644,11 @@ assert.ok(value);
 #@end
 //}
 
+#@# @suppress SentenceLength
 呼び出し可能で、プロパティをもつ。
-この場合、すぐに考えつく型定義は@<list>{interfaceAntipattern/callableModuleBad1-ignore}か、@<list>{interfaceAntipattern/callableModuleBad2-ignore}でしょう。
+この場合、すぐに考えつく型定義は@<list>{interfaceAntipattern/callableModuleBad1-ignore.d.ts}か、@<list>{interfaceAntipattern/callableModuleBad2-ignore.d.ts}でしょう。
 
-//list[interfaceAntipattern/callableModuleBad1-ignore][こうしてしまいたい、気持ち]{
+//list[interfaceAntipattern/callableModuleBad1-ignore.d.ts][こうしてしまいたい、気持ち]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleBad1-ignore.d.ts)
 declare var assert: {
   (value: any): void;
@@ -652,7 +657,7 @@ declare var assert: {
 #@end
 //}
 
-//list[interfaceAntipattern/callableModuleBad2-ignore][匿名型注釈よりはマシ]{
+//list[interfaceAntipattern/callableModuleBad2-ignore.d.ts][匿名型注釈よりはマシ]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleBad2-ignore.d.ts)
 declare var assert: Assert;
 
@@ -666,9 +671,9 @@ interface Assert {
 #@# @suppress ParenthesizedSentence
 たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。
 
-しかし、これには別のよいやり方があるのです（@<list>{interfaceAntipattern/callableModuleGood-ignore}）。
+しかし、これには別のよいやり方があるのです（@<list>{interfaceAntipattern/callableModuleGood-ignore.d.ts}）。
 
-//list[interfaceAntipattern/callableModuleGood-ignore][関数とnamespace 両方やらなきゃいけないのが辛いところだ]{
+//list[interfaceAntipattern/callableModuleGood-ignore.d.ts][関数とnamespace 両方やらなきゃいけないのが辛いところだ]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleGood-ignore.d.ts)
 declare function assert(value: any): void;
 declare namespace assert {
@@ -682,9 +687,9 @@ declare namespace assert {
 
 #@# @suppress SentenceLength
 この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
-@<list>{interfaceAntipattern/powerAssertAbst-ignore}に抜粋＆改変したものを示します。
+@<list>{interfaceAntipattern/powerAssertAbst-ignore.d.ts}に抜粋＆改変したものを示します。
 
-//list[interfaceAntipattern/powerAssertAbst-ignore][関数+namespaceの実例]{
+//list[interfaceAntipattern/powerAssertAbst-ignore.d.ts][関数+namespaceの実例]{
 #@mapfile(../code/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
 declare function assert(value: any, message?: string): void;
 declare namespace assert {
@@ -745,9 +750,9 @@ var test;
 
 クラスを型定義として起こす方法について解説します。
 歴史的経緯により、TypeScriptではクラスの型定義を行う時に2つの代表的なやり方が存在しています。
-まずはその2つのやり方を見てみましょう（@<list>{declareClass/basic}）。
+まずはその2つのやり方を見てみましょう（@<list>{declareClass/basic.d.ts}）。
 
-//list[declareClass/basic][素直にクラス定義 vs インタフェース+変数]{
+//list[declareClass/basic.d.ts][素直にクラス定義 vs インタフェース+変数]{
 #@mapfile(../code/definition-file/declareClass/basic.d.ts)
 // A. 普通にクラスを定義する
 declare class TestA {
@@ -767,10 +772,10 @@ interface TestB {
 普通にクラス定義をするほうが素直ですね。
 
 過去にはこの2つのやり方にそれぞれメリット・デメリットがありました。
-しかし、現在のTypeScriptでは大幅に制限が緩和されたためメリット・デメリットの面で考える必要はなくなってきました（@<list>{declareClass/stretch}）。
+しかし、現在のTypeScriptでは大幅に制限が緩和されたためメリット・デメリットの面で考える必要はなくなってきました（@<list>{declareClass/stretch.ts}）。
 よい時代になったものです。
 
-//list[declareClass/stretch][相互運用性がある！]{
+//list[declareClass/stretch.ts][相互運用性がある！]{
 #@mapfile(../code/definition-file/declareClass/stretch.ts)
 // classはopen-endedになったため同名のinterfaceで拡張可能に
 class Person {
@@ -828,11 +833,11 @@ export { }
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 正しいライブラリの使い方を導くこと。
-を心に秘めて、@<list>{overload/useOverload}を見てください。
+を心に秘めて、@<list>{overload/useOverload.ts}を見てください。
 
 質問：どれが一番、元々の関数の仕様がわかりやすいですか？
 
-//list[overload/useOverload][普通に使えます]{
+//list[overload/useOverload.ts][普通に使えます]{
 #@mapfile(../code/definition-file/overload/useOverload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 // 1関数でget, set両方の役目を果たす場合…
@@ -859,10 +864,10 @@ JavaScriptのライブラリは1つの関数にさまざまな使い方をさせ
 実装が煩雑になってしまいますからね。
 素直にメソッドを分けましょう。
 
-union typesを使うと@<list>{overload/overloadVsUnionTypes}のように書くこともできます。
+union typesを使うと@<list>{overload/overloadVsUnionTypes.ts}のように書くこともできます。
 簡単な例だとunion typesのほうがよいと思いますが、見た目が煩雑になるケースではどっちがいいかは判断が分かれるところです。
 
-//list[overload/overloadVsUnionTypes][うーん、どっちがいいかは難しい]{
+//list[overload/overloadVsUnionTypes.ts][うーん、どっちがいいかは難しい]{
 #@mapfile(../code/definition-file/overload/overloadVsUnionTypes.ts)
 // union types未使用
 declare function hello(word: string): string;
@@ -879,10 +884,11 @@ bye(() => "function");
 #@end
 //}
 
-もう一例見てみます（@<list>{definition-file/overload/overloadFault-invalid}）。
+#@# @suppress ParenthesizedSentence
+もう一例見てみます（@<list>{definition-file/overload/overloadFault-invalid.ts}）。
 union typesとoverloadの両方が選択肢に入る場合、現時点ではunion typesを選んだほうがよい場合があります。
 
-//list[definition-file/overload/overloadFault-invalid][overloadとunion typesは相性がよくない]{
+//list[definition-file/overload/overloadFault-invalid.ts][overloadとunion typesは相性がよくない]{
 #@mapfile(../code/definition-file/overload/overloadFault-invalid.ts)
 declare function funcA(word: string): string;
 declare function funcA(num: number): string;
@@ -917,10 +923,10 @@ funcB(obj);
 
 #@# @suppress SentenceLength
 あまり言及されることがないのでここで触れておきます。
-モジュールの型定義はopen endedですので@<list>{externalModuleDeclarationMerging/basic}と@<list>{externalModuleDeclarationMerging/usage}のようなコードが書けます。
+モジュールの型定義はopen endedですので@<list>{externalModuleDeclarationMerging/basic.ts}と@<list>{externalModuleDeclarationMerging/usage.ts}のようなコードが書けます。
 めでたい。
 
-//list[externalModuleDeclarationMerging/basic][モジュール定義を後から拡張可能]{
+//list[externalModuleDeclarationMerging/basic.ts][モジュール定義を後から拡張可能]{
 #@mapfile(../code/definition-file/externalModuleDeclarationMerging/basic.d.ts)
 // モジュールの定義の統合ができます
 declare module "foo" {
@@ -933,7 +939,7 @@ declare module "foo" {
 #@end
 //}
 
-//list[externalModuleDeclarationMerging/usage][普通に使えます]{
+//list[externalModuleDeclarationMerging/usage.ts][普通に使えます]{
 #@mapfile(../code/definition-file/externalModuleDeclarationMerging/usage.ts)
 import * as foo from "foo";
 foo.str;
@@ -988,9 +994,9 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではありません。
 ここを勘違いすると、"コールバックに値が渡されるが別に使わなくてもいいよ"マークとしてoptionalを使ってしまうのです。
 
-例を見てみましょう（@<list>{callback/basic}）。
+例を見てみましょう（@<list>{callback/basic.ts}）。
 
-//list[callback/basic][optionalはもしかしたら値がないことを表す]{
+//list[callback/basic.ts][optionalはもしかしたら値がないことを表す]{
 #@mapfile(../code/definition-file/callback/basic.ts)
 // 良い例
 declare function readFileA(
@@ -1120,9 +1126,9 @@ module.exports = hello;
 変換結果から逆に考えるとJavaScriptで@<code>{exports.module = ...;}の形式を見たらTypeScriptでは@<code>{export = ...;}という型定義に書き起こす必要があります。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-理解を深めるためNode.jsでのCommonJSの実現方法について該当のコードを抜粋@<fn>{node-module-url}します（@<list>{node-module}）。
+理解を深めるためNode.jsでのCommonJSの実現方法について該当のコードを抜粋@<fn>{node-module-url}します（@<list>{node-module.js}）。
 
-//list[node-module][Node.jsのモジュールの実現方法]{
+//list[node-module.js][Node.jsのモジュールの実現方法]{
 NativeModule.wrap = function(script) {
   return NativeModule.wrapper[0] + script + NativeModule.wrapper[1];
 };
@@ -1144,9 +1150,9 @@ Node.jsにおいて、モジュール固有の変数というのはモジュー�
 
 互換性の話に戻ります。
 この@<code>{export = ...;}の記法に対応した"正規の"importの書き方は先ほど見た@<code>{import xxx = require("...");}形式です。
-これを無理やりECMAScript 2015形式のimport文に書き直すと@<list>{commonJSCompat/exportsAssignment2/main}になります。
+これを無理やりECMAScript 2015形式のimport文に書き直すと@<list>{commonJSCompat/exportsAssignment2/main.ts}になります。
 
-//list[commonJSCompat/exportsAssignment2/main][import モジュール全体 as 名前]{
+//list[commonJSCompat/exportsAssignment2/main.ts][import モジュール全体 as 名前]{
 #@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/main.ts)
 // モジュール全体をutilに割当て
 import * as util from "./util";
@@ -1160,9 +1166,9 @@ util("CommonJS");
 #@end
 //}
 
-このやり方は若干良くなく、@<code>{export =}する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（@<list>{commonJSCompat/exportsAssignment2/util}）。
+このやり方は若干良くなく、@<code>{export =}する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（@<list>{commonJSCompat/exportsAssignment2/util.ts}）。
 
-//list[commonJSCompat/exportsAssignment2/util][同名のnamespaceを被せてごまかす]{
+//list[commonJSCompat/exportsAssignment2/util.ts][同名のnamespaceを被せてごまかす]{
 #@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/util.ts)
 function hello(word = "TypeScript") {
   console.log(`Hello, ${word}`);
@@ -1182,14 +1188,14 @@ export = hello;
 
 さて、ここで問題になるのがTypeScriptとBabelで@<code>{module.exports = ...;}形式のモジュールを利用する際、どうECMAScript 2015形式にマッピングするかの解釈が異なる点です。
 Babelの変換結果を見てみます。
-@<list>{babel-before}をコンパイルすると@<list>{babel-after}（@<list>{babel-after-rewrite}）となります。
+@<list>{babel-before.js}をコンパイルすると@<list>{babel-after.js}（@<list>{babel-after-rewrite.js}）となります。
 
-//list[babel-before][Babelで変換する前のコード]{
+//list[babel-before.js][Babelで変換する前のコード]{
 import util from "./util";
 util();
 //}
 
-//list[babel-after][Babelで変換した結果のコード]{
+//list[babel-after.js][Babelで変換した結果のコード]{
 "use strict";
 
 var _util = require("./util");
@@ -1203,7 +1209,7 @@ function _interopRequireDefault(obj) {
 (0, _util2.default)();
 //}
 
-//list[babel-after-rewrite][Babelで変換した結果をわかりやすく書き直す]{
+//list[babel-after-rewrite.js][Babelで変換した結果をわかりやすく書き直す]{
 "use strict";
 
 var util = require("./util");
@@ -1230,9 +1236,9 @@ TypeScriptでは@<code>{exports.default = ...}とされているコードのみ@
 
 === CommonJS形式でちょっと小難しいexport句の使い方
 
-インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、@<list>{export/sample1}のように書きます。
+インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、@<list>{export/sample1.d.ts}のように書きます。
 
-//list[export/sample1][実はインタフェースBarも外から見えない]{
+//list[export/sample1.d.ts][実はインタフェースBarも外から見えない]{
 #@mapfile(../code/definition-file/export/sample1.d.ts)
 declare module "bar" {
   interface Bar {
@@ -1246,10 +1252,10 @@ declare module "bar" {
 #@end
 //}
 
-呼び出し側では@<list>{export/sample1Usage}のように使います。
+呼び出し側では@<list>{export/sample1Usage.ts}のように使います。
 importした値がインタフェースFooのインスタンスになっていることがわかります。
 
-//list[export/sample1Usage][使うとき。インタフェースBarのインスタンスが得られる]{
+//list[export/sample1Usage.ts][使うとき。インタフェースBarのインスタンスが得られる]{
 #@mapfile(../code/definition-file/export/sample1Usage.ts)
 // b は "bar" の Barのインスタンス だよ！
 import * as b from "bar";
@@ -1257,10 +1263,10 @@ b.num;
 #@end
 //}
 
-よくやりがちな誤りは@<list>{export/sample2}のような書き方をしてしまうことです。
+よくやりがちな誤りは@<list>{export/sample2.d.ts}のような書き方をしてしまうことです。
 インタフェースのインスタンスをexportしたつもりが型がexportされてしまうのです。
 
-//list[export/sample2][それは値ではなくて型だけexportしているぞ！]{
+//list[export/sample2.d.ts][それは値ではなくて型だけexportしているぞ！]{
 #@mapfile(../code/definition-file/export/sample2.d.ts)
 declare module "buzz" {
   interface Buzz {
@@ -1295,10 +1301,10 @@ TypeScriptではこういうパターンのときに使いやすい型定義フ�
 strutilはrandomizeString関数を提供します。
 strutil-extraはhappy関数を提供し、strutilを拡張します。
 
-まずは型定義ファイルを見てみましょう（@<list>{augmentGlobal/typings/strutil/}、@<list>{augmentGlobal/typings/strutil-extra/}）。
+まずは型定義ファイルを見てみましょう（@<list>{augmentGlobal/typings/strutil/index.d.ts}、@<list>{augmentGlobal/typings/strutil-extra/index.d.ts}）。
 ちょっと見慣れない書き方ですね。
 
-//list[augmentGlobal/typings/strutil/][typings/strutil/index.d.ts]{
+//list[augmentGlobal/typings/strutil/index.d.ts][typings/strutil/index.d.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/typings/strutil/index.d.ts)
 // importされなかった場合、globalにstrutilという名前で展開する
 export as namespace strutil;
@@ -1319,7 +1325,7 @@ declare global {
 #@end
 //}
 
-//list[augmentGlobal/typings/strutil-extra/][typings/strutil-extra/index.d.ts]{
+//list[augmentGlobal/typings/strutil-extra/index.d.ts][typings/strutil-extra/index.d.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/typings/strutil-extra/index.d.ts)
 // 他のモジュールの型定義を参照する
 import * as strutil from "strutil";
@@ -1379,9 +1385,9 @@ baseUrlとpathsの指定があります。
 TypeScript 2.0.0からこうして任意の場所の型定義ファイルを任意の名前に紐付けられるようになったため、ローカル環境でも利用しやすくなりました。
 
 次に前述の型定義ファイルを利用する例を見てみます。
-まずはグローバルに展開される例です（@<list>{augmentGlobal/lib/bare}）。
+まずはグローバルに展開される例です（@<list>{augmentGlobal/lib/bare.ts}）。
 
-//list[augmentGlobal/lib/bare][lib/bare.ts]{
+//list[augmentGlobal/lib/bare.ts][lib/bare.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/lib/bare.ts)
 // UMD形式のライブラリがglobalに展開されたときの動作に相当する
 // import, export句がない場合、globalのstrutilが参照できる
@@ -1402,10 +1408,10 @@ strutilExtra.happy("TypeScript");
 @<code>{export as namespace ...}形式を使わないUMD形式の対応方法もありますが、importと混ぜるとエラーになるところがよいですね。
 
 #@# @suppress JapaneseStyle
-モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module}）。
+モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module.ts}）。
 普通にモジュールであるかのように利用できますね。
 
-//list[augmentGlobal/lib/module][lib/module.ts]{
+//list[augmentGlobal/lib/module.ts][lib/module.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/lib/module.ts)
 // UMD形式のライブラリがglobalに展開されたときの動作に相当する
 // importした時、普通のモジュールとして振る舞う
@@ -1555,9 +1561,9 @@ npmに公開されているライブラリはnpmで公開されている名前�
 .d.tsファイルも公開していたとしても、.tsファイルが存在しているとそちらが先に発見され、コンパイル処理が走ってしまいます。
 TypeScriptコンパイラのバージョンが上がった時にソースコード（.ts）の修正が必要になるケースは多いですが、型定義ファイル（.d.ts）が影響を受けるケースは稀です。
 つまり、自分のライブラリをより安定したものとするためには、.tsファイルをリリースに含めないほうがよいわけです。
-そのために.npmignoreファイルに@<list>{npmignore}の記述を追加します。
+そのために.npmignoreファイルに@<list>{.npmignore}の記述を追加します。
 
-//list[npmignore][.npmignoreで.tsコードを排除し.d.tsはパッケージング対象へ]{
+//list[.npmignore][.npmignoreで.tsコードを排除し.d.tsはパッケージング対象へ]{
 # libディレクトリ配下でコードが管理されている場合
 lib/**/*.ts
 !lib/**/*.d.ts

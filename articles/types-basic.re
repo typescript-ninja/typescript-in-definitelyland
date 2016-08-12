@@ -31,9 +31,9 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 
 == オブジェクト型リテラル（Object Type Literals）
 
-オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic}）。
+オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic.ts}）。
 
-//list[objectTypeLiteral/basic][基本的な例]{
+//list[objectTypeLiteral/basic.ts][基本的な例]{
 #@mapfile(../code/types-basic/objectTypeLiteral/basic.ts)
 // オブジェクトリテラルで値を作成！
 let objA = {
@@ -60,9 +60,9 @@ export { }
 値の代わりに型名を、要素の終わりに@<code>{,}ではなく@<code>{;}を書くだけです。
 簡単ですね。
 
-オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basicUsage}）。
+オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basicUsage.ts}）。
 
-//list[objectTypeLiteral/basicUsage][でも、正直読みづらい]{
+//list[objectTypeLiteral/basicUsage.ts][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/objectTypeLiteral/basicUsage.ts)
 // 関数の仮引数や返り値に対して
 function move(
@@ -96,9 +96,9 @@ export { }
 
 === プロパティシグニチャ（Property Signatures）
 
-1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture}）。
+1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture.ts}）。
 
-//list[objectTypeLiteral/propertySigniture][大将！いつものやつ！]{
+//list[objectTypeLiteral/propertySigniture.ts][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/objectTypeLiteral/propertySigniture.ts)
 let obj: {
   property: string;
@@ -116,9 +116,9 @@ export { }
 
 === コールシグニチャ（Call Signatures）
 
-2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature}）。
+2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
 
-//list[objectTypeLiteral/callSignature][関数として利用できる]{
+//list[objectTypeLiteral/callSignature.ts][関数として利用できる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/callSignature.ts)
 let obj: {
   (word: string): string;
@@ -140,9 +140,9 @@ export { }
 //}
 
 #@# @suppress ParenthesizedSentence
-オーバーロードも表現できます（@<list>{objectTypeLiteral/call-signature-overload}）。
+オーバーロードも表現できます（@<list>{objectTypeLiteral/call-signature-overload.ts}）。
 
-//list[objectTypeLiteral/call-signature-overload][オーバーロードも表現できる]{
+//list[objectTypeLiteral/call-signature-overload.ts][オーバーロードも表現できる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/callSignatureOverload.ts)
 let obj: {
   // overloadもできるよ
@@ -176,9 +176,9 @@ export { }
 === コンストラクトシグニチャ（Construct Signatures）
 
 #@# @suppress ParenthesizedSentence
-3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature}）。
+3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature.ts}）。
 
-//list[objectTypeLiteral/constructorSignature][newできる]{
+//list[objectTypeLiteral/constructorSignature.ts][newできる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/constructorSignature.ts)
 let clazz: {
   new (): any;
@@ -213,9 +213,9 @@ TypeScriptでは、クラスを定義しなければコンストラクトシグ�
 === インデックスシグニチャ（Index Signatures）
 
 4つ目は、インデックスシグニチャです。
-添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{objectTypeLiteral/indexSignature}）。
+添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{objectTypeLiteral/indexSignature.ts}）。
 
-//list[objectTypeLiteral/indexSignature][プロパティアクセスの例]{
+//list[objectTypeLiteral/indexSignature.ts][プロパティアクセスの例]{
 #@mapfile(../code/types-basic/objectTypeLiteral/indexSignature.ts)
 let objA: {
   [index: number]: string;
@@ -274,9 +274,9 @@ export { s1, s3, s4 }
 
 インデックスシグニチャの型と、インデックスシグニチャ以外（たとえばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。
 
-ちなみに、TypeScriptは@<list>{objectTypeLiteral/indexAccessSample}のように、文字列リテラルによるアクセスも許可しています。
+ちなみに、TypeScriptは@<list>{objectTypeLiteral/indexAccessSample.ts}のように、文字列リテラルによるアクセスも許可しています。
 
-//list[objectTypeLiteral/indexAccessSample][実はドットによるアクセスと同じ堅牢さを誇る]{
+//list[objectTypeLiteral/indexAccessSample.ts][実はドットによるアクセスと同じ堅牢さを誇る]{
 #@mapfile(../code/types-basic/objectTypeLiteral/indexAccessSample.ts)
 let obj = {
   str: "string",
@@ -310,9 +310,9 @@ export { str, num, propertyName1, propertyName2 }
 === メソッドシグニチャ（Method Signatures）
 
 最後の5つ目は、メソッドシグニチャです。
-あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature}）。
+あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature.ts}）。
 
-//list[objectTypeLiteral/methodSignature][メソッドの定義っぽい]{
+//list[objectTypeLiteral/methodSignature.ts][メソッドの定義っぽい]{
 #@mapfile(../code/types-basic/objectTypeLiteral/methodSignature.ts)
 let obj: {
   hello(word: string): string;
@@ -353,9 +353,9 @@ export { }
 
 オブジェクトリテラルを使って値を作る時に、厳密なチェックが行われる場合があります。
 それは、値を直接何らかの型に当てはめた場合です。
-例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid}）。
+例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid.ts}）。
 
-//list[objectTypeLiteral/strictCheck-invalid][厳密にチェックされる場合、されない場合]{
+//list[objectTypeLiteral/strictCheck-invalid.ts][厳密にチェックされる場合、されない場合]{
 #@mapfile(../code/types-basic/objectTypeLiteral/strictCheck-invalid.ts)
 // OK！変数の型に対して、過不足なし
 let obj: { name: string; } = {
@@ -406,9 +406,9 @@ export { }
 === readonly修飾子
 
 TypeScript固有の機能であるreadonly修飾子について紹介します。
-readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（@<list>{objectTypeLiteral/readonly}）。
+readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（@<list>{objectTypeLiteral/readonly.ts}）。
 
-//list[objectTypeLiteral/readonly][readonlyで読み取り専用にする]{
+//list[objectTypeLiteral/readonly.ts][readonlyで読み取り専用にする]{
 #@mapfile(../code/types-basic/objectTypeLiteral/readonly.ts)
 interface Foo {
   // readonly を使うと直接は書き換えできなくなる
@@ -438,10 +438,10 @@ export { }
 //}
 readonlyと変更された該当箇所が変更不可になるだけなので迂回路を使うと値は変更できてしまいます。
 
-クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（@<list>{objectTypeLiteral/readonlyWithClass}）。
+クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（@<list>{objectTypeLiteral/readonlyWithClass.ts}）。
 Javaのfinalに似ていますね。
 
-//list[objectTypeLiteral/readonlyWithClass][readonlyの変更はconstructorだけ]{
+//list[objectTypeLiteral/readonlyWithClass.ts][readonlyの変更はconstructorだけ]{
 #@mapfile(../code/types-basic/objectTypeLiteral/readonlyWithClass.ts)
 class Foo {
   readonly str: string;
@@ -495,9 +495,9 @@ export { Sample };
 
 == 関数型リテラル（Function Type Literals）
 
-関数も型として表現できます（@<list>{function-types/basic}）。
+関数も型として表現できます（@<list>{function-types/basic.ts}）。
 
-//list[function-types/basic][関数も型として表現できる]{
+//list[function-types/basic.ts][関数も型として表現できる]{
 #@mapfile(../code/types-basic/functionTypes/basic.ts)
 let func: (value: string) => string;
 // 当てはまる値はこんな感じ
@@ -528,9 +528,9 @@ TypeScriptでの一番基本的な使い方は名前付きオブジェクト型�
 インタフェースの中で許される記法はオブジェクト型リテラルそのままです。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic}で紹介します。
+TypeScriptでのインタフェースの酷使されっぷりを@<list>{interface/basic.ts}で紹介します。
 
-//list[interface/basic][酷使されるインタフェースさん]{
+//list[interface/basic.ts][酷使されるインタフェースさん]{
 #@mapfile(../code/types-basic/interface/basic.ts)
 // 一般的な用法
 interface A {
@@ -573,10 +573,10 @@ let objC: C = {
 == 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
-TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic}）。
+TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
 そこに実際の継承関係は必要ありません。
 
-//list[structuralSubtypings/basic][大体一緒ならまぁ一緒ってことでいいよね]{
+//list[structuralSubtypings/basic.ts][大体一緒ならまぁ一緒ってことでいいよね]{
 #@mapfile(../code/types-basic/structuralSubtypings/basic.ts)
 // クラス Foo はstring型のstrという名前のプロパティと
 // number型のnumという名前のプロパティを持つ
@@ -596,9 +596,9 @@ export { Foo, obj }
 #@end
 //}
 
-そのため、@<list>{structuralSubtypings/classCompat}のようなコードもTypeScriptとしては正しいです。
+そのため、@<list>{structuralSubtypings/classCompat.ts}のようなコードもTypeScriptとしては正しいです。
 
-//list[structuralSubtypings/classCompat][Pointインタフェースが要求されているが？]{
+//list[structuralSubtypings/classCompat.ts][Pointインタフェースが要求されているが？]{
 #@mapfile(../code/types-basic/structuralSubtypings/classCompat.ts)
 interface Point {
   x: number;
@@ -641,9 +641,9 @@ double(p); // オブジェクトリテラルを直で渡す場合余計な要素
 このコードはコンパイルがちゃんと成功します。
 Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図的な仕様であることが明示できるためより好ましいです。
 
-なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structuralSubtypings/optional}）。
+なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structuralSubtypings/optional.ts}）。
 
-//list[structuralSubtypings/optional][省略可能な（?がある）プロパティは値がなくてもよい]{
+//list[structuralSubtypings/optional.ts][省略可能な（?がある）プロパティは値がなくてもよい]{
 #@mapfile(../code/types-basic/structuralSubtypings/optional.ts)
 interface Point {
   x: number;
@@ -687,9 +687,9 @@ printPoint({
 #@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
 
 型アサーションは他の言語でいうところのキャストです。
-キャストの書き方は2種類あり、@<list>{typeAssertions/basic}のように@<code>{<変換後型名>値}か@<code>{値 as 変換後型名}と書くだけです。
+キャストの書き方は2種類あり、@<list>{typeAssertions/basic.ts}のように@<code>{<変換後型名>値}か@<code>{値 as 変換後型名}と書くだけです。
 
-//list[typeAssertions/basic][型アサーション 基本例]{
+//list[typeAssertions/basic.ts][型アサーション 基本例]{
 #@mapfile(../code/types-basic/typeAssertions/basic.ts)
 let obj: any = 1;
 
@@ -707,9 +707,9 @@ export { }
 #@end
 //}
 
-もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（@<list>{typeAssertions/invalidAssertions-invalid}）。
+もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（@<list>{typeAssertions/invalidAssertions-invalid.ts}）。
 
-//list[typeAssertions/invalidAssertions-invalid][stringはnumberにはなれない]{
+//list[typeAssertions/invalidAssertions-invalid.ts][stringはnumberにはなれない]{
 #@mapfile(../code/types-basic/typeAssertions/invalidAssertions-invalid.ts)
 let str = "str";
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
@@ -718,10 +718,10 @@ let num: number = str as number;
 #@end
 //}
 
-ダウンキャストも実行できます（@<list>{typeAssertions/class}）。
+ダウンキャストも実行できます（@<list>{typeAssertions/class.ts}）。
 TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
 
-//list[typeAssertions/class][親クラスから子クラスへ変換]{
+//list[typeAssertions/class.ts][親クラスから子クラスへ変換]{
 #@mapfile(../code/types-basic/typeAssertions/class.ts)
 class Base {
   str: string;
@@ -755,9 +755,9 @@ export { }
 //}
 
 anyに一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。
-型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{typeAssertions/buggyDefinitionFile}）。
+型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{typeAssertions/buggyDefinitionFile.ts}）。
 
-//list[typeAssertions/buggyDefinitionFile][無理やりなんとかする例]{
+//list[typeAssertions/buggyDefinitionFile.ts][無理やりなんとかする例]{
 #@mapfile(../code/types-basic/typeAssertions/buggyDefinitionFile.ts)
 // こういう、型定義があるとする。実装は他のライブラリなどが与える。
 declare class Base {
@@ -788,9 +788,9 @@ Javaなどでは総称型とも呼ばれます。
 === ジェネリクスの基本
 
 TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
-例を見てみましょう（@<list>{genericTypes/basic}）。
+例を見てみましょう（@<list>{genericTypes/basic.ts}）。
 
-//list[genericTypes/basic][配列はジェネリクスに支えられております]{
+//list[genericTypes/basic.ts][配列はジェネリクスに支えられております]{
 #@mapfile(../code/types-basic/genericTypes/basic.ts)
 // string[] は実は Array<string> と同じ意味なのだ！(Arrayだけ特別に！
 let strArray: Array<string> = ["a", "b", "c"];
@@ -833,9 +833,9 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"とするこ
 ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
 代表的な例ではTypeの頭文字であるT、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。
 
-さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid}を見てみます@<fn>{array-forEach}。
+さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid.ts}を見てみます@<fn>{array-forEach}。
 
-//list[genericTypes/arrayDeclaration-invalid][Array<T>が登場する]{
+//list[genericTypes/arrayDeclaration-invalid.ts][Array<T>が登場する]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclaration-invalid.ts)
 interface ArrayConstructor {
   new <T>(...items: T[]): T[];
@@ -855,9 +855,9 @@ interface Array<T> {
 色々な所でTが使われています。
 pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach"などの、汎用化された要素がたくさんあります。
 
-ここで、型パラメータTを実際にstringで具体化します（@<list>{genericTypes/arrayDeclarationString-invalid}）。
+ここで、型パラメータTを実際にstringで具体化します（@<list>{genericTypes/arrayDeclarationString-invalid.ts}）。
 
-//list[genericTypes/arrayDeclarationString-invalid][string専用Arrayに変身]{
+//list[genericTypes/arrayDeclarationString-invalid.ts][string専用Arrayに変身]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclarationString-invalid.ts)
 interface ArrayConstructor {
   new (...items: string[]): string[];
@@ -883,9 +883,9 @@ interface Array {
 
 === ジェネリクスの書き方色々
 
-ここでジェネリクスの書き方を確認しておきます（@<list>{genericTypes/variation}）。
+ここでジェネリクスの書き方を確認しておきます（@<list>{genericTypes/variation.ts}）。
 
-//list[genericTypes/variation][Array<T>が登場する]{
+//list[genericTypes/variation.ts][Array<T>が登場する]{
 #@mapfile(../code/types-basic/genericTypes/variation.ts)
 // それぞれのTは独立していて、関連性はない
 
@@ -939,9 +939,9 @@ export { SampleA, objA, SampleB, objB, obj, SampleC, objC }
 === 型パラメータと制約
 
 型パラメータには満たすべき制約を設けることができます。
-例を見てみましょう（@<list>{genericTypes/limitation}）。
+例を見てみましょう（@<list>{genericTypes/limitation.ts}）。
 
-//list[genericTypes/limitation][型パラメータTはBaseを継承していなければならない]{
+//list[genericTypes/limitation.ts][型パラメータTはBaseを継承していなければならない]{
 #@mapfile(../code/types-basic/genericTypes/limitation.ts)
 class Base {
   str: string;
@@ -1000,9 +1000,9 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 
 ありえないなんてことはありえない！はずだけれど、"ありえない"ことを示す型があります。
 到達不可能なコードはnever型となります。
-具体例を見てみましょう（@<list>{neverType/basic-invalid}）。
+具体例を見てみましょう（@<list>{neverType/basic-invalid.ts}）。
 
-//list[neverType/basic-invalid]["ありえない"ことが型として示される]{
+//list[neverType/basic-invalid.ts]["ありえない"ことが型として示される]{
 #@mapfile(../code/types-basic/neverType/basic-invalid.ts)
 let str = "TypeScript";
 if (typeof str === "number") {

@@ -27,12 +27,12 @@ ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{variable/withAnnotations}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです@<fn>{suppress-warning}。
+違うのは、@<list>{variable/withAnnotations.ts}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです@<fn>{suppress-warning}。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
 //footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
-//list[variable/withAnnotations][型注釈付きの変数]{
+//list[variable/withAnnotations.ts][型注釈付きの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
 let str: string;
 let num: number;
@@ -52,10 +52,10 @@ export { }
 //}
 
 型注釈の何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
-たとえば@<list>{variable/withAnnotations-invalid}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
+たとえば@<list>{variable/withAnnotations-invalid.ts}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
 安心安全！
 
-//list[variable/withAnnotations-invalid][型注釈に反することをやってみる]{
+//list[variable/withAnnotations-invalid.ts][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
 let str: string;
 // 文字列は数値と互換性がない！
@@ -76,9 +76,9 @@ bool = "str";
 
 安心安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。
 そんなあなたのために、TypeScriptは型推論の機能を備えています。
-@<list>{variable/withInitializer}のように、型注釈を書かずに変数定義と初期化を同時に行えます。
+@<list>{variable/withInitializer.ts}のように、型注釈を書かずに変数定義と初期化を同時に行えます。
 
-//list[variable/withInitializer][初期化付き変数 = 最強]{
+//list[variable/withInitializer.ts][初期化付き変数 = 最強]{
 #@mapfile(../code/typescript-basic/variable/withInitializer.ts)
 let str = "string";
 let num = 1;
@@ -101,13 +101,13 @@ export { str, num, bool, func, obj }
 #@# @suppress ParagraphNumber SectionLength
 === 普通のクラス
 
-ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic}）。
+ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic.ts}）。
 
 #@# OK REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
 #@# OK REVIEW lc: spec読んだら「class members」と「static class members」だった
 #@# vv: ES.next的には定まった呼称はなさそう syntax的にはClassElement。若干Java方言だけどここはとりあえずこのままにしときます。
 
-//list[class/basic][さまざまなクラス要素]{
+//list[class/basic.ts][さまざまなクラス要素]{
 #@mapfile(../code/typescript-basic/class/basic.ts)
 class Base {
   // インスタンス変数
@@ -236,7 +236,7 @@ console.log(obj.str);
 #@end
 //}
 
-@<list>{class/basic}の解説に戻ります。
+@<list>{class/basic.ts}の解説に戻ります。
 次はメソッドです。
 これも特に特筆すべき要素はありませんね。普通です。
 
@@ -245,10 +245,10 @@ console.log(obj.str);
 これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定します。
 get、setアクセサを使うと、getterしか定義していない場合でもプログラム上は値の代入処理が記述できてしまうので、"use strict"を併用して実行時にエラーを検出するようにしましょう。
 
-次に、クラスの継承も見て行きましょう（@<list>{class/inherit}）。
+次に、クラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
 superを使い親クラスのメソッドを参照することも普通にできます。
 
-//list[class/inherit][普通に継承もあるよ]{
+//list[class/inherit.ts][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
@@ -351,10 +351,10 @@ new Cat();
 
 === 普通の関数
 
-いたって普通です（@<list>{function/basic}）。
+いたって普通です（@<list>{function/basic.ts}）。
 型注釈の与え方や、引数を省略可能にする方法だけがJavaScriptと違いますね。
 
-//list[function/basic][色々な関数定義]{
+//list[function/basic.ts][色々な関数定義]{
 #@mapfile(../code/typescript-basic/function/basic.ts)
 function hello(word: string): string {
   return `Hello, ${word}`;
@@ -384,9 +384,9 @@ export { }
 #@end
 //}
 
-可変長引数もあります！（@<list>{function/args}）
+可変長引数もあります！（@<list>{function/args.ts}）
 
-//list[function/args][可変長引数の例]{
+//list[function/args.ts][可変長引数の例]{
 #@mapfile(../code/typescript-basic/function/args.ts)
 function hello(...args: string[]) {
   return `Hello, ${args.join(" & ")}`;
@@ -399,9 +399,9 @@ export { }
 //}
 
 #@# @suppress LongKanjiChain
-なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりするのはNGです（@<list>{function/invalid}）。
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりするのはNGです（@<list>{function/invalid.ts}）。
 
-//list[function/invalid][こういうパターンはNG]{
+//list[function/invalid.ts][こういうパターンはNG]{
 #@mapfile(../code/typescript-basic/function/invalid.ts)
 // 省略可能な引数の後に省略不可な引数がきてはいけない
 // error TS1016: A required parameter cannot follow an optional parameter.
@@ -423,10 +423,10 @@ export { }
 
 === アロー関数
 
-ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic}）。
+ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic.ts}）。
 通常の関数とアロー関数の違いについてはECMAScript 2015の範囲であるため、本書では解説しません。
 
-//list[arrowFunctions/basic][アロー関数 短くてかっこいい]{
+//list[arrowFunctions/basic.ts][アロー関数 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrowFunctions/basic.ts)
 // 次の2つは(thisが絡まない限り)等価！
 let funcA = () => true;
@@ -504,9 +504,9 @@ TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015に
 
 #@# @suppress SentenceLength CommaNumber
 さて、実際のコード例を見てみましょう。
-foo.ts（@<list>{externalModule/foo}）、bar.ts（@<list>{externalModule/bar}）、buzz.ts（@<list>{externalModule/buzz}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
+foo.ts（@<list>{externalModule/foo.ts}）、bar.ts（@<list>{externalModule/bar.ts}）、buzz.ts（@<list>{externalModule/buzz.ts}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
 
-//list[externalModule/foo][foo.ts]{
+//list[externalModule/foo.ts][foo.ts]{
 #@mapfile(../code/typescript-basic/externalModule/foo.ts)
 // defaultをbarという名前に hello関数をそのままの名前でimport
 import bar, { hello } from "./bar";
@@ -536,7 +536,7 @@ console.log(buzz2());
 #@end
 //}
 
-//list[externalModule/bar][bar.ts]{
+//list[externalModule/bar.ts][bar.ts]{
 #@mapfile(../code/typescript-basic/externalModule/bar.ts)
 export function hello(word = "TypeScript") {
   return `Hello, ${word}`;
@@ -548,7 +548,7 @@ export default function(word = "default") {
 #@end
 //}
 
-//list[externalModule/buzz][buzz.ts]{
+//list[externalModule/buzz.ts][buzz.ts]{
 #@mapfile(../code/typescript-basic/externalModule/buzz.ts)
 function bye(word = "TypeScript") {
   return `Good bye, ${word}`;
@@ -735,10 +735,10 @@ console.log(d.e.hello());
 モジュールもletやconstのようなブロックスコープもなかった頃の名残ですね。
 
 #@# @suppress JapaneseStyle
-長い名前を使うのが嫌なときは@<list>{internalModule/import}のように、import句を使うこともできます。
+長い名前を使うのが嫌なときは@<list>{internalModule/import.ts}のように、import句を使うこともできます。
 先に説明したモジュールではこれとは異なるimport句の使い方が出てきましたが、区別しましょう。
 
-//list[internalModule/import][import句で別名を作る]{
+//list[internalModule/import.ts][import句で別名を作る]{
 #@mapfile(../code/typescript-basic/internalModule/import.ts)
 namespace a {
   export class Sample { }

@@ -1,6 +1,6 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
-#@# @suppress SectionLength
+#@# @suppress SectionLength ParagraphNumber
 == インストールしてみよう
 
 Node.jsのセットアップはすでに完了しているものとします。
@@ -182,7 +182,7 @@ tsconfig.jsonができたら、後はコンパイルするだけです。
 #@# @suppress KatakanaSpellCheck
 == エディタ・IDEの環境を整えよう
 
-#@# @suppress KatakanaSpellCheck
+#@# @suppress KatakanaSpellCheck CommaNumber
 Atom、Eclipse、Emacs、Vim、Visual Studio、WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
 TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体から変数の種類やメソッドの有無などの情報を得えられます。

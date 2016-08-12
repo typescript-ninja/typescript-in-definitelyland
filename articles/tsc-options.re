@@ -153,9 +153,9 @@ gulpやgruntなどのタスクランナーを使う場合でもtsconfig.jsonを�
 TypeScriptコンパイラの最重要オプション、@<code>{--noImplicitAny}について解説します。
 このオプションは"暗黙的なanyを禁ずる"の名が表すとおり、型推論の結果、暗黙的に変数の型がanyになった場合、エラーとしてくれます。
 
-@<list>{noImplicitAny/basic-invalid}のようなメソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
+@<list>{noImplicitAny/basic-invalid.ts}のようなメソッドの返り値の型を書き忘れた！という脇の甘いコードをコンパイルしてみます。
 
-//list[noImplicitAny/basic-invalid][メソッドの返り値を書き忘れた！]{
+//list[noImplicitAny/basic-invalid.ts][メソッドの返り値を書き忘れた！]{
 #@mapfile(../code/tsc-options/noImplicitAny/basic-invalid.ts)
 declare class Sample {
   // 返り値の型を指定し忘れている！
@@ -195,9 +195,9 @@ nullやundefinedを許容したい場合、union typesや省略可能引数を�
 本書は@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
 有効にしている時の挙動は本書のサンプルすべてが該当しますので、この節ではこのオプションを使わないときの挙動について確認します。
 
-まずはオプションありの例です（@<list>{strictNullChecks/basic}）。
+まずはオプションありの例です（@<list>{strictNullChecks/basic.ts}）。
 
-//list[strictNullChecks/basic][危険なコードがいち早く発見される]{
+//list[strictNullChecks/basic.ts][危険なコードがいち早く発見される]{
 #@mapfile(../code/tsc-options/strictNullChecks/basic.ts)
 // --strictNullChecks無しとの比較
 // 無しの場合に等しい表現は…
@@ -234,9 +234,9 @@ nullやundefinedに対するアクセスが多くの場合未然に防がれ、"
 
 非null指定演算子（@<code>{!}）については@<chapref>{types-advanced}の@<hd>{types-advanced|non-null-assertion-operator}で触れました。
 
-さて次はオプションなしの例です（@<list>{strictNullChecks/withoutStrictNullCheck-ignore}）。
+さて次はオプションなしの例です（@<list>{strictNullChecks/withoutStrictNullCheck-ignore.ts}）。
 
-//list[strictNullChecks/withoutStrictNullCheck-ignore][実行時にエラーになるかも]{
+//list[strictNullChecks/withoutStrictNullCheck-ignore.ts][実行時にエラーになるかも]{
 #@mapfile(../code/tsc-options/strictNullChecks/withoutStrictNullCheck-ignore.ts)
 // --strictNullChecks無しだと大変ゆるい
 let obj: Date;
@@ -265,9 +265,9 @@ export { }
 その名のとおり、使っていないローカル変数があったらエラーにしてくれます。
 本書のサンプルコードでも有効になっているため、エラー消しのために無意味にexportしている箇所がありました。
 
-例を見てみます（@<list>{noUnusedLocals/basic-invalid}）。
+例を見てみます（@<list>{noUnusedLocals/basic-invalid.ts}）。
 
-//list[noUnusedLocals/basic-invalid][未使用変数はちゃんと消そう]{
+//list[noUnusedLocals/basic-invalid.ts][未使用変数はちゃんと消そう]{
 #@mapfile(../code/tsc-options/noUnusedLocals/basic-invalid.ts)
 // importした後、一回も使わないのはエラー
 // error TS6133: 'readFile' is declared but never used.
@@ -297,9 +297,9 @@ export let objC = {};
 関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
 エラーにせず残しておきたい場合、変数名の頭に@<code>{_}（アンダースコア）をつけることでエラーを抑制できます。
 
-例を見てみます（@<list>{noUnusedParameters/basic-invalid}）。
+例を見てみます（@<list>{noUnusedParameters/basic-invalid.ts}）。
 
-//list[noUnusedParameters/basic-invalid][使っていない仮引数はできれば削除したい]{
+//list[noUnusedParameters/basic-invalid.ts][使っていない仮引数はできれば削除したい]{
 #@mapfile(../code/tsc-options/noUnusedParameters/basic-invalid.ts)
 // 仮引数 b は利用されていないのでエラー _c はプリフィクス_なのでエラーにならない
 // error TS6133: 'b' is declared but never used.
@@ -325,9 +325,9 @@ export class Sample {
 @<code>{--noImplicitReturns}オプションについて解説します。
 関数やメソッドの返り値について、returnで値を返す場合とreturnしない場合、エラーになります。
 
-例を見てみます（@<list>{noImplicitReturns/basic-invalid}）。
+例を見てみます（@<list>{noImplicitReturns/basic-invalid.ts}）。
 
-//list[noImplicitReturns/basic-invalid][暗黙のreturnを禁じる]{
+//list[noImplicitReturns/basic-invalid.ts][暗黙のreturnを禁じる]{
 #@mapfile(../code/tsc-options/noImplicitReturns/basic-invalid.ts)
 // returnがない（暗黙的にundefinedが返る）パターンを検出してくれる
 // error TS7030: Not all code paths return a value.
@@ -358,9 +358,9 @@ export { }
 @<code>{--noImplicitThis}オプションについておさらいします。
 @<chapref>{types-advanced}の「関数のthisの型の指定」で述べたとおり、このオプションを利用すると、thisの型指定がない関数内でthisへアクセスするとエラーになります。
 
-例を見てみます（@<list>{noImplicitThis/basic-invalid}）。
+例を見てみます（@<list>{noImplicitThis/basic-invalid.ts}）。
 
-//list[noImplicitThis/basic-invalid][型指定無しのthisの利用を禁じる]{
+//list[noImplicitThis/basic-invalid.ts][型指定無しのthisの利用を禁じる]{
 #@mapfile(../code/tsc-options/noImplicitThis/basic-invalid.ts)
 // 関数内部でのthisの型を偽の第一引数で指定
 function testA(this: string) {
