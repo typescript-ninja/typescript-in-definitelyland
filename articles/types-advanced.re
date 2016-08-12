@@ -1,4 +1,4 @@
-= アドバンスド型戦略
+={types-advanced} アドバンスド型戦略
 
 #@# TODO 文脈依存型
 #@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8
@@ -15,7 +15,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 //footnote[bad-code][本章で触れる機能を使うほうがよい場合もあります。たとえば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください]
 
 #@# @suppress ParagraphNumber SectionLength
-== 直和型（Union Types）
+=={union-types} 直和型（Union Types）
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -137,7 +137,7 @@ export { }
 #@end
 //}
 
-union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を使いましょう。話はそれからだ！
+union typesを相手にする場合は、次に説明する@<hd>{type-guards}を使いましょう。話はそれからだ！
 
 
 #@# NOTE http://togetter.com/li/749889
@@ -148,7 +148,7 @@ union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を�
 #@# NOTE 小クワガタ 黒くて挟む角が2つ生えてる虫
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-=={typeGuards} 型の番人（Type Guards）
+=={type-guards} 型の番人（Type Guards）
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -156,7 +156,7 @@ union typesを相手にする場合は、次に説明する@<hd>{typeGuards}を�
 type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（番人となる条件式など）の後の文脈で変数の型を××に狭めることができます。
 
-=== 処理フローに基づく型の解析（Control Flow Based Type Analysis）
+==={control-flow-based-type-analysis} 処理フローに基づく型の解析（Control Flow Based Type Analysis）
 
 #@# @suppress JapaneseStyle
 さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
@@ -295,7 +295,7 @@ if (typeof v2 === "string") {
 
 さて、次項意向でどういう処理が絞り込みに繋がるのかの例を見ていきます。
 
-=== typeofによるType Guards
+==={typeof-type-guards} typeofによるType Guards
 
 JavaScriptの@<code>{typeof}は指定した値がどういう性質のオブジェクトかを調べ、文字列で返す演算子です。
 ECMAScript 5の範囲では、変換ルールは次のとおりです。
@@ -355,7 +355,7 @@ if (typeof objB === "string") {
 うーん、便利ですね。
 変数に指定した型どおりの値が入ってくるのが健全なので、コンパイル時にミスが発見されるのは嬉しいことです。
 
-=== instanceofによるType Guards
+==={instanceof-type-guards} instanceofによるType Guards
 
 typeofでしかtype guardsが使えないと辛いので、instanceofを使ったtype guardsも、もちろんあります。
 
@@ -440,7 +440,7 @@ export { }
 昔のTypeScriptと違って、instanceofのelse句でも型の絞り込みが行われます。
 挙動として納得感があり大変よいですね。
 
-=== ユーザ定義のType Guards（User-defined Type Guards）
+==={user-defined-type-guards} ユーザ定義のType Guards（User-defined Type Guards）
 
 ユーザが定義した関数によって、ある値がなんの型なのかをTypeScriptコンパイラに教える方法があります（@<list>{typeGuards/userDefined.ts}）。
 型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
@@ -519,7 +519,7 @@ export { }
 引数として渡された値の型名を明示する代わりに、thisの型を指定するわけです。
 これも利用する機会は少なさそうですが、ツリー状の構造を作るときなどに活躍しそうです。
 
-=== Type Guardsと論理演算子
+==={type-guards-and-logical-operators} Type Guardsと論理演算子
 
 type guardsは@<code>{&&}とか@<code>{||}とか@<code>{?}とか@<code>{!}とかの論理演算子にもちゃんと対応しています（@<list>{typeGuards/operator.ts}）。
 
@@ -561,7 +561,7 @@ export { }
 
 あんまり使わないかもしれませんが、他の人がこの書き方を使った時に戸惑わぬよう頭の片隅にはとどめておいたほうがよいかもしれません。
 
-=== Type Guardsの弱点
+==={type-guards-weakpoint} Type Guardsの弱点
 
 type guardsは型システム上の仕組みだということを忘れてはいけません。
 JavaScriptの実行環境とは全く関係がないのです。
@@ -638,7 +638,7 @@ let obj: Sample = {
 #@# @suppress JapaneseStyle
 色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することです。
 
-== 交差型（Intersection Types）
+=={intersection-types} 交差型（Intersection Types）
 
 union typesに似た記法のintersection types（交差型）です。
 intersection typesは2つの型を合成し、1つの型にできます。
@@ -746,7 +746,7 @@ export { sample1, sample2 }
 intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
 
 #@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
-== 文字列リテラル型（String Literal Types）
+=={string-literal-types} 文字列リテラル型（String Literal Types）
 
 文字列リテラルを型として使える機能です。
 パッと読んだだけでは、意味がわからないですね。
@@ -862,7 +862,7 @@ switch文によるtype guards（後述）はTypeScript 2.1.0からのサポー�
 //footnote[primitive-literal-types][@<href>{https://github.com/Microsoft/TypeScript/pull/9407}]
 
 #@# @suppress ParagraphNumber
-== 型の別名（Type Alias）
+=={type-alias} 型の別名（Type Alias）
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -984,7 +984,7 @@ union typesが絡むもの、tuple typesが絡むもの、型クエリが絡む�
 
 @<strong>{interfaceでできることをtype aliasでやるな！}
 
-== 多態性のあるthis型（Polymorphic 'this' Type）
+=={polymorphic-this-type} 多態性のあるthis型（Polymorphic 'this' Type）
 
 @<code>{this}を型として用いることができます。
 たとえば@<list>{polymorphicThisType/basic.ts}のようなコードです。
@@ -1048,7 +1048,7 @@ fluentな、メソッドチェーンで使うAPIを組み立てる場合に役�
 @<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-== 関数のthisの型の指定（Specifying This Types For Functions）
+=={specifying-this-types-for-functions} 関数のthisの型の指定（Specifying This Types For Functions）
 
 JavaScriptでは@<code>{Function.prototype.bind}や@<code>{Function.prototype.call}、@<code>{Function.prototype.apply}などの関数により、関数呼び出し時のthisの値の型を変更できます。
 この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。
@@ -1142,7 +1142,7 @@ export { }
 自分でTypeScriptコードを書く時に必要になる場合は少なくありたいものです。
 しかし、型定義ファイルを作成する時にはお世話にならざるをえないときがあるでしょう。
 
-== ローカル型（Local Types）
+=={local-types} ローカル型（Local Types）
 
 ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義できます（@<list>{localType/basic.ts}）。
 
@@ -1201,8 +1201,7 @@ export { Foo }
 #@end
 //}
 
-
-== 型クエリ（Type Queries）
+=={type-queries} 型クエリ（Type Queries）
 
 型クエリは指定した変数（やメソッドなど）の型をコピーします。
 たとえば、@<list>{typeQueries/basic.ts}のようなクラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
@@ -1288,7 +1287,7 @@ export { }
 ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうが断然いいですね。
 
 #@# @suppress ParagraphNumber SectionLength
-== タプル型（Tuple Types）
+=={tuple-types} タプル型（Tuple Types）
 
 #@# http://qiita.com/vvakame/items/0b5060de5566f210479b
 

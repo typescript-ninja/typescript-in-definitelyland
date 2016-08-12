@@ -1,4 +1,4 @@
-= TypeScriptの基本
+={typescript-basic} TypeScriptの基本
 
 #@# TODO enum
 #@# TODO const enum
@@ -23,7 +23,7 @@ ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 #@# vv: ここはこのままにしておきます…。
 
 #@# @suppress ParagraphNumber SectionLength
-== 変数
+=={variables} 変数
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
@@ -99,7 +99,7 @@ export { str, num, bool, func, obj }
 =={class} クラス
 
 #@# @suppress ParagraphNumber SectionLength
-=== 普通のクラス
+==={standard-class} 普通のクラス
 
 ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic.ts}）。
 
@@ -273,7 +273,7 @@ export { }
 TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
 
-=== 抽象クラス（Abstract Class）
+==={abstract-class} 抽象クラス（Abstract Class）
 
 ECMAScriptにはない機能として、抽象クラスが作成できます。
 抽象クラスは単独ではインスタンス化できません。
@@ -349,7 +349,7 @@ new Cat();
 
 #@# NOTE クラスの後に関数定義の説明したーーーい！したくない？
 
-=== 普通の関数
+==={standard-function} 普通の関数
 
 いたって普通です（@<list>{function/basic.ts}）。
 型注釈の与え方や、引数を省略可能にする方法だけがJavaScriptと違いますね。
@@ -421,7 +421,7 @@ export { }
 
 ここまで見てきた省略可能な引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドを記述するときも同様に利用できます。
 
-=== アロー関数
+==={arrow-function} アロー関数
 
 ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic.ts}）。
 通常の関数とアロー関数の違いについてはECMAScript 2015の範囲であるため、本書では解説しません。
@@ -463,7 +463,7 @@ export { }
 
 #@# TODO argumentsの取り扱いがES6準拠ではない みたいな話も仕様ちゃんと読んで書きたい
 
-== モジュールのあれこれ
+=={module-and-namespace} モジュールのあれこれ
 
 プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
 そのための武器として、ECMAScript 2015にはモジュールがあります。
@@ -485,7 +485,7 @@ Node.jsで使われているCommonJS形式のモジュールと考え方は一�
 仕様としてモジュールが策定され、WHATWGでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。
 これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
 
-=== モジュール
+==={module} モジュール
 
 モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。
 @<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照できます。
@@ -625,7 +625,7 @@ module.exports = bye;
 #@# prh:disable
 //footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
 
-=== namespace
+==={namespace} namespace
 
 現実的にコードを書く時にはnamespaceを使わないほうがよいのです。
 ですので、できればnamespaceについては説明したくないのですが、そうはいかない理由があります。

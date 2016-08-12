@@ -1,4 +1,4 @@
-= 型は便利だ楽しいな
+={types-basic} 型は便利だ楽しいな
 
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO 省略可能引数
@@ -29,7 +29,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。
 実用上のテクニックは@<chapref>{types-advanced}や@<chapref>{definition-file}でも言及します。
 
-== オブジェクト型リテラル（Object Type Literals）
+=={object-type-literals} オブジェクト型リテラル（Object Type Literals）
 
 オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic.ts}）。
 
@@ -94,7 +94,7 @@ export { }
 
 //footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません]
 
-=== プロパティシグニチャ（Property Signatures）
+==={property-signatures} プロパティシグニチャ（Property Signatures）
 
 1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture.ts}）。
 
@@ -114,7 +114,7 @@ export { }
 
 素直でわかりやすいですね。
 
-=== コールシグニチャ（Call Signatures）
+==={call-signatures} コールシグニチャ（Call Signatures）
 
 2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
 
@@ -173,7 +173,7 @@ export { }
 
 実装が煩雑になるのでなるべくオーバーロードを自分のコード内で利用することは避けたいところです。
 
-=== コンストラクトシグニチャ（Construct Signatures）
+==={constructor-signatures} コンストラクトシグニチャ（Construct Signatures）
 
 #@# @suppress ParenthesizedSentence
 3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature.ts}）。
@@ -210,7 +210,7 @@ TypeScriptでは、クラスを定義しなければコンストラクトシグ�
 
 コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。
 
-=== インデックスシグニチャ（Index Signatures）
+==={index-signatures} インデックスシグニチャ（Index Signatures）
 
 4つ目は、インデックスシグニチャです。
 添字によるプロパティアクセスに対して、型を当てはめられます（@<list>{objectTypeLiteral/indexSignature.ts}）。
@@ -307,7 +307,7 @@ export { str, num, propertyName1, propertyName2 }
 
 インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。
 
-=== メソッドシグニチャ（Method Signatures）
+==={method-signatures} メソッドシグニチャ（Method Signatures）
 
 最後の5つ目は、メソッドシグニチャです。
 あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature.ts}）。
@@ -347,7 +347,7 @@ export { }
 "プロパティシグニチャ+関数型リテラル（後述）"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
 
 #@# @suppress
-=== オブジェクトリテラルと厳密なチェック
+==={object-literal-and-strict-type-checks} オブジェクトリテラルと厳密なチェック
 
 オブジェクト型リテラルの話と関わりが深いのでここで説明します。
 
@@ -403,7 +403,7 @@ export { }
 そのようなコンパイルエラーは型定義ファイルを修正して対処してほしいところですが、急いでいるのであれば一旦別の変数に代入してから再代入することで回避できます。
 一旦別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。
 
-=== readonly修飾子
+==={readonly-modifiers} readonly修飾子
 
 TypeScript固有の機能であるreadonly修飾子について紹介します。
 readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（@<list>{objectTypeLiteral/readonly.ts}）。
@@ -493,7 +493,7 @@ export { Sample };
 #@# OK REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
 #@# vv: これ知らんかった… 入れるか迷ったけどとりあえず入れてみるか！
 
-== 関数型リテラル（Function Type Literals）
+=={function-type-literals} 関数型リテラル（Function Type Literals）
 
 関数も型として表現できます（@<list>{function-types/basic.ts}）。
 
@@ -520,7 +520,7 @@ func = (v1: string, v2 = "JavaScript") => `Hello, ${v1} & ${v2}`;
 #@# @suppress SentenceLength ParenthesizedSentence
 アロー関数の実装は@<code>{(word: string): string => "Hello, " + word;}という記法なのに対して、関数型リテラルは@<code>{(word: string) => string}という記法で、返り値の型を置く位置が@<code>{=>}の前後という違いがあるので間違えないように気をつけましょう。
 
-== インタフェース（Interfaces）
+=={inteface} インタフェース（Interfaces）
 
 インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
@@ -570,7 +570,7 @@ let objC: C = {
 #@end
 //}
 
-== 構造的部分型（Structural Subtyping）
+=={structural-subtyping} 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
 TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
@@ -682,7 +682,7 @@ printPoint({
 #@end
 //}
 
-== 型アサーション（Type Assertions）
+=={type-assertions} 型アサーション（Type Assertions）
 
 #@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
 
@@ -775,7 +775,7 @@ export { num }
 #@end
 //}
 
-== ジェネリクス（Generic Types）
+=={generic-types} ジェネリクス（Generic Types）
 
 いよいよ来ました。
 最後の大ボスです。
@@ -785,7 +785,7 @@ Javaなどでは総称型とも呼ばれます。
 という人も、実はすでに色々なところでお世話になっています。
 
 #@# @suppress SectionLength
-=== ジェネリクスの基本
+==={generic-basic} ジェネリクスの基本
 
 TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。
 例を見てみましょう（@<list>{genericTypes/basic.ts}）。
@@ -881,7 +881,7 @@ interface Array {
 
 //footnote[array-forEach][紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！]
 
-=== ジェネリクスの書き方色々
+==={generic-patterns} ジェネリクスの書き方色々
 
 ここでジェネリクスの書き方を確認しておきます（@<list>{genericTypes/variation.ts}）。
 
@@ -936,7 +936,7 @@ export { SampleA, objA, SampleB, objB, obj, SampleC, objC }
 この中でよく使うのは、クラスとインタフェースとメソッドシグニチャの書き方でしょう。
 まずはこの3パターンの書き方を覚えておくべきです。
 
-=== 型パラメータと制約
+==={generic-and-limitations} 型パラメータと制約
 
 型パラメータには満たすべき制約を設けることができます。
 例を見てみましょう（@<list>{genericTypes/limitation.ts}）。
@@ -983,7 +983,7 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 型パラメータが満たすべき制約をextendsの形式で指定できます。
 これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。
 
-=== 自分でジェネリクス有りのコードを書く
+==={design-generic-signatures} 自分でジェネリクス有りのコードを書く
 
 #@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
 ジェネリクスを使いこなすにあたり、一番難しいのは使うことではなく、使わせることです。
@@ -996,7 +996,7 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
 ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。
 
-== "ありえない"型（The Never Type）
+=={never-type} "ありえない"型（The Never Type）
 
 ありえないなんてことはありえない！はずだけれど、"ありえない"ことを示す型があります。
 到達不可能なコードはnever型となります。

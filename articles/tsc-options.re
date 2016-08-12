@@ -1,4 +1,4 @@
-= オプションを知り己のコードを知れば百戦危うからず
+={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
@@ -25,7 +25,7 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --out, --outDir, --outFile
 #@#   --noImplicitUseStrict
 
-== --init
+=={init} --init
 
 @<code>{--init}オプションについて解説します。
 このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
@@ -134,7 +134,7 @@ libD/bb.ts         # 対象にならない（exclude）
 //footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
 //footnote[tsconfig-cli][@<href>{https://www.npmjs.com/package/tsconfig-cli}]
 
-== --project
+=={project} --project
 
 @<code>{--project}オプションについて解説します。
 短縮記法の@<code>{-p}も利用できます。
@@ -148,7 +148,7 @@ tsconfig.jsonではない名前のファイルを使って、プロジェクト�
 
 gulpやgruntなどのタスクランナーを使う場合でもtsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
 
-== --noImplicitAny
+=={noImplicitAny} --noImplicitAny
 
 TypeScriptコンパイラの最重要オプション、@<code>{--noImplicitAny}について解説します。
 このオプションは"暗黙的なanyを禁ずる"の名が表すとおり、型推論の結果、暗黙的に変数の型がanyになった場合、エラーとしてくれます。
@@ -186,7 +186,7 @@ definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
 anyが紛れ込んで型チェックが意味を成さなくなるとTypeScriptの意義が薄れてしまいます。
 型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
 
-== --strictNullChecks
+=={strictNullChecks} --strictNullChecks
 
 @<code>{--strictNullChecks}オプションについて解説します。
 このオプションはnullやundefinedの扱いについてより厳格にし、変数の中身についての曖昧さを積極的に排除するよう振る舞います。
@@ -259,7 +259,7 @@ export { }
 しかし、それはプログラマの不断の努力の上にしか成り立ちません。
 そんな苦労をするよりは、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さが確かなものになりますね。
 
-== --noUnusedLocals
+=={noUnusedLocals} --noUnusedLocals
 
 @<code>{--noUnusedLocals}オプションについて解説します。
 その名のとおり、使っていないローカル変数があったらエラーにしてくれます。
@@ -291,7 +291,7 @@ export let objC = {};
 エラーを削っていくと、import文自体を削減できるパターンもあるでしょう。
 コードをきれいに保とう！
 
-== --noUnusedParameters
+=={noUnusedParameters} --noUnusedParameters
 
 @<code>{--noUnusedParameters}オプションについて解説します。
 関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
@@ -320,7 +320,7 @@ export class Sample {
 未使用の仮引数があるとエラーになります。
 関数の引数の数や型を後から変更するのはめんどくさいので、なるべく早めに検出し修正してしまいたいものです。
 
-== --noImplicitReturns
+=={noImplicitReturns} --noImplicitReturns
 
 @<code>{--noImplicitReturns}オプションについて解説します。
 関数やメソッドの返り値について、returnで値を返す場合とreturnしない場合、エラーになります。
@@ -352,7 +352,7 @@ export { }
 プログラミングのスタイルとして、elseの漏れや値の返し忘れがあるコードはミスである可能性が高いです。
 そういったコードを書くとエラーになるのは便利ですね。
 
-== --noImplicitThis
+=={noImplicitThis} --noImplicitThis
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 @<code>{--noImplicitThis}オプションについておさらいします。
@@ -379,7 +379,7 @@ export { testB }
 #@end
 //}
 
-== --target
+=={target} --target
 
 @<code>{--target}オプションについて解説します。
 短縮記法で@<code>{-t}も利用できます。
@@ -399,7 +399,7 @@ es3の利用はもはやお勧めしません。
 一部、Generatorやasync/awaitなどの記法はダウンパイルできません。
 これらは2.1.0でサポートされる予定なので、延期されないようにみんなで祈りましょう。
 
-== --module、--moduleResolution
+=={module-moduleResolution} --module、--moduleResolution
 
 @<code>{--module}オプションについて解説します。
 短縮記法で@<code>{-m}も利用できます。
@@ -433,7 +433,7 @@ TypeScript＋Rollup.jsをプロジェクトに導入してみてブログ記事�
 
 //footnote[rollup.js][@<href>{http://rollupjs.org/}]
 
-== --lib
+=={lib} --lib
 
 #@# lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
 #@# OK REVIEW lc: ↑めっちゃ読みたい
@@ -475,14 +475,14 @@ tsconfig.jsonの場合は素直に配列にしましょう。
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
 どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
 
-== --forceConsistentCasingInFileNames
+=={forceConsistentCasingInFileNames} --forceConsistentCasingInFileNames
 
 @<code>{--forceConsistentCasingInFileNames}オプションについて解説します。
 このオプションを有効にすると、ファイル名の参照について大文字小文字の食い違いがあるとエラーにします。
 macOSのような非ケースセンシティブな環境と、Linuxのようなケースセンシティブな環境が混在しているとき、macOSではエラーにならないけどLinuxではエラーになる…のようなシチュエーションを防止してくれます。
 チーム内でmacOSに統一されていても、外部の人やCIサーバなどはLinuxを使っている場合などはかなり多いため、とりあえず有効にしてしまってよいでしょう。
 
-== --noEmitOnError、--noEmit
+=={noEmitOnError-noEmit} --noEmitOnError、--noEmit
 
 @<code>{--noEmitOnError}オプションと@<code>{--noEmit}オプションについて解説します。
 このオプションは成果物である.jsファイル、.js.mapファイル、.d.tsファイルを生成するか否かを制御します。

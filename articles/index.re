@@ -1,6 +1,6 @@
 ={index} Revised 型の国のTypeScript
 
-== 本書について
+=={about-this-book} 本書について
 
 #@# prh:disable
 本書はC87で頒布した『型の国のTypeScript』の改訂（C90）版です。
@@ -26,7 +26,7 @@ C87版から上手に味わいを引き継いだ可愛い表紙をありがと�
 //footnote[wonderland][@<href>{http://typescript.ninja/typescript-in-definitelyland/}]
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
 
-== 対象読者
+=={main-target} 対象読者
 
 本書はECMAScript 2015について理解しているユーザを対象にしています。
 @<kw>{OOP,Object Oriented Programming}についても効能や利点をある程度理解していることが望ましいです。
@@ -43,7 +43,7 @@ Version 2.0.0
 
 //footnote[js-primer][@<href>{https://github.com/asciidwango/js-primer}]
 
-== 本書の内容
+=={tour-of-this-book} 本書の内容
 
 本書は@<code>{--noImplicitAny}、@<code>{--strictNullChecks}、@<code>{--noImplicitReturns}、@<code>{--noImplicitThis}を有効にした状態を基本として解説します。
 各オプションの詳細については@<chapref>{tsc-options}を参照してください。
@@ -75,7 +75,7 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 //footnote[webpack][@<href>{https://webpack.github.io/}]
 //footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
-== なぜTypeScriptを選ぶべきなのか
+=={why-typescript} なぜTypeScriptを選ぶべきなのか
 
 TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（JavaScript）に静的な型付けによる検証を導入したものです。
 現実を見据えた言語仕様で、"未来のJavaScriptそのもの"になることを目指しています。
@@ -95,7 +95,7 @@ with構文やtry-catch構文などは、TypeScript的に使いにくい仕様に
 
 //footnote[jonathandturner-left][過去にTypesの正式な仕様化について@<href>{https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#types,TC39ミーティングで話された}ことがあったがJonathan TurnerがMicrosoftを離れたため以後の進捗はよくない]
 
-== TypeScriptを選んだ時のデメリット
+=={disclaimer} TypeScriptを選んだ時のデメリット
 
 一番大きなデメリットは学習コストが追加で発生します。
 JavaScriptの書き方に加え、TypeScriptで型注釈を与える記法を学ばねばなりません。

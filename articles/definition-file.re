@@ -3,7 +3,7 @@
 #@# REVIEW muo: 6章けっこう長めなので章として切断できないかな。
 #@# REVIEW muo: 基礎編・応用編と分けるのはむずかしいかもしれないけど、「このへんまで頑張ったら一息つける」「ここまでやってくれる人はほめてあげよう」ぐらいに分かれていると、トピック拾いやすいかもしらん
 
-== JavaScriptの資産が使いたい
+=={use-js-assets} JavaScriptの資産が使いたい
 
 TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
 とはいえ、現時点ではWebアプリの世界はJavaScriptで成り立っていますし、すでに莫大な資産があります。
@@ -20,7 +20,7 @@ TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り
 そこのところを十分に気をつけないといけません。
 
 #@# @suppress ParagraphNumber SectionLength
-== @typesを使う
+=={use-at-types} @typesを使う
 
 さて、まずは自分で型定義ファイルを作るよりも、既存のものを使ってみましょう。
 jQueryやlodashなどの有名どころはひととおり揃っています。
@@ -88,7 +88,7 @@ DefinitelyTypedは規模は大きくなっていくもののアクティブに�
 
 ===[/column]
 
-== 型定義ファイルを参照してみよう
+=={use-definition-files} 型定義ファイルを参照してみよう
 
 型定義ファイルを参照するには、tscコマンドでコンパイルするときにコンパイル対象に含める必要があります。
 node_modules/@types にある型定義ファイルは特別扱いされ、モジュールをimportした時や、tsconfig.jsonのtypesに記述したモジュールの解決時に自動的に走査されます。
@@ -224,7 +224,7 @@ power-assertはテストコード中でimportしますが、テストランナ�
 あわせて型定義ファイルへの参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。
 コンパイルに利用したファイルをリスト表示する@<code>{--listFiles}オプションと、型定義ファイルを見つけるためにコンパイラがどういう探索を行ったかを表示する@<code>{--traceResolution}オプションを試してみてください。
 
-== 型定義ファイルを書こう
+=={writing-dts-files} 型定義ファイルを書こう
 
 さて型定義ファイルの取得方法、使い方はわかりました。
 しかし、世の中にあるJavaScriptライブラリのうち、型定義ファイルが書かれていないものはまだまだ数多くあります。
@@ -239,7 +239,7 @@ power-assertはテストコード中でimportしますが、テストランナ�
 
 //footnote[types-savannah][DefinitelyTypedメンテナ（＝筆者）の意見です]
 
-=== 型、実体、そして42。
+==={types-and-values} 型、実体、そして42。
 
 TypeScriptはJavaScriptに対して後付で型による制約を付け足した言語です。
 そのため、JavaやC#のような最初から型ありきの言語より少し考え方が複雑です。
@@ -254,7 +254,7 @@ TypeScriptはJavaScriptに対して後付で型による制約を付け足した
 そのため、型と実体が分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、というありさまになるわけです。
 型定義ファイルを書いて"この変数は、あります！"と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。
 
-=== 良い型定義ファイル、悪い型定義ファイル
+==={good-definitions-bad-definitions} 良い型定義ファイル、悪い型定義ファイル
 
 型定義ファイルにも良し悪しがあります。
 その基準は至って簡単です。
@@ -282,7 +282,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 これから説明するベストプラクティスを踏まえて、より良い型定義ファイルを作成できるように鍛錬していきましょう。
 
 #@# @suppress ParagraphNumber SectionLength
-== 型定義ファイルを書くための心得
+=={writing-instruction} 型定義ファイルを書くための心得
 
 #@# @suppress SentenceLength JapaneseStyle
 型定義ファイルを書く上でのベストプラクティスを解説していきます。
@@ -292,7 +292,7 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 //footnote[official-handbook][@<href>{http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html}]
 //footnote[dt-best-practice][@<href>{http://definitelytyped.org/guides/best-practices.html}]
 
-=== テキトーに、やろー！
+==={silly-go-luck} テキトーに、やろー！
 
 一番最初にコレを書くのもどうかと思うのですが、まずは"使える"ようにするのが一番大切です。
 
@@ -319,7 +319,7 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 //footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
 #@# @suppress InvalidExpression
-==== 最高に雑な型定義ファイルを作る
+===={done-is-better-than-perfect} 最高に雑な型定義ファイルを作る
 
 テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid.d.ts}）。
 モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。
@@ -379,7 +379,7 @@ anyばっかりですね。
 しかし、コンパイルはとおります。
 
 #@# @suppress ParagraphNumber SectionLength
-=== インタフェースを活用する
+==={interface-the-best-friend} インタフェースを活用する
 
 #@# @suppress SentenceLength ParenthesizedSentence
 インタフェースは大変使いやすいパーツです。
@@ -444,7 +444,7 @@ console.log(str.trimStart());
 //footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
 //footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
 
-=== 幽霊namespace
+==={ghost-namespace} 幽霊namespace
 
 幽霊namespace@<fn>{ghost-module}という考え方があります。
 
@@ -589,7 +589,7 @@ declare var $: jquery.Static;
 //footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
 
 #@# @suppress JapaneseStyle ParagraphNumber SectionLength
-=== なんでもかんでもインタフェースにしてはならない
+==={interface-is-not-duct-tape} なんでもかんでもインタフェースにしてはならない
 
 少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？
 と思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
@@ -746,7 +746,7 @@ var test;
 
 //footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
 
-=== クラスはクラスとして定義する
+==={class-definitions} クラスはクラスとして定義する
 
 クラスを型定義として起こす方法について解説します。
 歴史的経緯により、TypeScriptではクラスの型定義を行う時に2つの代表的なやり方が存在しています。
@@ -829,7 +829,7 @@ export { }
 
 #@# OK REVIEW lc: s/以下のような分/以下のような文/
 
-=== オーバーロードを上手く使おう！
+==={pretty-good-overload} オーバーロードを上手く使おう！
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 正しいライブラリの使い方を導くこと。
@@ -914,7 +914,7 @@ funcB(obj);
 //footnote[issue5766][@<href>{https://github.com/Microsoft/TypeScript/issues/5766}]
 
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
-=== モジュールの定義の統合
+==={module-declaration-merging} モジュールの定義の統合
 
 #@# OK REVIEW lc: なんか「ベストプラクティス」からずれている気がする・・・
 #@# vv: 心得に変えました
@@ -952,7 +952,7 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 モジュールを利用しないnamespaceだけの構成です。
 たとえば、lodashやjQueryのようなグローバルな名前空間に変数を生やすような場合に、いまだに有効です。
 
-=== anyと{}とObject
+==={any-vs-object} anyと{}とObject
 
 もしも型定義ファイルを書いていて具体的な型がわからないとき、頭を使わずにとりあえずコンパイルを通したいときは、素直に@<code>{any}を使いましょう。
 こういったシチュエーションで、稀にObjectを指定する人がいます。
@@ -971,7 +971,7 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 #@# @suppress SuccessiveWord
 そしてanyを使うことに気後れするのであれば、よくよく調べて適切な型定義を与えるようにしましょう。
 
-=== ドキュメントから書き起こす
+==={scratch-from-document} ドキュメントから書き起こす
 
 もしライブラリにしっかりしたドキュメントがあるのであれば、実装コードから型定義ファイルを起こすのではなく、ドキュメントをベースに作成しましょう。
 Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDocコメントも利用時に表示してくれる場合があります。
@@ -989,7 +989,7 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 そのため、もしjQueryのドキュメント自体が間違っている場合はjQueryのドキュメントを直すところから始めるとよいでしょう。
 コントリビュートの輪！
 
-=== コールバック関数の引数を無闇に省略可能（optional）にしない
+==={be-careful-about-optional} コールバック関数の引数を無闇に省略可能（optional）にしない
 
 optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではありません。
 ここを勘違いすると、"コールバックに値が渡されるが別に使わなくてもいいよ"マークとしてoptionalを使ってしまうのです。
@@ -1041,7 +1041,7 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 間違えないよう、留意しましょう。
 
 #@# @suppress SectionLength ParagraphNumber
-=== インタフェースのプリフィクスとしてIをつけるのはやめよう！
+==={dont-use-i-prefix} インタフェースのプリフィクスとしてIをつけるのはやめよう！
 
 とTypeScriptの公式ドキュメントで@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions,明記}@<fn>{writing-dts-files}されました。
 
@@ -1053,7 +1053,7 @@ C#やJavaよりも、広い範囲でインタフェースが利用されるの�
 
 //footnote[writing-dts-files][@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions}]
 
-=== ECMAScript 2015とCommonJSでのモジュールの互換性について
+==={module-compat} ECMAScript 2015とCommonJSでのモジュールの互換性について
 
 最初にまとめを書いておきます。
 まとめ：@<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
@@ -1234,7 +1234,7 @@ TypeScriptでは@<code>{exports.default = ...}とされているコードのみ@
 
 //footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v6.3.1/lib/internal/bootstrap_node.js#L434-L441}]
 
-=== CommonJS形式でちょっと小難しいexport句の使い方
+==={export-and-commonjs} CommonJS形式でちょっと小難しいexport句の使い方
 
 インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、@<list>{export/sample1.d.ts}のように書きます。
 
@@ -1283,7 +1283,7 @@ declare module "buzz" {
 型定義ファイルを書いたら適当なユースケースに当てはめて意図どおりコンパイルできるか確かめてみましょう。
 
 #@# @suppress SectionLength ParagraphNumber
-=== グローバルに展開される型定義とモジュールの両立
+==={modules-and-global} グローバルに展開される型定義とモジュールの両立
 
 #@# OK REVIEW lc: これも「ベストプラクティス」からずれている気がする・・・
 #@# vv: 心得 に名称変えました
@@ -1440,7 +1440,7 @@ randomizeString("TypeScript", {
 
 //footnote[umd][@<href>{https://github.com/umdjs/umd}]
 
-=== 最終チェック！
+==={check-at-last} 最終チェック！
 
 #@# OK REVIEW lc: もはや「型定義ファイルのベストプラクティス」節であることを忘れている気がする
 #@# vv: 心得に変えました
@@ -1450,7 +1450,7 @@ randomizeString("TypeScript", {
 それが、--noImplicitAnyや--strictNullChecksをつけての試しコンパイルとtslintによるチェックです。
 
 #@# @suppress SectionLength
-==== tslint
+===={tslint} tslint
 
 lintという種類のプログラムがあります。
 ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくるツールを指します。
@@ -1469,7 +1469,7 @@ tslintは設定ファイルを必要とします。
 //footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 //footnote[tsc-tslint][@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json}]
 
-== Let's contribute!
+=={lets-contribute} Let's contribute!
 
 ようこそ！@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped,DefinitelyTyped}@<fn>{dt}へ！
 メンテナのvvakameです。
@@ -1495,7 +1495,7 @@ DefinitelyTypedはGitHub上のリポジトリなので追加、修正につい�
 //footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
 //footnote[dt-contrib-guide][@<href>{http://definitelytyped.org/guides/contributing.html}]
 
-=== 新規型定義ファイルの追加のレビューの観点
+==={review-about-new-definitions} 新規型定義ファイルの追加のレビューの観点
 
 まずは今までなかった、新しいライブラリに対する型定義ファイルのレビューの観点を解説していきます。
 
@@ -1522,7 +1522,7 @@ npmに公開されているライブラリはnpmで公開されている名前�
 なおレビュワー次第ですがJSDocがきっちり書かれているか、というのを見る人もいます。
 きちんとドキュメントから転記などしてあるものが送られてきたときはやはり感心しますね。
 
-=== 既存型定義ファイルの修正のレビューの観点
+==={review-about-improvements} 既存型定義ファイルの修正のレビューの観点
 
  1. CIが通っているか
  2. 破壊的変更が含まれていないか
@@ -1548,7 +1548,7 @@ npmに公開されているライブラリはnpmで公開されている名前�
 
 では、皆様のpull request、お待ちしています！
 
-== 自分のライブラリをnpmで公開するときのベストプラクティス
+=={publish-npm-best-practice} 自分のライブラリをnpmで公開するときのベストプラクティス
 
 自分の作ったライブラリをnpmに公開する時のベストプラクティスについて説明します。
 ここで説明するのはTypeScriptによってコードが書かれているライブラリを前提とします。

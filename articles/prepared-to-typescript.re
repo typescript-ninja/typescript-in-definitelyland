@@ -1,7 +1,7 @@
 ={prepared-to-typescript} 戦闘準備だ！TypeScript！
 
 #@# @suppress SectionLength ParagraphNumber
-== インストールしてみよう
+=={install} インストールしてみよう
 
 Node.jsのセットアップはすでに完了しているものとします。
 筆者はNode.jsのインストールとバージョン管理に@<href>{https://github.com/hokaccha/nodebrew#nodebrew,nodebrew}@<fn>{nodebrew}を利用しています。
@@ -78,7 +78,7 @@ Version 2.0.0
 //footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
 //footnote[npm-scripts][@<href>{https://docs.npmjs.com/misc/scripts}]
 
-== tsconfig.jsonを準備する
+=={prepare-tsconfig.json} tsconfig.jsonを準備する
 
 TypeScriptではtsconfig.jsonという設定ファイルを利用します。
 必要なコンパイルオプションやコンパイル対象となるファイルはすべてtsconfig.jsonに記述します。
@@ -169,7 +169,7 @@ $ cat tsconfig.json
 
 より詳しい説明は@<chapref>{tsc-options}を参照してください。
 
-== 試しにコンパイルしてみる
+=={compile} 試しにコンパイルしてみる
 
 #@# @suppress KatakanaSpellCheck
 tsconfig.jsonができたら、後はコンパイルするだけです。
@@ -180,7 +180,7 @@ tsconfig.jsonができたら、後はコンパイルするだけです。
 本節についてもより詳しい説明は@<chapref>{tsc-options}を参照してください。
 
 #@# @suppress KatakanaSpellCheck
-== エディタ・IDEの環境を整えよう
+=={editor-and-ide} エディタ・IDEの環境を整えよう
 
 #@# @suppress KatakanaSpellCheck CommaNumber
 Atom、Eclipse、Emacs、Vim、Visual Studio、WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
@@ -195,7 +195,7 @@ language serviceに興味がある場合、@<href>{https://github.com/Microsoft/
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 
-=== Visual Studio Codeを使ってみる
+==={vscode} Visual Studio Codeを使ってみる
 
 #@# OK REVIEW lc: 節にしては薄すぎる気がする・・・これはエディタ・IDE節の中の項なのでは？むしろ、話の展開として先にVCSがTSサポート厚いから使う話をして、同様のサポートが他のエディタでもあります、その理由は〜という展開のほうが読みやすい気がする？
 #@# vv: 項に格下げにしました
