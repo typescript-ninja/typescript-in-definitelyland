@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="<%=h @language %>">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
 <% if @stylesheets.present? %>
 <%   @stylesheets.each do |style| %>
   <link rel="stylesheet" type="text/css" href="<%=h style %>" />
@@ -64,5 +65,8 @@
   <script src="<%=h script %>"></script>
   <%   end %>
   <% end%>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/typescript.min.js"></script>
+  <script>document.querySelectorAll("pre.list").forEach(function(b) { hljs.highlightBlock(b); });</script>
 </body>
 </html>
