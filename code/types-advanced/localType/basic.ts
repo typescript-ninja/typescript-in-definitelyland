@@ -1,6 +1,6 @@
 {
-	type Data = string | boolean;
-	let obj: Data = true;
+	type Data = string | number;
+	let obj: Data = 1;
 
 	console.log(obj);
 }

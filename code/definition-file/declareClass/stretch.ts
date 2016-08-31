@@ -32,16 +32,4 @@ class Cat extends Animal {
 let cat: Cat = new Cat();
 console.log(cat.speak());
 
-// ECMAScript 2015だと次のような文すら書けるのでまぁできて然るべきだった
-let cat2: Cat = new class extends class {
-	speak() {
-		return "???";
-	}
-} {
-	speak() {
-		return "meow";
-	}
-}();
-console.log(cat2.speak());
-
 export { }

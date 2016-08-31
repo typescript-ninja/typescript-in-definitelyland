@@ -330,8 +330,8 @@ class Animal {
 // error TS2511: Cannot create an instance of the abstract class 'Animal'.
 // new Animal();
 class Cat extends Animal {
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super(...arguments);
         // プロパティの実装を強制される
         this.name = "Cat";
         this.poo = "poo...";

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/kmuto/review.git
-  revision: 2a20a0904a6380ff44af77ee1224f4035af62ea3
+  revision: eb6845763b8875b89af997277abd0c158f8092b9
   specs:
     review (2.0.0)
       rubyzip
