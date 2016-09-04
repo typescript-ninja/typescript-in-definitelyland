@@ -1,45 +1,58 @@
 # TypeScript in Definitelyland [![Circle CI](https://circleci.com/gh/typescript-ninja/typescript-in-definitelyland.svg?style=svg)](https://circleci.com/gh/typescript-ninja/typescript-in-definitelyland)
 
 この書籍はvvakame([Twitter](https://twitter.com/vvakame), [GitHub](https://github.com/vvakame))が執筆した、[TypeScript](http://www.typescriptlang.org/)についての本です。
-初出はコミットマーケット87にて、[TechBoosterにて頒布](http://techbooster.github.io/c87/#typescript)したもので、その全文を公開しています。
+
+初出はコミットマーケット87にて、[TechBoosterにて頒布](http://techbooster.github.io/c87/#typescript)したものです。
+現在はコミックマーケット90にて[頒布](http://techbooster.github.io/c90/#typescript)した内容が反映されています。
 
 ただし、表紙データは含まれていません。
-欲しい場合は紙版をなんとか入手していただきたいところです。
+欲しい場合は[booth.pm](https://booth.pm/ja/items/299594)（電子版）や[COMIC ZIN](http://shop.comiczin.jp/products/detail.php?product_id=29874)（紙版）から購入してください。
 
 ## 本を読むには？
 
 ### Webサイトとして閲覧する場合
 
-[こちら](http://typescript.ninja/typescript-in-definitelyland/)で公開予定
+[こちら](http://typescript.ninja/typescript-in-definitelyland/)で公開中。
 
 ### 電子書籍として閲覧する場合
 
-[griflet](https://tcb.mowa-net.jp/griflet/github/typescript-ninja/typescript-in-definitelyland/)よりダウンロード可能
+[booth.pm](https://booth.pm/ja/items/299594)（電子版）から入手できます。
 
 ### 紙版が欲しい！
 
-未定
+在庫があれば[COMIC ZIN](http://shop.comiczin.jp/products/detail.php?product_id=29874)（紙版）から入手できます。
 
 ## 改訂履歴
 
+* 2016/08/04 第2版 確定 (C90版)
 * 2014/12/16 初版 確定 (C87版)
 
 ## この本のビルドの仕方
 
 ```
-$ npm install -g grunt-cli
-$ gem install bundler
 $ git clone https://github.com/typescript-ninja/typescript-in-definitelyland.git
 $ cd typescript-in-definitelyland
+$ npm run global
+# gem install bundler 相当の処理が走る
 $ npm install
-# 裏で git submodule init && git submodule update && bundle install が走る
-$ grunt pdf
+# bundle install 相当の処理も走る
+$ npm run pdf
 ```
 
-その他細かい準備(tex入れたり)は[FirstStepReVIEW](https://github.com/TechBooster/FirstStepReVIEW)に準じる。
+その他細かい準備(tex入れたり)は[FirstStepReVIEW v2](https://github.com/TechBooster/C89-FirstStepReVIEW-v2)に準じる。
 めんどくさい場合はRe:VIEWビルド用の[dockerイメージ](https://registry.hub.docker.com/u/vvakame/review/)を用意してあるので使ってください。
 
 ## Special Thanks
+
+### 第2版 Revised TypeScript in Definitelyland
+
+[mhidaka](https://twitter.com/mhidaka)と[muo_jp](https://twitter.com/muo_jp)と[laco](https://twitter.com/laco0416)にはレビュー・編集・印刷の手配・当日の搬入などなどの形で大変お世話になりました(まだなってる)。
+大変感謝しております :yum:
+
+また、紙版ではイラストを[shati](http://utata-ne.net/)さん、デザインをsiosioさんに手がけていただき、第1版の世界観を踏襲した良い装丁にしてもらいました。
+大変感謝し、喜んでおります :satisfied:
+
+### 第1版 TypeScript in Definitelyland
 
 [mhidaka](https://twitter.com/mhidaka)と[muo_jp](https://twitter.com/muo_jp)にはレビュー・編集・印刷の手配・当日の搬入などなどの形で大変お世話になりました(まだなってる)。
 大変感謝しております :yum:

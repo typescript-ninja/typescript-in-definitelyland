@@ -1,8 +1,8 @@
-declare module "foo" {
-	interface Foo {
+declare module "buzz" {
+	interface Buzz {
 		num: number;
 	}
 
 	// よくやりがちな過ち
-	export = Foo;
+	export = Buzz;
 }

@@ -1,0 +1,51 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es6",
+        "declaration": true,
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "types": [
+            "node"
+        ],
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitUseStrict": false,
+        "sourceMap": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "traceResolution": false,
+        "listFiles": false,
+        "stripInternal": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": false,
+        "pretty": false,
+        "noEmitOnError": true
+    },
+    "include": [
+        "code/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "code/definition-file/usage/",
+        "code/definition-file/augmentGlobal/",
+        "code/definition-file/issue9831/",
+        "code/**/*-invalid.ts",
+        "code/**/*-invalid.d.ts",
+        "code/**/invalid.ts",
+        "code/**/invalid.d.ts",
+        "code/**/*-ignore.ts",
+        "code/**/*-ignore.d.ts",
+        "code/**/ignore.ts",
+        "code/**/ignore.d.ts"
+    ]
+}

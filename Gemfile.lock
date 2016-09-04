@@ -1,10 +1,22 @@
+GIT
+  remote: https://github.com/kmuto/review.git
+  revision: eb6845763b8875b89af997277abd0c158f8092b9
+  specs:
+    review (2.0.0)
+      rubyzip
+
 GEM
   remote: https://rubygems.org/
   specs:
-    review (1.4.0)
+    review-peg (0.2.2)
+    rubyzip (1.2.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  review (= 1.4.0)
+  review!
+  review-peg (= 0.2.2)
+
+BUNDLED WITH
+   1.12.5

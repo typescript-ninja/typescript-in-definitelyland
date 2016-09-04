@@ -3,6 +3,8 @@ class Sample {
 	}
 }
 
-var obj = new Sample("TypeScript");
+let obj = new Sample("TypeScript");
 // TypeScript と表示される
 console.log(obj.str);
+
+export { }

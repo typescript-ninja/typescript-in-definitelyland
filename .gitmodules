@@ -1,3 +1,0 @@
-[submodule "typescript"]
-	path = typescript
-	url = git@github.com:Microsoft/TypeScript.git

@@ -1,22 +1,29 @@
 // 良い例
-declare function onClick(listener: (e: MouseEvent) => void): void;
+declare function readFileA(
+	filePath: string,
+	listener: (data: string) => void): void;
 // 悪い例
-declare function onClickOpt(listener: (e?: MouseEvent) => void): void;
+declare function readFileB(
+	filePath: string,
+	listener: (data?: string) => void): void;
 
 // 使ってみよう！
-onClick(e => {
-	// ここでのeは必ず実体がある
-	console.log("clicked!" + e.srcElement.textContent);
+readFileA("./test.txt", data => {
+	// ここでのdataは必ず実体がある
+	console.log(data.toUpperCase());
 });
-onClickOpt(e => {
-	// ここでのeはundefinedかもしれない… チェックしなくていいの？
-	console.log("clicked!" + e.srcElement.textContent);
+readFileB("./test.txt", data => {
+	// ここでのdataはundefinedかもしれない… チェックしなければダメ
+	if (!data) {
+		data = "not found";
+	}
+	console.log(data.toUpperCase());
 });
 
-// 引数を無視するのは自由 optionalにする理由にはならぬ！
-onClick(() => {
-	console.log("clicked!");
+// 引数を無視するのは自由 optionalにする理由にはならない
+readFileA("./test.txt", () => {
+	console.log("done");
 });
-onClickOpt(() => {
-	console.log("clicked!");
+readFileB("./test.txt", () => {
+	console.log("done");
 });

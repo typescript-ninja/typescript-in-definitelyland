@@ -1,9 +1,9 @@
-declare module "foo" {
-	interface Foo {
+declare module "bar" {
+	interface Bar {
 		num: number;
 	}
 
 	// この_は外部からは参照できない。exportしてないので。
-	var _: Foo;
+	let _: Bar;
 	export = _;
 }

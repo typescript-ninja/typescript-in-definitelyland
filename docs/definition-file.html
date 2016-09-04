@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style-web.css" />
+<link rel="prev" title="オプションを知り己のコードを知れば百戦危うからず" href="tsc-options.html">  <meta name="generator" content="Re:VIEW" />
+  <title>JS資産と型定義ファイル | Revised TypeScript in Definitelyland</title>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-6628015-6', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrapper">
+      <a class="site-title" href="/">TypeScript Ninja</a>
+      <nav class="site-nav">
+        <div class="trigger">
+            <a class="page-link" href="/typescript-in-definitelyland/">本のトップ</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="book">
+    <nav class="side-content">
+      <h1>Revised TypeScript in Definitelyland</h1>
+      <ul class="book-toc">
+<li><a href="index.html">TOP</a></li>
+<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
+<li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
+<li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
+<li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
+<li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
+<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+</ul>
+      <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
+    </nav>
+    <div class="book-body">
+      <header>
+      </header>
+      <div class="book-page">
+        <h1 id="definition-file"><a id="h6"></a><span class="secno">第6章　</span>JS資産と型定義ファイル</h1>
+
+<h2 id="use-js-assets"><a id="h6-1"></a><span class="secno">6.1　</span>JavaScriptの資産が使いたい</h2>
+<p>TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。とはいえ、現時点ではWebアプリの世界はJavaScriptで成り立っていますし、すでに莫大な資産があります。それらを放り出してしまうのはあまりにもったいないので、TypeScriptでも活用したいものです。そのためにTypeScriptは既存のJavaScript用資産を活用するための仕組みを持っています。それが、型定義ファイルです。</p>
+<p>通常のTypeScriptコードは拡張子が.tsなのに対して、型定義ファイルは拡張子を.d.tsとします。拡張子を.d.tsとしたファイルに実装を含むようなコードを書くとtscがエラーにするので、ケアレスミス予防のためにも型定義ファイルの拡張子は必ず.d.tsにします。</p>
+<p>TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り）の世界に後付で型を与えます。もとからTypeScriptで書かれている場合、実装と型定義を同時に書いているためこのふたつがズレて（つまりバグって）しまうことはありません。一方、型定義ファイルはすでに実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。そこのところを十分に気をつけないといけません。</p>
+
+<h2 id="use-at-types"><a id="h6-2"></a><span class="secno">6.2　</span>@typesを使う</h2>
+<p>さて、まずは自分で型定義ファイルを作るよりも、既存のものを使ってみましょう。jQueryやlodashなどの有名どころはひととおり揃っています。</p>
+<p>ライブラリの作者がTypeScriptユーザで、npm package自体に型定義ファイルがバンドルされていて何も考えずにTypeScriptから使える場合もありますが、今のところまだ稀です。基本的にはDefinitelyTyped<a id="fnb-definitelytyped" href="#fn-definitelytyped" class="noteref" epub:type="noteref">*1</a>というコミュニティベースの型定義ファイル集積リポジトリを利用することになるでしょう。</p>
+<p>DefinitelyTypedから型定義ファイルをダウンロードしてくるための方法は複数用意されています。TypeScript 2.0.0からは@typesというnpmのscoped package<a id="fnb-scoped-package" href="#fn-scoped-package" class="noteref" epub:type="noteref">*2</a>を使って型定義ファイルを利用します。2.0.0以前ではtsd<a id="fnb-tsd" href="#fn-tsd" class="noteref" epub:type="noteref">*3</a>やdtsm<a id="fnb-dtsm" href="#fn-dtsm" class="noteref" epub:type="noteref">*4</a>やtypings<a id="fnb-typings" href="#fn-typings" class="noteref" epub:type="noteref">*5</a>というツールを使っていましたが、これらが不要になります。</p>
+<p>しばらくは過渡期になるため、混乱があったり利用の仕方がわかりにくかったり型定義ファイルが壊れていたりする場合があるかもしれません。コミュニティの力によって徐々に前進し、やがてはみんなが@typesを使うようになるでしょう。もし、ここで紹介する方法でうまくいかない場合、利用事例やブログ記事などが出回っている旧ツール群のいずれかを使ってみるとよいでしょう。</p>
+<p>さて、前置きが長くなりましたが実際に型定義ファイルをダウンロードしてきて使ってみましょう。ここではテストで使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードしてみます。</p>
+<div class="cmd-code">
+<pre class="cmd"># 型定義ファイルをinstall
+$ npm install --save-dev @types/power-assert
+└─┬ @types/power-assert@0.0.27
+   ├── @types/empower@0.0.28
+   └── @types/power-assert-formatter@0.0.26
+</pre>
+</div>
+<p>power-assertの型定義ファイルが依存しているモジュールの型定義も芋づる式に取得できています。便利ですね。型定義ファイルのパッケージには残念ながらライブラリの実体は含まれていないため<code class="inline-code tt">npm install power-assert</code>で別途インストールする必要があります。</p>
+<p>既存ライブラリに対する型定義ファイルは@types/の下に元ライブラリのパッケージ名と同じ名前で公開される運用です。パッケージの検索は<a href="https://microsoft.github.io/TypeSearch/" class="link">TypeSearch</a><a id="fnb-typesearch" href="#fn-typesearch" class="noteref" epub:type="noteref">*6</a>で行うか、npm searchを使うとよいでしょう。</p>
+<p>また、@typesで導入した型定義ファイルの検索は、モジュールの解決方法（<code class="inline-code tt">--moduleResolution</code>）がnodeのときのみ行われます<a id="fnb-issue9831" href="#fn-issue9831" class="noteref" epub:type="noteref">*7</a>。AMDなどを利用したい場合、現時点では<code class="inline-code tt">--moduleResolution node</code>を指定するようにしましょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-definitelytyped"><p class="footnote">[*1] <a href="https://github.com/DefinitelyTyped/DefinitelyTyped" class="link">https://github.com/DefinitelyTyped/DefinitelyTyped</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-scoped-package"><p class="footnote">[*2] @xxx/ から始まる名前空間が区切られたnpm packageのこと <a href="https://docs.npmjs.com/misc/scope" class="link">https://docs.npmjs.com/misc/scope</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-tsd"><p class="footnote">[*3] <a href="https://www.npmjs.com/package/tsd" class="link">https://www.npmjs.com/package/tsd</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-dtsm"><p class="footnote">[*4] <a href="https://www.npmjs.com/package/dtsm" class="link">https://www.npmjs.com/package/dtsm</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-typings"><p class="footnote">[*5] <a href="https://www.npmjs.com/package/typings" class="link">https://www.npmjs.com/package/typings</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-typesearch"><p class="footnote">[*6] <a href="https://microsoft.github.io/TypeSearch/" class="link">https://microsoft.github.io/TypeSearch/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-issue9831"><p class="footnote">[*7] <a href="https://github.com/Microsoft/TypeScript/issues/9831" class="link">https://github.com/Microsoft/TypeScript/issues/9831</a></p></div>
+<div class="column">
+
+<h3><a id="column-1"></a>@typesとDefinitelyTypedの今</h3>
+<p>@typesの対応はMicrosoftのTypeScriptチームが主体となって始めました。DefinitelyTypedは規模は大きくなっていくもののアクティブにメンテを続けるメンバーが少なく、運用上徐々に無理が生じてきていたと思います。現在、TypeScript 2.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。彼らは給料を貰い、仕事の時間内にコミュニティを回すための時間を割いてくれているため、今後は今までよりも回転が早くなるでしょう。</p>
+<p>執筆時点（2016年08月01日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0対応が行われています。もし、@typesへ変更を反映してほしい人がいる場合、現時点ではtypes-2.0ブランチにpull requestを送ってください。また、TypeScript 2.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。</p>
+<p>参考になるURLを示しておきます。</p>
+<ul>
+<li>types-publisher <a href="https://github.com/Microsoft/types-publisher" class="link">https://github.com/Microsoft/types-publisher</a></li>
+<li>TypeSearch <a href="https://microsoft.github.io/TypeSearch/" class="link">https://microsoft.github.io/TypeSearch/</a></li>
+<li>上記サイトのリポジトリ <a href="https://github.com/Microsoft/TypeSearch" class="link">https://github.com/Microsoft/TypeSearch</a></li>
+</ul>
+</div>
+
+<h2 id="use-definition-files"><a id="h6-3"></a><span class="secno">6.3　</span>型定義ファイルを参照してみよう</h2>
+<p>型定義ファイルを参照するには、tscコマンドでコンパイルするときにコンパイル対象に含める必要があります。node_modules/@types にある型定義ファイルは特別扱いされ、モジュールをimportした時や、tsconfig.jsonのtypesに記述したモジュールの解決時に自動的に走査されます。要するにnpm installしたら、後は何も気にしなくてもTypeScriptコンパイラが型定義ファイルを探しだしてきてくれるのです。</p>
+<p>古くはリファレンスコメントとして、ソースコードの先頭に<code class="inline-code tt">/// &lt;reference path=&quot;相対パスor絶対パス&quot; /&gt;</code>の形式で書く方法もありましたがtsconfig.jsonの登場により廃れました。基本として依存性の解決などはtsconfig.jsonで行うようにします。</p>
+<p>mocha＋power-assertでテストを書く場合を例に、使い方を解説していきます。</p>
+<p>テスト対象のコードは<code class="inline-code tt">./lib/index.ts</code>です（リスト6.1）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.1: 至って普通のモジュール</p>
+<pre class="list language-ts">export function hello(word = &quot;TypeScript&quot;) {
+  return `Hello, ${word}`;
+}
+</pre>
+</div>
+<p>これに対してテストコードとして<code class="inline-code tt">./test/indexSpec.ts</code>を書いてみましょう（リスト6.2）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.2: mocha+power-assertでテストを書く</p>
+<pre class="list language-ts">import * as assert from &quot;power-assert&quot;;
+
+import { hello } from &quot;../lib/&quot;;
+
+describe(&quot;lib&quot;, () =&gt; {
+  describe(&quot;hello function&quot;, () =&gt; {
+    it(&quot;generate string with default value&quot;, () =&gt; {
+      let str = hello();
+      assert(str === &quot;Hello, TypeScript&quot;);
+    });
+    it(&quot;generate string with parameter&quot;, () =&gt; {
+      let str = hello(&quot;JavaScript&quot;);
+      assert(str === &quot;Hello, JavaScript&quot;);
+    });
+  });
+});
+</pre>
+</div>
+<p>普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。</p>
+<p>ここで問題なのは、TypeScriptコンパイラが安全にコードを処理するためには、mochaとpower-assertについての情報が必要であることです。たとえば、assert関数はpower-assertが提供するものですし、describeとitはmochaが提供しています。JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため外部ライブラリの型情報をどうにかしてコンパイラに教えてあげる必要があります。そこで使われるのが型定義ファイルです。</p>
+<p>mocha（リスト6.3）とpower-assert（リスト6.4）の型定義ファイルを抜粋・簡略化したものを見てみましょう。</p>
+<div class="caption-code">
+<p class="caption">リスト6.3: mocha.d.ts抜粋</p>
+<pre class="list language-ts">interface MochaDone {
+  (error?: Error): void;
+}
+declare let describe: {
+  (description: string, spec: () =&gt; void): any;
+};
+declare let it: {
+  (expectation: string, assertion?: () =&gt; void): any;
+  (expectation: string, assertion?: (done: MochaDone) =&gt; void): any;
+};
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.4: power-assert.d.ts抜粋</p>
+<pre class="list language-ts">export = assert;
+export as namespace assert;
+
+declare function assert(value: any, message?: string): void;
+</pre>
+</div>
+<p>型定義ファイルを見るとmochaとpower-assertそれぞれのAPIが表現されています。TypeScriptコンパイラがこれらの型定義ファイルを認識できれば、矛盾なくコンパイルを通すことができそうです。そのためのpackage.json（リスト6.5）とtsconfig.json（リスト6.6）を確認します。</p>
+<div class="caption-code">
+<p class="caption">リスト6.5: package.json</p>
+<pre class="list language-json">{
+  &quot;name&quot;: &quot;typescript-in-definitelyland-sample&quot;,
+  &quot;private&quot;: true,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;main&quot;: &quot;lib/index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;tsc -p ./&quot;,
+    &quot;pretest&quot;: &quot;npm run build&quot;,
+    &quot;test&quot;: &quot;mocha&quot;
+  },
+  &quot;author&quot;: &quot;vvakame&quot;,
+  &quot;license&quot;: &quot;MIT&quot;,
+  &quot;devDependencies&quot;: {
+    &quot;@types/mocha&quot;: &quot;^2.2.28&quot;,
+    &quot;@types/power-assert&quot;: &quot;0.0.27&quot;,
+    &quot;mocha&quot;: &quot;^2.5.3&quot;,
+    &quot;power-assert&quot;: &quot;^1.4.1&quot;
+  }
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.6: tsconfig.json</p>
+<pre class="list language-json">{
+    &quot;compilerOptions&quot;: {
+        &quot;module&quot;: &quot;commonjs&quot;,
+        &quot;target&quot;: &quot;es5&quot;,
+        &quot;noImplicitAny&quot;: true,
+        &quot;strictNullChecks&quot;: true,
+        &quot;types&quot;: [
+            &quot;mocha&quot;
+        ]
+    },
+    &quot;exclude&quot;: [
+        &quot;node_modules&quot;
+    ]
+}
+</pre>
+</div>
+<p>power-assertはテストコード中でimportしますが、テストランナーであるmochaの定義はソースコード中からの参照がありません。そのため、power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。</p>
+<p>しかしmochaはそのような機会がないため、TypeScriptコンパイラは型定義を探しにいってくれません。このままコンパイルするとmochaがグローバルに値を展開しているdescribeやitなどが見つからないと言われてしまいます。これを解決するためにtsconfig.jsonのtypesプロパティ中でmochaを参照するよう指定します。</p>
+<p>あわせて型定義ファイルへの参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。コンパイルに利用したファイルをリスト表示する<code class="inline-code tt">--listFiles</code>オプションと、型定義ファイルを見つけるためにコンパイラがどういう探索を行ったかを表示する<code class="inline-code tt">--traceResolution</code>オプションを試してみてください。</p>
+
+<h2 id="writing-dts-files"><a id="h6-4"></a><span class="secno">6.4　</span>型定義ファイルを書こう</h2>
+<p>さて型定義ファイルの取得方法、使い方はわかりました。しかし、世の中にあるJavaScriptライブラリのうち、型定義ファイルが書かれていないものはまだまだ数多くあります。特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地です。</p>
+<p>しからば！自分で書くしかあるまいよ！ぶっちゃけた話、めんどくさいのですが、後々の安心・安全を得るための投資として割りきりましょう。</p>
+<p>なお、自分で型定義ファイルを書く覚悟無しにTypeScriptをやるのは茨の道だと思いますので頑張ってください。「誰かがやってくれないと自分ではできません」なんて甘えた根性では型サバンナでは到底生きていけないのです<a id="fnb-types-savannah" href="#fn-types-savannah" class="noteref" epub:type="noteref">*8</a>。</p>
+<div class="footnote" epub:type="footnote" id="fn-types-savannah"><p class="footnote">[*8] DefinitelyTypedメンテナ（＝筆者）の意見です</p></div>
+
+<h3 id="types-and-values"><a id="h6-4-1"></a>型、実体、そして42。</h3>
+<p>TypeScriptはJavaScriptに対して後付で型による制約を付け足した言語です。そのため、JavaやC#のような最初から型ありきの言語より少し考え方が複雑です。具体的にいえば型と実体（値）というものが分かれています。</p>
+<p>すべてがTypeScriptで書かれたプログラムであれば、型と実体は基本的には一致しています。クラスの定義を書いたとき、JavaScriptプログラムとしてのクラスと、TypeScriptで使う型としてのクラスが一度に誕生します。これは大変素直かつ簡単な動作で、ひとつの記述から型と実体を作成しているためこの2つが乖離してしまうことはありません。</p>
+<p>一方、JavaScriptでコードを書いてTypeScriptで型定義ファイルを作成して使う場合、実装と型が個別に定義されることになります。そのため、型と実体が分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、というありさまになるわけです。型定義ファイルを書いて&quot;この変数は、あります！&quot;と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。</p>
+
+<h3 id="good-definitions-bad-definitions"><a id="h6-4-2"></a>良い型定義ファイル、悪い型定義ファイル</h3>
+<p>型定義ファイルにも良し悪しがあります。その基準は至って簡単です。</p>
+<ol>
+<li>正しいライブラリの使い方を導くこと</li>
+<li>他のコードや型定義ファイルに意図せぬ干渉を引き起こさないこと</li>
+<li>IDE上で使いやすいこと</li>
+</ol>
+<p>正しいライブラリの使い方を導く、というのは裏を返せば間違った使い方ができないようにする、ということです。これには型と実体の定義に乖離が存在せず、コンパイルが通ったら実行時エラーが簡単には起こらないことも含まれます。</p>
+<p>他のコードや型定義ファイルに意図せぬ干渉を引き起こさないこと、というのは意図せぬインタフェースの統合などが起こらないことを指します。このためには汎用的な名前を使うのを避け、可読性が高く理解しやすい型定義を作り、干渉した場合に容易に判断できるようにすることも含まれます。</p>
+<p>IDE上で使いやすいことというのは、Visual Studio Codeなどでコードを書く上で入力補完の候補が不用意に出過ぎないようにして見通しのよい開発を助けることなどが含まれます。</p>
+<p>これら3つを守ることが&quot;良い品質であること&quot;に繋がるというのは、TypeScript自体が型指定を行うことで間違ったコードを書きにくいようにするツールであると考えると納得がいくでしょう。</p>
+<p>慣れないうちはどうしても&quot;うまく書けないので仕方なく&quot;悪い型定義を書いてしまうことがあります。DefinitelyTypedにpull requestを送ってくれる人にもそういう人は多くいます。</p>
+<p>これから説明するベストプラクティスを踏まえて、より良い型定義ファイルを作成できるように鍛錬していきましょう。</p>
+
+<h2 id="writing-instruction"><a id="h6-5"></a><span class="secno">6.5　</span>型定義ファイルを書くための心得</h2>
+<p>型定義ファイルを書く上でのベストプラクティスを解説していきます。基本的には公式Handbookの<a href="http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html" class="link">Writing Declaration Files</a><a id="fnb-official-handbook" href="#fn-official-handbook" class="noteref" epub:type="noteref">*9</a>とDefinitelyTypedの<a href="http://definitelytyped.org/guides/best-practices.html" class="link">best practices</a><a id="fnb-dt-best-practice" href="#fn-dt-best-practice" class="noteref" epub:type="noteref">*10</a>にしたがっておけばよいです。本章では、そこに書かれていることや筆者の経験則などを説明していきます。</p>
+<div class="footnote" epub:type="footnote" id="fn-official-handbook"><p class="footnote">[*9] <a href="http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html" class="link">http://www.typescriptlang.org/docs/handbook/writing-declaration-files.html</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-dt-best-practice"><p class="footnote">[*10] <a href="http://definitelytyped.org/guides/best-practices.html" class="link">http://definitelytyped.org/guides/best-practices.html</a></p></div>
+
+<h3 id="silly-go-luck"><a id="h6-5-1"></a>テキトーに、やろー！</h3>
+<p>一番最初にコレを書くのもどうかと思うのですが、まずは&quot;使える&quot;ようにするのが一番大切です。</p>
+<p>型定義ファイルの品質の良さにこだわるあまり、完成しない、使いたいライブラリが使えない、というのがもっともよくない状態です。型定義ファイルの良し悪しを判断する力は、TypeScript自体への理解度に大きく依存します。TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見えてくるのは避けられません。まずは&quot;使える&quot;状態にすることを目指しましょう。</p>
+<p>品質や&quot;ライブラリ全体をカバーしている&quot;かは気になるところではあります。しかし、まずは使いたいところが使えればいいのです。スゴいものになると、1万行を超える型定義ファイルがあります。また3000行程度のものはわりとごろごろしています…。しかし、そんなにも頑張って書いてると余裕で日が暮れてしまいます<a id="fnb-atom-dts" href="#fn-atom-dts" class="noteref" epub:type="noteref">*11</a>。</p>
+<p>まずは、使いたいところが、使える！それでよいのです。ドラゴン・ゲンドーソー＝先生のインストラクション・ワンを思い出しましょう。</p>
+<blockquote><p>百発のスリケンで倒せぬ相手だからといって、一発の力に頼ってはならぬ。一千発のスリケンを投げるのだ！</p></blockquote>
+<p>最初はうまくできなくても数をこなし学習を重ねれば、そのうち立派な型定義ファイルを書けるようになるでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-atom-dts"><p class="footnote">[*11] なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ</p></div>
+
+<h4 id="done-is-better-than-perfect"><a id="h6-5-1-1"></a>最高に雑な型定義ファイルを作る</h4>
+<p>テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（リスト6.7）。モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。</p>
+<div class="caption-code">
+<p class="caption">リスト6.7: 雑な型定義ファイルの例</p>
+<pre class="list language-ts">// 名前だけ定義すると全てanyでとりあえず使える
+declare module &quot;lodash&quot;;
+
+// 必要な変数をとりあえずanyで生やす
+declare let $: any;
+
+// 特定のパッケージ配下をとりあえず全部anyで
+declare module &quot;sample/*&quot;;
+
+
+// webpackなど特殊なローダー用
+declare module &quot;json!*&quot;;
+
+// 同上
+// モジュール読んだらモジュールは文字列
+declare module &quot;*!text&quot; {
+  const _: string;
+  export = _;
+}
+</pre>
+</div>
+<p>この例だと、<code class="inline-code tt">--noImplicitAny</code>オプションを有効にするとエラーになってしまいます。そのため、コンパイルエラーを無くしたらなるべく早く<code class="inline-code tt">--noImplicitAny</code>を有効にできるように頑張りたいところです。</p>
+<p>この型定義ファイルの利用例を見てみます（<code class="inline-code tt">wildcard/basicUsage-ignore</code>）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.8: 型定義ファイルの利用例</p>
+<pre class="list language-ts">import * as _ from &quot;lodash&quot;;
+import * as sample from &quot;sample/foobar&quot;;
+import * as data from &quot;json!./bar.json&quot;;
+import * as text from &quot;./foo.txt!text&quot;;
+
+// _はany
+_.map([1, 2, 3], n =&gt; n * 3);
+// $はany
+$(&quot;#id&quot;);
+// sampleはany
+sample;
+// dataもany
+data;
+// textはstring
+text.toUpperCase();
+</pre>
+</div>
+<p>anyばっかりですね。しかし、コンパイルはとおります。</p>
+
+<h3 id="interface-the-best-friend"><a id="h6-5-2"></a>インタフェースを活用する</h3>
+<p>インタフェースは大変使いやすいパーツです。というのも、インタフェースには<strong>後から定義を拡張できる</strong>という特性があるからです（リスト6.9、リスト6.10）<a id="fnb-open-ended-class" href="#fn-open-ended-class" class="noteref" epub:type="noteref">*12</a>。</p>
+<div class="caption-code">
+<p class="caption">リスト6.9: 定義を分割して書く</p>
+<pre class="list language-ts">interface Foo {
+  hello(): string;
+}
+
+// 同名のインタフェースを定義すると、合成される！
+interface Foo {
+  bye(): string;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.10: 定義が統合される！</p>
+<pre class="list language-ts">/// &lt;reference path=&quot;./declarationMerging.d.ts&quot; /&gt;
+// ↑ 昔はこのようにreference commentを使ってファイル間の依存関係を明示していましたが、
+//   最近はtsconfig.jsonに依存関係を書くため見かけることが大変少なくなりました
+
+let foo: Foo = null as any;
+
+foo.hello();
+foo.bye();
+
+export { }
+</pre>
+</div>
+<p>このとおり別々に定義したインタフェースがひとつに統合されています。これを利用することで、既存の型であろうとも拡張が可能になるのです。</p>
+<p>例をひとつ見てみましょう。<code class="inline-code tt">String#trimStart</code>は、文字列の先頭にある空白文字を取り除く機能です。本章執筆時点（2016年08月01日）では、この提案<a id="fnb-string-trimStart" href="#fn-string-trimStart" class="noteref" epub:type="noteref">*13</a>はTC39のプロポーザルでstage 2<a id="fnb-tc39-proposal" href="#fn-tc39-proposal" class="noteref" epub:type="noteref">*14</a>で、TypeScriptにはまだ入ってきていません。そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（リスト6.11）</p>
+<div class="caption-code">
+<p class="caption">リスト6.11: String#trimStartを生やす</p>
+<pre class="list language-ts">interface String {
+  trimStart(): string;
+}
+
+let str = &quot;  TypeScript  &quot;;
+
+// 文字列先頭の空白文字を削る
+console.log(str.trimStart());
+</pre>
+</div>
+<p>あとは、実行時にString.prototype.trimStartを適当な実装で補ってやれば未サポートのブラウザでも利用可能になるでしょう。</p>
+<p>この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-open-ended-class"><p class="footnote">[*12] ちなみに、classの定義も後から拡張可能になりました <a href="https://github.com/Microsoft/TypeScript/issues/3332" class="link">https://github.com/Microsoft/TypeScript/issues/3332</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-string-trimStart"><p class="footnote">[*13] <a href="https://github.com/sebmarkbage/ecmascript-string-left-right-trim" class="link">https://github.com/sebmarkbage/ecmascript-string-left-right-trim</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-tc39-proposal"><p class="footnote">[*14] <a href="https://tc39.github.io/process-document/" class="link">https://tc39.github.io/process-document/</a></p></div>
+
+<h3 id="ghost-namespace"><a id="h6-5-3"></a>幽霊namespace</h3>
+<p>幽霊namespace<a id="fnb-ghost-module" href="#fn-ghost-module" class="noteref" epub:type="noteref">*15</a>という考え方があります。</p>
+<p>namespaceを作ったとしても、即座に実体が生成されるとは限りません。namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（リスト6.12）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.12: 幽霊namespace</p>
+<pre class="list language-ts">declare namespace ghost {
+  interface Test {
+    str: string;
+  }
+}
+
+// 型としては普通にアクセスできる
+let test: ghost.Test;
+test.str;
+
+// 実体としては存在していない！
+// invalid.ts(13,17): error TS2304: Cannot find name 'ghost'.
+let notExists = ghost;
+
+export { }
+</pre>
+</div>
+<p>これを活用して大量のインタフェースをもつようなライブラリの定義をひとまとまりにできます。</p>
+<p>実際の例を見てみましょう。リスト6.13はjQueryの型定義ファイルからの抜粋（＆一部改変）です。</p>
+<div class="caption-code">
+<p class="caption">リスト6.13: 実際のjQueryの型定義の例</p>
+<pre class="list language-ts">interface JQuery {
+  addClass(className: string): JQuery;
+  html(htmlString: string): JQuery;
+  val(): any;
+  empty(): JQuery;
+  append(content1: JQuery, ...content2: any[]): JQuery;
+  appendTo(target: JQuery): JQuery;
+}
+
+interface JQueryStatic {
+  ajax(settings: JQueryAjaxSettings): any;
+  (selector: string, context?: Element): JQuery;
+  (element: Element): JQuery;
+}
+
+interface JQueryAjaxSettings {
+  data?: any;
+  type?: string;
+  url?: string;
+}
+
+interface JQueryPromise&lt;T&gt; {
+  state(): string;
+  then&lt;U&gt;(
+    fullfill: (value: T) =&gt; U,
+    reject?: (...reasons: any[]) =&gt; U
+  ): JQueryPromise&lt;U&gt;;
+}
+
+interface JQueryDeferred&lt;T&gt; extends JQueryPromise&lt;T&gt; {
+  reject(...args: any[]): JQueryDeferred&lt;T&gt;;
+  resolve(value?: T, ...args: any[]): JQueryDeferred&lt;T&gt;;
+}
+
+declare var $: JQueryStatic;
+</pre>
+</div>
+<p>トップレベルに複数の型がいくつも散乱してしまうのがよくありません。それに<code class="inline-code tt">JQuery</code>というprefixが乱舞していて目を惑わせます。ライブラリ内部でAPI同士が参照する場合でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。</p>
+<p>これを幽霊namespaceを使って書きなおしてみます（リスト6.14）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.14: 幽霊namespaceを使ってみた</p>
+<pre class="list language-ts">declare namespace jquery {
+  interface Element {
+    addClass(className: string): Element;
+    html(htmlString: string): Element;
+    val(): any;
+    empty(): Element;
+    append(content1: Element, ...content2: any[]): Element;
+    appendTo(target: Element): Element;
+  }
+
+  interface Static {
+    ajax(settings: AjaxSettings): any;
+    (selector: string, context?: Element): Element;
+    (element: Element): Element;
+  }
+
+  interface AjaxSettings {
+    data?: any;
+    type?: string;
+    url?: string;
+  }
+
+  interface Promise&lt;T&gt; {
+    state(): string;
+    then&lt;U&gt;(
+      fullfill: (value: T) =&gt; U,
+      reject?: (...reasons: any[]) =&gt; U
+    ): Promise&lt;U&gt;;
+  }
+
+  interface Deferred&lt;T&gt; extends Promise&lt;T&gt; {
+    reject(...args: any[]): Deferred&lt;T&gt;;
+    resolve(value?: T, ...args: any[]): Deferred&lt;T&gt;;
+  }
+}
+
+declare var $: jquery.Static;
+</pre>
+</div>
+<p>インタフェース名が短く、かつわかりやすくなりました。やっぱり、こういうのがいいですね。</p>
+<p>もちろん、無理に幽霊namespaceを使う必要はありません。クラスや変数や関数などを持ち、通常の実体をもつnamespaceが存在している場合は、そのnamespaceに相乗りしてしまったほうが楽でしょう。</p>
+<p>…どうしてDefinitelyTyped上にある型定義ファイルでそうなってないものが多いのかって？よい質問です。ひとつは幽霊namespaceの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。先で説明しましたが、インタフェースは定義の統合ができます。この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまうのです。特にjQueryプラグインとかはインタフェースを拡張する形で型定義するのでその量たるや…。</p>
+<p>ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊namespaceに切り替えるのは難しい場合があります。可能であれば最初から幽霊namespaceを使うようにしましょう。将来的には、このパターンの検出はtslintなどで機械的に行えるようにしたいところですね。</p>
+<div class="footnote" epub:type="footnote" id="fn-ghost-module"><p class="footnote">[*15] TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された</p></div>
+
+<h3 id="interface-is-not-duct-tape"><a id="h6-5-4"></a>なんでもかんでもインタフェースにしてはならない</h3>
+<p>少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？と思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。</p>
+<p>具体的にはnamespace様の構造をインタフェースを使って作ってはいけません（リスト6.15）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.15: インタフェースでnamespaceを表現してしまう。何故なのか…</p>
+<pre class="list language-ts">interface Foo {
+  bar: FooBar;
+}
+
+interface FooBar {
+  buzz: FooBarBuzz;
+}
+
+interface FooBarBuzz {
+  str: string;
+}
+
+declare var foo: Foo;
+
+// foo.bar.buzz.str という使い方ができる。わかりにくくてユーザは死ぬ。
+</pre>
+</div>
+<p>この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。筆者は絶対に使いません。絶対です。普通にリスト6.16のように書きましょう。</p>
+<div class="caption-code">
+<p class="caption">リスト6.16: 素直にこうしよう</p>
+<pre class="list language-ts">// 普通にコレでいいだろ！！
+declare namespace foo.bar.buzz {
+  let str: string;
+}
+</pre>
+</div>
+<p>さて次です。通常リスト6.17のような型定義ファイルを書こうとは思わないと思いますが、こういうコードが必要になる場合が稀にあります。関数としても呼べるし、namespaceのようにも振る舞うオブジェクトの型定義を作成したいときです。</p>
+<div class="caption-code">
+<p class="caption">リスト6.17: 関数・namespace どっちなの？</p>
+<pre class="list language-ts">// assertは関数としても呼べるしnamespaceのようにも見える
+assert(foo === &quot;foo&quot;);
+assert.ok(value);
+</pre>
+</div>
+<p>呼び出し可能で、プロパティをもつ。この場合、すぐに考えつく型定義はリスト6.18か、リスト6.19でしょう。</p>
+<div class="caption-code">
+<p class="caption">リスト6.18: こうしてしまいたい、気持ち</p>
+<pre class="list language-ts">declare var assert: {
+  (value: any): void;
+  ok(value: any): void;
+};
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.19: 匿名型注釈よりはマシ</p>
+<pre class="list language-ts">declare var assert: Assert;
+
+interface Assert {
+  (value: any): void;
+  ok(value: any): void;
+}
+</pre>
+</div>
+<p>たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。</p>
+<p>しかし、これには別のよいやり方があるのです（リスト6.20）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.20: 関数とnamespace 両方やらなきゃいけないのが辛いところだ</p>
+<pre class="list language-ts">declare function assert(value: any): void;
+declare namespace assert {
+  function ok(value: any): void;
+}
+</pre>
+</div>
+<p>関数とnamespaceを同名で宣言できるのです。メリットは階層構造を素直に表現できることと、前項で説明した幽霊namespaceの書き方を併用できるところです。</p>
+<p>この手法は、実際に<a href="https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/" class="link">power-assertの型定義ファイル</a><a id="fnb-power-assert-dts" href="#fn-power-assert-dts" class="noteref" epub:type="noteref">*16</a>でも利用されています。リスト6.21に抜粋＆改変したものを示します。</p>
+<div class="caption-code">
+<p class="caption">リスト6.21: 関数+namespaceの実例</p>
+<pre class="list language-ts">declare function assert(value: any, message?: string): void;
+declare namespace assert {
+
+  export function deepEqual(actual: any, expected: any): void;
+  export function notDeepEqual(acutal: any, expected: any): void;
+
+  export interface Options {
+    assertion?: any;
+    output?: any;
+  }
+
+  export function customize(options: Options): typeof assert;
+}
+</pre>
+</div>
+<p>外部に公開されている関数は<code class="inline-code tt">assert</code>のみで、そこに追加でプロパティが生えている形式です。namespaceにOptionsインタフェースがうまく取り込まれています。余計な名前を階層の浅いところにバラ撒かず、厳密さも損なっていません。この書き方は、意外とよく登場するパターンなので覚えておきましょう。</p>
+<p>実は、このやり方は型定義ファイルだけではなく通常のTypeScriptコードでも使えます（リスト6.22）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.22: 関数が先、namespaceは後！絶対！</p>
+<pre class="list language-ts">function test() {
+  return &quot;test!&quot;;
+}
+namespace test {
+  export function func() {
+    return &quot;function!&quot;;
+  }
+}
+</pre>
+</div>
+<p>コンパイル結果のリスト6.23を見ると、なぜ関数が先でnamespaceが後、という決まりになっているかがわかります。</p>
+<div class="caption-code">
+<p class="caption">リスト6.23: JSとして正しい構造だ</p>
+<pre class="list language-js">function test() {
+    return &quot;test!&quot;;
+}
+var test;
+(function (test) {
+    function func() {
+        return &quot;function!&quot;;
+    }
+    test.func = func;
+})(test || (test = {}));
+</pre>
+</div>
+<div class="footnote" epub:type="footnote" id="fn-power-assert-dts"><p class="footnote">[*16] <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/" class="link">https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/</a></p></div>
+
+<h3 id="class-definitions"><a id="h6-5-5"></a>クラスはクラスとして定義する</h3>
+<p>クラスを型定義として起こす方法について解説します。歴史的経緯により、TypeScriptではクラスの型定義を行う時に2つの代表的なやり方が存在しています。まずはその2つのやり方を見てみましょう（リスト6.24）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.24: 素直にクラス定義 vs インタフェース+変数</p>
+<pre class="list language-ts">// A. 普通にクラスを定義する
+declare class TestA {
+}
+
+// B. クラスの分解定義 変数 + インタフェース2つ
+declare let TestB: TestBConstructor;
+interface TestBConstructor {
+  new (): TestB;
+}
+interface TestB {
+}
+</pre>
+</div>
+<p>こんな感じです。普通にクラス定義をするほうが素直ですね。</p>
+<p>過去にはこの2つのやり方にそれぞれメリット・デメリットがありました。しかし、現在のTypeScriptでは大幅に制限が緩和されたためメリット・デメリットの面で考える必要はなくなってきました（リスト6.25）。よい時代になったものです。</p>
+<div class="caption-code">
+<p class="caption">リスト6.25: 相互運用性がある！</p>
+<pre class="list language-ts">// classはopen-endedになったため同名のinterfaceで拡張可能に
+class Person {
+  name: string;
+}
+interface Person {
+  age: number;
+}
+let p: Person = new Person();
+// 両方アクセス可能！
+console.log(p.name, p.age);
+
+// interfaceを使ったクラスの構成でも
+interface AnimalConstructor {
+  new (): Animal;
+}
+interface Animal {
+  speak(): string;
+}
+/* tslint:disable:variable-name */
+let Animal: AnimalConstructor = class {
+  speak() {
+    return &quot;???&quot;;
+  }
+};
+/* tslint:enable:variable-name */
+// Animalはただの変数だが普通に継承できる！
+class Cat extends Animal {
+  speak() {
+    return &quot;meow&quot;;
+  }
+}
+let cat: Cat = new Cat();
+console.log(cat.speak());
+
+export { }
+</pre>
+</div>
+
+<h3 id="pretty-good-overload"><a id="h6-5-6"></a>オーバーロードを上手く使おう！</h3>
+<p>正しいライブラリの使い方を導くこと。を心に秘めて、リスト6.26を見てください。</p>
+<p>質問：どれが一番、元々の関数の仕様がわかりやすいですか？</p>
+<div class="caption-code">
+<p class="caption">リスト6.26: 普通に使えます</p>
+<pre class="list language-ts">// 同じ実装に対して、どの型定義が一番便利かな？
+// 1関数でget, set両方の役目を果たす場合…
+
+// getのとき setのとき 仕様が違うことがよく分かる
+declare function valueA(value: any): void;
+declare function valueA(): any;
+
+// setのときも値が取れる気がする…？
+declare function valueB(value?: any): any;
+
+// 詳細が不明だ…！
+declare let valueC: Function;
+</pre>
+</div>
+<p>答え：一番最初のやつ。</p>
+<p>JavaScriptのライブラリは1つの関数にさまざまな使い方をさせようとする場合がままあります。つまり、1つの関数が複数の顔をもつということです。その顔ひとつひとつに個別の型定義を割り振ってやるテクニックをオーバーロードと呼びます。</p>
+<p>なおTypeScriptコードを書くときは普通はオーバーロードをあまり使わないのがよいスタイルです。実装が煩雑になってしまいますからね。素直にメソッドを分けましょう。</p>
+<p>union typesを使うとリスト6.27のように書くこともできます。簡単な例だとunion typesのほうがよいと思いますが、見た目が煩雑になるケースではどっちがいいかは判断が分かれるところです。</p>
+<div class="caption-code">
+<p class="caption">リスト6.27: うーん、どっちがいいかは難しい</p>
+<pre class="list language-ts">// union types未使用
+declare function hello(word: string): string;
+declare function hello(callback: () =&gt; string): string;
+
+hello(&quot;TypeScript&quot;);
+hello(() =&gt; &quot;function&quot;);
+
+// union typesあり
+declare function bye(word: string | { (): string; }): string;
+
+bye(&quot;JavaScript&quot;);
+bye(() =&gt; &quot;function&quot;);
+</pre>
+</div>
+<p>もう一例見てみます（リスト6.28）。union typesとoverloadの両方が選択肢に入る場合、現時点ではunion typesを選んだほうがよい場合があります。</p>
+<div class="caption-code">
+<p class="caption">リスト6.28: overloadとunion typesは相性がよくない</p>
+<pre class="list language-ts">declare function funcA(word: string): string;
+declare function funcA(num: number): string;
+
+let obj: string | number = null as any;
+
+// stringかnumberを渡さなければならない場合 string | number はコンパイルエラーになる
+// 本来であれば、受け入れてほしいのだけど…
+// error TS2345: Argument of type 'string | number'
+//   is not assignable to parameter of type 'number'.
+//  Type 'string' is not assignable to type 'number'.
+funcA(obj);
+
+// 元の定義がunion typesならもちろんOK
+declare function funcB(word: string | number): string;
+funcB(obj);
+</pre>
+</div>
+<p>この問題は<a href="https://github.com/Microsoft/TypeScript/issues/5766" class="link">Issue</a><a id="fnb-issue5766" href="#fn-issue5766" class="noteref" epub:type="noteref">*17</a>として管理されています。&quot;Accepting PRs&quot;ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていないけれどコミュニティの誰かがやる気を出せば修正される、という状態です。</p>
+<div class="footnote" epub:type="footnote" id="fn-issue5766"><p class="footnote">[*17] <a href="https://github.com/Microsoft/TypeScript/issues/5766" class="link">https://github.com/Microsoft/TypeScript/issues/5766</a></p></div>
+
+<h3 id="module-declaration-merging"><a id="h6-5-7"></a>モジュールの定義の統合</h3>
+<p>あまり言及されることがないのでここで触れておきます。モジュールの型定義はopen endedですのでリスト6.29とリスト6.30のようなコードが書けます。めでたい。</p>
+<div class="caption-code">
+<p class="caption">リスト6.29: モジュール定義を後から拡張可能</p>
+<pre class="list language-ts">// モジュールの定義の統合ができます
+declare module &quot;foo&quot; {
+  let str: string;
+}
+
+declare module &quot;foo&quot; {
+  let num: number;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.30: 普通に使えます</p>
+<pre class="list language-ts">import * as foo from &quot;foo&quot;;
+foo.str;
+foo.num;
+</pre>
+</div>
+<p>DefinitelyTypedではモジュールの型定義の外側にnamespaceを使った定義を掃き出し、モジュールの型定義の外側に拡張ポイントを設ける例がありました。モジュールを利用しないnamespaceだけの構成です。たとえば、lodashやjQueryのようなグローバルな名前空間に変数を生やすような場合に、いまだに有効です。</p>
+
+<h3 id="any-vs-object"><a id="h6-5-8"></a>anyと{}とObject</h3>
+<p>もしも型定義ファイルを書いていて具体的な型がわからないとき、頭を使わずにとりあえずコンパイルを通したいときは、素直に<code class="inline-code tt">any</code>を使いましょう。こういったシチュエーションで、稀にObjectを指定する人がいます。これはJavaScriptの仕様として、プロトタイプチェーンの頂点にいるObjectを使おう！と思ったのでしょう。</p>
+<p>関数の引数にObjectや{}を指定するのは、どういう性質の値がほしいのかを述べていません。本当にどのような値でも受け入れるのであれば、anyにするべきです。</p>
+<p>関数の返り値にObjectや{}を指定しても有用なプロパティが存在しないため型アサーションでもって適切な型にキャストするしかありません。これはanyを指定するのと同程度に危険で、なおかつanyより検出しにくいです。素直にanyを使いましょう。</p>
+<p>筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません。大抵の場合は、適切な型を定義してそちらを参照するほうが優れています。</p>
+<p>そしてanyを使うことに気後れするのであれば、よくよく調べて適切な型定義を与えるようにしましょう。</p>
+
+<h3 id="scratch-from-document"><a id="h6-5-9"></a>ドキュメントから書き起こす</h3>
+<p>もしライブラリにしっかりしたドキュメントがあるのであれば、実装コードから型定義ファイルを起こすのではなく、ドキュメントをベースに作成しましょう。Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDocコメントも利用時に表示してくれる場合があります。そのため、型定義を起こしつつ、あわせてJSDocを記述していくとよいでしょう。</p>
+<p>サンプルをテスト用コードとしてTypeScriptコードに移植し、ドキュメントどおりの記述が可能かも確かめるとよいです。型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例のコードをコンパイルしてみて失敗するようであれば、それは悪い型定義だといえます。たまにドキュメントのほうが間違っている場合があるのでその場合は修正のpull requestを送るチャンスです。</p>
+<p>世の中、ドキュメントにコストをあまり掛けることのできないプロジェクトも多くあるため絶対的なルールではありません。この場合、コードから型定義ファイルを起こすことになるのは仕方のないことです。</p>
+<p>現在、DefinitelyTypedにあるjQueryの型定義ファイルを熱心に面倒みてくれているJohn Reillyは特にドキュメントとの整合性を熱心に見ます。そのため、もしjQueryのドキュメント自体が間違っている場合はjQueryのドキュメントを直すところから始めるとよいでしょう。コントリビュートの輪！</p>
+
+<h3 id="be-careful-about-optional"><a id="h6-5-10"></a>コールバック関数の引数を無闇に省略可能（optional）にしない</h3>
+<p>optionalとは、値が渡されるかどうかの指標であって、コールバックを受け取った側が使うかどうかではありません。ここを勘違いすると、&quot;コールバックに値が渡されるが別に使わなくてもいいよ&quot;マークとしてoptionalを使ってしまうのです。</p>
+<p>例を見てみましょう（リスト6.31）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.31: optionalはもしかしたら値がないことを表す</p>
+<pre class="list language-ts">// 良い例
+declare function readFileA(
+  filePath: string,
+  listener: (data: string) =&gt; void): void;
+// 悪い例
+declare function readFileB(
+  filePath: string,
+  listener: (data?: string) =&gt; void): void;
+
+// 使ってみよう！
+readFileA(&quot;./test.txt&quot;, data =&gt; {
+  // ここでのdataは必ず実体がある
+  console.log(data.toUpperCase());
+});
+readFileB(&quot;./test.txt&quot;, data =&gt; {
+  // ここでのdataはundefinedかもしれない… チェックしなければダメ
+  if (!data) {
+    data = &quot;not found&quot;;
+  }
+  console.log(data.toUpperCase());
+});
+
+// 引数を無視するのは自由 optionalにする理由にはならない
+readFileA(&quot;./test.txt&quot;, () =&gt; {
+  console.log(&quot;done&quot;);
+});
+readFileB(&quot;./test.txt&quot;, () =&gt; {
+  console.log(&quot;done&quot;);
+});
+</pre>
+</div>
+<p>両方とも、ファイルの読み取りを行うための関数を型定義として書き起こしたものです。readFileはdataが省略不可、readFileOptはdataが省略可能（optional）になっています。これはreadFileOptではdataがundefinedになるかもしれないことを表します。dataがundefinedかもしれないため、if文などで中身をチェックし、undefinedだった場合の対応を入れなければなりません。本当にundefinedになりうるのであれば省略可能にするか、union typesでundefinedを与える必要があります。しかし、そうではなく必ずdataの値が渡されてくる場合は、無用なチェック処理が発生することになります。</p>
+<p>間違えないよう、留意しましょう。</p>
+
+<h3 id="dont-use-i-prefix"><a id="h6-5-11"></a>インタフェースのプリフィクスとしてIをつけるのはやめよう！</h3>
+<p>とTypeScriptの公式ドキュメントで<a href="https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions" class="link">明記</a><a id="fnb-writing-dts-files" href="#fn-writing-dts-files" class="noteref" epub:type="noteref">*18</a>されました。</p>
+<p>C#やJavaよりも、広い範囲でインタフェースが利用されるので&quot;実装を強制させるパーツ&quot;扱いしてはいけないからだそうです。</p>
+<p>古くはTypeScriptコンパイラ本体のコードもC#の伝統に倣いIプリフィクスを使っていましたが、現在では取り除かれています。またDefinitelyTypedでも公式の記述に従い新しい型定義ファイルについてはIプリフィクスを使わぬようレビューしています。</p>
+<div class="footnote" epub:type="footnote" id="fn-writing-dts-files"><p class="footnote">[*18] <a href="https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions" class="link">https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions</a></p></div>
+
+<h3 id="module-compat"><a id="h6-5-12"></a>ECMAScript 2015とCommonJSでのモジュールの互換性について</h3>
+<p>最初にまとめを書いておきます。まとめ：<strong>元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな</strong>。</p>
+<p>現在JavaScriptのモジュールの仕様は過渡期にあります。ECMAScript 2015でモジュールの記法や考え方は定義されましたが、実際ブラウザにはまだ実装されていません。ブラウザ上でのスクリプトの読み込みは煩雑で、まだ実装のための仕様も固まっていない段階です。さらにCommonJS形式のモジュールとの互換性なんて、ECMAScriptの仕様には含まれていません。</p>
+<p>そのためにTypeScriptやBabelなど、各種トランスパイラ毎にECMAScript 2015とCommonJS間の変換方法は食い違っています。TypeScriptが正しいのかBabelが正しいのかという議論は、そもそも仕様が不明なのだから成立しません。TypeScriptもBabelもECMAScript 2015なモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。</p>
+<p>まずはTypeScriptで書いたコードがどのようなCommonJS形式のコードに変換されるかを見てみます（リスト6.32、リスト6.33）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.32: 関数などを素直にexportする</p>
+<pre class="list language-ts">export function hello(word = &quot;TypeScript&quot;) {
+  console.log(`Hello, ${word}`);
+}
+
+export function bye(word = &quot;JavaScript&quot;) {
+  console.log(`Bye, ${word}`);
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.33: CommonJS形式ではexports.xxx = となる</p>
+<pre class="list language-js">&quot;use strict&quot;;
+function hello(word = &quot;TypeScript&quot;) {
+    console.log(`Hello, ${word}`);
+}
+exports.hello = hello;
+function bye(word = &quot;JavaScript&quot;) {
+    console.log(`Bye, ${word}`);
+}
+exports.bye = bye;
+</pre>
+</div>
+<p>単純でわかりやすいですね。</p>
+<p>次にCommonJSでの<code class="inline-code tt">exports.module = ...;</code>形式（export.moduleへの代入）の記法を見てみます（リスト6.34、リスト6.35）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.34: export = ... と書く</p>
+<pre class="list language-ts">function hello(word = &quot;TypeScript&quot;) {
+  console.log(`Hello, ${word}`);
+}
+
+// CommonJSの exports.module = hello; 相当
+// 外からこのモジュールを参照した時のオブジェクト自体を差し替える
+export = hello;
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.35: exports.module = ... となる</p>
+<pre class="list language-js">&quot;use strict&quot;;
+function hello(word = &quot;TypeScript&quot;) {
+    console.log(`Hello, ${word}`);
+}
+module.exports = hello;
+</pre>
+</div>
+<p>この変換は重要です。変換結果から逆に考えるとJavaScriptで<code class="inline-code tt">exports.module = ...;</code>の形式を見たらTypeScriptでは<code class="inline-code tt">export = ...;</code>という型定義に書き起こす必要があります。</p>
+<p>理解を深めるためNode.jsでのCommonJSの実現方法について該当のコードを抜粋<a id="fnb-node-module-url" href="#fn-node-module-url" class="noteref" epub:type="noteref">*19</a>します（リスト6.36）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.36: Node.jsのモジュールの実現方法</p>
+<pre class="list language-js">NativeModule.wrap = function(script) {
+  return NativeModule.wrapper[0] + script + NativeModule.wrapper[1];
+};
+
+NativeModule.wrapper = [
+  '(function (exports, require, module, __filename, __dirname) { ',
+  '\n});'
+];
+</pre>
+</div>
+<p>大変シンプルなコードが出てきました。Node.jsにおいて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後にあの2行を付け足して、evalしているだけなのです。なので、Node.js初心者がたまにやりがちな<code class="inline-code tt">exports = ...;</code>というコードは間違いです。単に変数の値を差し替えているだけなので当然ですね。外部に変更を露出させるには、何かのプロパティの変更（つまり<code class="inline-code tt">module.exports = ...;</code>）でなければなりません。</p>
+<p>互換性の話に戻ります。この<code class="inline-code tt">export = ...;</code>の記法に対応した&quot;正規の&quot;importの書き方は先ほど見た<code class="inline-code tt">import xxx = require(&quot;...&quot;);</code>形式です。これを無理やりECMAScript 2015形式のimport文に書き直すとリスト6.37になります。</p>
+<div class="caption-code">
+<p class="caption">リスト6.37: import モジュール全体 as 名前</p>
+<pre class="list language-ts">// モジュール全体をutilに割当て
+import * as util from &quot;./util&quot;;
+
+// この書き方は誤り util.ts にdefaultエクスポートはない
+// error TS1192: Module '&quot;略/util&quot;' has no default export.
+// import util from &quot;./util&quot;;
+
+// Hello, CommonJS と表示される
+util(&quot;CommonJS&quot;);
+</pre>
+</div>
+<p>このやり方は若干良くなく、<code class="inline-code tt">export =</code>する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（リスト6.38）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.38: 同名のnamespaceを被せてごまかす</p>
+<pre class="list language-ts">function hello(word = &quot;TypeScript&quot;) {
+  console.log(`Hello, ${word}`);
+}
+// 呼び出し元でエラーになるのを防ぐ 同名のnamespaceを被せてごまかす
+// error TS2497: Module '&quot;略/util&quot;' resolves to a non-module entity
+//   and cannot be imported using this construct.
+namespace hello { }
+
+export = hello;
+</pre>
+</div>
+<p>いまいち優雅ではありませんね。この場合は無理にECMAScript 2015のモジュール記法を使わないほうが無難かもしれません。世間的にも意見が分かれるところです。</p>
+<p>さて、ここで問題になるのがTypeScriptとBabelで<code class="inline-code tt">module.exports = ...;</code>形式のモジュールを利用する際、どうECMAScript 2015形式にマッピングするかの解釈が異なる点です。Babelの変換結果を見てみます。リスト6.39をコンパイルするとリスト6.40（リスト6.41）となります。</p>
+<div class="caption-code">
+<p class="caption">リスト6.39: Babelで変換する前のコード</p>
+<pre class="list language-js">import util from &quot;./util&quot;;
+util();
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.40: Babelで変換した結果のコード</p>
+<pre class="list language-js">&quot;use strict&quot;;
+
+var _util = require(&quot;./util&quot;);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj &amp;&amp; obj.__esModule ? obj : { default: obj };
+}
+
+(0, _util2.default)();
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.41: Babelで変換した結果をわかりやすく書き直す</p>
+<pre class="list language-js">&quot;use strict&quot;;
+
+var util = require(&quot;./util&quot;);
+if (!util || !util.__esModule) {
+  util = { default: util };
+}
+
+util.default();
+</pre>
+</div>
+<p>Babelは、<code class="inline-code tt">module.exports = ...;</code>形式のコードに対して特別な配慮を行い、<code class="inline-code tt">import util from &quot;./util&quot;;</code>形式でも動作します。TypeScriptが<code class="inline-code tt">import * as util from &quot;./util&quot;;</code>形式しか許していないため、ここに齟齬があります。</p>
+<p>ECMAScript 2015形式＋BabelのコードをTypeScriptから参照したり、ECMAScript 2015＋TypeScriptのコードをBabelから参照したりすることには大きな問題はありません。しかし<code class="inline-code tt">module.exports = ...;</code>なコードの取り扱いには注意が必要なのです。</p>
+<p>この話題はDefinitelyTypedでよくあるトラブルの1つで、TypeScript＋Babelの両方を組み合わせて使うユーザからこのあたりがごっちゃになったコードや修正が来ます。レビューする側としては「いやお前の環境では動くかもしれんが大抵のビルド手順では動かんのじゃ」となり、修正してくれるまで取り込むことはありません。TypeScriptでは<code class="inline-code tt">exports.default = ...</code>とされているコードのみ<code class="inline-code tt">export default ...</code>という型定義を与えてよいのです。<strong>元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな</strong>。ということです。</p>
+<div class="footnote" epub:type="footnote" id="fn-node-module-url"><p class="footnote">[*19] <a href="https://github.com/nodejs/node/blob/v6.3.1/lib/internal/bootstrap_node.js#L434-L441" class="link">https://github.com/nodejs/node/blob/v6.3.1/lib/internal/bootstrap_node.js#L434-L441</a></p></div>
+
+<h3 id="export-and-commonjs"><a id="h6-5-13"></a>CommonJS形式でちょっと小難しいexport句の使い方</h3>
+<p>インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、リスト6.42のように書きます。</p>
+<div class="caption-code">
+<p class="caption">リスト6.42: 実はインタフェースBarも外から見えない</p>
+<pre class="list language-ts">declare module &quot;bar&quot; {
+  interface Bar {
+    num: number;
+  }
+
+  // この_は外部からは参照できない。exportしてないので。
+  let _: Bar;
+  export = _;
+}
+</pre>
+</div>
+<p>呼び出し側ではリスト6.43のように使います。importした値がインタフェースFooのインスタンスになっていることがわかります。</p>
+<div class="caption-code">
+<p class="caption">リスト6.43: 使うとき。インタフェースBarのインスタンスが得られる</p>
+<pre class="list language-ts">// b は &quot;bar&quot; の Barのインスタンス だよ！
+import * as b from &quot;bar&quot;;
+b.num;
+</pre>
+</div>
+<p>よくやりがちな誤りはリスト6.44のような書き方をしてしまうことです。インタフェースのインスタンスをexportしたつもりが型がexportされてしまうのです。</p>
+<div class="caption-code">
+<p class="caption">リスト6.44: それは値ではなくて型だけexportしているぞ！</p>
+<pre class="list language-ts">declare module &quot;buzz&quot; {
+  interface Buzz {
+    num: number;
+  }
+
+  // よくやりがちな過ち
+  export = Buzz;
+}
+</pre>
+</div>
+<p>こういう悲しい目を回避するには、型定義ファイルのテストが有効です。型定義ファイルを書いたら適当なユースケースに当てはめて意図どおりコンパイルできるか確かめてみましょう。</p>
+
+<h3 id="modules-and-global"><a id="h6-5-14"></a>グローバルに展開される型定義とモジュールの両立</h3>
+<p>グローバルに変数が展開されるタイプとモジュールとしての利用が両立しているタイプのライブラリについて考えます。具体的に<b class="kw">UMD (Universal Module Definition)</b><!-- IDX:UMD -->と呼ばれる形式<a id="fnb-umd" href="#fn-umd" class="noteref" epub:type="noteref">*20</a>です。ライブラリ内部でモジュールとしての使い方が想定されているのか、そうではないのかを判断し展開の方法を変えます。</p>
+<p>TypeScriptではこういうパターンのときに使いやすい型定義ファイルの記述方法があります。しかし、TypeScript 2.0.0までは任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識させる方法がなかったため、役に立ってはいませんでした。この形式が使われているのはDefinitelyTypedの@typesパッケージシリーズ（本書執筆時点ではtypes-2.0ブランチ）だけではないでしょうか。</p>
+<p>説明のためにstrutilとstrutil-extraという架空のライブラリについて考えてみます。strutilはrandomizeString関数を提供します。strutil-extraはhappy関数を提供し、strutilを拡張します。</p>
+<p>まずは型定義ファイルを見てみましょう（リスト6.45、リスト6.46）。ちょっと見慣れない書き方ですね。</p>
+<div class="caption-code">
+<p class="caption">リスト6.45: typings/strutil/index.d.ts</p>
+<pre class="list language-ts">// importされなかった場合、globalにstrutilという名前で展開する
+export as namespace strutil;
+
+// 普通の型定義 declare module &quot;...&quot; の中と同じ書き味でよい
+export interface Options {
+  i?: number;
+}
+export declare function randomizeString(str: string, opts?: Options): string;
+
+// グローバルな要素の拡張
+declare global {
+  // 既存のstring型にメソッドを生やす
+  interface String {
+    randomizeString(opts?: Options): string;
+  }
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト6.46: typings/strutil-extra/index.d.ts</p>
+<pre class="list language-ts">// 他のモジュールの型定義を参照する
+import * as strutil from &quot;strutil&quot;;
+
+export as namespace strutilExtra;
+
+export declare function happy(str: string): string;
+
+// 他のモジュールの拡張
+declare module &quot;strutil&quot; {
+  // 既存の要素を拡張できる
+  interface Options {
+    reverse?: boolean;
+  }
+
+  // 自分ではないモジュールに勝手に新規の変数や関数を生やしたりはできない
+  // 定義の拡張のみ可能
+  // error TS1038: A 'declare' modifier cannot be used
+  //   in an already ambient context.
+  // export declare let test: any;
+}
+
+declare global {
+  interface String {
+    happy(): string;
+  }
+}
+</pre>
+</div>
+<p>既存モジュールの定義の拡張もできています。この形式だと、どのライブラリを拡張しているのか明示するところが利点です。</p>
+<p>これらを<code class="inline-code tt">import ... from &quot;strutil&quot;;</code>したりするためのtsconfig.jsonを確認しておきます（リスト6.47）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.47: tsconfig.jsonの例</p>
+<pre class="list language-json">{
+    &quot;compilerOptions&quot;: {
+        &quot;module&quot;: &quot;commonjs&quot;,
+        &quot;target&quot;: &quot;es5&quot;,
+        &quot;noImplicitAny&quot;: true,
+        &quot;baseUrl&quot;: &quot;./&quot;,
+        &quot;paths&quot;: {
+            &quot;strutil&quot;: [&quot;./typings/strutil/&quot;],
+            &quot;strutil-extra&quot;: [&quot;./typings/strutil-extra/&quot;]
+        }
+    },
+    &quot;exclude&quot;: [
+        &quot;node_modules&quot;
+    ]
+}
+</pre>
+</div>
+<p>baseUrlとpathsの指定があります。TypeScript 2.0.0からこうして任意の場所の型定義ファイルを任意の名前に紐付けられるようになったため、ローカル環境でも利用しやすくなりました。</p>
+<p>次に前述の型定義ファイルを利用する例を見てみます。まずはグローバルに展開される例です（リスト6.48）。</p>
+<div class="caption-code">
+<p class="caption">リスト6.48: lib/bare.ts</p>
+<pre class="list language-ts">// UMD形式のライブラリがglobalに展開されたときの動作に相当する
+// import, export句がない場合、globalのstrutilが参照できる
+strutil.randomizeString(&quot;TypeScript&quot;);
+strutilExtra.happy(&quot;TypeScript&quot;);
+
+// globalのStringも拡張されている
+&quot;TypeScript&quot;.randomizeString();
+&quot;TypeScript&quot;.happy();
+
+// import、export が存在すると、ちゃんと読み込め！と怒られる
+// error TS2686: Identifier 'strutil' must be imported from a module
+// error TS2686: Identifier 'strutilExtra' must be imported from a module
+</pre>
+</div>
+<p>なるほど。<code class="inline-code tt">export as namespace ...</code>形式を使わないUMD形式の対応方法もありますが、importと混ぜるとエラーになるところがよいですね。</p>
+<p>モジュール形式も見てみましょう（リスト6.49）。普通にモジュールであるかのように利用できますね。</p>
+<div class="caption-code">
+<p class="caption">リスト6.49: lib/module.ts</p>
+<pre class="list language-ts">// UMD形式のライブラリがglobalに展開されたときの動作に相当する
+// importした時、普通のモジュールとして振る舞う
+import { randomizeString } from &quot;strutil&quot;;
+import { happy } from &quot;strutil-extra&quot;;
+
+randomizeString(&quot;TypeScript&quot;);
+happy(&quot;TypeScript&quot;);
+
+// strutil-extra で追加したパラメータも反映されている
+randomizeString(&quot;TypeScript&quot;, {
+  i: 11,
+  reverse: true, // これ
+});
+
+// globalのStringも拡張されている
+&quot;TypeScript&quot;.randomizeString();
+&quot;TypeScript&quot;.happy();
+</pre>
+</div>
+<p>この形式がどこまで普及するかはわかりませんが、時とともにDefinitelyTyped内部でも見かける頻度が増えていくでしょう。ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけ、注意が必要です。</p>
+<div class="footnote" epub:type="footnote" id="fn-umd"><p class="footnote">[*20] <a href="https://github.com/umdjs/umd" class="link">https://github.com/umdjs/umd</a></p></div>
+
+<h3 id="check-at-last"><a id="h6-5-15"></a>最終チェック！</h3>
+<p>やった！型定義ファイルが書けたぞ！出来高に満足する前に、もう少しだけやっておきたいことがあります。それが、--noImplicitAnyや--strictNullChecksをつけての試しコンパイルとtslintによるチェックです。</p>
+
+<h4 id="tslint"><a id="h6-5-15-1"></a>tslint</h4>
+<p>lintという種類のプログラムがあります。ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくるツールを指します。</p>
+<p>TypeScriptでは<a href="https://github.com/palantir/tslint" class="link">tslint</a><a id="fnb-tslint-repo" href="#fn-tslint-repo" class="noteref" epub:type="noteref">*21</a>というプログラムが一般的に使われています。</p>
+<p>tslintはコンパイルだけでは見つけきれない、悪いにおいのするコードを検出してくれます。tslintでは頻繁に新しいルールが追加されるため、本書では詳しくは取り上げません。その時々の最適な設定を突き詰めてみてください。</p>
+<p>tslintは設定ファイルを必要とします。今のところ、TypeScriptにおける統一見解は存在していないのでtslintが使ってる<a href="https://github.com/palantir/tslint/blob/master/tslint.json" class="link">設定ファイル</a><a id="fnb-tslint-example-config" href="#fn-tslint-example-config" class="noteref" epub:type="noteref">*22</a>かTypeScript本体の<a href="https://github.com/Microsoft/TypeScript/blob/master/tslint.json" class="link">tslint.json</a><a id="fnb-tsc-tslint" href="#fn-tsc-tslint" class="noteref" epub:type="noteref">*23</a>を参照するとよいでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-tslint-repo"><p class="footnote">[*21] <a href="https://github.com/palantir/tslint" class="link">https://github.com/palantir/tslint</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-tslint-example-config"><p class="footnote">[*22] <a href="https://github.com/palantir/tslint/blob/master/tslint.json" class="link">https://github.com/palantir/tslint/blob/master/tslint.json</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-tsc-tslint"><p class="footnote">[*23] <a href="https://github.com/Microsoft/TypeScript/blob/master/tslint.json" class="link">https://github.com/Microsoft/TypeScript/blob/master/tslint.json</a></p></div>
+
+<h2 id="lets-contribute"><a id="h6-6"></a><span class="secno">6.6　</span>Let's contribute!</h2>
+<p>ようこそ！<a href="https://github.com/DefinitelyTyped/DefinitelyTyped" class="link">DefinitelyTyped</a><a id="fnb-dt" href="#fn-dt" class="noteref" epub:type="noteref">*24</a>へ！メンテナのvvakameです。</p>
+<p>DefinitelyTypedではさまざまな型定義ファイルを取り揃えてございます！世界中の人々が作った型定義ファイルは集積され、@typesなどを介して広く利用されています。</p>
+<p>貴方が作った型定義ファイルも世界中の人々に使ってほしいとは思いませんか？もしくは、あなたがいつも使っている型定義ファイルのバグを治したい…そんな気持ちになることもあるでしょう。その思い、すべてDefinitelyTypedにぶつけてみましょう！</p>
+<p>本書を読んでいただいた紳士淑女の皆様は、感じのよい型定義ファイルが書けるようになっています。品質と時間のトレードオフを考えつつ、上品な型定義ファイルを提供していただきたいです。</p>
+<p>DefinitelyTypedはGitHub上のリポジトリなので追加、修正についてはpull requestをご利用ください。</p>
+<p>この節では、筆者がDefinitelyTypedに送られてきたときにどういう考えでpull requestのレビューをしているかを示します。あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことを言われる場合もあるでしょう。実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーを尊重して議論していただきたいと思います。</p>
+<p>とはいえ、メンテナは全員DefinitelyTypedの<a href="http://definitelytyped.org/guides/contributing.html" class="link">Contribution guide</a><a id="fnb-dt-contrib-guide" href="#fn-dt-contrib-guide" class="noteref" epub:type="noteref">*25</a>は読んでいるはずなので、こちらには目を通しておくとよいでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-dt"><p class="footnote">[*24] <a href="https://github.com/DefinitelyTyped/DefinitelyTyped" class="link">https://github.com/DefinitelyTyped/DefinitelyTyped</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-dt-contrib-guide"><p class="footnote">[*25] <a href="http://definitelytyped.org/guides/contributing.html" class="link">http://definitelytyped.org/guides/contributing.html</a></p></div>
+
+<h3 id="review-about-new-definitions"><a id="h6-6-1"></a>新規型定義ファイルの追加のレビューの観点</h3>
+<p>まずは今までなかった、新しいライブラリに対する型定義ファイルのレビューの観点を解説していきます。</p>
+<ol>
+<li>CIが通っているか</li>
+<li>npmまたはbowerに公開されている名前どおりか。公開されていない場合は競合が発生しないか</li>
+<li>テストが存在しているか</li>
+<li>幽霊namespaceを使ったほうが構造がきれいになるか</li>
+</ol>
+<p>だいたいこんな感じです。</p>
+<p>CIが通っているか。これは、ヘッダが定められた形式で書かれているか、--noImplicitAny付きで型定義ファイルやテストがコンパイルできるか、を主に見ています。</p>
+<p>npm, またはbowerに公開されている名前どおりか。npmに公開されているライブラリはnpmで公開されている名前と同一のディレクトリ名にあわせます。もし、npmに公開されていない場合は適当に名前を選ぶしかありませんが、同名の別のライブラリがnpm上に存在していないかなどをチェックしています。</p>
+<p>逆に、ここに書かれていないことはあまり見ていません。たとえば、ライブラリの実装全体に対する型定義ファイルのカバー率やanyの多さなどはあまり見ていません。それらは後から別の人が補ってくれる可能性があるからです。一人でやりきらなくてもいいよな！という発想ですね。もちろん最初に高品質高カバー率のものが出てきたほうが「やりおる！」と感心はします。</p>
+<p>なおレビュワー次第ですがJSDocがきっちり書かれているか、というのを見る人もいます。きちんとドキュメントから転記などしてあるものが送られてきたときはやはり感心しますね。</p>
+
+<h3 id="review-about-improvements"><a id="h6-6-2"></a>既存型定義ファイルの修正のレビューの観点</h3>
+<ol>
+<li>CIが通っているか</li>
+<li>破壊的変更が含まれていないか</li>
+<li>ライブラリ本体のドキュメントまたは実装と照らして変更内容が妥当であるか</li>
+</ol>
+<p>これだけです。新規追加の場合は比較的レビューがガバガバなのですが、既存のものの変更はすでに利用している人に影響があるため、勢い慎重になってしまいます。そのため結構レビューに時間が取られて辛いので、ドキュメントや実装が確認できるURLを添えてくれると大変嬉しいです。</p>
+<p>いくつか補足しましょう。</p>
+<p>破壊的変更が含まれていないか。たとえばコードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊namespaceを使っていないスタイルから使っているスタイルへの変更など。または、ある型定義を別の表現へと書き換える場合。これらはレビュアーが妥当かどうかを判断します。たいてい判断できないのでヘッダに書いてあるDefinitions by:に名前が書いてある人達にGitHub上でmentionが飛ばされ、レビューしてもらって決めます。型定義ファイルを作った人は、たいていの場合、実際に使っている人、つまり破壊的変更を加えられると困る人達です。変な変更が入りそうな場合、きっと事前に相談してほしいに違いないと考えるわけです。</p>
+<p>次に、変更内容が妥当であるかの検証です。多くの場合は筆者が当該ライブラリのドキュメントまたは実装を読んで正しいかどうかをverifyします。しかし、小規模でドキュメントのURLがちゃんと添付されている場合以外は、前述のとおりDefinitions by:の人たちにレビューの依頼を投げます。</p>
+<p>では、皆様のpull request、お待ちしています！</p>
+
+<h2 id="publish-npm-best-practice"><a id="h6-7"></a><span class="secno">6.7　</span>自分のライブラリをnpmで公開するときのベストプラクティス</h2>
+<p>自分の作ったライブラリをnpmに公開する時のベストプラクティスについて説明します。ここで説明するのはTypeScriptによってコードが書かれているライブラリを前提とします。また、npmにパッケージを公開するための基本的な説明はここでは行いません。</p>
+<p>ポイントは.tsファイルをリリースに含めないこと、.d.tsファイルをTypeScriptコンパイラに生成させること、.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにすることです。</p>
+<p>まずは<strong>.tsファイルをリリースに含めない</strong>理由について説明します。これは、TypeScriptコンパイラの探索順序が.tsファイル、.tsxファイル、.d.tsファイルだからです。.d.tsファイルも公開していたとしても、.tsファイルが存在しているとそちらが先に発見され、コンパイル処理が走ってしまいます。TypeScriptコンパイラのバージョンが上がった時にソースコード（.ts）の修正が必要になるケースは多いですが、型定義ファイル（.d.ts）が影響を受けるケースは稀です。つまり、自分のライブラリをより安定したものとするためには、.tsファイルをリリースに含めないほうがよいわけです。そのために.npmignoreファイルにリスト6.50の記述を追加します。</p>
+<div class="caption-code">
+<p class="caption">リスト6.50: .npmignoreで.tsコードを排除し.d.tsはパッケージング対象へ</p>
+<pre class="list"># libディレクトリ配下でコードが管理されている場合
+lib/**/*.ts
+!lib/**/*.d.ts
+</pre>
+</div>
+<p><strong>.d.tsファイルをTypeScriptコンパイラに生成させる</strong>のは、.tsコードをコンパイルするときに<code class="inline-code tt">--declaration</code>オプションを利用するだけなので簡単です。</p>
+<p>つぎに<strong>.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにする</strong>理由ですが、これは単純にそのほうが使いやすいからです。実現するためにはTypeScriptコンパイラの検索パスに自身の型定義ファイルが入るようにします。</p>
+<p>そのための方法はいくつかあります。</p>
+<ol>
+<li>パッケージのrootにindex.d.tsを置く</li>
+<li>package.jsonにtypingsプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く</li>
+<li>package.jsonにtypesプロパティを作成し、最初に参照するべき型定義ファイルの相対パスを書く</li>
+</ol>
+<p>1つ目はNode.jsが実行時にパッケージのrootにあるindex.jsを最初に読み込もうとする挙動に似せた動作です。2つ目と3つ目はほぼおなじやり方ですが、3つ目のほうが最近追加されたやり方です。typingsとtypesプロパティの両方が存在する場合はtypingsプロパティが優先されます。</p>
+<p>筆者はもっぱら、1つ目の方法を使いindex.d.tsとindex.jsを手書きしています。これはpackage.jsonに色々と書くよりも一般的なルールに従うのを良しとしているためです。</p>
+<p>実例については筆者の<a href="https://github.com/vvakame/typescript-formatter" class="link">typescript-formatter</a><a id="fnb-tsfmt" href="#fn-tsfmt" class="noteref" epub:type="noteref">*26</a>リポジトリを参照してください。</p>
+<div class="footnote" epub:type="footnote" id="fn-tsfmt"><p class="footnote">[*26] https://github.com/vvakame/typescript-formatter</p></div>
+      </div>
+      <nav class="book-navi book-prev">
+                <a href="tsc-options.html">
+          <div class="book-cursor"><span class="cursor-prev">◀</span></div>
+        </a>
+              </nav>
+      <nav class="book-navi book-next">
+              </nav>
+    </div>
+  </div>
+
+  <!--
+  <footer>
+      </footer>
+    -->
+
+  <footer class="site-footer">
+    <div class="wrapper">
+      <h2 class="footer-heading">TypeScript Ninja</h2>
+      <div class="footer-col-wrapper">
+        <div class="footer-col  footer-col-1">
+          <ul class="contact-list">
+            <li>TypeScript Ninja</li>
+            <li><a href="mailto:vvakame+typescript@gmail.com">vvakame+typescript@gmail.com</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col  footer-col-2">
+          <ul class="social-media-list">
+            <li>
+              <a href="https://github.com/vvakame">
+                <span class="icon  icon--github">
+                  <svg viewBox="0 0 16 16">
+                    <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                  </svg>
+                </span>
+                <span class="username">vvakame</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="https://twitter.com/vvakame">
+                <span class="icon  icon--twitter">
+                  <svg viewBox="0 0 16 16">
+                    <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                    c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                  </svg>
+                </span>
+                <span class="username">vvakame</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col  footer-col-3">
+          <p class="text">TypeScriptについて色々書くよ。忍者！</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/typescript.min.js"></script>
+  <script>document.querySelectorAll("pre.list").forEach(function(b) { hljs.highlightBlock(b); });</script>
+</body>
+</html>

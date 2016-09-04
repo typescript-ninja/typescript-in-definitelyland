@@ -6,9 +6,7 @@ CHAPS:
   - typescript-basic.re
   - types-basic.re
   - types-advanced.re
+  - tsc-options.re
   - definition-file.re
-#  - es6.re
-#  - another-transpiler.re
-#  - antipattern.re
 
 POSTDEF:

@@ -2,10 +2,12 @@
 .idea/
 
 .tscache/
+.sass-cache/
 
 node_modules/
 
 npm-debug.log
 
 code/**/*.js
-public/
+code/**/*.d.ts
+publish/

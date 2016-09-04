@@ -10,6 +10,8 @@ class Inherit extends Base {
 	}
 }
 
-var obj = new Inherit();
+let obj = new Inherit();
 // Hi! TypeScript. How are you? と出力される
 console.log(obj.greeting("TypeScript"));
+
+export { }
