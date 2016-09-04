@@ -1,6 +1,8 @@
 machine:
   timezone:
     Asia/Tokyo
+  node:
+    version: 6
 
 test:
   override:
