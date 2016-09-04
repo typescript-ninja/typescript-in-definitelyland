@@ -1,5 +1,33 @@
 /* stylesheet for Re:VIEW web */
 
+@charset "utf-8";
+
+$base-font-family: Helvetica, Arial, sans-serif;
+$base-font-size:   16px;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     30px;
+
+$text-color:       #111;
+$background-color: #fdfdfd;
+$brand-color:      #2a7ae2;
+
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+@import "style-jykell";
+
 $cursor-top: 100px;
 $cursor-width: 40px;
 $side-width: 200px;
@@ -84,4 +112,3 @@ footer p
 {
     max-width: 100%;
 }
-
