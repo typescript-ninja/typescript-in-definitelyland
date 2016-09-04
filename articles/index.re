@@ -38,7 +38,7 @@ C87版から上手に味わいを引き継いだ可愛い表紙をありがと�
 
 本書で利用しているTypeScriptコンパイラは次のものです。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
-Version 2.0.2
+Version 2.0.0
 #@end
 
 //footnote[js-primer][@<href>{https://github.com/asciidwango/js-primer}]

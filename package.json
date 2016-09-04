@@ -32,7 +32,7 @@
     "load-grunt-tasks": "^3.5.0",
     "node-sass": "^3.8.0",
     "tslint": "^3.13.0",
-    "typescript": "^2.0.2",
+    "typescript": "2.0.0",
     "typescript-formatter": "^3.0.0"
   }
 }
