@@ -1,28 +1,7 @@
-general:
-  branches:
-    ignore:
-      - gh-pages
-
 machine:
   timezone:
     Asia/Tokyo
-  environment:
-    # for gh-pages
-    GIT_COMMITTER_NAME:  vvakame
-    GIT_COMMITTER_EMAIL: vvakame+dev@gmail.com
-    GIT_AUTHOR_NAME:     vvakame
-    GIT_AUTHOR_EMAIL:    vvakame+dev@gmail.com
-
-dependencies:
-  pre:
-    - npm run global
 
 test:
   override:
-    - grunt html
-
-deployment:
-  release:
-    branch: master
-    commands:
-      - ./deploy-gh-pages.sh
+    - npm run web
