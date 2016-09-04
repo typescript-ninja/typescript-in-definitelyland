@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style-web.css" />
+<link rel="next" title="型は便利だ楽しいな" href="types-basic.html"><link rel="prev" title="戦闘準備だ！TypeScript！" href="prepared-to-typescript.html">  <meta name="generator" content="Re:VIEW" />
+  <title>TypeScriptの基本 | Revised TypeScript in Definitelyland</title>
+</head>
+<body>
+  <div class="book">
+    <nav class="side-content">
+      <h1>Revised TypeScript in Definitelyland</h1>
+      <ul class="book-toc">
+<li><a href="index.html">TOP</a></li>
+<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
+<li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
+<li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
+<li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
+<li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
+<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+</ul>
+      <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
+    </nav>
+    <div class="book-body">
+      <header>
+      </header>
+      <div class="book-page">
+        <h1 id="typescript-basic"><a id="h2"></a><span class="secno">第2章　</span>TypeScriptの基本</h1>
+<p>第1章「戦闘準備だ！TypeScript！」で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。ECMAScript 2015の知識はどんどん広まってきていますし、今後は基本的なJavaScriptの知識になっていくでしょう。ECMAScriptの知識は、TypeScript固有の知識ではないですからね。</p>
+<p>この章ではTypeScriptでの基本的な構文を解説します。まずは、TypeScriptを使うのに必要最低限の知識を身につけていきましょう。</p>
+<p>型の基本は第3章「型は便利だ楽しいな」を、難しいことや便利なことは第4章「アドバンスド型戦略」を見てください。既存のJavaScriptな資産やライブラリを使いたい場合は第6章「JS資産と型定義ファイル」を見てください。</p>
+<p>また、本書は<code class="inline-code tt">--noImplicitAny</code>、<code class="inline-code tt">--strictNullChecks</code>、<code class="inline-code tt">--noImplicitReturns</code>、<code class="inline-code tt">--noImplicitThis</code>を有効にした状態を基本として解説します。各オプションの詳細については第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
+
+<h2 id="variables"><a id="h2-1"></a><span class="secno">2.1　</span>変数</h2>
+<p>TypeScriptの変数宣言はおおむねJavaScriptと同じです。違うのは、リスト2.1のように変数名の後に<code class="inline-code tt">: 型名</code>という形式でその変数がどういう型の値の入れ物になるのか指定できるところです<a id="fnb-suppress-warning" href="#fn-suppress-warning" class="noteref" epub:type="noteref">*1</a>。これを<b class="kw">型注釈 (type annotations)</b><!-- IDX:型注釈 -->と呼びます。</p>
+<div class="footnote" epub:type="footnote" id="fn-suppress-warning"><p class="footnote">[*1] コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます</p></div>
+<div class="caption-code">
+<p class="caption">リスト2.1: 型注釈付きの変数</p>
+<pre class="list language-ts">let str: string;
+let num: number;
+let bool: boolean;
+
+let func: Function;
+let obj: any; // なんでも型
+
+str = &quot;文字列&quot;;
+num = 1;
+bool = true;
+func = () =&gt; { };
+obj = {};
+
+export { }
+</pre>
+</div>
+<p>型注釈の何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。たとえばリスト2.2のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。安心安全！</p>
+<div class="caption-code">
+<p class="caption">リスト2.2: 型注釈に反することをやってみる</p>
+<pre class="list language-ts">let str: string;
+// 文字列は数値と互換性がない！
+// error TS2322: Type 'number' is not assignable to type 'string'.
+str = 1;
+
+let num: number;
+// 数値は真偽値と互換性がない！
+// error TS2322: Type 'boolean' is not assignable to type 'number'.
+num = true;
+
+let bool: boolean;
+// 真偽値は文字列と互換性がない！
+// error TS2322: Type 'string' is not assignable to type 'boolean'.
+bool = &quot;str&quot;;
+</pre>
+</div>
+<p>安心安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。そんなあなたのために、TypeScriptは型推論の機能を備えています。リスト2.3のように、型注釈を書かずに変数定義と初期化を同時に行えます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.3: 初期化付き変数 = 最強</p>
+<pre class="list language-ts">let str = &quot;string&quot;;
+let num = 1;
+let bool = true;
+
+let func = () =&gt; {
+};
+let obj = {};
+
+export { str, num, bool, func, obj }
+</pre>
+</div>
+<p>これで手で型注釈を与えずに済みます。しかも、書き方がJavaScriptと全く同じになりました。楽に書ける上に実行前にコンパイルの段階で不審な臭いのするコードを発見できるようになる、第一歩です。</p>
+
+<h2 id="class"><a id="h2-2"></a><span class="secno">2.2　</span>クラス</h2>
+
+<h3 id="standard-class"><a id="h2-2-1"></a>普通のクラス</h3>
+<p>ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（リスト2.4）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.4: さまざまなクラス要素</p>
+<pre class="list language-ts">class Base {
+  // インスタンス変数
+  numA: number;
+  strA = &quot;string&quot;;
+  public numB: number;
+  private numC: number;
+  protected numD: number;
+  regexpA?: RegExp;
+
+  // クラス変数
+  static numA: number;
+  public static numB: number;
+  private static numC: number;
+  protected static numD: number;
+  static regexpA?: RegExp;
+
+  // コンストラクタ
+  constructor(boolA: boolean,
+    public boolB: boolean,
+    private boolC: boolean,
+    protected boolD: boolean) {
+    // エラー消し 一回も使われない可能性があると怒られる
+    console.log(boolA, this.numC, this.boolC, Base.numC);
+  }
+
+  // メソッド
+  hello(word: string): string {
+    return &quot;Hello, &quot; + word;
+  }
+
+  // get, setアクセサ
+  // コンパイル時に --target es5 以上が必要です
+  /** @internal **/
+  private _date: Date;
+  get dateA(): Date {
+    return this._date;
+  }
+  set dateA(value: Date) {
+    this._date = value;
+  }
+
+  optional() {
+    // 省略可能なプロパティは値の存在チェックが必要です
+    if (this.regexpA != null) {
+      this.regexpA.test(&quot;Hi!&quot;);
+    }
+    if (Base.regexpA != null) {
+      Base.regexpA.test(&quot;Hi!&quot;);
+    }
+  }
+}
+
+let obj = new Base(true, false, true, false);
+obj.numA;
+obj.strA;
+obj.numB;
+// obj.numC; // private   なメンバにはアクセスできない
+// obj.numD; // protected なメンバにもアクセスできない
+obj.boolB;
+// obj.boolC; // private   なメンバにはアクセスできない
+// obj.boolD; // protected なメンバにもアクセスできない
+obj.hello(&quot;TypeScript&quot;);
+obj.dateA = new Date();
+obj.dateA;
+
+export { }
+</pre>
+</div>
+<p>上から順に見て行きましょう。</p>
+<p>まずはクラス変数、インスタンス変数です。クラスそのものやインスタンスに紐づく変数です。JavaScriptっぽくいうとプロパティですね。</p>
+<p>アクセス修飾子として、private、public、protectedなどの可視性を制御するアクセス修飾子を利用できます。何も指定していないとき、デフォルトの可視性はpublicになります。</p>
+<p>コンパイル後のJSファイルを見るとわかりますが<code class="inline-code tt">any</code>にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100%防げる！と考えるのは禁物です。そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに<code class="inline-code tt">@internal</code>をつけるといった工夫をしています。</p>
+<p>また、プロパティには省略可能（optional）かを明示する<b class="kw">?</b><!-- IDX:? -->を指定できます。コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能である旨を指定したほうがよいかもしれません。</p>
+<p>次はコンストラクタです。コンストラクタ自体にも前述のprivate、protectedなどのアクセス修飾子を利用できます。</p>
+<p>引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。これを<b class="kw">引数プロパティ宣言 (parameter property declaration)</b><!-- IDX:引数プロパティ宣言 -->と呼びます。引数プロパティ宣言はTypeScript固有の記法です。そもそも、JavaScriptにはアクセス修飾子がありませんからね。リスト2.5のようなコードを書くとリスト2.6のようなJavaScriptが出てきます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.5: 引数プロパティ宣言！</p>
+<pre class="list language-ts">class Sample {
+  constructor(public str: string) {
+  }
+}
+
+let obj = new Sample(&quot;TypeScript&quot;);
+// TypeScript と表示される
+console.log(obj.str);
+
+export { }
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.6: コンパイルするとこんなの</p>
+<pre class="list language-js">&quot;use strict&quot;;
+class Sample {
+    constructor(str) {
+        this.str = str;
+    }
+}
+let obj = new Sample(&quot;TypeScript&quot;);
+// TypeScript と表示される
+console.log(obj.str);
+</pre>
+</div>
+<p>リスト2.4の解説に戻ります。次はメソッドです。これも特に特筆すべき要素はありませんね。普通です。</p>
+<p>最後にget、setアクセサです。これを含んだコードをコンパイルするときは、<code class="inline-code tt">--target es5</code>以上を指定します。get、setアクセサを使うと、getterしか定義していない場合でもプログラム上は値の代入処理が記述できてしまうので、&quot;use strict&quot;を併用して実行時にエラーを検出するようにしましょう。</p>
+<p>次に、クラスの継承も見て行きましょう（リスト2.7）。superを使い親クラスのメソッドを参照することも普通にできます。</p>
+<div class="caption-code">
+<p class="caption">リスト2.7: 普通に継承もあるよ</p>
+<pre class="list language-ts">class Base {
+  greeting(name: string) {
+    return &quot;Hi! &quot; + name;
+  }
+}
+
+class Inherit extends Base {
+  greeting(name: string) {
+    return super.greeting(name) + &quot;. How are you?&quot;;
+  }
+}
+
+let obj = new Inherit();
+// Hi! TypeScript. How are you? と出力される
+console.log(obj.greeting(&quot;TypeScript&quot;));
+
+export { }
+</pre>
+</div>
+<p>TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。頑張ってオブジェクト指向に適した設計を行いましょう。</p>
+
+<h3 id="abstract-class"><a id="h2-2-2"></a>抽象クラス（Abstract Class）</h3>
+<p>ECMAScriptにはない機能として、抽象クラスが作成できます。抽象クラスは単独ではインスタンス化できません。その代わり、抽象クラスを継承したクラスに対して、abstractで指定した要素の実装を強制できます。例を見てみましょう（リスト2.8）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.8: 抽象クラス</p>
+<pre class="list language-ts">abstract class Animal {
+  abstract name: string;
+  abstract get poo(): string;
+
+  abstract speak(): string;
+  sleep(): string {
+    return &quot;zzzZZZ...&quot;;
+  }
+}
+// もちろん、abstract classはそのままではインスタンス化できない
+// error TS2511: Cannot create an instance of the abstract class 'Animal'.
+// new Animal();
+
+class Cat extends Animal {
+  // プロパティの実装を強制される
+  name = &quot;Cat&quot;;
+  poo = &quot;poo...&quot;;
+
+  // メソッドの実装を強制される
+  speak(): string {
+    return &quot;meow&quot;;
+  }
+}
+
+new Cat();
+
+export { }
+</pre>
+</div>
+<p>便利ですね。privateやprotectedに比べ、よっぽど使い出があります。</p>
+<p>コンパイル後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（リスト2.9）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.9: コンパイルしてしまえばただのクラス</p>
+<pre class="list language-js">&quot;use strict&quot;;
+class Animal {
+    get poo() { }
+    sleep() {
+        return &quot;zzzZZZ...&quot;;
+    }
+}
+// もちろん、abstract classはそのままではインスタンス化できない
+// error TS2511: Cannot create an instance of the abstract class 'Animal'.
+// new Animal();
+class Cat extends Animal {
+    constructor(...args) {
+        super(...args);
+        // プロパティの実装を強制される
+        this.name = &quot;Cat&quot;;
+        this.poo = &quot;poo...&quot;;
+    }
+    // メソッドの実装を強制される
+    speak() {
+        return &quot;meow&quot;;
+    }
+}
+new Cat();
+</pre>
+</div>
+
+<h2 id="function"><a id="h2-3"></a><span class="secno">2.3　</span>関数</h2>
+
+<h3 id="standard-function"><a id="h2-3-1"></a>普通の関数</h3>
+<p>いたって普通です（リスト2.10）。型注釈の与え方や、引数を省略可能にする方法だけがJavaScriptと違いますね。</p>
+<div class="caption-code">
+<p class="caption">リスト2.10: 色々な関数定義</p>
+<pre class="list language-ts">function hello(word: string): string {
+  return `Hello, ${word}`;
+}
+hello(&quot;TypeScript&quot;);
+
+// 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある
+function bye(word: string) {
+  return `Bye, ${word}`;
+}
+bye(&quot;TypeScript&quot;);
+
+// ? をつけると呼び出しときに引数が省略可能になる
+function hey(word?: string) {
+  // 省略可能にした時はundefinedの時の考慮が必要！
+  return `Hey, ${word || &quot;TypeScript&quot;}`;
+}
+hey();
+
+// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+function ahoy(word = &quot;TypeScript&quot;) {
+  return `Ahoy! ${word}`;
+}
+ahoy();
+
+export { }
+</pre>
+</div>
+<p>可変長引数もあります！（リスト2.11）</p>
+<div class="caption-code">
+<p class="caption">リスト2.11: 可変長引数の例</p>
+<pre class="list language-ts">function hello(...args: string[]) {
+  return `Hello, ${args.join(&quot; &amp; &quot;)}`;
+}
+// Hello, TS &amp; JS と表示される
+console.log(hello(&quot;TS&quot;, &quot;JS&quot;));
+
+export { }
+</pre>
+</div>
+<p>なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりするのはNGです（リスト2.12）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.12: こういうパターンはNG</p>
+<pre class="list language-ts">// 省略可能な引数の後に省略不可な引数がきてはいけない
+// error TS1016: A required parameter cannot follow an optional parameter.
+function funcA(arg1?: string, arg2: string) {
+  return `Hello, ${arg1}, ${arg2}`;
+}
+
+// 可変長引数は必ず最後じゃないといけない
+// error TS1014: A rest parameter must be last in a parameter list.
+function funcB(...args: string[], rest: string) {
+  return `Hello, ${args.join(&quot;, &quot;)} and ${rest}`;
+}
+
+export { }
+</pre>
+</div>
+<p>ここまで見てきた省略可能な引数やデフォルト値付き引数、可変長引数はクラスのコンストラクタやメソッドを記述するときも同様に利用できます。</p>
+
+<h3 id="arrow-function"><a id="h2-3-2"></a>アロー関数</h3>
+<p>ECMAScript 2015で導入された<b class="kw">アロー関数 (Arrow Functions)</b><!-- IDX:アロー関数 -->を見ていきましょう（リスト2.13）。通常の関数とアロー関数の違いについてはECMAScript 2015の範囲であるため、本書では解説しません。</p>
+<div class="caption-code">
+<p class="caption">リスト2.13: アロー関数 短くてかっこいい</p>
+<pre class="list language-ts">// 次の2つは(thisが絡まない限り)等価！
+let funcA = () =&gt; true;
+let funcB = function() {
+  return true;
+};
+funcA();
+funcB();
+
+// NOTE ここのcallbackの型注釈の意味は別の章で解説します
+// 引数を1つ取って返り値無し の関数を表します
+function asyncModoki(callback: (value: string) =&gt; void) {
+  callback(&quot;TypeScript&quot;);
+}
+// ES5時代の書き方
+asyncModoki(function(value: string) {
+  console.log(`Hello, ${value}`);
+});
+// アロー関数だとさらに楽
+asyncModoki(value =&gt; console.log(`Hello, ${value}`));
+// アロー関数に型付をする場合
+asyncModoki((value: string): void =&gt; console.log(`Hello, ${value}`));
+
+export { }
+</pre>
+</div>
+<p>アロー関数も普通の関数同様、型注釈の与え方以外ECMAScript 2015との差分は見当たりません。短くてかっこいいですね。</p>
+<p>もうひとつの便利な点として、アロー関数は親スコープのthisをそのまま受け継ぎます。この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。</p>
+
+<h2 id="module-and-namespace"><a id="h2-4"></a><span class="secno">2.4　</span>モジュールのあれこれ</h2>
+<p>プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。そのための武器として、ECMAScript 2015にはモジュールがあります。1つのJSファイルを1つのモジュールと捉えます。Node.jsで使われているCommonJS形式のモジュールと考え方は一緒です。つまり、別ファイルになれば別モジュールと考え、モジュールから値をexportしたりimportしたりして大きなプログラムを分割し統治します。</p>
+<p>歴史的経緯により、TypeScriptでは先に説明した1つのJavaScriptファイルを1つのモジュールと捉えた形式のことを外部モジュール（External Modules）と呼び、関数を使って1つの名前空間を作り出す形式を内部モジュール（Internal Modules）と呼んでいました。しかし、ECMAScript 2015で本格的に&quot;モジュール&quot;の概念が定義されたため、TypeScriptでは今後はモジュールといえば外部モジュールを指し、内部モジュールのことは<code class="inline-code tt">namespace</code>と呼ぶようになりました。これにあわせて、内部モジュールの記法も旧来の<code class="inline-code tt">module</code>から<code class="inline-code tt">namespace</code>に変更されました。未だに<code class="inline-code tt">module</code>を使うこともできますが、今後は<code class="inline-code tt">namespace</code>を使ったほうがよいでしょう。</p>
+<p>本書でも、これ以降は単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指します。</p>
+<p>仕様としてモジュールが策定され、WHATWGでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。</p>
+
+<h3 id="module"><a id="h2-4-1"></a>モジュール</h3>
+<p>モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。<code class="inline-code tt">import * as foo from &quot;./foo&quot;;</code>のように書くと、そのファイルから./foo.ts<a id="fnb-require-ext" href="#fn-require-ext" class="noteref" epub:type="noteref">*2</a>を参照できます。ここでは、./fooがひとつのモジュールとして扱われます。</p>
+<p>TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。いずれの形式で出力するかについてはコンパイル時に<code class="inline-code tt">--module commonjs</code>などの形式で指定できます。</p>
+<p>本書ではNode.jsでもBrowserifyやwebpackで広く利用しやすいCommonJS形式についてのみ言及します。対応形式の中ではAMDやSystemJSについては癖が強く、tscに与えることができるオプションの数も多いため興味がある人は自分で調べてみてください。筆者は両形式はあまり筋がよいとは今のところ思っていませんけれど。</p>
+<p>さて、実際のコード例を見てみましょう。foo.ts（リスト2.14）、bar.ts（リスト2.15）、buzz.ts（リスト2.16）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。</p>
+<div class="caption-code">
+<p class="caption">リスト2.14: foo.ts</p>
+<pre class="list language-ts">// defaultをbarという名前に hello関数をそのままの名前でimport
+import bar, { hello } from &quot;./bar&quot;;
+// モジュール全体をbar2に束縛
+import * as bar2 from &quot;./bar&quot;;
+// ECMAScript 2015形式のモジュールでもCommonJS形式でimportできる
+import bar3 = require(&quot;./bar&quot;);
+
+// Hello, TypeScript! と表示される
+console.log(hello());
+// Hi!, default と表示される
+console.log(bar());
+// 上に同じく Hello, TypeScript! と Hi!, default
+console.log(bar2.hello());
+console.log(bar2.default());
+// 上に同じく Hello, TypeScript! と Hi!, default
+console.log(bar3.hello());
+console.log(bar3.default());
+
+// export = xxx 形式の場合モジュール全体をbuzzに束縛
+import * as buzz from &quot;./buzz&quot;;
+// CommonJS形式のモジュールに対して一番素直で真っ当な書き方 in TypeScript
+import buzz2 = require(&quot;./buzz&quot;);
+// 両方 Good bye, TypeScript! と表示される
+console.log(buzz());
+console.log(buzz2());
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.15: bar.ts</p>
+<pre class="list language-ts">export function hello(word = &quot;TypeScript&quot;) {
+  return `Hello, ${word}`;
+}
+
+export default function(word = &quot;default&quot;) {
+  return `Hi!, ${word}`;
+}
+</pre>
+</div>
+<div class="caption-code">
+<p class="caption">リスト2.16: buzz.ts</p>
+<pre class="list language-ts">function bye(word = &quot;TypeScript&quot;) {
+  return `Good bye, ${word}`;
+}
+// foo.ts でECMAScript 2015形式でimportする際、
+// 次のエラーが出るのを抑制するためのハック
+// error TS2497: Module '&quot;略/buzz&quot;' resolves to a non-module entity
+//   and cannot be imported using this construct.
+namespace bye { }
+
+// CommonJS向け ECMAScript 2015では×
+export = bye;
+</pre>
+</div>
+<p>各モジュールのトップレベルでexportしたものが別のファイルからimportされたときに利用できているのがわかります。コンパイルして結果を確かめてみましょう。Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることが分かるでしょう。</p>
+<div class="cmd-code">
+<pre class="cmd">$ tsc --module commonjs --target es6 foo.ts
+$ cat foo.js
+&quot;use strict&quot;;
+// defaultをbarという名前に hello関数をそのままの名前でimport
+const bar_1 = require(&quot;./bar&quot;);
+// モジュール全体をbar2に束縛
+const bar2 = require(&quot;./bar&quot;);
+// ECMAScript 2015形式のモジュールでもCommonJS形式でimportできる
+const bar3 = require(&quot;./bar&quot;);
+// Hello, TypeScript! と表示される
+console.log(bar_1.hello());
+// Hi!, default と表示される
+console.log(bar_1.default());
+// 上に同じく Hello, TypeScript! と Hi!, default
+console.log(bar2.hello());
+console.log(bar2.default());
+// 上に同じく Hello, TypeScript! と Hi!, default
+console.log(bar3.hello());
+console.log(bar3.default());
+// export = xxx 形式の場合モジュール全体をbuzzに束縛
+const buzz = require(&quot;./buzz&quot;);
+// CommonJS形式のモジュールに対して一番素直で真っ当な書き方 in TypeScript
+const buzz2 = require(&quot;./buzz&quot;);
+// 両方 Good bye, TypeScript! と表示される
+console.log(buzz());
+console.log(buzz2());
+$ cat bar.js
+&quot;use strict&quot;;
+function hello(word = &quot;TypeScript&quot;) {
+    return `Hello, ${word}`;
+}
+exports.hello = hello;
+function default_1(word = &quot;default&quot;) {
+    return `Hi!, ${word}`;
+}
+Object.defineProperty(exports, &quot;__esModule&quot;, { value: true });
+exports.default = default_1;
+$ cat buzz.js
+&quot;use strict&quot;;
+function bye(word = &quot;TypeScript&quot;) {
+    return `Good bye, ${word}`;
+}
+module.exports = bye;
+</pre>
+</div>
+<div class="footnote" epub:type="footnote" id="fn-require-ext"><p class="footnote">[*2] Node.js上の仕様（TypeScriptではない）について細かくいうと、require(&quot;./foo&quot;)すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します</p></div>
+
+<h3 id="namespace"><a id="h2-4-2"></a>namespace</h3>
+<p>現実的にコードを書く時にはnamespaceを使わないほうがよいのです。ですので、できればnamespaceについては説明したくないのですが、そうはいかない理由があります。それが、型定義ファイルの存在です。型定義ファイルの中ではインタフェースや関数などをきれいに取りまとめるためにnamespaceの仕組みを活用する場面がでてきます。そのため、TypeScriptの習熟度を高めるうえでnamespaceは避けては通れないのです。</p>
+<p>まずは簡単な例を見てみましょう（リスト2.17）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.17: namespaceを使ったコード</p>
+<pre class="list language-ts">namespace a {
+  // export してないものは外部からは見えない
+  class Sample {
+    hello(word = &quot;TypeScript&quot;) {
+      return `Hello, ${word}`;
+    }
+  }
+
+  export interface Hello {
+    hello(word?: string): string;
+  }
+  export let obj: Hello = new Sample();
+}
+namespace a {
+  export function bye(word = &quot;JavaScript&quot;) {
+    return `Bye, ${word}`;
+  }
+
+  // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
+  // error TS2304: Cannot find name 'Sample'.
+  // let tmp = new Sample();
+}
+
+namespace b {
+  export namespace c {
+    export function hello() {
+      return a.obj.hello();
+    }
+  }
+}
+namespace d.e {
+  export function hello() {
+    return a.obj.hello();
+  }
+}
+
+// Hello, TypeScript と表示される
+console.log(b.c.hello());
+// Hello, TypeScript と表示される
+console.log(d.e.hello());
+</pre>
+</div>
+<p>なかなかシンプルです。namespaceの内側で定義した要素はクラスであれ、関数であれ、なんであってもexportをつけなければ外側から見えないようになります。</p>
+<p>これをコンパイルした結果を確認してみます（リスト2.18）。</p>
+<div class="caption-code">
+<p class="caption">リスト2.18: コンパイルすると関数を使った構文に展開される</p>
+<pre class="list language-js">var a;
+(function (a) {
+    // export してないものは外部からは見えない
+    class Sample {
+        hello(word = &quot;TypeScript&quot;) {
+            return `Hello, ${word}`;
+        }
+    }
+    a.obj = new Sample();
+})(a || (a = {}));
+var a;
+(function (a) {
+    function bye(word = &quot;JavaScript&quot;) {
+        return `Bye, ${word}`;
+    }
+    a.bye = bye;
+})(a || (a = {}));
+var b;
+(function (b) {
+    var c;
+    (function (c) {
+        function hello() {
+            return a.obj.hello();
+        }
+        c.hello = hello;
+    })(c = b.c || (b.c = {}));
+})(b || (b = {}));
+var d;
+(function (d) {
+    var e;
+    (function (e) {
+        function hello() {
+            return a.obj.hello();
+        }
+        e.hello = hello;
+    })(e = d.e || (d.e = {}));
+})(d || (d = {}));
+// Hello, TypeScript と表示される
+console.log(b.c.hello());
+// Hello, TypeScript と表示される
+console.log(d.e.hello());
+</pre>
+</div>
+<p>関数を使って名前空間を擬似的に作っています。モジュールもletやconstのようなブロックスコープもなかった頃の名残ですね。</p>
+<p>長い名前を使うのが嫌なときはリスト2.19のように、import句を使うこともできます。先に説明したモジュールではこれとは異なるimport句の使い方が出てきましたが、区別しましょう。</p>
+<div class="caption-code">
+<p class="caption">リスト2.19: import句で別名を作る</p>
+<pre class="list language-ts">namespace a {
+  export class Sample { }
+}
+
+namespace b {
+  // 他のモジュールも普通に参照できる
+  let objA: a.Sample;
+  objA = new a.Sample();
+
+  // めんどくさいなら import句 を使えばいい
+  import Sample = a.Sample;
+  let objB: Sample;
+  objB = new Sample();
+
+  // 別に違う名前をつけてもいい(けど混乱しちゃうかも？
+  import Test = a.Sample;
+  let objC: Test;
+  objC = new Test();
+
+  // 別に名前が違っても互換性が失われるわけではないのだ
+  objA = new Test();
+}
+</pre>
+</div>
+      </div>
+      <nav class="book-navi book-prev">
+                <a href="prepared-to-typescript.html">
+          <div class="book-cursor"><span class="cursor-prev">◀</span></div>
+        </a>
+              </nav>
+      <nav class="book-navi book-next">
+                <a href="types-basic.html">
+          <div class="book-cursor"><span class="cursor-next">▶</span></div>
+        </a>
+              </nav>
+    </div>
+  </div>
+  <footer>
+      </footer>
+  </body>
+</html>

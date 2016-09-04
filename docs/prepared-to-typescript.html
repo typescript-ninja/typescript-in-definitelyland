@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style-web.css" />
+<link rel="next" title="TypeScriptの基本" href="typescript-basic.html"><link rel="prev" title="Revised 型の国のTypeScript" href="index.html">  <meta name="generator" content="Re:VIEW" />
+  <title>戦闘準備だ！TypeScript！ | Revised TypeScript in Definitelyland</title>
+</head>
+<body>
+  <div class="book">
+    <nav class="side-content">
+      <h1>Revised TypeScript in Definitelyland</h1>
+      <ul class="book-toc">
+<li><a href="index.html">TOP</a></li>
+<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
+<li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
+<li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
+<li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
+<li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
+<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+</ul>
+      <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
+    </nav>
+    <div class="book-body">
+      <header>
+      </header>
+      <div class="book-page">
+        <h1 id="prepared-to-typescript"><a id="h1"></a><span class="secno">第1章　</span>戦闘準備だ！TypeScript！</h1>
+
+<h2 id="install"><a id="h1-1"></a><span class="secno">1.1　</span>インストールしてみよう</h2>
+<p>Node.jsのセットアップはすでに完了しているものとします。筆者はNode.jsのインストールとバージョン管理に<a href="https://github.com/hokaccha/nodebrew#nodebrew" class="link">nodebrew</a><a id="fnb-nodebrew" href="#fn-nodebrew" class="noteref" epub:type="noteref">*1</a>を利用しています。</p>
+<p>TypeScriptのインストールには、Node.jsのパッケージマネージャである<b class="kw">npm (Node Package Manager)</b><!-- IDX:npm -->を利用します。TypeScriptをインストールすると、tscというコマンドが利用可能になります。tscコマンドでTypeScriptコードのコンパイルを行います。</p>
+<div class="cmd-code">
+<pre class="cmd"># -g をつけるとグローバルなコマンドとしてインストールする
+$ npm install -g typescript
+# 省略
+$ tsc -v
+Version 2.0.0
+$ echo &quot;class Sample {}&quot; &gt; sample.ts
+$ tsc sample.ts
+$ cat sample.js
+var Sample = (function () {
+    function Sample() {
+    }
+    return Sample;
+}());
+</pre>
+</div>
+<p>なお、本書執筆時点では<code class="inline-code tt">npm install -g typescript</code>で導入できるTypeScriptバージョンは1.8.10です。2.0.0以降が使いたい場合はしばらくの間は<code class="inline-code tt">npm install -g typescript@beta</code>とする必要があります。</p>
+<p>ともあれ、これで準備は整いました。</p>
+<p>cutting edgeな最新版コンパイラを利用したい場合は次の手順で行います。</p>
+<div class="cmd-code">
+<pre class="cmd">$ npm install -g typescript@next
+# 省略
+$ tsc -v
+Version 2.1.0-dev.20160716
+</pre>
+</div>
+<p>実際にはプロジェクトごとに利用するTypeScriptのバージョンを変えたい場合がほとんどでしょう。常に最新のバージョンだけを使い続けるのは自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。その方法を次に示します。</p>
+<div class="cmd-code">
+<pre class="cmd">$ npm init
+# Enter連打
+$ ls package.json
+package.json
+$ npm install --save-dev typescript
+$ ./node_modules/.bin/tsc -v
+Version 2.0.0
+</pre>
+</div>
+<p>この、<code class="inline-code tt">node_modules/.bin</code>にはプロジェクトローカルに導入された実行ファイルが集められています。<code class="inline-code tt">npm bin</code>コマンドを実行するとパスが得られます。macOSやLinux環境下では<code class="inline-code tt">$(npm bin)/tsc</code>とするとプロジェクトローカルのtscコマンドへのパスが取得できます。</p>
+<p>さらにnpm scriptsでは$PATHに<code class="inline-code tt">node_modules/.bin</code>が自動的に追加されます。このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。</p>
+<div class="cmd-code">
+<pre class="cmd">$ npm bin
+$PWD/node_modules/.bin 的なパスが表示される
+$ $(npm bin)/tsc -v
+Version 2.0.0
+</pre>
+</div>
+<div class="footnote" epub:type="footnote" id="fn-nodebrew"><p class="footnote">[*1] <a href="https://github.com/hokaccha/nodebrew#nodebrew" class="link">https://github.com/hokaccha/nodebrew#nodebrew</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-npm-scripts"><p class="footnote">[*2] <a href="https://docs.npmjs.com/misc/scripts" class="link">https://docs.npmjs.com/misc/scripts</a></p></div>
+
+<h2 id="prepare-tsconfig.json"><a id="h1-2"></a><span class="secno">1.2　</span>tsconfig.jsonを準備する</h2>
+<p>TypeScriptではtsconfig.jsonという設定ファイルを利用します。必要なコンパイルオプションやコンパイル対象となるファイルはすべてtsconfig.jsonに記述します。すべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。</p>
+<p>まずはtsconfig.jsonを作成してみましょう。<code class="inline-code tt">tsc --init</code>で作成できます。</p>
+<div class="cmd-code">
+<pre class="cmd">$ tsc --init
+message TS6071: Successfully created a tsconfig.json file.
+$ cat tsconfig.json
+{
+    &quot;compilerOptions&quot;: {
+        &quot;module&quot;: &quot;commonjs&quot;,
+        &quot;target&quot;: &quot;es5&quot;,
+        &quot;noImplicitAny&quot;: false,
+        &quot;sourceMap&quot;: false
+    },
+    &quot;exclude&quot;: [
+        &quot;node_modules&quot;
+    ]
+}
+</pre>
+</div>
+<p>この設定ではTypeScriptが利用できる制約の多くをONにしていないため、完全にガバガバな設定です。一番最初に利用する例としてはいいかもしれませんが、運用するにあたってTypeScriptが与える堅牢さのすべてを享受することはできません。</p>
+<p>本書のサンプルコード用tsconfig.jsonをリスト1.1に示します。この設定をベースに自分たちにとって都合がよい設定値へ変更したり制限を緩めたりすることをお勧めします。具体的に&quot;include&quot;や&quot;exclude&quot;の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。</p>
+<div class="caption-code">
+<p class="caption">リスト1.1: 本書サンプルコード用のtsconfig.json</p>
+<pre class="list language-json">{
+    &quot;compilerOptions&quot;: {
+        &quot;module&quot;: &quot;commonjs&quot;,
+        &quot;moduleResolution&quot;: &quot;node&quot;,
+        &quot;target&quot;: &quot;es6&quot;,
+        &quot;declaration&quot;: true,
+        &quot;lib&quot;: [
+            &quot;dom&quot;,
+            &quot;es2017&quot;
+        ],
+        &quot;types&quot;: [
+            &quot;node&quot;
+        ],
+        &quot;noImplicitAny&quot;: true,
+        &quot;strictNullChecks&quot;: true,
+        &quot;noFallthroughCasesInSwitch&quot;: true,
+        &quot;noImplicitReturns&quot;: true,
+        &quot;noImplicitThis&quot;: true,
+        &quot;noUnusedLocals&quot;: true,
+        &quot;noUnusedParameters&quot;: true,
+        &quot;noImplicitUseStrict&quot;: false,
+        &quot;sourceMap&quot;: false,
+        &quot;emitDecoratorMetadata&quot;: true,
+        &quot;experimentalDecorators&quot;: true,
+        &quot;forceConsistentCasingInFileNames&quot;: true,
+        &quot;traceResolution&quot;: false,
+        &quot;listFiles&quot;: false,
+        &quot;stripInternal&quot;: true,
+        &quot;skipDefaultLibCheck&quot;: true,
+        &quot;skipLibCheck&quot;: false,
+        &quot;pretty&quot;: false,
+        &quot;noEmitOnError&quot;: true
+    },
+    &quot;include&quot;: [
+        &quot;code/**/*.ts&quot;
+    ],
+    &quot;exclude&quot;: [
+        &quot;node_modules&quot;,
+        &quot;code/definition-file/usage/&quot;,
+        &quot;code/definition-file/augmentGlobal/&quot;,
+        &quot;code/definition-file/issue9831/&quot;,
+        &quot;code/**/*-invalid.ts&quot;,
+        &quot;code/**/*-invalid.d.ts&quot;,
+        &quot;code/**/invalid.ts&quot;,
+        &quot;code/**/invalid.d.ts&quot;,
+        &quot;code/**/*-ignore.ts&quot;,
+        &quot;code/**/*-ignore.d.ts&quot;,
+        &quot;code/**/ignore.ts&quot;,
+        &quot;code/**/ignore.d.ts&quot;
+    ]
+}
+</pre>
+</div>
+<p>より詳しい説明は第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
+
+<h2 id="compile"><a id="h1-3"></a><span class="secno">1.3　</span>試しにコンパイルしてみる</h2>
+<p>tsconfig.jsonができたら、後はコンパイルするだけです。コンパイルの方法はtsconfig.jsonがあれば、どんな環境でも<code class="inline-code tt">--project</code>オプションを使うだけです。それ以外のオプションについてはtsconfig.jsonにすべて記述されています。具体的に、<code class="inline-code tt">tsc -p ./</code>または<code class="inline-code tt">tsc -p ./tsconfig.json</code>とします。</p>
+<p>本節についてもより詳しい説明は第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
+
+<h2 id="editor-and-ide"><a id="h1-4"></a><span class="secno">1.4　</span>エディタ・IDEの環境を整えよう</h2>
+<p>Atom、Eclipse、Emacs、Vim、Visual Studio、WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています<a id="fnb-ts-editor" href="#fn-ts-editor" class="noteref" epub:type="noteref">*3</a>。</p>
+<p>TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体から変数の種類やメソッドの有無などの情報を得えられます。そのため多数のIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。</p>
+<p>language serviceに興味がある場合、<a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API" class="link">https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API</a>や<a href="https://github.com/Microsoft/language-server-protocol" class="link">https://github.com/Microsoft/language-server-protocol</a>などを参照するとよいでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-ts-editor"><p class="footnote">[*3] <a href="https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support" class="link">https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support</a></p></div>
+
+<h3 id="vscode"><a id="h1-4-1"></a>Visual Studio Codeを使ってみる</h3>
+<p>現時点での筆者のお勧めは<a href="https://code.visualstudio.com/" class="link">Visual Studio Code</a><a id="fnb-vscode" href="#fn-vscode" class="noteref" epub:type="noteref">*4</a>です。Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。Visual Studioの名を冠していますがElectron<a id="fnb-electron" href="#fn-electron" class="noteref" epub:type="noteref">*5</a>を利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。</p>
+<p>筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。</p>
+<p>tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。</p>
+<div class="footnote" epub:type="footnote" id="fn-vscode"><p class="footnote">[*4] <a href="https://code.visualstudio.com/" class="link">https://code.visualstudio.com/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-electron"><p class="footnote">[*5] <a href="http://electron.atom.io/" class="link">http://electron.atom.io/</a></p></div>
+      </div>
+      <nav class="book-navi book-prev">
+                <a href="index.html">
+          <div class="book-cursor"><span class="cursor-prev">◀</span></div>
+        </a>
+              </nav>
+      <nav class="book-navi book-next">
+                <a href="typescript-basic.html">
+          <div class="book-cursor"><span class="cursor-next">▶</span></div>
+        </a>
+              </nav>
+    </div>
+  </div>
+  <footer>
+      </footer>
+  </body>
+</html>
