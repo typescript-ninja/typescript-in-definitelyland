@@ -24,7 +24,7 @@ C90冊子版の表紙はイラスト：shatiさん（@<href>{http://utata-ne.net
 C87版から上手に味わいを引き継いだ可愛い表紙をありがとうございます！
 
 なお、booth.pmやCOMIC ZINにて通販を行っております。
-@<href>{http://shop.comiczin.jp/products/detail.php?product_id=29874,紙版の通販}、@<href>{https://techbooster.booth.pm/items/299594,電子版販売}、そして@<href>{https://techbooster.booth.pm/items/307694,わかめこちゃんラバスト & てくぶコットンバッグ}（@<img>{rubber-strap}）があります。
+@<href>{http://shop.comiczin.jp/products/detail.php?product_id=29874,紙版の通販}、@<href>{https://techbooster.booth.pm/items/299594?utm_source=webbook&utm_medium=webbook&utm_campaign=ebook,電子版販売}、そして@<href>{https://techbooster.booth.pm/items/307694?utm_source=webbook&utm_medium=webbook&utm_campaign=rubber-strap,わかめこちゃんラバスト & てくぶコットンバッグ}（@<img>{rubber-strap}）があります。
 特にラバストは原価と戦うために結構多めに作ったため、在庫が潤沢にあります。
 本文を読んで、お役に立った場合、是非赤字解消への協力をご検討ください…！
 
