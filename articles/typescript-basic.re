@@ -225,6 +225,7 @@ export { }
 //list[class/constructor.js][コンパイルするとこんなの]{
 #@mapfile(../code/typescript-basic/class/constructor.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Sample {
     constructor(str) {
         this.str = str;
@@ -320,8 +321,8 @@ privateやprotectedに比べ、よっぽど使い出があります。
 //list[class/abstract.js][コンパイルしてしまえばただのクラス]{
 #@mapfile(../code/typescript-basic/class/abstract.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Animal {
-    get poo() { }
     sleep() {
         return "zzzZZZ...";
     }
@@ -330,8 +331,8 @@ class Animal {
 // error TS2511: Cannot create an instance of the abstract class 'Animal'.
 // new Animal();
 class Cat extends Animal {
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super(...arguments);
         // プロパティの実装を強制される
         this.name = "Cat";
         this.poo = "poo...";
@@ -573,6 +574,7 @@ $ tsc --module commonjs --target es6 foo.ts
 $ cat foo.js
 #@mapfile(../code/typescript-basic/externalModule/foo.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // defaultをbarという名前に hello関数をそのままの名前でimport
 const bar_1 = require("./bar");
 // モジュール全体をbar2に束縛
@@ -600,6 +602,7 @@ console.log(buzz2());
 $ cat bar.js
 #@mapfile(../code/typescript-basic/externalModule/bar.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function hello(word = "TypeScript") {
     return `Hello, ${word}`;
 }
@@ -607,7 +610,6 @@ exports.hello = hello;
 function default_1(word = "default") {
     return `Hi!, ${word}`;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 #@end
 $ cat buzz.js
@@ -697,16 +699,18 @@ var a;
     }
     a.obj = new Sample();
 })(a || (a = {}));
-var a;
 (function (a) {
     function bye(word = "JavaScript") {
         return `Bye, ${word}`;
     }
     a.bye = bye;
+    // 定義を分けてしまうと同名のモジュールでもexportされていないものは見えない
+    // error TS2304: Cannot find name 'Sample'.
+    // let tmp = new Sample();
 })(a || (a = {}));
 var b;
 (function (b) {
-    var c;
+    let c;
     (function (c) {
         function hello() {
             return a.obj.hello();

@@ -598,6 +598,7 @@ objはSampleを型として持ち、その値として互換性のあるオブ�
 //list[typeGuards/weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/types-advanced/typeGuards/weakspot.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Sample {
 }
 // 構造的部分型！

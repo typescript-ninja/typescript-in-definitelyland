@@ -734,7 +734,6 @@ namespace test {
 function test() {
     return "test!";
 }
-var test;
 (function (test) {
     function func() {
         return "function!";
@@ -1074,6 +1073,7 @@ export function bye(word = "JavaScript") {
 //list[commonJSCompat/basic/basic.js][CommonJS形式ではexports.xxx = となる]{
 #@mapfile(../code/definition-file/commonJSCompat/basic/basic.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function hello(word = "TypeScript") {
     console.log(`Hello, ${word}`);
 }
