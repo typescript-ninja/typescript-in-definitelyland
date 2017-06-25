@@ -2,7 +2,7 @@ machine:
   timezone:
     Asia/Tokyo
   node:
-    version: 6
+    version: 8
 
 test:
   override:
