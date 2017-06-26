@@ -1,4 +1,5 @@
-={index} Revised 型の国のTypeScript
+={index} Revised^2 型の国のTypeScript
+#@# TODO Revised^2 にしたい(上付き) http://www.r6rs.org/ と同じ感じ
 
 #@# TODO トランスフォームベースのJSコード生成の話 in 2.1.1
 #@# TODO async/awaitのdownpile in 2.1.1
