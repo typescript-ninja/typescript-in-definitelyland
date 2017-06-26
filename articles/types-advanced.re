@@ -4,6 +4,9 @@
 #@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8
 #@# TODO オーバーロードの選択アルゴリズム
 
+#@# TODO keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
+#@# TODO ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
+
 型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
 タプル型（tuple types）や直和型（union types）についての解説もありますよ！
 なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています@<fn>{bad-code}。
@@ -16,6 +19,8 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 
 #@# @suppress ParagraphNumber SectionLength
 =={union-types} 直和型（Union Types）
+
+#@# TODO Discriminated union types タグ付きUnion型 in 2.0.0 Beta
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -748,6 +753,8 @@ intersection typesを使いこなした書き方のほうが、圧倒的に謎�
 
 #@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
 =={string-literal-types} 文字列リテラル型（String Literal Types）
+
+#@# TODO numberとbooleanもリテラル型に使えるようになった in 2.0.3
 
 文字列リテラルを型として使える機能です。
 パッと読んだだけでは、意味がわからないですね。

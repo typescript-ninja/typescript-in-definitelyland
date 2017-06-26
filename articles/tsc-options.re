@@ -1,5 +1,13 @@
 ={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
+#@# TODO tsconfig.jsonでextendsが使えるようになった (Configuration inheritance) in 2.1.1
+#@# TODO 無条件にstrict modeにするオプションの追加 (New --alwaysStrict) in 2.1.1
+#@# TODO es2016, 2017 をターゲットに追加 (Support for --target ES2016 and --target ES2017) in 2.1.1
+#@# TODO --target ESNext がさらに追加された Support for --target ES2016, --target ES2017 and --target ESNext in 2.1.4
+#@# TODO --strict オプションの追加 New --strict master option in 2.3RC
+#@# TODO tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
+#@# TODO --plugins オプションの追加 Language Service Extensibility in 2.3RC
+
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
 

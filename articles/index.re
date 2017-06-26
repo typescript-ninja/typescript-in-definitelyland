@@ -1,5 +1,47 @@
 ={index} Revised 型の国のTypeScript
 
+#@# TODO トランスフォームベースのJSコード生成の話 in 2.1.1
+#@# TODO async/awaitのdownpile in 2.1.1
+#@# TODO ヘルパライブラリの話 in 2.1.1
+
+#@# TODO 型推論とベストプラクティス的な話を書く 細部を取り上げてこの時はこう推論される、ということを考えるのは難しいので新しい指針が必要
+#@# TODO   自然なJavaScriptを書くことでよりよい安全性を提供する という精神
+#@# TODO   Better inference for literal types
+#@# TODO   Control flow analysis for implicit any variables
+#@# TODO   Control flow analysis for array construction
+#@# TODO   Narrow string and number types in literal equality checks
+
+#@# TODO 部分的型注釈からの型推論 Contextual typing of partially annotated signatures in 2.1.1
+#@# TODO 直和型と交差型を組み合わせのノーマライズ (Normalize union/intersection type combinations in 2.1.1
+
+#@# TODO Language Service や Language Server Protocol についての言及
+#@# TODO "実装箇所へジャンプする" をLanguageServiceに追加 (Go to implementation support) in 2.1.1
+#@# TODO reference commentとかimport文での入力補完をLanguageServiceに追加 (Completions in imports and triple-slash reference paths) in 2.1.1
+#@# TODO Quick fixes をLanguageServiceに追加 (Quick fixes support in language service API) in 2.1.1
+
+#@# TODO Object Rest/Spread Properties for ECMAScriptがstage 3になったので入ったっぽい ESNext object property spread and rest in 2.1.4
+#@# TODO superを呼び出しした時コンストラクタでreturnした値がthisとなるように変更 Use returned values from super calls as 'this' in 2.1.4
+#@# TODO React.createElement 以外のJSXファクトリが利用可能に New --jsxFactory in 2.1.4
+#@# TODO 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
+#@# TODO クラスのMixinパターンのサポートMixin classes in 2.2.1
+#@# TODO インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
+#@# TODO new.targetがサポートされた Support for new.target in 2.2.1
+#@# TODO nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
+#@# TODO クラスの継承にObject.setPrototypeOfを使うようになった Update __extends to use Object.setPrototypeOf in 2.2.1
+#@# TODO stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1
+#@# TODO JSXで子要素のspread記法がサポートされたSupport for JSX spread children in 2.2.1
+#@# TODO JSX記法のターゲットにReact Nativeが追加されたNew --jsx react-native in 2.2.1
+#@# TODO object型のサポート Support for the object type in 2.2.1
+#@# TODO Language Service経由で使えるQuick fixesの種類が増えた。More Quick fixes! in 2.2.1
+#@# TODO --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
+#@# TODO 非同期イテレータのサポート Asynchronous iterators in 2.3RC
+#@# TODO Genericsの型パラメータにデフォルトの型を設定できるようになった Generic defaults in 2.3RC
+#@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
+#@# TODO JSXのstateless componentsとなる関数がoverloadできなかったのが直された JSX stateless components overload resolution in 2.3RC
+#@# TODO --checkJs オプションでJSコードについて型の整合性やらをチェックするようになったらしい Report errors in .js files with new --checkJs in 2.3RC
+
+#@# TODO 2.4.0系差分をTODO化する
+
 =={about-this-book} 本書について
 
 #@# prh:disable
