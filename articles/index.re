@@ -46,6 +46,21 @@
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
 
+=={main-target} 対象読者
+
+本書はECMAScript 2015とそれ以降について理解しているユーザを対象にしています。
+@<kw>{OOP,Object Oriented Programming}についても効能や利点をある程度理解していることが望ましいです。
+もし、これらの理解に不安がある場合、azuさんとlacoが執筆中のECMAScript 2015時代のためのJavaScript入門書『@<href>{https://github.com/asciidwango/js-primer,js-primer}』@<fn>{js-primer}などを参考にしてください。
+今のところまだ書き終わっていないようですが2016……、2017年中くらいには書き終わるのではないでしょうか。
+128Pくらいでモダンブラウザでの動作に限定した基本的な文法の紹介と主要なツール類の解説を行ったJS本なんか出ないですかね…。
+
+本書に登場するすべてのサンプルコードは次のTypeScriptコンパイラでコンパイルできることを確認しています。
+#@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
+Version 2.4.0
+#@end
+
+//footnote[js-primer][@<href>{https://github.com/asciidwango/js-primer}]
+
 =={about-this-book} 本書について
 
 #@# prh:disable
@@ -82,21 +97,6 @@ C87版から上手に味わいを引き継いだ可愛い表紙をありがと�
 
 //footnote[wonderland][@<href>{http://typescript.ninja/typescript-in-definitelyland/}]
 //footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
-
-=={main-target} 対象読者
-
-本書はECMAScript 2015とそれ以降について理解しているユーザを対象にしています。
-@<kw>{OOP,Object Oriented Programming}についても効能や利点をある程度理解していることが望ましいです。
-もし、これらの理解に不安がある場合、azuさんとlacoが執筆中のECMAScript 2015時代のためのJavaScript入門書『@<href>{https://github.com/asciidwango/js-primer,js-primer}』@<fn>{js-primer}などを参考にしてください。
-今のところまだ書き終わっていないようですが2016……、2017年中くらいには書き終わるのではないでしょうか。
-128Pくらいでモダンブラウザでの動作に限定した基本的な文法の紹介と主要なツール類の解説を行ったJS本なんか出ないですかね…。
-
-本書に登場するすべてのサンプルコードは次のTypeScriptコンパイラでコンパイルできることを確認しています。
-#@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
-Version 2.4.0
-#@end
-
-//footnote[js-primer][@<href>{https://github.com/asciidwango/js-primer}]
 
 =={tour-of-this-book} 本書の内容
 
