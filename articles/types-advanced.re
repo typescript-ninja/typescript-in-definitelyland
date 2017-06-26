@@ -564,7 +564,7 @@ export { }
 ==={type-guards-weakpoint} Type Guardsの弱点
 
 type guardsは型システム上の仕組みだということを忘れてはいけません。
-JavaScriptの実行環境とは全く関係がないのです。
+JavaScriptの実行環境とはまったく関係がないのです。
 
 TypeScriptでは構造的部分型の仕組みにより、クラスが要求されている箇所に互換性のある別の値を代入できます。
 
