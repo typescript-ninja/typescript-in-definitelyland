@@ -36,28 +36,28 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 // 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される
 // 省略しても問題のない型の記述は積極的に省略してしまってよい！
 {
-    let str = "文字列";
-    let num = 1;
-    let bool = true;
+  let str = "文字列";
+  let num = 1;
+  let bool = true;
 
-    let func = () => { };
-    let obj = {};
+  let func = () => { };
+  let obj = {};
 
-    console.log(str, num, bool, func(), obj);
+  console.log(str, num, bool, func(), obj);
 }
 
 // 型推論に頼らずに型注釈を明示的に書いてもよい
 // 特別な理由がない限り、このやり方にあまり長所はない
 {
-    let str: string = "文字列";
-    let num: number = 1;
-    let bool: boolean = true;
+  let str: string = "文字列";
+  let num: number = 1;
+  let bool: boolean = true;
 
-    let func: Function = () => {};
-    // any はなんでも型
-    let obj: any = {};
+  let func: Function = () => { };
+  // any はなんでも型
+  let obj: any = {};
 
-    console.log(str, num, bool, func(), obj);
+  console.log(str, num, bool, func(), obj);
 }
 #@end
 //}
@@ -97,153 +97,90 @@ export {}
 
 =={class} クラス
 
-#@# @suppress ParagraphNumber SectionLength
-==={standard-class} 普通のクラス
-
-ECMAScript 2015より導入されたクラス構文についても各所に型注釈可能な構文が追加されています（@<list>{class/basic.ts}）。
+クラスについて、TypeScriptではいくつかの拡張が用意されています（@<list>{class/basic.ts}）。
 
 #@# OK REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
 #@# OK REVIEW lc: spec読んだら「class members」と「static class members」だった
 #@# vv: ES.next的には定まった呼称はなさそう syntax的にはClassElement。若干Java方言だけどここはとりあえずこのままにしときます。
 
-//list[class/basic.ts][さまざまなクラス要素]{
+//list[class/basic.ts][一般的なクラス要素]{
 #@mapfile(../code/typescript-basic/class/basic.ts)
 class Base {
   // インスタンス変数
-  numA: number;
-  strA = "string";
-  public numB: number;
-  private numC: number;
-  protected numD: number;
-  regexpA?: RegExp;
+  num = 1;
 
-  // クラス変数
-  static numA: number;
-  public static numB: number;
-  private static numC: number;
-  protected static numD: number;
-  static regexpA?: RegExp;
+  // 初期値を与えない場合は型の指定が必要
+  str: string;
 
-  // コンストラクタ
-  constructor(boolA: boolean,
-    public boolB: boolean,
-    private boolC: boolean,
-    protected boolD: boolean) {
-    // エラー消し 一回も使われない可能性があると怒られる
-    console.log(boolA, this.numC, this.boolC, Base.numC);
+  // プロパティ名に ? をつけると省略可能（undefinedである可能性がある）ことを表せる
+  regExpOptional?: RegExp;
+
+  constructor(str: string) {
+    // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+    // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
+    this.str = str;
   }
 
-  // メソッド
-  hello(word: string): string {
-    return "Hello, " + word;
+  // メソッドの定義 返り値は省略してもOK
+  hello(): string {
+    return `Hello, ${this.str}`;
   }
 
-  // get, setアクセサ
-  // コンパイル時に --target es5 以上が必要です
-  /** @internal **/
-  private _date: Date;
-  get dateA(): Date {
-    return this._date;
-  }
-  set dateA(value: Date) {
-    this._date = value;
-  }
-
-  optional() {
-    // 省略可能なプロパティは値の存在チェックが必要です
-    if (this.regexpA != null) {
-      this.regexpA.test("Hi!");
+  get regExp() {
+    if (!this.regExpOptional) {
+      return new RegExp("test");
     }
-    if (Base.regexpA != null) {
-      Base.regexpA.test("Hi!");
-    }
+
+    return this.regExpOptional;
   }
 }
 
-let obj = new Base(true, false, true, false);
-obj.numA;
-obj.strA;
-obj.numB;
-// obj.numC; // private   なメンバにはアクセスできない
-// obj.numD; // protected なメンバにもアクセスできない
-obj.boolB;
-// obj.boolC; // private   なメンバにはアクセスできない
-// obj.boolD; // protected なメンバにもアクセスできない
-obj.hello("TypeScript");
-obj.dateA = new Date();
-obj.dateA;
+const base = new Base("world");
+console.log(base.hello());
 
-export { }
+export { };
 #@end
 //}
 
-上から順に見て行きましょう。
+クラスのメンバーを定義する箇所にプロパティを記述していくやり方はTypeScriptの拡張で、ECMAScriptの範囲ではありません。
+ECMAScriptの場合はコンストラクタ内部でプロパティの設定を行います。
+コンパイルして出て来るjsコード（@<list>{class/basic.js}）との差を見てみるとわかりやすいです。
 
-まずはクラス変数、インスタンス変数です。
-クラスそのものやインスタンスに紐づく変数です。
-JavaScriptっぽくいうとプロパティですね。
-
-#@# @suppress CommaNumber
-アクセス修飾子として、private、public、protectedなどの可視性を制御するアクセス修飾子を利用できます。
-何も指定していないとき、デフォルトの可視性はpublicになります。
-
-コンパイル後のJSファイルを見るとわかりますが@<code>{any}にキャストするとそれらの要素にアクセスできてしまうので、アクセス修飾子をつけたから外部からの変更を100%防げる！と考えるのは禁物です。
-そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
-
-#@# OK REVIEW lc: s/100/100%/
+//list[class/basic.js][jsにコンパイルしたの出力]{
+#@mapfile(../code/typescript-basic/class/basic.js)
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Base {
+    constructor(str) {
+        // インスタンス変数
+        this.num = 1;
+        // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+        // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
+        this.str = str;
+    }
+    // メソッドの定義 返り値は省略してもOK
+    hello() {
+        return `Hello, ${this.str}`;
+    }
+    get regExp() {
+        if (!this.regExpOptional) {
+            return new RegExp("test");
+        }
+        return this.regExpOptional;
+    }
+}
+const base = new Base("world");
+console.log(base.hello());
+#@end
+//}
 
 また、プロパティには省略可能（optional）かを明示する@<kw>{?}を指定できます。
-コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能である旨を指定したほうがよいかもしれません。
+コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能でことを明示するようにしましょう。
 #@# クラスのプロパティが省略可能かどうか指定の追加（Optional properties in classes）
 #@# OK REVIEW lc: s/旨/旨を/
 
-次はコンストラクタです。
-コンストラクタ自体にも前述のprivate、protectedなどのアクセス修飾子を利用できます。
-
-引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります。
-これを@<kw>{引数プロパティ宣言,parameter property declaration}と呼びます。
-引数プロパティ宣言はTypeScript固有の記法です。
-そもそも、JavaScriptにはアクセス修飾子がありませんからね。
-@<list>{class/constructor.ts}のようなコードを書くと@<list>{class/constructor.js}のようなJavaScriptが出てきます。
-
-//list[class/constructor.ts][引数プロパティ宣言！]{
-#@mapfile(../code/typescript-basic/class/constructor.ts)
-class Sample {
-  constructor(public str: string) {
-  }
-}
-
-let obj = new Sample("TypeScript");
-// TypeScript と表示される
-console.log(obj.str);
-
-export { }
-#@end
-//}
-
-//list[class/constructor.js][コンパイルするとこんなの]{
-#@mapfile(../code/typescript-basic/class/constructor.js)
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Sample {
-    constructor(str) {
-        this.str = str;
-    }
-}
-let obj = new Sample("TypeScript");
-// TypeScript と表示される
-console.log(obj.str);
-#@end
-//}
-
-@<list>{class/basic.ts}の解説に戻ります。
-次はメソッドです。
-これも特に特筆すべき要素はありませんね。普通です。
-
-#@# @suppress SentenceLength CommaNumber ParenthesizedSentence
-最後にget、setアクセサです。
-これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定します。
-get、setアクセサを使うと、getterしか定義していない場合でもプログラム上は値の代入処理が記述できてしまうので、"use strict"を併用して実行時にエラーを検出するようにしましょう。
+#@# get、setアクセサについても少し触れておきます。
+#@# これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定します。
 
 次に、クラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
 superを使い親クラスのメソッドを参照することも普通にできます。
@@ -252,13 +189,13 @@ superを使い親クラスのメソッドを参照することも普通にでき
 #@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
-    return "Hi! " + name;
+    return `Hi! ${name}`;
   }
 }
 
 class Inherit extends Base {
   greeting(name: string) {
-    return super.greeting(name) + ". How are you?";
+    return `${super.greeting(name)}. How are you?`;
   }
 }
 
@@ -272,6 +209,114 @@ export { }
 
 TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
+
+==={class-access-modifier} アクセス修飾子
+
+#@# @suppress CommaNumber
+TypeScript固有の機能として、アクセス修飾子があります。
+プロパティやメソッド、コンストラクタについてprivate、public、protectedといったアクセス修飾子を利用できます（@<list>{class/modifier.ts}）。
+何も指定していないとき、デフォルトの可視性はpublicになります。
+
+//list[class/modifier.ts][アクセス修飾子の例]{
+#@mapfile(../code/typescript-basic/class/modifier.ts)
+class Base {
+  a = "a";
+  public b = "b";
+  protected c = "c";
+  private d = "d";
+
+  method() {
+    // privateなプロパティは利用しているコードが一箇所もないと警告してもらえる
+    this.d;
+  }
+}
+
+class Inherit extends Base {
+  method() {
+    // 子クラスから public, protected はアクセス可能
+    this.a;
+    this.b;
+    this.c;
+    // private はコンパイルエラーになる
+    // this.d;
+  }
+}
+
+const base = new Base();
+// public は通常のアクセスが可能
+base.a;
+base.b;
+// protected, private はコンパイルエラーになる
+// base.c;
+// base.d;
+#@end
+//}
+
+次にコンパイル後のJSファイルを見てみます（@<list>{class/modifier.js}）。
+
+//list[class/modifier.js][アクセス修飾子はJSコードに影響しない]{
+#@mapfile(../code/typescript-basic/class/modifier.js)
+class Base {
+    constructor() {
+        this.a = "a";
+        this.b = "b";
+        this.c = "c";
+        this.d = "d";
+    }
+    method() {
+        // privateなプロパティは利用しているコードが一箇所もないと警告してもらえる
+        this.d;
+    }
+}
+class Inherit extends Base {
+    method() {
+        // 子クラスから public, protected はアクセス可能
+        this.a;
+        this.b;
+        this.c;
+        // private はコンパイルエラーになる
+        // this.d;
+    }
+}
+const base = new Base();
+// public は通常のアクセスが可能
+base.a;
+base.b;
+// protected, private はコンパイルエラーになる
+// base.c;
+// base.d;
+#@end
+//}
+
+アクセス修飾子がきれいさっぱり消えていますね。
+アクセス修飾子はコンパイル時のみに影響がある機能で、@<code>{any}のような何でもあり型にキャストすると隠したはずのプロパティにアクセスできてしまいます。
+アクセス修飾子をつけても外部からの変更を100%防げる！と考えることはできないということですね。
+そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
+
+==={class-parameter-property-declaration} 引数プロパティ宣言
+
+コンストラクタの引数にアクセス修飾子をあわせて書くと、インスタンス変数としてその値が利用可能になります（@<list>{class/constructor.ts}）。
+これを@<kw>{引数プロパティ宣言,parameter property declaration}と呼びます。
+引数プロパティ宣言もTypeScript固有の記法です。
+
+//list[class/constructor.ts][引数プロパティ宣言！]{
+#@mapfile(../code/typescript-basic/class/constructor.ts)
+class BaseA {
+  constructor(public str: string) {
+  }
+}
+
+// BaseA と等価な定義
+class BaseB {
+  str: string;
+  constructor(str: string) {
+    this.str = str;
+  }
+}
+
+export { BaseA, BaseB }
+#@end
+//}
 
 ==={abstract-class} 抽象クラス（Abstract Class）
 
@@ -313,7 +358,7 @@ export { }
 //}
 
 便利ですね。
-privateやprotectedに比べ、よっぽど使い出があります。
+privateやprotectedに比べると使い勝手がよい機能といえます。
 
 コンパイル後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（@<list>{class/abstract.js}）。
 
