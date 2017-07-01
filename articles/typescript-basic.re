@@ -397,7 +397,8 @@ new Cat();
 ==={standard-function} 普通の関数
 
 いたって普通です（@<list>{function/basic.ts}）。
-型注釈の与え方や、引数を省略可能にする方法だけがJavaScriptと違いますね。
+型注釈の書き方で通常のJavaScriptと差が出ます。
+確認していきましょう。
 
 //list[function/basic.ts][色々な関数定義]{
 #@mapfile(../code/typescript-basic/function/basic.ts)
@@ -406,7 +407,7 @@ function hello(word: string): string {
 }
 hello("TypeScript");
 
-// 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある
+// 返り値の型を省略すると返り値の型から推論される
 function bye(word: string) {
   return `Bye, ${word}`;
 }
@@ -419,7 +420,7 @@ function hey(word?: string) {
 }
 hey();
 
-// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+// デフォルト値の指定で仮引数の型を省略したりもできる
 function ahoy(word = "TypeScript") {
   return `Ahoy! ${word}`;
 }
@@ -429,7 +430,8 @@ export { }
 #@end
 //}
 
-可変長引数もあります！（@<list>{function/args.ts}）
+可変長引数の場合は仮引数の最終的な型を書きます（@<list>{function/args.ts}）。
+つまり、配列の形になりますね。
 
 //list[function/args.ts][可変長引数の例]{
 #@mapfile(../code/typescript-basic/function/args.ts)
@@ -468,45 +470,33 @@ export { }
 
 ==={arrow-function} アロー関数
 
-ECMAScript 2015で導入された@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic.ts}）。
-通常の関数とアロー関数の違いについてはECMAScript 2015の範囲であるため、本書では解説しません。
+@<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic.ts}）。
+通常の関数とアロー関数の違いについてはECMAScriptの仕様の範囲ですので省略します。
 
 //list[arrowFunctions/basic.ts][アロー関数 短くてかっこいい]{
 #@mapfile(../code/typescript-basic/arrowFunctions/basic.ts)
-// 次の2つは(thisが絡まない限り)等価！
-let funcA = () => true;
-let funcB = function() {
-  return true;
-};
-funcA();
-funcB();
-
 // NOTE ここのcallbackの型注釈の意味は別の章で解説します
 // 引数を1つ取って返り値無し の関数を表します
 function asyncModoki(callback: (value: string) => void) {
   callback("TypeScript");
 }
-// ES5時代の書き方
-asyncModoki(function(value: string) {
-  console.log(`Hello, ${value}`);
-});
-// アロー関数だとさらに楽
+
+// アロー関数をコールバック関数として渡す 渡す関数の型は型推論される！
 asyncModoki(value => console.log(`Hello, ${value}`));
-// アロー関数に型付をする場合
+
+// アロー関数に明示的に型付をする場合
 asyncModoki((value: string): void => console.log(`Hello, ${value}`));
 
 export { }
 #@end
 //}
 
-アロー関数も普通の関数同様、型注釈の与え方以外ECMAScript 2015との差分は見当たりません。
-短くてかっこいいですね。
+アロー関数も普通の関数同様、型注釈の与え方以外ECMAScriptの仕様との差分はありません。
+書きやすくてよいですね。
 
-もうひとつの便利な点として、アロー関数は親スコープのthisをそのまま受け継ぎます。
+アロー関数は親スコープのthisをそのまま受け継ぎます。
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。
 特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
-
-#@# TODO argumentsの取り扱いがES6準拠ではない みたいな話も仕様ちゃんと読んで書きたい
 
 =={module-and-namespace} モジュールのあれこれ
 

@@ -3,7 +3,7 @@ function hello(word: string): string {
 }
 hello("TypeScript");
 
-// 返り値の型を省略すると返り値の型から推論される。明記したほうが読みやすい場合もある
+// 返り値の型を省略すると返り値の型から推論される
 function bye(word: string) {
 	return `Bye, ${word}`;
 }
@@ -16,7 +16,7 @@ function hey(word?: string) {
 }
 hey();
 
-// デフォルト値を指定することもできる (? を付けたのと同じ扱い+α)
+// デフォルト値の指定で仮引数の型を省略したりもできる
 function ahoy(word = "TypeScript") {
 	return `Ahoy! ${word}`;
 }
