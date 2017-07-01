@@ -181,7 +181,7 @@ export { }
 //list[objectTypeLiteral/constructorSignature.ts][newできる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/constructorSignature.ts)
 let clazz: {
-  new (): any;
+  new(): any;
 };
 
 // 当てはまる値はこんな感じ

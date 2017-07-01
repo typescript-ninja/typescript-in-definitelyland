@@ -11,7 +11,7 @@ console.log(p.name, p.age);
 
 // interfaceを使ったクラスの構成でも
 interface AnimalConstructor {
-	new (): Animal;
+	new(): Animal;
 }
 interface Animal {
 	speak(): string;

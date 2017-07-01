@@ -1234,7 +1234,7 @@ obj = new clazz();
 
 // clazz を頑張って手で書くと次に等しい
 let alterClazz: {
-  new (): { str: string; };
+  new(): { str: string; };
 };
 alterClazz = clazz;
 clazz = alterClazz;

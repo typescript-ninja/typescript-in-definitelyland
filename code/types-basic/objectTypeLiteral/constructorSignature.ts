@@ -1,5 +1,5 @@
 let clazz: {
-	new (): any;
+	new(): any;
 };
 
 // 当てはまる値はこんな感じ

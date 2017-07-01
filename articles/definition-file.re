@@ -760,7 +760,7 @@ declare class TestA {
 // B. クラスの分解定義 変数 + インタフェース2つ
 declare let TestB: TestBConstructor;
 interface TestBConstructor {
-  new (): TestB;
+  new(): TestB;
 }
 interface TestB {
 }
@@ -789,7 +789,7 @@ console.log(p.name, p.age);
 
 // interfaceを使ったクラスの構成でも
 interface AnimalConstructor {
-  new (): Animal;
+  new(): Animal;
 }
 interface Animal {
   speak(): string;
