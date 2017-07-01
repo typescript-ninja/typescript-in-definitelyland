@@ -5,8 +5,8 @@
 #@# TODO 暗黙的なインデックスシグニチャ（Implicit index signatures）
 
 #@# prh:disable
-@<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScript 2015の文法・仕様についてすべてを解説することはしません。
-ECMAScript 2015の知識はどんどん広まってきていますし、今後は基本的なJavaScriptの知識になっていくでしょう。
+@<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScriptの文法・仕様についてすべてを解説することはしません。
+ECMAScriptの知識はどんどん広まってきていますし、最近では知っている人も多い知識になってきました。
 ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 この章ではTypeScriptでの基本的な構文を解説します。
@@ -16,8 +16,8 @@ ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
 
 #@# @suppress CommaNumber
-また、本書は@<code>{--noImplicitAny}、@<code>{--strictNullChecks}、@<code>{--noImplicitReturns}、@<code>{--noImplicitThis}を有効にした状態を基本として解説します。
-各オプションの詳細については@<chapref>{tsc-options}を参照してください。
+また、本書は@<code>{--strict}を有効にした状態を基本として解説します。
+オプションの詳細については@<chapref>{tsc-options}を参照してください。
 
 #@# OK REVIEW lc: tsconfigの設定状態を出したほうがわかりやすい？
 #@# vv: ここはこのままにしておきます…。
@@ -27,74 +27,73 @@ ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{variable/withAnnotations.ts}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです@<fn>{suppress-warning}。
+違うのは、@<list>{variable/withAnnotations.ts}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
-
-//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
 //list[variable/withAnnotations.ts][型注釈付きの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
-let str: string;
-let num: number;
-let bool: boolean;
+// JSそのものの書き方
+// 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される
+// 省略しても問題のない型の記述は積極的に省略してしまってよい！
+{
+    let str = "文字列";
+    let num = 1;
+    let bool = true;
 
-let func: Function;
-let obj: any; // なんでも型
+    let func = () => { };
+    let obj = {};
 
-str = "文字列";
-num = 1;
-bool = true;
-func = () => { };
-obj = {};
+    console.log(str, num, bool, func(), obj);
+}
 
-export { }
+// 型推論に頼らずに型注釈を明示的に書いてもよい
+// 特別な理由がない限り、このやり方にあまり長所はない
+{
+    let str: string = "文字列";
+    let num: number = 1;
+    let bool: boolean = true;
+
+    let func: Function = () => {};
+    // any はなんでも型
+    let obj: any = {};
+
+    console.log(str, num, bool, func(), obj);
+}
 #@end
 //}
 
-型注釈の何が嬉しいかというと、型に反するようなコードを書くとtscコマンドを使ってコンパイルしたときにコンパイルエラーになるのです。
-たとえば@<list>{variable/withAnnotations-invalid.ts}のように、整合性がとれていない箇所がTypeScriptによって明らかにされます。
-安心安全！
+もちろん、変数に対して初期化子を与えることで変数の型をコンパイラに考えさせる（型推論させる）こともできます。
+TypeScriptはIDEやエディタとの連携が良好なため、ソースコードのある箇所がどういう型になっているかはツールチップなどで簡単に確認できます。
+このため、型推論を多様しても困ることはほぼないため、安心して短く気持ちよく書きましょう。
+
+型がつけられると何が嬉しいかというと、型に反するようなコードを書くとtscコマンドなどでコンパイルしたときにエラーになることです。
+たとえば@<list>{variable/withAnnotations-invalid.ts}のように、整合性がとれていない箇所をコンパイラが見つけてくれます@<fn>{suppress-warning}。
 
 //list[variable/withAnnotations-invalid.ts][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
 let str: string;
 // 文字列は数値と互換性がない！
-// error TS2322: Type 'number' is not assignable to type 'string'.
+// error TS2322: Type '1' is not assignable to type 'string'.
 str = 1;
 
 let num: number;
 // 数値は真偽値と互換性がない！
-// error TS2322: Type 'boolean' is not assignable to type 'number'.
+// error TS2322: Type 'true' is not assignable to type 'number'.
 num = true;
 
 let bool: boolean;
 // 真偽値は文字列と互換性がない！
-// error TS2322: Type 'string' is not assignable to type 'boolean'.
+//  error TS2322: Type '"str"' is not assignable to type 'boolean'.
 bool = "str";
+
+export {}
 #@end
 //}
 
-安心安全なのはよいですが、わかりきったことを書くのは省きたいと思うのはエンジニアの性分でしょう。
-そんなあなたのために、TypeScriptは型推論の機能を備えています。
-@<list>{variable/withInitializer.ts}のように、型注釈を書かずに変数定義と初期化を同時に行えます。
+コンパイルした段階でソースコードの整合性が保たれていない、きな臭い部分があぶり出されるのは嬉しいです。
+安心安全！
 
-//list[variable/withInitializer.ts][初期化付き変数 = 最強]{
-#@mapfile(../code/typescript-basic/variable/withInitializer.ts)
-let str = "string";
-let num = 1;
-let bool = true;
-
-let func = () => {
-};
-let obj = {};
-
-export { str, num, bool, func, obj }
-#@end
-//}
-
-これで手で型注釈を与えずに済みます。
-しかも、書き方がJavaScriptとまったく同じになりました。
-楽に書ける上に実行前にコンパイルの段階で不審な臭いのするコードを発見できるようになる、第一歩です。
+//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
 =={class} クラス
 

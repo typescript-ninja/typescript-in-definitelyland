@@ -144,7 +144,8 @@ $ cat tsconfig.json
         "skipDefaultLibCheck": true,
         "skipLibCheck": false,
         "pretty": false,
-        "noEmitOnError": true
+        "noEmitOnError": true,
+        "downlevelIteration": true
     },
     "include": [
         "code/**/*.ts"
