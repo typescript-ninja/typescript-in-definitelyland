@@ -256,6 +256,7 @@ base.b;
 
 //list[class/modifier.js][アクセス修飾子はJSコードに影響しない]{
 #@mapfile(../code/typescript-basic/class/modifier.js)
+"use strict";
 class Base {
     constructor() {
         this.a = "a";
@@ -783,6 +784,7 @@ namespaceの内側で定義した要素はクラスであれ、関数であれ�
 
 //list[internalModule/basic.js][コンパイルすると関数を使った構文に展開される]{
 #@mapfile(../code/typescript-basic/internalModule/basic.js)
+"use strict";
 var a;
 (function (a) {
     // export してないものは外部からは見えない

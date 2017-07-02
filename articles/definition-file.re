@@ -731,6 +731,7 @@ namespace test {
 
 //list[interfaceAntipattern/callableModule.js][JSとして正しい構造だ]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModule.js)
+"use strict";
 function test() {
     return "test!";
 }
