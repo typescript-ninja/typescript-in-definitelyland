@@ -21,7 +21,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.0.2",
+    "@types/node": "^8.0.7",
     "@types/power-assert": "^1.4.29",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
@@ -33,7 +33,7 @@
     "load-grunt-tasks": "^3.5.0",
     "node-sass": "^4.5.3",
     "tslint": "^5.4.3",
-    "typescript": "2.4.0",
+    "typescript": "2.4.1",
     "typescript-formatter": "^5.2.0"
   }
 }
