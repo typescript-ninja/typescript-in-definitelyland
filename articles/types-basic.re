@@ -1048,3 +1048,5 @@ export { }
 基本的にはnever型を見かけることがあれば、何かミスをしているな…と考えたほうがよいでしょう。
 
 #@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる
+
+#@# TODO object型のサポート Support for the object type in 2.2.1

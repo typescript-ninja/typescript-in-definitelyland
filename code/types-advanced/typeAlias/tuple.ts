@@ -5,7 +5,7 @@ type Circle = [Point, number];
 let c: Circle = [[1, 2], 3];
 
 // でも、こっちのほうがTypeScriptとしては適切よね
-namespace alternative {
+{
 	class Point {
 		constructor(public x: number, public y: number) {
 		}
@@ -18,4 +18,4 @@ namespace alternative {
 	console.log(c2.p, c2.r);
 }
 
-export { Point, Circle, c, alternative }
+export { Point, Circle, c }

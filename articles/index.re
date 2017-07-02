@@ -32,7 +32,6 @@
 #@# TODO stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1
 #@# TODO JSXで子要素のspread記法がサポートされたSupport for JSX spread children in 2.2.1
 #@# TODO JSX記法のターゲットにReact Nativeが追加されたNew --jsx react-native in 2.2.1
-#@# TODO object型のサポート Support for the object type in 2.2.1
 #@# TODO Language Service経由で使えるQuick fixesの種類が増えた。More Quick fixes! in 2.2.1
 #@# TODO --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
 #@# TODO 非同期イテレータのサポート Asynchronous iterators in 2.3RC
