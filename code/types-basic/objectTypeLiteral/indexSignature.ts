@@ -1,9 +1,6 @@
 let objA: {
 	[index: number]: string;
 } = {};
-let objB: {
-	[index: string]: string;
-} = {};
 
 // どういった使い方ができるの？
 let s1 = objA[1];
@@ -14,6 +11,10 @@ let s1 = objA[1];
 // var s2 = objA["test"];
 
 // インデックスの型指定が string の場合 string でも number でもOK
+let objB: {
+	[index: string]: string;
+} = {};
+
 let s3 = objB[1];
 let s4 = objB["test"];
 

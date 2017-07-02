@@ -3,10 +3,6 @@
 #@# TODO プロパティの文字列定数によるアクセス
 #@# TODO 省略可能引数
 
-#@# prh:disable
-TypeScriptの華はやはり型！
-@<chapref>{typescript-basic}など所詮児戯に過ぎぬわッ！！
-
 #@# @suppress JapaneseAmbiguousNounConjunction
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
 TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
@@ -96,7 +92,7 @@ export { }
 
 ==={property-signatures} プロパティシグニチャ（Property Signatures）
 
-1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture.ts}）。
+1つ目はすでに登場している、プロパティを示す記法のプロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture.ts}）。
 
 //list[objectTypeLiteral/propertySigniture.ts][大将！いつものやつ！]{
 #@mapfile(../code/types-basic/objectTypeLiteral/propertySigniture.ts)
@@ -116,7 +112,7 @@ export { }
 
 ==={call-signatures} コールシグニチャ（Call Signatures）
 
-2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
+2つ目はそのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
 
 //list[objectTypeLiteral/callSignature.ts][関数として利用できる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/callSignature.ts)
@@ -176,7 +172,7 @@ export { }
 ==={constructor-signatures} コンストラクトシグニチャ（Construct Signatures）
 
 #@# @suppress ParenthesizedSentence
-3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature.ts}）。
+3つ目は対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature.ts}）。
 
 //list[objectTypeLiteral/constructorSignature.ts][newできる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/constructorSignature.ts)
@@ -220,9 +216,6 @@ TypeScriptでは、クラスを定義しなければコンストラクトシグ�
 let objA: {
   [index: number]: string;
 } = {};
-let objB: {
-  [index: string]: string;
-} = {};
 
 // どういった使い方ができるの？
 let s1 = objA[1];
@@ -233,6 +226,10 @@ let s1 = objA[1];
 // var s2 = objA["test"];
 
 // インデックスの型指定が string の場合 string でも number でもOK
+let objB: {
+  [index: string]: string;
+} = {};
+
 let s3 = objB[1];
 let s4 = objB["test"];
 
@@ -287,21 +284,20 @@ let obj = {
 let str: string = obj["str"];
 let num: number = obj["num"];
 // ちなみに、存在しない要素にアクセスすると any になる
-// --noImplicitAny を使うと暗黙的anyとしてちゃんと怒られる 萌え
+// --noImplicitAny を使うと暗黙的anyとしてちゃんと怒られる 偉い！
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let any = obj["notExists"];
 
-// 即値じゃないとダメ！コンパイラが処理できないのです
+// 即値じゃないとダメなので このパターンはコンパイルエラーになる
 let propertyName1 = "str";
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let str2 = obj[propertyName1];
 
-// なお、string literal typesを使っても怒られます
-let propertyName2: "str" = "str";
-// error TS7017: Index signature of object type implicitly has an 'any' type.
-// let str3 = obj[propertyName2];
+// constだと型が後述の文字列リテラル型相当なのでイケる！
+const propertyName2 = "str";
+let str3 = obj[propertyName2];
 
-export { str, num, propertyName1, propertyName2 }
+export { str, num, propertyName1, propertyName2, str3 }
 #@end
 //}
 
@@ -309,7 +305,7 @@ export { str, num, propertyName1, propertyName2 }
 
 ==={method-signatures} メソッドシグニチャ（Method Signatures）
 
-最後の5つ目は、メソッドシグニチャです。
+最後の5つ目はメソッドシグニチャです。
 あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature.ts}）。
 
 //list[objectTypeLiteral/methodSignature.ts][メソッドの定義っぽい]{
@@ -351,8 +347,7 @@ export { }
 
 オブジェクト型リテラルの話と関わりが深いのでここで説明します。
 
-オブジェクトリテラルを使って値を作る時に、厳密なチェックが行われる場合があります。
-それは、値を直接何らかの型に当てはめた場合です。
+オブジェクトリテラルを使って値を作る時に、プロパティの過不足について厳しくチェックされる場合があります。
 例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid.ts}）。
 
 //list[objectTypeLiteral/strictCheck-invalid.ts][厳密にチェックされる場合、されない場合]{
@@ -403,6 +398,36 @@ export { }
 そのようなコンパイルエラーは型定義ファイルを修正して対処してほしいところですが、急いでいるのであればいったん別の変数に代入してから再代入することで回避できます。
 いったん別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。
 
+もう一例見てみます。
+TypeScript 2.4系で導入された弱い型の検出（Weak type detection）です（@<list>{objectTypeLiteral/weakTypeDetection-invalid.ts}）。
+これは、別変数作戦を使ったときでも、特定の条件を満たす場合にコンパイルエラーとしてミスを検出できるというものです。
+条件は3つあります。
+
+ 1. 1つ以上プロパティを持っている
+ 2. すべてのプロパティがoptional
+ 3. インデックスシグニチャを持たない
+
+//list[objectTypeLiteral/weakTypeDetection-invalid.ts][期待されるプロパティが1つ以上必要]{
+#@mapfile(../code/types-basic/objectTypeLiteral/weakTypeDetection-invalid.ts)
+interface FooOptions {
+  fileName?: string;
+  checkBar?: boolean;
+}
+
+// 一旦別の変数を経由しても…
+let obj = {
+    unknownOption: 1,
+};
+
+// 共通のプロパティが1つも存在しない場合エラーにしてもらえる
+// error TS2559: Type '{ unknownOption: number; }' has
+//   no properties in common with type 'FooOptions'.
+let fooOpts: FooOptions = obj;
+#@end
+//}
+
+これにより、まったく関係のないオブジェクトを間違って渡しているパターンを検出できます。
+
 ==={readonly-modifiers} readonly修飾子
 
 TypeScript固有の機能であるreadonly修飾子について紹介します。
@@ -436,6 +461,7 @@ console.log(objA.str);
 export { }
 #@end
 //}
+
 readonlyと変更された該当箇所が変更不可になるだけなので迂回路を使うと値は変更できてしまいます。
 
 クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（@<list>{objectTypeLiteral/readonlyWithClass.ts}）。
