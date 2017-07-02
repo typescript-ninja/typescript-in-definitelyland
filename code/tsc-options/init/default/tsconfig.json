@@ -1,11 +1,12 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
-        "sourceMap": false
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    // 様々なオプションの説明が出力されるが紙面の都合でカットです！
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true // 次の4オプションを一括で有効にする
+    // "noImplicitAny": true,
+    // "strictNullChecks": true,
+    // "noImplicitThis": true,
+    // "alwaysStrict": true,
+  }
 }
