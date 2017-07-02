@@ -498,27 +498,42 @@ export { }
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。
 特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
 
+#@# TODO async/await と generator への型の付け方について言及したほうがよい
+
 =={module-and-namespace} モジュールのあれこれ
 
 プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
-そのための武器として、ECMAScript 2015にはモジュールがあります。
+そのための武器として、ECMAScript 2015から言語にモジュールの仕様が追加されました。
 1つのJSファイルを1つのモジュールと捉えます。
-Node.jsで使われているCommonJS形式のモジュールと考え方は一緒です。
 つまり、別ファイルになれば別モジュールと考え、モジュールから値をexportしたりimportしたりして大きなプログラムを分割し統治します。
 
 #@# @suppress SentenceLength CommaNumber
 #@# prh:disable
-歴史的経緯により、TypeScriptでは先に説明した1つのJavaScriptファイルを1つのモジュールと捉えた形式のことを外部モジュール（External Modules）と呼び、関数を使って1つの名前空間を作り出す形式を内部モジュール（Internal Modules）と呼んでいました。
-しかし、ECMAScript 2015で本格的に"モジュール"の概念が定義されたため、TypeScriptでは今後はモジュールといえば外部モジュールを指し、内部モジュールのことは@<code>{namespace}と呼ぶようになりました。
-これにあわせて、内部モジュールの記法も旧来の@<code>{module}から@<code>{namespace}に変更されました。
-未だに@<code>{module}を使うこともできますが、今後は@<code>{namespace}を使ったほうがよいでしょう。
-
-#@# prh:disable
-本書でも、これ以降は単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指します。
+歴史的経緯により、TypeScriptではモジュールの他に@<code>{namespace}という機能があります。
+モジュールの考え方がまだ発達していなかった時代に、関数を使ってモジュールのようなものを涙ぐましく作っていた名残ですね。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-仕様としてモジュールが策定され、WHATWGでブラウザでのモジュールの動作について議論が進んでいる現状、namespaceのみを使ってプログラムを分割・構成すると将来的にはきっと負債になるでしょう。
+仕様としてモジュールが策定され、ブラウザでの実装も進んでいる今、namespaceを使ってプログラムを分割・構成するのは悪手です@<fn>{tsc-namespace}。
 これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
+
+//footnote[tsc-namespace][なお、TypeScriptコンパイラ本体はまだnamespaceを使っている模様]
+
+====[column] モジュールとnamespaceと外部モジュールと内部モジュール
+
+過去の用語の使い方について参考文献としてメモしておきます。
+ここに書いてあることは知らないほうがよい知識かもしれません。
+
+歴史的経緯により、TypeScriptはモジュールのことを外部モジュール（External Modules）と呼んでいました。
+また、namespaceのことを内部モジュール（Internal Modules）と呼んでいました。
+内部モジュールとは、関数を使って1つの名前空間を作り出すテクニックのことで、ECMAScriptの仕様に含まれるものではありません。
+
+ECMAScript 2015で本格的に"モジュール"の概念が定義されたため、TypeScriptでは今後はモジュールといえば外部モジュールを指し、内部モジュールのことは@<code>{namespace}と呼ぶように改めました。
+これにあわせて、内部モジュールの記法も古くは@<code>{module}を使っていたのを@<code>{namespace}に変更されました。
+
+#@# prh:disable
+本書でも、単にモジュールと書く場合は外部モジュールのことを指し、namespaceと書いた時は内部モジュールのことを指しています。
+
+====[/column]
 
 ==={module} モジュール
 
@@ -528,12 +543,12 @@ Node.jsで使われているCommonJS形式のモジュールと考え方は一�
 
 #@# @suppress CommaNumber
 TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。
-いずれの形式で出力するかについてはコンパイル時に@<code>{--module commonjs}などの形式で指定できます。
+いずれの形式で出力するかについては@<code>{--module commonjs}というようにオプションで指定できます。
 
 #@# prh:disable
 本書ではNode.jsでもBrowserifyやwebpackで広く利用しやすいCommonJS形式についてのみ言及します。
-対応形式の中ではAMDやSystemJSについては癖が強く、tscに与えることができるオプションの数も多いため興味がある人は自分で調べてみてください。
-筆者は両形式はあまり筋がよいとは今のところ思っていませんけれど。
+rollup.jsなどの普及により、es2015形式のまま出力し別途bundlerで処理する場合もあるかもしれません。
+AMDやSystemJSは正直最近廃れてきていると思いますので興味がある人は自分で調べてみてください。
 
 #@# OK REVIEW lc: s/WebPack/Webpack/
 
@@ -594,7 +609,7 @@ function bye(word = "TypeScript") {
 //   and cannot be imported using this construct.
 namespace bye { }
 
-// CommonJS向け ECMAScript 2015では×
+// CommonJS向け ECMAScript 2015では× 今後は使わなくてよし！
 export = bye;
 #@end
 //}
@@ -604,7 +619,7 @@ export = bye;
 Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることが分かるでしょう。
 
 //cmd{
-$ tsc --module commonjs --target es6 foo.ts
+$ tsc --module commonjs --target es2015 foo.ts
 $ cat foo.js
 #@mapfile(../code/typescript-basic/externalModule/foo.js)
 "use strict";
@@ -633,6 +648,7 @@ const buzz2 = require("./buzz");
 console.log(buzz());
 console.log(buzz2());
 #@end
+
 $ cat bar.js
 #@mapfile(../code/typescript-basic/externalModule/bar.js)
 "use strict";
@@ -646,6 +662,7 @@ function default_1(word = "default") {
 }
 exports.default = default_1;
 #@end
+
 $ cat buzz.js
 #@mapfile(../code/typescript-basic/externalModule/buzz.js)
 "use strict";
@@ -660,6 +677,49 @@ module.exports = bye;
 
 #@# prh:disable
 //footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
+
+==={dynamic-import} 動的インポート（Dynamic Import）
+
+TypeScript 2.4系からサポートされたECMAScriptの仕様に動的インポートがあります。
+ECMAScriptの仕様上、モジュールのimport文は参照するモジュールを動的に変える余地がありませんでした。
+これは、プログラムを実行しなくてもパースした時点で必要なファイルの全リストを作れるという利点があります。
+この仕様は90%のユースケースを満足させるかもしれませんが、動的に必要なモジュールを決定できることにより得られる柔軟性もあります。
+そのために、動的インポートの仕様が策定されています。
+コード例を見てみましょう（@<list>{dynamicImport/index.ts}、@<list>{dynamicImport/sub.ts}）。
+
+//list[dynamicImport/index.ts][実行時に動的にインポートするモジュールを決定する]{
+#@mapfile(../code/typescript-basic/dynamicImport/index.ts)
+async function main() {
+  // 動的にモジュールをimportできる Promiseが返ってくる
+  // 即値（文字列リテラル）でモジュール名を指定するとちゃんと型がついてる！
+  const sub = await import("./sub");
+  console.log(sub.hello());
+}
+
+function mainAnother() {
+  // こういうのも普通にイケる
+  import("./sub").then(sub => {
+    console.log(sub.hello());
+  });
+}
+
+main();
+#@end
+//}
+
+//list[dynamicImport/sub.ts][なんの変哲もないimportされる側]{
+#@mapfile(../code/typescript-basic/dynamicImport/sub.ts)
+export function hello(word = "world") {
+  return `Hello, ${word}`;
+}
+#@end
+//}
+
+わかりやすいですね。
+TypeScript上での特徴として、importに渡す文字列が固定の場合、これは実行せずに解析できるため得られたモジュールにはしっかりと型がついています。
+動的に組み立てた文字列を渡した場合、なんでもアリのanyになってしまうため、自分で独自に型注釈を与えたほうが安全に使えます。
+
+なお、動的インポートを無変換でJSに出力したい場合、@<code>{--module esnext}が必要で、@<code>{--module es2015}ではエラーになるので注意しましょう。
 
 ==={namespace} namespace
 
