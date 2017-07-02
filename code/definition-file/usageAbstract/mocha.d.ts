@@ -1,10 +1,10 @@
 interface MochaDone {
-	(error?: Error): void;
+	(error?: any): void;
 }
 declare let describe: {
-	(description: string, spec: () => void): any;
+	(description: string, callback: () => void): any;
 };
 declare let it: {
-	(expectation: string, assertion?: () => void): any;
-	(expectation: string, assertion?: (done: MochaDone) => void): any;
+	(expectation: string, callback?: () => void): any;
+	(expectation: string, callback?: (done: MochaDone) => void): any;
 };

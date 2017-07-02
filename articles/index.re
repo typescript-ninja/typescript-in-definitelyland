@@ -45,6 +45,8 @@
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
 
+#@# TODO SlackとかRedditとかGoogleとかがTypeScript採用した話を書く
+
 =={about-this-book} 本書について
 
 本書はJavaScriptにコンパイル可能な言語のTypeScriptについて解説した本です。
