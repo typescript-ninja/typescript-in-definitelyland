@@ -1,4 +1,5 @@
 let func: (value: string) => string;
+
 // 当てはまる値はこんな感じ
 func = word => `Hello, ${word}`;
 func = (word: string) => {

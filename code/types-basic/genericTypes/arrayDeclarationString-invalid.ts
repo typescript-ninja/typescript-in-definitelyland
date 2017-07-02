@@ -6,6 +6,6 @@ interface Array {
 	length: number;
 	push(...items: string[]): number;
 	pop(): string | undefined;
-	forEach(callbackfn: (value: string) => void, thisArg?: any): void;
+	indexOf(searchElement: string, fromIndex?: number): number;
 	[n: number]: string;
 }

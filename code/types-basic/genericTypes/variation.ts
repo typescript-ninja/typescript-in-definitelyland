@@ -5,7 +5,8 @@ class SampleA<T> {
 	constructor(public data: T) {
 	}
 }
-// 使い方 <string>は省略しても引数から推論可能
+// 使い方
+// 引数から推論できるので<string>は省略する場合のほうが多い
 let objA = new SampleA<string>("str");
 
 // インタフェースとジェネリクス

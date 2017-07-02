@@ -526,6 +526,7 @@ export { Sample };
 //list[function-types/basic.ts][関数も型として表現できる]{
 #@mapfile(../code/types-basic/functionTypes/basic.ts)
 let func: (value: string) => string;
+
 // 当てはまる値はこんな感じ
 func = word => `Hello, ${word}`;
 func = (word: string) => {
@@ -599,10 +600,10 @@ let objC: C = {
 =={structural-subtyping} 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
-TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
-そこに実際の継承関係は必要ありません。
+TypeScriptでは、プロパティやメソッドなどの構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
+そこにクラスを継承しているかとか、インタフェースを実装しているかというのは必ずしも必要ではありません。
 
-//list[structuralSubtypings/basic.ts][大体一緒ならまぁ一緒ってことでいいよね]{
+//list[structuralSubtypings/basic.ts][構造が一緒ならまぁ一緒ってことでいいよね]{
 #@mapfile(../code/types-basic/structuralSubtypings/basic.ts)
 // クラス Foo はstring型のstrという名前のプロパティと
 // number型のnumという名前のプロパティを持つ
@@ -630,11 +631,13 @@ interface Point {
   x: number;
   y: number;
 }
+
 // Point の実装を強制する！！！
 class PointImpl1 implements Point {
   constructor(public x: number, public y: number) {
   }
 }
+
 // Point の実装が強制されないけど互換性はある！
 class PointImpl2 {
   constructor(public x: number, public y: number) {
@@ -648,26 +651,21 @@ function double(p: Point): Point {
     y: p.y * 2,
   };
 }
-// 次のすべては正しいコードとなります
+
+// 次の3つの関数呼び出しはすべて正しいコードです
 double(new PointImpl1(1, 2));
 double(new PointImpl2(3, 4));
 double({
   x: 5,
   y: 6,
 });
-let p = {
-  x: 7,
-  y: 8,
-  z: 9,
-};
-double(p); // オブジェクトリテラルを直で渡す場合余計な要素があると怒られる
 #@end
 //}
 
 このコードはコンパイルがちゃんと成功します。
 Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図的な仕様であることが明示できるためより好ましいです。
 
-なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（@<list>{structuralSubtypings/optional.ts}）。
+なお、省略可能なプロパティは存在していなくても型の互換性として問題ないものとして扱われます（@<list>{structuralSubtypings/optional.ts}）。
 
 //list[structuralSubtypings/optional.ts][省略可能な（?がある）プロパティは値がなくてもよい]{
 #@mapfile(../code/types-basic/structuralSubtypings/optional.ts)
@@ -683,28 +681,18 @@ function printPoint(p: Point): void {
   }
   console.log(message);
 }
+
 // optinal なプロパティはなくても大丈夫！
-// x=1, y=2 と表示される
 printPoint({
   x: 1,
   y: 2,
 });
-// red(x=1, y=2) と表示される
+
 printPoint({
   x: 1,
   y: 2,
-  color: "red",
+  color: "red", // color があるパターン 型が一致していないともちろん怒られる
 });
-// とはいえ、型が不一致だと怒られる。
-// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }'
-//   is not assignable to parameter of type 'Point'.
-//   Types of property 'color' are incompatible.
-//     Type 'boolean' is not assignable to type 'string'.
-// printPoint({
-//   x: 1,
-//   y: 2,
-//   color: true,
-// });
 #@end
 //}
 
@@ -713,21 +701,22 @@ printPoint({
 #@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
 
 型アサーションは他の言語でいうところのキャストです。
-キャストの書き方は2種類あり、@<list>{typeAssertions/basic.ts}のように@<code>{<変換後型名>値}か@<code>{値 as 変換後型名}と書くだけです。
+キャストの書き方は2種類あり、@<list>{typeAssertions/basic.ts}のように@<code>{値 as 変換後型名}か@<code>{<変換後型名>値}と書くだけです。
 
 //list[typeAssertions/basic.ts][型アサーション 基本例]{
 #@mapfile(../code/types-basic/typeAssertions/basic.ts)
 let obj: any = 1;
 
 // お前は今後 number として生きよ…
-let num = <number>obj;
+let num = obj as number;
 
 let str = "string";
 // 非常に外道なコードを書くことができる… 人としての良識を疑う
 // stringをnumberな型の変数に代入するだなんてなんて卑劣な…！
-num = <any>str;
-// 後置のキャストもあります as 型名という形式
 num = str as any;
+
+// 前置で書くやり方もあるよ
+num = <any>str;
 
 export { }
 #@end
@@ -745,7 +734,6 @@ let num: number = str as number;
 //}
 
 ダウンキャストも実行できます（@<list>{typeAssertions/class.ts}）。
-TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。
 
 //list[typeAssertions/class.ts][親クラスから子クラスへ変換]{
 #@mapfile(../code/types-basic/typeAssertions/class.ts)
@@ -780,8 +768,11 @@ export { }
 #@end
 //}
 
-anyにいったんキャストすればなんにでも化けさせられるので、これは一種の切り札です。
-型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（@<list>{typeAssertions/buggyDefinitionFile.ts}）。
+しかしながら、TypeScriptでは自然なJavaScriptの書き方を行うと適切に型が絞り込まれる仕組みが作られています。
+そのため、型アサーションを使った明示的な型の変換は、絶対に必要なときに限りひとつまみだけ使うのがよいコードです。
+
+@<list>{typeAssertions/buggyDefinitionFile.ts}のように、anyを経由することでどうとでも型を誤魔化せますが、これは一種の切り札です。
+型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合にとりあえず誤魔化すためのスパイスとして使ったりします。
 
 //list[typeAssertions/buggyDefinitionFile.ts][無理やりなんとかする例]{
 #@mapfile(../code/types-basic/typeAssertions/buggyDefinitionFile.ts)
@@ -857,9 +848,9 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"とするこ
 実際、ここで出てくるアルファベットは@<code>{T}ではなくてもかまいせん。
 @<code>{Type}でもいいですし、なんでもよいです。
 ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
-代表的な例ではTypeの頭文字であるT、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。
+代表的な例ではTypeの頭文字のT、アルファベット的にTの次の文字でのUや、Returnの頭文字のRなどが使われます。
 
-さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid.ts}を見てみます@<fn>{array-forEach}。
+さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid.ts}を見てみます。
 
 //list[genericTypes/arrayDeclaration-invalid.ts][Array<T>が登場する]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclaration-invalid.ts)
@@ -871,7 +862,7 @@ interface Array<T> {
   length: number;
   push(...items: T[]): number;
   pop(): T | undefined;
-  forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+    indexOf(searchElement: T, fromIndex?: number): number;
   [n: number]: T;
 }
 #@end
@@ -879,7 +870,7 @@ interface Array<T> {
 
 #@# @suppress SuccessiveWord SentenceLength CommaNumber
 色々な所でTが使われています。
-pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach"などの、汎用化された要素がたくさんあります。
+pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、指定した○○の値と同じ要素が何番目にあるかを調べるメソッドindexOf"などの、汎用化された要素がたくさんあります。
 
 ここで、型パラメータTを実際にstringで具体化します（@<list>{genericTypes/arrayDeclarationString-invalid.ts}）。
 
@@ -893,19 +884,17 @@ interface Array {
   length: number;
   push(...items: string[]): number;
   pop(): string | undefined;
-  forEach(callbackfn: (value: string) => void, thisArg?: any): void;
+  indexOf(searchElement: string, fromIndex?: number): number;
   [n: number]: string;
 }
 #@end
 //}
 
 #@# @suppress JapaneseAmbiguousNounConjunction SentenceLength CommaNumber
-"stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach"などになりました。
+"stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、指定したstringの値と同じ要素が何番目にあるかを調べるメソッドindexOf"などになりました。
 ジェネリクス、使う分にはめっちゃ簡単ですね！
 
 このように、ジェネリクスを使うと柔軟性と堅牢さを両立させることができます。
-
-//footnote[array-forEach][紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！]
 
 ==={generic-patterns} ジェネリクスの書き方色々
 
@@ -920,7 +909,8 @@ class SampleA<T> {
   constructor(public data: T) {
   }
 }
-// 使い方 <string>は省略しても引数から推論可能
+// 使い方
+// 引数から推論できるので<string>は省略する場合のほうが多い
 let objA = new SampleA<string>("str");
 
 // インタフェースとジェネリクス
@@ -976,7 +966,7 @@ class InheritA extends Base {
   num: number;
 }
 
-// TはBaseを継承済の型でなければならない制約
+// TはBaseという制約を満たす型でなければならない
 interface Sample<T extends Base> {
   method(): T;
 }
@@ -1020,7 +1010,7 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 これを上手に使いこなすには一段上の設計力が要求されます。
 
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
-ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。
+まずはジェネリクスを適用できるような、複数の方にまたがる共通の処理を見つけ出す眼力が必要になります。
 
 =={never-type} "ありえない"型（The Never Type）
 
@@ -1055,6 +1045,6 @@ export { }
 関数を実行すると必ず例外が発生する…。
 そんな、到達できないコードではnever型が利用されます。
 コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。
-基本的にはnever型を見かけることがあったら、何かミスをしているな…と考えたほうがよいでしょう。
+基本的にはnever型を見かけることがあれば、何かミスをしているな…と考えたほうがよいでしょう。
 
 #@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる
