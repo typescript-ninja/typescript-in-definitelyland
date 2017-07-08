@@ -7,6 +7,8 @@
 #@# TODO --strict オプションの追加 New --strict master option in 2.3RC
 #@# TODO tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
 #@# TODO --plugins オプションの追加 Language Service Extensibility in 2.3RC
+#@# TODO --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
+#@# TODO --checkJs オプションでJSコードについて型の整合性やらをチェックするようになったらしい Report errors in .js files with new --checkJs in 2.3RC
 
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。

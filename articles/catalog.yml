@@ -8,5 +8,6 @@ CHAPS:
   - types-advanced.re
   - tsc-options.re
   - definition-file.re
+  - typescript-as-a-tool.re
 
 POSTDEF:
