@@ -10,10 +10,6 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO 部分的型注釈からの型推論 Contextual typing of partially annotated signatures in 2.1.1
-#@# TODO 直和型と交差型を組み合わせのノーマライズ (Normalize union/intersection type combinations in 2.1.1
-
-#@# TODO superを呼び出しした時コンストラクタでreturnした値がthisとなるように変更 Use returned values from super calls as 'this' in 2.1.4
 #@# TODO 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
 #@# TODO クラスのMixinパターンのサポートMixin classes in 2.2.1
 #@# TODO インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
@@ -49,6 +45,9 @@
 #@# * JSXで子要素のspread記法がサポートされたSupport for JSX spread children in 2.2.1
 #@# * JSX記法のターゲットにReact Nativeが追加されたNew --jsx react-native in 2.2.1
 #@# * JSXのstateless componentsとなる関数がoverloadできなかったのが直された JSX stateless components overload resolution in 2.3RC
+
+#@# NOTE 重箱の隅的仕様だし知らなくても別にさほど労力が減らない系の話題
+#@# * 部分的型注釈からの型推論 Contextual typing of partially annotated signatures in 2.1.1
 
 =={about-this-book} 本書について
 

@@ -210,6 +210,10 @@ export { }
 TypeScript以外のオブジェクト指向言語でもいえることですが、なんでもかんでも継承すればいいや！という考えはよくありません。
 頑張ってオブジェクト指向に適した設計を行いましょう。
 
+#@# 仕様として複雑なので次のテクニックには言及しなくていいかなぁ…
+#@# superを呼び出しした時コンストラクタでreturnした値がthisとなるように変更 Use returned values from super calls as 'this' in 2.1.4
+#@# https://github.com/Microsoft/TypeScript/issues/13355 constructorに型付けできないと困る話
+
 ==={class-access-modifier} アクセス修飾子
 
 #@# @suppress CommaNumber

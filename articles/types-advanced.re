@@ -22,6 +22,9 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 
 #@# TODO Discriminated union types タグ付きUnion型 in 2.0.0 Beta
 
+#@# 備忘録 特に意識的に注意しないと正しいコードが書けない話じゃないので割愛していく
+#@# 直和型と交差型を組み合わせのノーマライズ (Normalize union/intersection type combinations in 2.1.1
+
 #@# @<strong>{導入されるバージョン 1.4.0}
 
 はい、皆様待望の機能でございます。
