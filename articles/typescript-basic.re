@@ -499,7 +499,39 @@ export { }
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。
 特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
 
-#@# TODO async/await と generator への型の付け方について言及したほうがよい
+==={async-await} Async（非同期）関数
+
+#@# since 2.1.1
+
+俗にasync/awaitと呼ばれる仕様です。
+async/awaitの振る舞いについてはECMAScript仕様の範囲ですので概要だけ説明します。
+ES2015で標準仕様に入った非同期処理APIのPromiseがあります。
+これらに簡易な構文を与えたものがAsync関数です（@<list>{asyncFunction/basic.ts}）@<fn>{async-await-downpile}。
+
+//list[asyncFunction/basic.ts][async/await 便利！]{
+#@mapfile(../code/typescript-basic/asyncFunction/basic.ts)
+// NOTE ここのcallbackの型注釈の意味は別の章で解説します
+// 引数を1つ取って返り値無し の関数を表します
+function asyncModoki(callback: (value: string) => void) {
+  callback("TypeScript");
+}
+
+// アロー関数をコールバック関数として渡す 渡す関数の型は型推論される！
+asyncModoki(value => console.log(`Hello, ${value}`));
+
+// アロー関数に明示的に型付をする場合
+asyncModoki((value: string): void => console.log(`Hello, ${value}`));
+
+export { }
+#@end
+//}
+
+Async関数の返り値の型は常にPromiseになります。
+
+#@# NOTE Asynchronous Iterations https://github.com/Microsoft/TypeScript/issues/11326
+ちなみに、generatorの返り値の型は常に@<code>{IterableIterator}、async generatorの場合は常に@<code>{AsyncIterableIterator}とする必要があります。
+
+//footnote[async-await-downpile][ちなみにasync/awaitのdownpileもTypeScript 2.1.1からサポートされています]
 
 =={module-and-namespace} モジュールのあれこれ
 

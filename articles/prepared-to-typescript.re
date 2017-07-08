@@ -120,7 +120,8 @@ tsconfig.jsonはJSONと言ってるクセにコメントを書くことが可能
     "module": "commonjs",
     "lib": [
       "dom",
-      "esnext"
+      "esnext",
+      "esnext.asynciterable"
     ],
 
     /* Strict Type-Checking Options */

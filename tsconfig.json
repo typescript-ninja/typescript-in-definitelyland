@@ -5,7 +5,8 @@
     "module": "commonjs",
     "lib": [
       "dom",
-      "esnext"
+      "esnext",
+      "esnext.asynciterable"
     ],
 
     /* Strict Type-Checking Options */
