@@ -514,17 +514,35 @@ ES2015で標準仕様に入った非同期処理APIのPromiseがあります。
 
 //list[asyncFunction/basic.ts][async/await 便利！]{
 #@mapfile(../code/typescript-basic/asyncFunction/basic.ts)
-// NOTE ここのcallbackの型注釈の意味は別の章で解説します
-// 引数を1つ取って返り値無し の関数を表します
-function asyncModoki(callback: (value: string) => void) {
-  callback("TypeScript");
+function returnByPromise(word: string) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(word);
+        }, 100);
+    });
 }
 
-// アロー関数をコールバック関数として渡す 渡す関数の型は型推論される！
-asyncModoki(value => console.log(`Hello, ${value}`));
+// async functionの返り値の型は必ずPromiseになる
+async function helloAsync(): Promise<string> {
+    // この関数は実行すると A, TypeScript, B が順番に表示される
 
-// アロー関数に明示的に型付をする場合
-asyncModoki((value: string): void => console.log(`Hello, ${value}`));
+    console.log("A");
+    // Promiseな値をawaitすると中身が取り出せる（ように見える）
+    const word = await returnByPromise("TypeScript");
+    console.log(word);
+    console.log("B");
+
+    return `Hello, ${word}`;
+}
+
+// awaitが使えるのは必ずasync functionの中
+(async () => {
+    const hello = await helloAsync();
+    console.log(hello);
+})();
+
+// 普通にPromiseとして扱うこともできる
+helloAsync().then(hello => console.log(hello));
 
 export { }
 #@end
