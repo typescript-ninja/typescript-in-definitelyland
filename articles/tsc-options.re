@@ -1,11 +1,8 @@
 ={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
 #@# TODO tsconfig.jsonでextendsが使えるようになった (Configuration inheritance) in 2.1.1
-#@# TODO 無条件にstrict modeにするオプションの追加 (New --alwaysStrict) in 2.1.1
 #@# TODO es2016, 2017 をターゲットに追加 (Support for --target ES2016 and --target ES2017) in 2.1.1
 #@# TODO --target ESNext がさらに追加された Support for --target ES2016, --target ES2017 and --target ESNext in 2.1.4
-#@# TODO --strict オプションの追加 New --strict master option in 2.3RC
-#@# TODO tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
 #@# TODO --plugins オプションの追加 Language Service Extensibility in 2.3RC
 #@# TODO --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
 
@@ -37,9 +34,12 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 
 =={init} --init
 
+#@# NOTE tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
+
 @<code>{--init}オプションについて解説します。
 このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
-生成されたファイルは後述の@<code>{--project}オプションと組み合わせて使います。
+生成されたファイルはtscコマンドがコンパイルを行うときに読み込まれます。
+後述の@<code>{--project}オプションも参照してみてください。
 TypeScriptではプロジェクトのビルドに必要なコンパイルオプションや、コンパイル対象の指定などをtsconfig.jsonファイルにまとめていきます。
 このファイルはすべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。
 
@@ -196,6 +196,14 @@ definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
 このようなときに、それはダメだ！とコンパイラが教えてくれます。
 anyが紛れ込んで型チェックが意味を成さなくなるとTypeScriptの意義が薄れてしまいます。
 型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
+
+=={strict} --strict
+
+#@# --strict オプションの追加 New --strict master option in 2.3RC
+@<code>{tsc --init}したときにデフォルトで有効になっているオプションです。
+このオプションは後述の@<code>{--strictNullChecks}、@<code>{--noImplicitAny}、@<code>{--noImplicitThis}、@<code>{--alwaysStrict}の4オプションを一括で有効にします。
+これがデフォルトで有効になっているということは、TypeScript開発チームは皆さんにガッツリ堅牢なコードを書いていってほしい、と思っているということですね。
+新規にプロジェクトを作成する場合などは必ず有効にして冒険の旅に出るようにしましょう。
 
 =={strictNullChecks} --strictNullChecks
 
@@ -389,6 +397,14 @@ function testB() {
 export { testB }
 #@end
 //}
+
+=={alwaysStrict} --alwaysStrict
+
+#@# 無条件にstrict modeにするオプションの追加 (New --alwaysStrict) in 2.1.1
+@<code>{"use strict";}ディレクティブを常時出力してくれるようになるオプションです。
+ECMAScriptのモジュールを使ったときのように言語仕様上必ず@<code>{"use strict";}を出してくれる場合もありました。
+このオプションを使うとそれが常時適用される状態になります。
+今の時代、strictモードをあえて使わないという選択肢はないはずですのでこれも常時使うのがよいオプションです。
 
 =={target} --target
 
