@@ -40,7 +40,15 @@
 #@# TODO JSXのstateless componentsとなる関数がoverloadできなかったのが直された JSX stateless components overload resolution in 2.3RC
 #@# TODO --checkJs オプションでJSコードについて型の整合性やらをチェックするようになったらしい Report errors in .js files with new --checkJs in 2.3RC
 
-#@# TODO 2.4.0系差分をTODO化する
+#@# TODO 関数の返り値の型をGenericsの型パラメータの推測に利用する Infer from generic function return types in 2.4.1
+#@# TODO Generics有りの関数の型パラメータが推論されるようになった  in 2.4.1
+#@# TODO Genericsの型の互換性チェックがより厳密になった Stricter generic signature checks in 2.4.1
+#@# TODO Genericsについて共変性のチェックが行われるようになった Covariant checking for callback parameters in 2.4.1
+#@# TODO enumの値にstringが使えるようになった String valued members in enums in 2.4.1
+#@# TODO プロパティが全てoptionalな型について特別なサポートを与えるようにした Weak type detection in 2.4.1
+#@# TODO dynamic importがstage 3になったので入った in 2.4.1
+#@# TODO リファクタリングの機能をLanguage Service APIに追加 in 2.4.1
+#@# TODO tsconfig.jsonについてのエラー表示がより良くなった in 2.4.1
 
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
