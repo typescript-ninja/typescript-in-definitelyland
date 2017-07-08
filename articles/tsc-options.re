@@ -1,10 +1,6 @@
 ={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
-#@# TODO tsconfig.jsonでextendsが使えるようになった (Configuration inheritance) in 2.1.1
-#@# TODO es2016, 2017 をターゲットに追加 (Support for --target ES2016 and --target ES2017) in 2.1.1
-#@# TODO --target ESNext がさらに追加された Support for --target ES2016, --target ES2017 and --target ESNext in 2.1.4
 #@# TODO --plugins オプションの追加 Language Service Extensibility in 2.3RC
-#@# TODO --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
 
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
@@ -34,7 +30,8 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 
 =={init} --init
 
-#@# NOTE tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
+#@# tsc --init の出力が整理されてコメントとかも付くように Enhanced tsc --init output in 2.3RC
+#@# tsconfig.jsonでextendsが使えるようになった (Configuration inheritance) in 2.1.1
 
 @<code>{--init}オプションについて解説します。
 このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
@@ -62,12 +59,16 @@ TypeScriptではプロジェクトのビルドに必要なコンパイルオプ�
 #@end
 //}
 
-tsconfig.jsonに記述可能なプロパティは概ね次の4つです。
+tsconfig.jsonに記述可能なプロパティは概ね次の5つです。
 
+ * extends
  * compilerOptions
  * files
  * include
  * exclude
+
+extendsには、相対パスまたは絶対パスで別のtsconfig.jsonを指定し、設定内容を引き継ぐことができます。
+拡張子の@<code>{.json}は省略可能です。
 
 compilerOptionsには、コンパイル時に利用するオプションを指定します。
 コンパイルオプションの名前とcompilerOptionsに記載可能なプロパティ名は一致しています。
@@ -408,11 +409,12 @@ ECMAScriptのモジュールを使ったときのように言語仕様上必ず@
 
 =={target} --target
 
-#@# TODO 選べるもの増えてる
+#@# es2016, 2017 をターゲットに追加 (Support for --target ES2016 and --target ES2017) in 2.1.1
+#@# --target ESNext がさらに追加された Support for --target ES2016, --target ES2017 and --target ESNext in 2.1.4
 
 @<code>{--target}オプションについて解説します。
 短縮記法で@<code>{-t}も利用できます。
-TypeScriptのコンパイルを行う際、ECMAScript 3（超古い！）、ECMAScript 5（古い！）、ECMAScript 2015（最近）のどのバージョンをターゲットとするかを指定します。
+TypeScriptのコンパイルを行う際、どのバージョンのECMAScriptをターゲットとするかを指定します。
 これは、"TypeScriptコードをどのバージョンで書くか"ではなく、"書いたTypeScriptをどのバージョンに変換するか"の指定です。
 TypeScriptでは基本的に最新の記法で書き、ダウンパイル（古い書き方へ変換）します。
 
@@ -421,13 +423,15 @@ TypeScriptでは基本的に最新の記法で書き、ダウンパイル（古�
  * es3
  * es5
  * es6 / es2015
+ * es2016
+ * es2017
+ * esnext
 
 基本的に、IE11などの少し古いブラウザのサポートを切らないのであればes5を選択すればよいでしょう。
 es3の利用はもはやお勧めしません。
 
-#@# TODO 追加オプションについて言及すること
-一部、Generatorやasync/awaitなどの記法はダウンパイルできません。
-これらは2.1.0でサポートされる予定なので、延期されないようにみんなで祈りましょう。
+#@# --target es3 と --target es5 でもジェネレータが使えるようになった Generator support for ES3/ES5 in 2.3RC
+GeneratorやIteratorをes5のコードにダウンパイルしたい場合は@<code>{--downlevelIteration}を併せて指定します。
 
 =={module-moduleResolution} --module、--moduleResolution
 
@@ -437,13 +441,12 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
 
 利用可能なオプションの値は次のとおりです。
 
-#@# TODO これも増えた
-
  * none
  * commonjs
  * system（SystemJS）
  * umd
  * es6 / es2015
+ * esnext
 
 これも明確な事情がない限り、今のところはcommonjsでよいでしょう。
 
@@ -459,7 +462,7 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
 基本としてnode一択でよいでしょう。
 
 #@# TODO この辺も改訂が必要
-前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module es6}とすることもできます。
+前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module esnext}とすることもできます。
 この組み合わせが可能になったのはTypeScript 2.0.0からなので、Rollup.js@<fn>{rollup.js}との組み合わせての運用はまだ未知数です。
 TypeScript＋Rollup.jsをプロジェクトに導入してみてブログ記事などにまとめてみると話題になるかもしれません。
 お待ちしています！
@@ -471,7 +474,6 @@ TypeScript＋Rollup.jsをプロジェクトに導入してみてブログ記事�
 #@# lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
 #@# OK REVIEW lc: ↑めっちゃ読みたい
 
-#@# TODO この辺も増えてるオプションが多いので見直しが必要
 @<code>{--lib}オプションについて解説します。
 TypeScriptのコンパイルを行う際、標準の型定義として何を使うかを個別に指定できます。
 たとえ、@<code>{--target es5}としてダウンパイルする場合でも、利用する型定義はes2015にできるのです。
@@ -482,25 +484,30 @@ TypeScriptのコンパイルを行う際、標準の型定義として何を使�
 tsconfig.jsonの場合は素直に配列にしましょう。
 
 #@# prh:disable
- * dom
- * webworker
  * es5
  * es6 / es2015
+ * es7 / es2016
+ * es2017
+ * esnext
+ * dom
+ * dom.iterable
+ * webworker
+ * scripthost
  * es2015.core
  * es2015.collection
+ * es2015.generator
  * es2015.iterable
  * es2015.promise
  * es2015.proxy
  * es2015.reflect
- * es2015.generator
  * es2015.symbol
  * es2015.symbol.wellknown
- * es2016
  * es2016.array.include
- * es2017
  * es2017.object
  * es2017.sharedmemory
- * scripthost
+ * es2017.string
+ * es2017.intl
+ * esnext.asynciterable
 
 自分のプロジェクトの用途を考え、適切なものを選びましょう。
 たとえばNode.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
