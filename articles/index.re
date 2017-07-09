@@ -10,16 +10,12 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
-
 #@# TODO 関数の返り値の型をGenericsの型パラメータの推測に利用する Infer from generic function return types in 2.4.1
 #@# TODO Generics有りの関数の型パラメータが推論されるようになった in 2.4.1
 #@# TODO Genericsの型の互換性チェックがより厳密になった Stricter generic signature checks in 2.4.1
 #@# TODO Genericsについて共変性のチェックが行われるようになった Covariant checking for callback parameters in 2.4.1
 #@# TODO enumの値にstringが使えるようになった String valued members in enums in 2.4.1
 #@# TODO プロパティが全てoptionalな型について特別なサポートを与えるようにした Weak type detection in 2.4.1
-
-#@# TODO 2.0Betaとか2.0.3とかの変更分について取りこぼしがあるので調査したほうがいいかも…
 
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する

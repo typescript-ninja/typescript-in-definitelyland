@@ -1068,6 +1068,16 @@ export { }
 自分でTypeScriptコードを書く時にこの記法が必要になる機会は少なくありたいものです。
 しかし、型定義ファイルを作成する時にはお世話にならざるをえないときがあるでしょう。
 
+=={thistype} ThisTypeでthisの型を制御する
+
+#@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
+@<code>{--noImplicitThis}オプションを利用した場合、オブジェクトリテラル中のthisがオブジェクトリテラル自体を指すよう正しく認識されます。
+
+さらに、オブジェクトリテラル中でのthisの型を強力にコントロールしたい場合、@<code>{ThisType<T>}を利用できます。
+
+#@# TODO https://github.com/Microsoft/TypeScript/issues/17041
+#@# これコンパイラのバグじゃね？案件を掘り出してしまったので一旦寝かせる
+
 =={local-types} ローカル型（Local Types）
 
 ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義できます（@<list>{localType/basic.ts}）。
