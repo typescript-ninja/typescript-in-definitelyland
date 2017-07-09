@@ -10,7 +10,6 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO クラスのMixinパターンのサポートMixin classes in 2.2.1
 #@# TODO インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
 #@# TODO nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
 #@# TODO stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1

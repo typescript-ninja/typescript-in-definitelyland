@@ -1417,3 +1417,75 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 もし興味があれば覗いてみて、何か意見を書いていってください。
 
 //footnote[issue10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]
+
+=={mixin-classes} クラスのMixin
+
+#@# クラスのMixinパターンのサポート Mixin classes in 2.2.1
+クラスにmixinで要素や機能を追加できます。
+拡張用の関数に対してコンストラクタを渡すとそれを機能拡張する形で継承したものを返す、というだけの関数です（@<list>{mixin/basic.ts}）。
+
+//list[mixin/basic.ts][任意のクラスにmixinで機能を追加する]{
+#@mapfile(../code/types-advanced/mixin/basic.ts)
+type Constructor<T> = new (...args: any[]) => T;
+
+function Tagged<T extends Constructor<object>>(Base: T) {
+    return class extends Base {
+        tag = "";
+        constructor(...args: any[]) {
+            super(...args);
+        }
+    };
+}
+
+class Score {
+    constructor(public point: number) { }
+}
+
+// mixinできる
+const TaggedScore = Tagged(Score);
+
+const ts = new TaggedScore(1);
+ts.tag = "vv";
+console.log(ts.tag, ts.point);
+
+// これはちゃんと怒られる
+// error TS2345: Argument of type '"s"' is not assignable to parameter of type 'number'.
+// new TaggedScore("s");
+
+// mixinしたクラスも分け隔てなく継承できる
+class RankingScore extends TaggedScore {
+    constructor(public rank: number, tag: string, point: number) {
+        super(point);
+        this.tag = tag;
+    }
+}
+
+const rs = new RankingScore(1, "vv", 100);
+console.log(rs.rank, rs.tag, rs.point);
+#@end
+//}
+
+過去に存在した問題として、このやり方をしてもTypeScriptがreturnしている新しいクラスに対して上手に型付けができませんでした。
+これを、TypeScriptでは@<list>{mixin/compat.ts}のようなルールを設けることで回避しました。
+
+//list[mixin/compat.ts][mixinのためのルール]{
+#@mapfile(../code/types-advanced/mixin/compat.ts)
+// 2つのコンストラクタとそれぞれの返り値の型
+// コンストラクタの片方は ...args: any[] を引数に取る
+type ConstructorA<T, U> = { new (s: string): T } & { new (...args: any[]): U };
+
+// 1つのコンストラクタと返り値は2つの型の交差型
+type ConstructorB<T, U> = { new (s: string): T & U };
+
+// 2つの定義には互換性がある！
+const A: ConstructorA<Date, RegExp> = null as any;
+const B: ConstructorB<Date, RegExp> = A;
+const A2: ConstructorA<Date, RegExp> = B;
+#@end
+//}
+
+mixinクラスのコンストラクタ引数が@<code>{...args: any[]}なのがポイントですね。
+@<list>{mixin/basic.ts}で出てくるTagged関数は@<code>{ConstructorA}に似た型定義になりますが、他の箇所では@<code>{ConstructorB}のように扱われるため、意図どおりの活用ができるようになります。
+
+mixin用の関数について命名規則は言及されている媒体によってCamelCaseやcamelCaseのようにバラバラで、まだコンセンサスがないようです。
+ここではTypeScriptのWhat's newの規則に則っています。
