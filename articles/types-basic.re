@@ -597,6 +597,9 @@ let objC: C = {
 #@end
 //}
 
+#@# インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
+TypeScript 2.2系から@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできるようになりました。
+
 =={structural-subtyping} 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。

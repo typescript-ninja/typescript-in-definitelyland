@@ -10,9 +10,6 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
-#@# TODO nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
-#@# TODO stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1
 #@# TODO Genericsの型パラメータにデフォルトの型を設定できるようになった Generic defaults in 2.3RC
 #@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
 
@@ -48,6 +45,8 @@
 
 #@# NOTE 重箱の隅的仕様だし知らなくても別にさほど労力が減らない系の話題
 #@# * 部分的型注釈からの型推論 Contextual typing of partially annotated signatures in 2.1.1
+#@# * nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
+#@# * stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1
 
 =={about-this-book} 本書について
 
