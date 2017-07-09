@@ -1429,16 +1429,16 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 type Constructor<T> = new (...args: any[]) => T;
 
 function Tagged<T extends Constructor<object>>(Base: T) {
-    return class extends Base {
-        tag = "";
-        constructor(...args: any[]) {
-            super(...args);
-        }
-    };
+  return class extends Base {
+    tag = "";
+    constructor(...args: any[]) {
+      super(...args);
+    }
+  };
 }
 
 class Score {
-    constructor(public point: number) { }
+  constructor(public point: number) { }
 }
 
 // mixinできる
@@ -1454,10 +1454,10 @@ console.log(ts.tag, ts.point);
 
 // mixinしたクラスも分け隔てなく継承できる
 class RankingScore extends TaggedScore {
-    constructor(public rank: number, tag: string, point: number) {
-        super(point);
-        this.tag = tag;
-    }
+  constructor(public rank: number, tag: string, point: number) {
+    super(point);
+    this.tag = tag;
+  }
 }
 
 const rs = new RankingScore(1, "vv", 100);
@@ -1472,10 +1472,10 @@ console.log(rs.rank, rs.tag, rs.point);
 #@mapfile(../code/types-advanced/mixin/compat.ts)
 // 2つのコンストラクタとそれぞれの返り値の型
 // コンストラクタの片方は ...args: any[] を引数に取る
-type ConstructorA<T, U> = { new (s: string): T } & { new (...args: any[]): U };
+type ConstructorA<T, U> = { new(s: string): T } & { new(...args: any[]): U };
 
 // 1つのコンストラクタと返り値は2つの型の交差型
-type ConstructorB<T, U> = { new (s: string): T & U };
+type ConstructorB<T, U> = { new(s: string): T & U };
 
 // 2つの定義には互換性がある！
 const A: ConstructorA<Date, RegExp> = null as any;

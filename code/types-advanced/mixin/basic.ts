@@ -1,16 +1,16 @@
 type Constructor<T> = new (...args: any[]) => T;
 
 function Tagged<T extends Constructor<object>>(Base: T) {
-    return class extends Base {
-        tag = "";
-        constructor(...args: any[]) {
-            super(...args);
-        }
-    };
+	return class extends Base {
+		tag = "";
+		constructor(...args: any[]) {
+			super(...args);
+		}
+	};
 }
 
 class Score {
-    constructor(public point: number) { }
+	constructor(public point: number) { }
 }
 
 // mixinできる
@@ -26,10 +26,10 @@ console.log(ts.tag, ts.point);
 
 // mixinしたクラスも分け隔てなく継承できる
 class RankingScore extends TaggedScore {
-    constructor(public rank: number, tag: string, point: number) {
-        super(point);
-        this.tag = tag;
-    }
+	constructor(public rank: number, tag: string, point: number) {
+		super(point);
+		this.tag = tag;
+	}
 }
 
 const rs = new RankingScore(1, "vv", 100);

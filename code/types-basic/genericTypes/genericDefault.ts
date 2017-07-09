@@ -1,9 +1,9 @@
 class DataContainer<T = string> {
-    data?: T
+	data?: T
 
-    print() {
-        console.log(this.data);
-    }
+	print() {
+		console.log(this.data);
+	}
 }
 
 // 省略したら T は string

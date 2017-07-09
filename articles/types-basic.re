@@ -1011,11 +1011,11 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 //list[genericTypes/genericDefault.ts][型パラメータのデフォルト型をつけられる]{
 #@mapfile(../code/types-basic/genericTypes/genericDefault.ts)
 class DataContainer<T = string> {
-    data?: T
+  data?: T
 
-    print() {
-        console.log(this.data);
-    }
+  print() {
+    console.log(this.data);
+  }
 }
 
 // 省略したら T は string
