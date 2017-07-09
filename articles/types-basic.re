@@ -1002,6 +1002,39 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 型パラメータが満たすべき制約をextendsの形式で指定できます。
 これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。
 
+==={default-type-parameter} 型パラメータのデフォルト値
+
+#@# Genericsの型パラメータにデフォルトの型を設定できるようになった Generic defaults in 2.3RC
+あまり使わない機能かもしれませんが、標準のPromiseの型定義にも出てくるので軽く触れておきます。
+ジェネリクスの型パラメータには、指定を省略し、型推論も上手にできなかった場合のデフォルトとなる型を明示できます（@<list>{genericTypes/genericDefault.ts}）。
+
+//list[genericTypes/genericDefault.ts][型パラメータのデフォルト型をつけられる]{
+#@mapfile(../code/types-basic/genericTypes/genericDefault.ts)
+class DataContainer<T = string> {
+    data?: T
+
+    print() {
+        console.log(this.data);
+    }
+}
+
+// 省略したら T は string
+const obj1 = new DataContainer();
+obj1.data = "";
+// defaultはstringなのでこれはダメ
+// obj1.data = 1;
+
+// 省略しなかったので普通に T は number
+const obj2 = new DataContainer<number>();
+obj2.data = 1;
+#@end
+//}
+
+型パラメータが2つも3つもある型を自作する場合、デフォルトの型を指定できないか考えてみるとよいでしょう。
+
+別の活用方法として、すでにあるクラスやインタフェースなどに型パラメータを追加したい場合、関連するすべての箇所を治す必要がありめんどくさいです。
+その対策として、新規に追加した型パラメータにデフォルト型を指定してやると既存のコードを修正する必要がなく、安全性も損なわずに済みます。
+
 ==={design-generic-signatures} 自分でジェネリクス有りのコードを書く
 
 #@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
@@ -1050,6 +1083,7 @@ export { }
 コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。
 基本的にはnever型を見かけることがあれば、何かミスをしているな…と考えたほうがよいでしょう。
 
-#@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる
+#@# TODO never と他の型のunion typeはneverが単純に消える
 
+#@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる
 #@# TODO object型のサポート Support for the object type in 2.2.1

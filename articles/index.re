@@ -10,7 +10,6 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO Genericsの型パラメータにデフォルトの型を設定できるようになった Generic defaults in 2.3RC
 #@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
 
 #@# TODO 関数の返り値の型をGenericsの型パラメータの推測に利用する Infer from generic function return types in 2.4.1
