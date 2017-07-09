@@ -1,7 +1,5 @@
 ={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
-#@# TODO --plugins オプションの追加 Language Service Extensibility in 2.3RC
-
 本章ではtscのコマンドラインオプションについて解説していきます。
 すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
 
@@ -449,6 +447,7 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
  * esnext
 
 これも明確な事情がない限り、今のところはcommonjsでよいでしょう。
+前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module esnext}とすることもできます。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 @<code>{--moduleResolution}オプションについて少し触れておきます。
@@ -460,12 +459,6 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
  * classic（TypeScript 1.6以前の形式）
 
 基本としてnode一択でよいでしょう。
-
-#@# TODO この辺も改訂が必要
-前述の@<code>{--target}と自由に組み合わせることができるため、@<code>{--target es5}としつつ@<code>{--module esnext}とすることもできます。
-この組み合わせが可能になったのはTypeScript 2.0.0からなので、Rollup.js@<fn>{rollup.js}との組み合わせての運用はまだ未知数です。
-TypeScript＋Rollup.jsをプロジェクトに導入してみてブログ記事などにまとめてみると話題になるかもしれません。
-お待ちしています！
 
 //footnote[rollup.js][@<href>{http://rollupjs.org/}]
 
@@ -539,3 +532,59 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 @<code>{tsc}でファイルを生成するのとは違う手順でのみビルドを行う場合、例えばwebpackでts-loaderを使っているプロジェクトなどで有効です。
 @<code>{tsc --noEmit}とすることでTypeScriptのコンパイルエラーのみをチェックできます。
 これはビルドタスク全体を走らせるよりも手短で、作業ディレクトリに不要なファイルを撒き散らすこともありません。
+
+=={plugin} pluginsの設定
+
+#@# --plugins オプションの追加 Language Service Extensibility in 2.3RC
+#@# TODO typescript-as-a-tool が書けなかったら見直し
+
+pluginsも仕組みとして面白いので概要だけ言及しておきます。
+詳しくは@<chapref>{typescript-as-a-tool}で扱います。
+
+pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができるのはエディタやIDE上のみです。
+コンパイル時の動作には影響を及ぼすことができません。
+そのため、tscのオプションとしてはpluginsは存在せず、tsconfig.jsonの設定項目としてのみ存在します。
+このオプションを設定しておくと、エディタ上のTypeScriptの入力補完やコンパイルエラーの表示などの動作を拡張することができます。
+現時点で実際に使える（と思われる）npmパッケージを次に挙げます@<fn>{plugins-in-real-world}。
+
+ * @angular/language-service
+ * ts-graphql-plugin
+ * tslint-language-service@<fn>{tslint-plugins-issue}
+
+また、筆者の作った役にも立たないプラグインを@<code>{@vvakame/typescript-plugin-example}@<fn>{vvakame-plugin-example}として公開しています。
+これは入力補完候補の説明文とかクイックインフォの説明文の末尾に猫の絵文字とかを出すだけのものです。
+設定例と動作イメージの紹介にちょうどいいでの確認してみます。
+tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{plugins}です。
+
+//list[plugins/tsconfig.json][pluginsの設定例]{
+#@mapfile(../code/tsc-options/plugins/tsconfig.json)
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "plugins": [
+      {
+        // name は全プラグイン共通で必須
+        "name": "@vvakame/typescript-plugin-example",
+        // プラグイン固有の設定を行う場合がある
+        "verbose": true,
+        "goody": "(`_´)"
+      }
+    ]
+  }
+}
+#@end
+//}
+
+//image[plugins][tsconfig.jsonの設定内容を反映して顔文字が出ている]{
+にゃーん
+//}
+
+簡単にエディタの機能を拡張できるので楽しいですね。
+まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。
+
+//footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
+#@# NOTE https://github.com/Microsoft/TypeScript/issues/15460
+//footnote[tslint-plugins-issue][@<href>{https://github.com/palantir/tslint/issues/2282}]
+//footnote[vvakame-plugin-example][@<href>{https://www.npmjs.com/package/@vvakame/typescript-plugin-example}]

@@ -7,3 +7,6 @@
 #@# TODO Quick fixes をLanguageServiceに追加 (Quick fixes support in language service API) in 2.1.1
 #@# TODO Language Service経由で使えるQuick fixesの種類が増えた。More Quick fixes! in 2.2.1
 #@# TODO リファクタリングの機能をLanguage Service APIに追加 in 2.4.1
+
+#@# NOTE https://github.com/RyanCavanaugh/sample-ts-plugin
+#@# NOTE https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin

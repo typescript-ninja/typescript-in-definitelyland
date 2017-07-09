@@ -1,0 +1,10 @@
+{
+  "name": "plugins-example",
+  "version": "1.0.0",
+  "private": true,
+  "author": "vvakame",
+  "license": "ISC",
+  "devDependencies": {
+    "@vvakame/typescript-plugin-example": "^1.1.0"
+  }
+}

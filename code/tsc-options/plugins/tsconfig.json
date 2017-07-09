@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "plugins": [
+      {
+        // name は全プラグイン共通で必須
+        "name": "@vvakame/typescript-plugin-example",
+        // プラグイン固有の設定を行う場合がある
+        "verbose": true,
+        "goody": "(`_´)"
+      }
+    ]
+  }
+}
