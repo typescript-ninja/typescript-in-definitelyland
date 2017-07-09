@@ -10,7 +10,6 @@
 #@# TODO   Control flow analysis for array construction
 #@# TODO   Narrow string and number types in literal equality checks
 
-#@# TODO 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
 #@# TODO クラスのMixinパターンのサポートMixin classes in 2.2.1
 #@# TODO インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
 #@# TODO nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
@@ -24,6 +23,8 @@
 #@# TODO Genericsについて共変性のチェックが行われるようになった Covariant checking for callback parameters in 2.4.1
 #@# TODO enumの値にstringが使えるようになった String valued members in enums in 2.4.1
 #@# TODO プロパティが全てoptionalな型について特別なサポートを与えるようにした Weak type detection in 2.4.1
+
+#@# TODO 2.0Betaとか2.0.3とかの変更分について取りこぼしがあるので調査したほうがいいかも…
 
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
