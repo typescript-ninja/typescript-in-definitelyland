@@ -3,19 +3,7 @@
 
 #@# TODO ヘルパライブラリの話 in 2.1.1
 
-#@# TODO 型推論とベストプラクティス的な話を書く 細部を取り上げてこの時はこう推論される、ということを考えるのは難しいので新しい指針が必要
-#@# TODO   自然なJavaScriptを書くことでよりよい安全性を提供する という精神
-#@# TODO   Better inference for literal types
-#@# TODO   Control flow analysis for implicit any variables
-#@# TODO   Control flow analysis for array construction
-#@# TODO   Narrow string and number types in literal equality checks
-
-#@# TODO 関数の返り値の型をGenericsの型パラメータの推測に利用する Infer from generic function return types in 2.4.1
-#@# TODO Generics有りの関数の型パラメータが推論されるようになった in 2.4.1
-#@# TODO Genericsの型の互換性チェックがより厳密になった Stricter generic signature checks in 2.4.1
-#@# TODO Genericsについて共変性のチェックが行われるようになった Covariant checking for callback parameters in 2.4.1
 #@# TODO enumの値にstringが使えるようになった String valued members in enums in 2.4.1
-#@# TODO プロパティが全てoptionalな型について特別なサポートを与えるようにした Weak type detection in 2.4.1
 
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
@@ -39,9 +27,16 @@
 #@# * JSXのstateless componentsとなる関数がoverloadできなかったのが直された JSX stateless components overload resolution in 2.3RC
 
 #@# NOTE 重箱の隅的仕様だし知らなくても別にさほど労力が減らない系の話題
+#@# * リテラル型とより良い型推論 Better inference for literal types in 2.1.1
+#@# * 型注釈無しの変数に対する型導出のサポート Control flow analysis for implicit any variables in 2.1.1
+#@# * 型注釈無しの配列に対する型導出のサポート Control flow analysis for array construction in 2.1.1
+#@# * 条件式によるnumber or stringからリテラル型への変換 Narrow string and number types in literal equality checks in 2.1.1
 #@# * 部分的型注釈からの型推論 Contextual typing of partially annotated signatures in 2.1.1
 #@# * nullableな値に対する演算子の適用でよいよいチェックを提供Improved checking of nullable operands in expressions in 2.2.1
 #@# * stringインデックスシグニチャに対する . アクセスの挙動を改善Allow property (dotted) access for types with string index signatures in 2.2.1
+#@# * 関数の返り値の型をGenericsの型パラメータの推測に利用する Infer from generic function return types in 2.4.1
+#@# * Generics有りの関数の型パラメータが推論されるようになった in 2.4.1
+#@# * Genericsについて共変性のチェックが行われるようになった Covariant checking for callback parameters in 2.4.1
 
 =={about-this-book} 本書について
 
