@@ -295,7 +295,7 @@ if (typeof v2 === "string") {
 #@end
 //}
 
-さて、次項意向でどういう処理が絞り込みに繋がるのかの例を見ていきます。
+さて、次項以降でどういう処理が絞り込みに繋がるのかの例を見ていきます。
 
 ==={typeof-type-guards} typeofによるType Guards
 
