@@ -1,9 +1,5 @@
 ={types-advanced} アドバンスド型戦略
 
-#@# TODO 文脈依存型
-#@# TODO 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8
-#@# TODO オーバーロードの選択アルゴリズム
-
 #@# TODO keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
 #@# TODO ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
 
@@ -827,11 +823,7 @@ export { }
 #@end
 //}
 
-#@# TODO これ消す
-なお、執筆時点でアンダース・ヘルスバーグ御大が@<i>{Number, enum, and boolean literal types}というpull requestを作成、作業しています@<fn>{primitive-literal-types}。
-
 //footnote[this-definition-was-changed][なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています]
-//footnote[primitive-literal-types][@<href>{https://github.com/Microsoft/TypeScript/pull/9407}]
 
 #@# @suppress ParagraphNumber
 =={type-alias} 型の別名（Type Alias）

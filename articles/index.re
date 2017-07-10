@@ -27,6 +27,9 @@
 #@# * JSXのstateless componentsとなる関数がoverloadできなかったのが直された JSX stateless components overload resolution in 2.3RC
 
 #@# NOTE 重箱の隅的仕様だし知らなくても別にさほど労力が減らない系の話題
+#@# * 古の… 文脈依存型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#15-contextual-typing このへん？
+#@# * 古の… 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8 このへん？
+#@# * 古の… オーバーロードの選択アルゴリズム https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#4.15.1 このへん？
 #@# * リテラル型とより良い型推論 Better inference for literal types in 2.1.1
 #@# * 型注釈無しの変数に対する型導出のサポート Control flow analysis for implicit any variables in 2.1.1
 #@# * 型注釈無しの配列に対する型導出のサポート Control flow analysis for array construction in 2.1.1

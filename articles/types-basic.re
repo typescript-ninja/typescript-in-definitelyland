@@ -1,8 +1,5 @@
 ={types-basic} 型は便利だ楽しいな
 
-#@# TODO プロパティの文字列定数によるアクセス
-#@# TODO 省略可能引数
-
 #@# @suppress JapaneseAmbiguousNounConjunction
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
 TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
@@ -702,8 +699,6 @@ printPoint({
 
 =={type-assertions} 型アサーション（Type Assertions）
 
-#@# TODO let foo = <Test>{} ; みたいな書き方はやめろという話を書く
-
 型アサーションは他の言語でいうところのキャストです。
 キャストの書き方は2種類あり、@<list>{typeAssertions/basic.ts}のように@<code>{値 as 変換後型名}か@<code>{<変換後型名>値}と書くだけです。
 
@@ -736,6 +731,10 @@ let str = "str";
 let num: number = str as number;
 #@end
 //}
+
+基本的に、型アサーションはなるべく使わずに済ませます。
+ある値の型を明示したい場合、値に対して型アサーションを用いるよりは変数のほうに型を明示するやり方のほうがコンパイラのサポートの面で優れています。
+型アサーションより型注釈です。
 
 ダウンキャストも実行できます（@<list>{typeAssertions/class.ts}）。
 
@@ -1054,6 +1053,44 @@ obj2.data = 1;
 通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
 まずはジェネリクスを適用できるような、複数の方にまたがる共通の処理を見つけ出す眼力が必要になります。
 
+=={object-type} オブジェクト限定型（The Object Type）
+
+#@# object型のサポート Support for the object type in 2.2.1
+プリミティブ型となるnumber、string、boolean、symbol、null、undefined。
+そしてそれ以外のオブジェクト。
+この2種類を区別することにより防げる実行時エラーがあります。
+そこで導入されたのが@<code>{object}型です（@<list>{objectType/basic-invalid.ts}）。
+
+//list[objectType/basic-invalid.ts][非プリミティブ（オブジェクト）とプリミティブが区別できる]{
+#@mapfile(../code/types-basic/objectType/basic-invalid.ts)
+// object という型があると、解決できる問題がある
+
+function receiveObject(obj: object) {
+  // number, string, boolean, symbol, null, undefined は弾きたい！
+  // Object.create のようにobjectとnull以外を渡すと実行時エラーになるAPIがある
+  Object.create(obj);
+}
+
+
+// OK!
+receiveObject({});
+
+// NG! 値がprimitiveな型なので…
+receiveObject(1);
+receiveObject("string");
+receiveObject(true);
+receiveObject(1);
+receiveObject(Symbol.for("symol"));
+receiveObject(null);
+receiveObject(undefined);
+#@end
+//}
+
+正直、自分でコードを書く上で必要になる場面はほぼないでしょう。
+しかし、@<code>{Object.create}や@<code>{Object.setPrototypeOf}、@<code>{Object.assign}などはプリミティブな値を渡すと実行時エラーになります。
+これらのエラーを早期検出するためにこの工夫が必要となったわけです。
+単に{}を使うと、これは"プロパティを何も持たない"という意味のオブジェクト型リテラルになるため、プリミティブ型も条件を満たしてしまい、まずいのです。
+
 =={never-type} "ありえない"型（The Never Type）
 
 ありえないなんてことはありえない！はずだけれど、"ありえない"ことを示す型があります。
@@ -1092,4 +1129,3 @@ export { }
 #@# TODO never と他の型のunion typeはneverが単純に消える
 
 #@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる
-#@# TODO object型のサポート Support for the object type in 2.2.1
