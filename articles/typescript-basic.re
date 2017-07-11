@@ -1,9 +1,5 @@
 ={typescript-basic} TypeScriptの基本
 
-#@# TODO enum
-#@# TODO const enum
-#@# TODO 暗黙的なインデックスシグニチャ（Implicit index signatures）
-
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScriptの文法・仕様についてすべてを解説することはしません。
 ECMAScriptの知識はどんどん広まってきていますし、最近では知っている人も多い知識になってきました。
@@ -918,3 +914,83 @@ namespace b {
 }
 #@end
 //}
+
+=={enum} enumとconst enum
+
+#@# const enum in 1.4.1
+#@# enumの値にstringが使えるようになった String valued members in enums in 2.4.1
+
+基本なのかと問われるとちょっと微妙な気持ちになるenumです。
+ECMAScriptの範囲にある仕様ではない、TypeScript独自の仕様なのでenumはなるべく仕様せず、const enumだけで運用していきたいものです。
+
+enumを使うと、自分で選んだ名前と値の集合を作ることができます。
+const enumはそこから一歩進んで、コンパイル時にすべての値をインライン展開し定数値に置き換えます。
+まずはtsコード（@<list>{enum/basic.ts}）と生成されたjsコード（@<list>{enum/basic.js}）を確認します。
+
+//list[enum/basic.ts][enumとconst enumの例]{
+#@mapfile(../code/typescript-basic/enum/basic.ts)
+enum Suit {
+  Heart,
+  Diamond,
+  Club,
+  Spade,
+}
+// 0, 'Heart' と表示される
+console.log(Suit.Heart, Suit[Suit.Heart]);
+
+const enum Permission {
+  Execute = 1,
+  Read = 2,
+  Write = 4,
+  All = Execute | Read | Write,
+}
+// 7 と表示される
+console.log(Permission.All);
+
+enum Tree {
+  Node = "node",
+  Leaf = "leaf",
+}
+// node と表示される
+console.log(Tree.Node);
+
+export { Suit, Permission, Tree }
+#@end
+//}
+
+//list[enum/basic.js][生成されたjs constはコンパイルすると消える]{
+#@mapfile(../code/typescript-basic/enum/basic.js)
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Suit;
+(function (Suit) {
+    Suit[Suit["Heart"] = 0] = "Heart";
+    Suit[Suit["Diamond"] = 1] = "Diamond";
+    Suit[Suit["Club"] = 2] = "Club";
+    Suit[Suit["Spade"] = 3] = "Spade";
+})(Suit || (Suit = {}));
+exports.Suit = Suit;
+// 0, 'Heart' と表示される
+console.log(Suit.Heart, Suit[Suit.Heart]);
+// 7 と表示される
+console.log(7 /* All */);
+var Tree;
+(function (Tree) {
+    Tree["Node"] = "node";
+    Tree["Leaf"] = "leaf";
+})(Tree || (Tree = {}));
+exports.Tree = Tree;
+// node と表示される
+console.log(Tree.Node);
+#@end
+//}
+
+enumは変数に展開され、const enumは実行コードから消えています。
+enumの値に指定できるのはnumberかstringで、numberの場合は実行時に数値からプロパティの名前を逆引きできるようになっています。
+また、値はある程度の計算の結果を利用することもできます。
+
+TypeScript 2.4系から値にstringを使えるようになったため、木構造を構築するのがだいぶやりやすくなりました。
+前は必ずnumberになってしまうため、JSONなどの構造にダンプしたときに人間にはわかりにくい値になってしまうという難点がありましたが、これが解消された形です。
+
+const enumについて、tscに@<code>{--preserveConstEnums}オプションを渡してやるとenum相当のコードが生成されるようになります。
+デバッグ時にはこのオプションを用いたほうが処理を追いかけやすい場合もあるでしょう。

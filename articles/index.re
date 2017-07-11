@@ -3,8 +3,6 @@
 
 #@# TODO ヘルパライブラリの話 in 2.1.1
 
-#@# TODO enumの値にstringが使えるようになった String valued members in enums in 2.4.1
-
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
 
@@ -30,6 +28,7 @@
 #@# * 古の… 文脈依存型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#15-contextual-typing このへん？
 #@# * 古の… 再帰型 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.8 このへん？
 #@# * 古の… オーバーロードの選択アルゴリズム https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#4.15.1 このへん？
+#@# * 暗黙的なインデックスシグニチャ（Implicit index signatures） in 2.0Beta
 #@# * リテラル型とより良い型推論 Better inference for literal types in 2.1.1
 #@# * 型注釈無しの変数に対する型導出のサポート Control flow analysis for implicit any variables in 2.1.1
 #@# * 型注釈無しの配列に対する型導出のサポート Control flow analysis for array construction in 2.1.1
