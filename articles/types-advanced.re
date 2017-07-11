@@ -710,12 +710,85 @@ export { sample1, sample2 }
 
 intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
 
+#@# @suppress ParagraphNumber
+=={type-alias} 型の別名（Type Alias）
+
+#@# @<strong>{導入されるバージョン 1.4.0}
+
+type aliasもunion typesの扱いを便利にするために導入された機能です。
+機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。
+それだけです。
+例を見てみましょう（@<list>{typeAlias/basic.ts}）。
+
+//list[typeAlias/basic.ts][頻出するunion typesに名前をつける]{
+#@mapfile(../code/types-advanced/typeAlias/basic.ts)
+type FooReturns = string | number | boolean;
+
+interface Foo {
+  bar(): FooReturns;
+  buzz(): FooReturns;
+  barbuzz(): FooReturns;
+}
+#@end
+//}
+
+わかりやすいですね。
+1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。
+
+tuple typesに名前をつけることもできます（@<list>{typeAlias/tuple.ts}）。
+
+//list[typeAlias/tuple.ts][tuple typesに名前をつける]{
+#@mapfile(../code/types-advanced/typeAlias/tuple.ts)
+// tuple typesに名前をつける
+type Point = [number, number];
+type Circle = [Point, number];
+
+let c: Circle = [[1, 2], 3];
+
+// でも、こっちのほうがTypeScriptとしては適切よね
+{
+  class Point {
+    constructor(public x: number, public y: number) {
+    }
+  }
+  class Circle {
+    constructor(public p: Point, public r: number) {
+    }
+  }
+  let c2: Circle = new Circle(new Point(1, 2), 3);
+  console.log(c2.p, c2.r);
+}
+
+export { Point, Circle, c }
+#@end
+//}
+
+こちらは素直にクラスでやればいいのに、という感じです。
+
+type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。
+そのため、@<list>{typeAlias/doNotHaveInstance-invalid.ts}のようなコードは書くことができません。
+
+//list[typeAlias/doNotHaveInstance-invalid.ts][type aliasは値を作らない]{
+#@mapfile(../code/types-advanced/typeAlias/doNotHaveInstance-invalid.ts)
+// 型の別名を作るだけで何かの値を作るわけではない…！
+type StringArray = Array<string>;
+
+// なのでこういうことはできない
+// error TS2304: Cannot find name 'StringArray'.
+let strArray = new StringArray();
+#@end
+//}
+
+type aliasは仕様上、interfaceと同じように利用できる場面もあります。
+ですが、基本的にはtype aliasよりもinterfaceを使うべきです。
+interfaceは定義の統合ができるので後から自由に拡張することができます。
+柔軟性が高いのです。
+interfaceが基本、type aliasは応用、と考えておきましょう。
+
 #@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
 =={primitive-literal-types} プリミティブ値のリテラル型（String, Number, Boolean and Enum Literal Types）
 
-#@# TODO type alias の説明が先のほうが楽そう
-
-#@# TODO numberとbooleanもリテラル型に使えるようになった in 2.0.3
+#@# numberとbooleanもリテラル型に使えるようになった in 2.0.3
 文字列リテラル、数値リテラル、真偽値のリテラルを型として使える機能です。
 文字列以外の値をリテラル型として使える機能は2.0.3で入りました。
 パッと読んだだけでは、意味がわからないですね。
@@ -839,81 +912,6 @@ export { }
 //}
 
 //footnote[this-definition-was-changed][なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています]
-
-#@# @suppress ParagraphNumber
-=={type-alias} 型の別名（Type Alias）
-
-#@# @<strong>{導入されるバージョン 1.4.0}
-
-type aliasもunion typesの扱いを便利にするために導入された機能です。
-機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。
-それだけです。
-例を見てみましょう（@<list>{typeAlias/basic.ts}）。
-
-//list[typeAlias/basic.ts][頻出するunion typesに名前をつける]{
-#@mapfile(../code/types-advanced/typeAlias/basic.ts)
-type FooReturns = string | number | boolean;
-
-interface Foo {
-  bar(): FooReturns;
-  buzz(): FooReturns;
-  barbuzz(): FooReturns;
-}
-#@end
-//}
-
-わかりやすいですね。
-1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。
-
-tuple typesに名前をつけることもできます（@<list>{typeAlias/tuple.ts}）。
-
-//list[typeAlias/tuple.ts][tuple typesに名前をつける]{
-#@mapfile(../code/types-advanced/typeAlias/tuple.ts)
-// tuple typesに名前をつける
-type Point = [number, number];
-type Circle = [Point, number];
-
-let c: Circle = [[1, 2], 3];
-
-// でも、こっちのほうがTypeScriptとしては適切よね
-{
-  class Point {
-    constructor(public x: number, public y: number) {
-    }
-  }
-  class Circle {
-    constructor(public p: Point, public r: number) {
-    }
-  }
-  let c2: Circle = new Circle(new Point(1, 2), 3);
-  console.log(c2.p, c2.r);
-}
-
-export { Point, Circle, c }
-#@end
-//}
-
-こちらは素直にクラスでやればいいのに、という感じです。
-
-type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。
-そのため、@<list>{typeAlias/doNotHaveInstance-invalid.ts}のようなコードは書くことができません。
-
-//list[typeAlias/doNotHaveInstance-invalid.ts][type aliasは値を作らない]{
-#@mapfile(../code/types-advanced/typeAlias/doNotHaveInstance-invalid.ts)
-// 型の別名を作るだけで何かの値を作るわけではない…！
-type StringArray = Array<string>;
-
-// なのでこういうことはできない
-// error TS2304: Cannot find name 'StringArray'.
-let strArray = new StringArray();
-#@end
-//}
-
-type aliasは仕様上、interfaceと同じように利用できる場面もあります。
-ですが、基本的にはtype aliasよりもinterfaceを使うべきです。
-interfaceは定義の統合ができるので後から自由に拡張することができます。
-柔軟性が高いのです。
-interfaceが基本、type aliasは応用、と考えておきましょう。
 
 =={polymorphic-this-type} 多態性のあるthis型（Polymorphic 'this' Type）
 
