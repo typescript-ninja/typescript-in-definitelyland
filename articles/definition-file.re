@@ -1393,7 +1393,6 @@ randomizeString("TypeScript", {
 ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけ、注意が必要です。
 
 #@# TODO /// <reference types="jquery" /> 的な記述の調査 https://github.com/Microsoft/TypeScript/issues/7156
-#@# TODO 今時UMDとか使わなくない…？
 
 //footnote[umd][@<href>{https://github.com/umdjs/umd}]
 

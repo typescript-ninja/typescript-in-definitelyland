@@ -711,39 +711,54 @@ export { sample1, sample2 }
 intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。
 
 #@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
-=={string-literal-types} 文字列リテラル型（String Literal Types）
+=={primitive-literal-types} プリミティブ値のリテラル型（String, Number, Boolean and Enum Literal Types）
+
+#@# TODO type alias の説明が先のほうが楽そう
 
 #@# TODO numberとbooleanもリテラル型に使えるようになった in 2.0.3
-
-文字列リテラルを型として使える機能です。
+文字列リテラル、数値リテラル、真偽値のリテラルを型として使える機能です。
+文字列以外の値をリテラル型として使える機能は2.0.3で入りました。
 パッと読んだだけでは、意味がわからないですね。
-まずは例を見てみましょう（@<list>{stringLiteralTypes/basic.ts}）。
+まずは例を見てみましょう（@<list>{literalTypes/basic.ts}）。
 
-//list[stringLiteralTypes/basic.ts][カードのスートを型として表す]{
-#@mapfile(../code/types-advanced/stringLiteralTypes/basic.ts)
+//list[literalTypes/basic.ts][カードのスートを型として表す]{
+#@mapfile(../code/types-advanced/literalTypes/basic.ts)
 // "文字列" が 型 です。値ではない！
-let suit: "Heart" | "Diamond" | "Club" | "Spade";
+type Suit = "Heart" | "Diamond" | "Club" | "Spade";
 
 // OK
-suit = "Heart";
+let suit = "Heart";
 // NG suitの型に含まれていない
 // error TS2322: Type '"Joker"' is not
 //   assignable to type '"Heart" | "Diamond" | "Club" | "Spade"'.
 // suit = "Joker";
 
-export { }
+// number, boolean, enum
+type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+type Bool = true | false;
+type Falsy = false | 0 | "" | null | undefined;
+
+enum SuitEnum {
+  Heart,
+  Diamond,
+  Club,
+  Spade,
+}
+type RedSuit = SuitEnum.Heart | SuitEnum.Diamond;
+
+export { Suit, suit, Digit, Bool, Falsy, SuitEnum, RedSuit }
 #@end
 //}
 
 文字列が型というのは見慣れないとなかなか気持ちが悪いですね。
 しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
 たとえば、DOMのaddEventListenerなどです。
-指定するイベント名によって、イベントリスナーの型が変わります（@<list>{stringLiteralTypes/eventListener.d.ts}）@<fn>{this-definition-was-changed}。
+指定するイベント名によって、イベントリスナーの型が変わります（@<list>{literalTypes/eventListener.d.ts}）@<fn>{this-definition-was-changed}。
 
 #@# OK REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
 
-//list[stringLiteralTypes/eventListener.d.ts][イベント名によって型が変わる]{
-#@mapfile(../code/types-advanced/stringLiteralTypes/eventListener.d.ts)
+//list[literalTypes/eventListener.d.ts][イベント名によって型が変わる]{
+#@mapfile(../code/types-advanced/literalTypes/eventListener.d.ts)
 // lib.dom.d.ts から抜粋
 // 第一引数で指定するイベントによってリスナーで得られるイベントの型が違う
 interface HTMLBodyElement extends HTMLElement {
@@ -770,10 +785,10 @@ interface HTMLBodyElement extends HTMLElement {
 これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。
 こんなものが必要になってしまうJavaScriptの複雑さよ…。
 
-またunion typesと文字列リテラル型を組み合わせ、switchで条件分岐ができます（@<list>{stringLiteralTypes/switch.ts}）。
+またunion typesとリテラル型を組み合わせ、switchで条件分岐ができます（@<list>{literalTypes/switch.ts}）。
 
-//list[stringLiteralTypes/switch.ts][Union Typesはswitchでえこひいきされている]{
-#@mapfile(../code/types-advanced/stringLiteralTypes/switch.ts)
+//list[literalTypes/switch.ts][Union Typesはswitchでえこひいきされている]{
+#@mapfile(../code/types-advanced/literalTypes/switch.ts)
 // 足し算
 interface Add {
   type: "add";
