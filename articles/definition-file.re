@@ -19,53 +19,6 @@ TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り
 一方、型定義ファイルはすでに実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。
 そこのところを十分に気をつけないといけません。
 
-=={start-easy-going-hard} 雑な型定義でやりすごす
-
-はい。まずはラクショーにスタートする方法から入っていきましょう。
-ラクショーにスタートするとanyがガバガバ流入してくるので少しずつ定義を育てていき、立派な安全さを得ていきましょう。
-
-#@# 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
-まず一番簡単なのは@<code>{--noImplicitAny}オプションが指定されていない場合に限り、型定義のないモジュールをimportするとエラーにならずにanyとして参照できるというものです。
-これはたいへん簡単に始められますが@<code>{--noImplicitAny}を使わないというのがそもそも厳しいため、書き捨てのスクリプトを作るときくらいしか出番が無さそうです。
-
-#@# 雑な型定義の作成法の追加とワイルドカード（Shorthand ambient module declarations and wildcard matching in module names） in 2.0Beta
-次に使える手法として、モジュールの型定義を簡略表記方法とワイルドカードがあります。
-定義の例@<list>{shorthand/module.d.ts}とそれを使う例@<list>{shorthand/usage.ts}を確認してみます。
-
-//list[shorthand/module.d.ts][定義の例 名前を書くだけ]{
-#@mapfile(../code/definition-file/shorthand/module.d.ts)
-declare module "jquery";
-
-// こういう定義と同等
-declare module "jquery-alt" {
-  var _temp: any;
-  export = _temp;
-}
-
-// ワイルドカードも使える
-declare module "json!*";
-declare module "sample/*";
-#@end
-//}
-
-//list[shorthand/usage.ts][利用例 とりあえず使える]{
-#@mapfile(../code/definition-file/shorthand/usage.ts)
-import * as $ from "jquery";
-
-// $ はany
-$.notExists();
-
-// これらもコンパイルが通る
-import * as json from "json!package.json";
-import * as sampleFoo from "sample/foo";
-import * as sampleFooBar from "sample/foo/bar";
-
-export { $, json, sampleFoo, sampleFooBar }
-#@end
-//}
-
-簡単ですね！
-
 #@# @suppress ParagraphNumber SectionLength
 =={use-at-types} @typesを使う
 
@@ -265,7 +218,6 @@ power-assertはテストコード中でimportしますが、テストランナ�
 しからば！自分で書くしかあるまいよ！
 ぶっちゃけた話、めんどくさいのですが、後々の安心・安全を得るための投資として割りきりましょう。
 
-#@# TODO 気楽なimportについて言及する
 なお、自分で型定義ファイルを1ミリも書かずにTypeScriptをやると、不便が大きいと思います。
 最初のうちは無理かもしれませんが、まずは人が書いた型定義ファイルを読んで知識を蓄え、この世界に入ってきてくれると嬉しいです。
 
@@ -350,66 +302,53 @@ TypeScriptを書き始めたばかりに作ったものは上達するにつけ�
 
 //footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
-#@# @suppress InvalidExpression
-===={done-is-better-than-perfect} 最高に雑な型定義ファイルを作る
+==={done-is-better-than-perfect} 雑な型定義でやりすごす
 
-テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid.d.ts}）。
-モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。
+はい。まずはラクショーにスタートする方法から入っていきましょう。
+ラクショーにスタートするとanyがガバガバ流入してくるので少しずつ定義を育てていき、立派な安全さを得ていきましょう。
 
-//list[wildcard/basic-invalid.d.ts][雑な型定義ファイルの例]{
-#@mapfile(../code/definition-file/wildcard/basic-invalid.d.ts)
-// 名前だけ定義すると全てanyでとりあえず使える
-declare module "lodash";
+#@# 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
+まず一番簡単なのは@<code>{--noImplicitAny}オプションが指定されていない場合に限り、型定義のないモジュールをimportするとエラーにならずにanyとして参照できるというものです。
+これはたいへん簡単に始められますが@<code>{--noImplicitAny}を使わないというのがそもそも厳しいため、書き捨てのスクリプトを作るときくらいしか出番が無さそうです。
 
-// 必要な変数をとりあえずanyで生やす
-declare let $: any;
+#@# 雑な型定義の作成法の追加とワイルドカード（Shorthand ambient module declarations and wildcard matching in module names） in 2.0Beta
+次に使える手法として、モジュールの型定義を簡略表記する方法とワイルドカードがあります。
+定義の例@<list>{shorthand/module.d.ts}とそれを使う例@<list>{shorthand/usage.ts}を確認してみます。
 
-// 特定のパッケージ配下をとりあえず全部anyで
-declare module "sample/*";
+//list[shorthand/module.d.ts][定義の例 名前を書くだけ]{
+#@mapfile(../code/definition-file/shorthand/module.d.ts)
+declare module "jquery";
 
-
-// webpackなど特殊なローダー用
-declare module "json!*";
-
-// 同上
-// モジュール読んだらモジュールは文字列
-declare module "*!text" {
-  const _: string;
-  export = _;
+// こういう定義と同等
+declare module "jquery-alt" {
+  var _temp: any;
+  export = _temp;
 }
+
+// ワイルドカードも使える
+declare module "json!*";
+declare module "sample/*";
 #@end
 //}
 
-この例だと、@<code>{--noImplicitAny}オプションを有効にするとエラーになってしまいます。
-そのため、コンパイルエラーを無くしたらなるべく早く@<code>{--noImplicitAny}を有効にできるように頑張りたいところです。
+//list[shorthand/usage.ts][利用例 とりあえず使える]{
+#@mapfile(../code/definition-file/shorthand/usage.ts)
+import * as $ from "jquery";
 
-この型定義ファイルの利用例を見てみます（@<code>{wildcard/basicUsage-ignore}）。
+// $ はany
+$.notExists();
 
-#@# tsc code/definition-file/wildcard/basicUsage-ignore.ts code/definition-file/wildcard/basic-invalid.d.ts
+// これらもコンパイルが通る
+import * as json from "json!package.json";
+import * as sampleFoo from "sample/foo";
+import * as sampleFooBar from "sample/foo/bar";
 
-//list[wildcard/basicUsage-ignore.ts][型定義ファイルの利用例]{
-#@mapfile(../code/definition-file/wildcard/basicUsage-ignore.ts)
-import * as _ from "lodash";
-import * as sample from "sample/foobar";
-import * as data from "json!./bar.json";
-import * as text from "./foo.txt!text";
-
-// _はany
-_.map([1, 2, 3], n => n * 3);
-// $はany
-$("#id");
-// sampleはany
-sample;
-// dataもany
-data;
-// textはstring
-text.toUpperCase();
+export { $, json, sampleFoo, sampleFooBar }
 #@end
 //}
 
-anyばっかりですね。
-しかし、コンパイルはとおります。
-実際に動くコードを生み出すこともできます。
+簡単ですね！
+とりあえず、開発を始めることができます。
 
 #@# @suppress ParagraphNumber SectionLength
 ==={interface-the-best-friend} インタフェースを活用する
