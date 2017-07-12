@@ -6,8 +6,6 @@
 #@# TODO DefinitelyTyped周りの変化について解説する
 #@# TODO TypeScriptのリリースサイクルについて解説する
 
-#@# TODO SlackとかRedditとかGoogleとかがTypeScript採用した話を書く
-
 #@# TODO 気が向いたらコラム化する
 #@# * トランスフォームベースのJSコード生成の話 in 2.1.1
 
@@ -133,7 +131,7 @@ TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜し�
 つまり、ECMAScript＋静的型付け＝TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けようとしています。
 
-稀にTypeScriptのリポジトリに「TypeScriptにLINQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってくることがあります。
+稀にTypeScriptのリポジトリに「TypeScriptにLIatoimNQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってくることがあります。
 しかしながら、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。
 どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体にその仕様を入れる努力が必要でしょう。
 
@@ -144,6 +142,14 @@ TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜し�
 さらにTypeScriptを勧めたい点として、TypeScriptコンパイラーが内蔵するエディタ支援のための機能群です。
 コンパイラに密に結合された（つまり更新遅延のない）エディタサポートは、強く信頼できる、まさにコンパイラと同等レベルの型推論や入力補完を提供してくれます。
 高機能で信頼できる、曖昧さが排除されたエディタを使いたい場合、TypeScriptはうってつけの選択肢といえます。
+
+これらTypeScriptの利点が支持された結果として、いくつかのフレームワークや多くの人々がTypeScriptを使い始めています。
+たとえばSlack@<fn>{slack-ts}、Reddit@<fn>{reddit-ts}、Google@<fn>{google-ts}（そういえば、もちろんMicrosoftも）などのビッグサービスです。
+乗るしかない！このビッグウェーブに！
+
+//footnote[slack-ts][@<href>{https://slack.engineering/typescript-at-slack-a81307fa288d}]
+//footnote[reddit-ts][@<href>{https://redditblog.com/2017/06/30/why-we-chose-typescript/}]
+//footnote[google-ts][@<href>{http://www.publickey1.jp/blog/17/googletypescriptng-conf_2017.html}]
 
 =={disclaimer} TypeScriptを選んだ時のデメリット
 
