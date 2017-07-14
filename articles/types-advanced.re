@@ -1,8 +1,5 @@
 ={types-advanced} アドバンスド型戦略
 
-#@# TODO keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
-#@# TODO ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
-
 型のうち、難しいけど便利な話や、標準の型定義を読むのに必要な知識や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
 タプル型（tuple types）や直和型（union types）についての解説もありますよ！
 なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています@<fn>{bad-code}。
@@ -1504,3 +1501,213 @@ mixinクラスのコンストラクタ引数が@<code>{...args: any[]}なのが�
 
 mixin用の関数について命名規則は言及されている媒体によってCamelCaseやcamelCaseのようにバラバラで、まだコンセンサスがないようです。
 ここではTypeScriptのWhat's newの規則に則っています。
+
+=={keyof-and-mapped-types} keyofと型の写像（keyof and Mapped Types）
+
+#@# keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
+#@# ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
+
+これもかなり複雑な機能です。
+Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equivalent-word}のですが、型の写像という訳にしました。
+
+この節ではざっくりと次の事柄について順に説明していきます。
+
+ 1. 型の切り出し（Loolup Types）
+ 2. keyof演算子
+ 3. 型に対してMap処理をかける（型の写像の作成）
+ 4. 組み込みの型のMap処理の紹介
+ 5. 合せ技の紹介
+
+まずは型の切り出し（Loolup Types）です。
+他の型のプロパティの値の型を参照できる、というものです。
+コード例を見てみます（@<list>{keyofAndMappedTypes/lookupTypes.ts}）。
+
+//list[keyofAndMappedTypes/lookupTypes.ts][ある型のプロパティの型を参照できる]{
+#@mapfile(../code/types-advanced/keyofAndMappedTypes/lookupTypes.ts)
+interface Cat {
+  kind: string;
+  name: string;
+  age: number;
+}
+
+// Catのkindプロパティの型を指す！
+// つまり string である
+type KindType = Cat["kind"];
+
+// kindとageのどちらかの型なので string | number になる
+type NameOrAge = Cat["kind" | "age"];
+#@end
+//}
+
+型注釈でインデックスアクセスのような記法でそのプロパティの型が参照できます。
+ドットアクセスだとコンパイルエラーになるので注意しましょう。
+
+全プロパティのキー名を列挙するにはkeyof演算子を使います（@<list>{keyofAndMappedTypes/keyof.ts}）。
+
+//list[keyofAndMappedTypes/keyof.ts][keyof演算子である型のプロパティ名を列挙できる]{
+#@mapfile(../code/types-advanced/keyofAndMappedTypes/keyof.ts)
+interface Cat {
+  kind: string;
+  name: string;
+  age: number;
+}
+
+// 全プロパティのキー名
+// つまり "kind" | "name" | "age" になる
+type CatPropertyNames = keyof Cat;
+#@end
+//}
+
+型に対してプロパティが増減した時も自動的に対応が行われるのがいいですね。
+
+型の切り出しやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。
+
+型の写像処理の書き方基本4パターンを次に示します。
+
+//emlist{
+{ [ P in K ] : T }
+{ [ P in K ] ? : T }
+{ readonly [ P in K ] : T }
+{ readonly [ P in K ] ? : T }
+//}
+
+全然わからないですね。
+全体としてはインデックスシグニチャと同じ書式として読み解くことができます。
+@<code>{K}に含まれる@<code>{P}の値の型にあたる@<code>{T}と読めばいいのでしょうか。
+前半部分にあたる@<code>{[ P in K ]}相当の部分で操作対象となるプロパティの一覧を定義します。
+それと対になるように変換後のプロパティ個別の値を定義します。
+
+この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（@<list>{keyofAndMappedTypes/buildinTypes.ts}）。
+
+//list[keyofAndMappedTypes/buildinTypes.ts][ビルトインの型の写像を作るパーツたち]{
+#@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypes.ts)
+// 指定した型の全ブロパティを省略可能にする
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+// 指定した型の全プロパティをreadonly扱いにする
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+// 指定した型の、指定したプロパティだけを集めたサブセット型を作る
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+// 指定した型のプロパティの値の型を変換した型を作る
+type Record<K extends string, T> = {
+  [P in K]: T;
+};
+
+export { Partial, Readonly, Pick, Record }
+#@end
+//}
+
+写像処理と型の切り出しを組み合わせ、実用的な変換処理を作り出しています。
+これだけだとピンとこないと思いますのでこれらの型の利用例を見ます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
+
+//list[keyofAndMappedTypes/buildinTypesUsage.ts][ビルトインの型の利用例]{
+#@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypesUsage.ts)
+interface Cat {
+  kind: string;
+  name: string;
+  age?: number;
+}
+
+let c1: Cat = {
+  kind: "NorwegianForestCat",
+  name: "アルファ",
+};
+
+let c2: Partial<Cat> = {
+  kind: "NorwegianForestCat",
+  // name, age が欠けていてもエラーにならない
+};
+
+let c3: Readonly<Cat> = {
+  kind: "NorwegianForestCat",
+  name: "アルファ",
+  age: 3,
+};
+// readonly なので代入しようとするとエラーになる
+// error TS2540: Cannot assign to 'name'
+//   because it is a constant or a read-only property.
+// c3.kind = "TypeScript";
+
+let c4: Pick<Cat, "name" | "age"> = {
+  // kind は K に含まれていないので不要
+  name: "アルファ",
+  // age はもともとOptional
+};
+
+let c5: Record<keyof Cat, boolean> = {
+  // 全てのプロパティの型はbooleanを要求される
+  kind: true,
+  name: true,
+  age: true, // 必須になる
+};
+
+export { c1, c2, c3, c4, c5 }
+#@end
+//}
+
+雰囲気はわかります。
+とりあえずビルトイン型の存在を認識して、便利に使えるようになるところから始めるのがよさそうです。
+
+これらの武器をうまく使うと、自然なJavaScript的コードに対して複雑な型チェックを行わせることができます（@<list>{keyofAndMappedTypes/usage-invalid.ts}）。
+
+//list[keyofAndMappedTypes/usage-invalid.ts][この節のパーツを組み合わせてより強い安全さを作り出す]{
+#@mapfile(../code/types-advanced/keyofAndMappedTypes/usage-invalid.ts)
+interface PropertyDescriptor<T> {
+  configurable?: boolean;
+  enumerable?: boolean;
+  value?: T;
+  writable?: boolean;
+  get?(): T;
+  set?(v: T): void;
+}
+function defineProperty<T, K extends keyof T>(o: T, p: K, attributes: PropertyDescriptor<T[K]>): any {
+  return Object.defineProperty(o, p, attributes);
+}
+
+interface Foo {
+  a?: string;
+}
+
+let foo: Foo = {};
+
+// 正しい組み合わせ a に string
+defineProperty(foo, "a", {
+  enumerable: false,
+  value: "a",
+});
+
+// ダメ a に number
+// error TS2345: Argument of type '{ enumerable: false; value: number; }'
+//   is not assignable to parameter of type 'PropertyDescriptor<string>'.
+//  Types of property 'value' are incompatible.
+//    Type 'number' is not assignable to type 'string'.
+defineProperty(foo, "a", {
+  enumerable: false,
+  value: 1,
+});
+
+// ダメ b は存在しない
+// error TS2345: Argument of type '"b"' is not assignable to
+//   parameter of type '"a"'.
+defineProperty(foo, "b", {
+  enumerable: false,
+  value: "a",
+});
+
+export { }
+#@end
+//}
+
+これを自力で1からひねり出せるかというと結構難しそうです。
+功夫が必要です。
+やっていきましょう。
+
+//footnote[equivalent-word][訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…]
