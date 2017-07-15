@@ -118,6 +118,8 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
+@<chapref>{typescript-as-a-tool}では、TypeScriptのLanguage Service APIやLanguage Server Protocolについて概要を紹介します。
+
 #@# prh:disable
 //footnote[webpack][@<href>{https://webpack.github.io/}]
 //footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
