@@ -215,3 +215,28 @@ Language Serviceに興味がある場合、@<href>{https://github.com/Microsoft/
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 //footnote[vscode][@<href>{https://code.visualstudio.com/}]
 //footnote[electron][@<href>{http://electron.atom.io/}]
+
+===[column] TypeScriptのリリースサイクルについて
+
+TypeScriptのリリースサイクルについて解説しておきます。
+以前のTypeScriptは次のリリースは予定された機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。
+このため、すでに開発完了している機能やバグフィクスがなかなか使えるようにならない！という不満がありました。
+最近ではこの問題が改められ、定期的にリリースされる運用に変更@<fn>{ts-release-schedule}されました。
+
+変更後のリリースサイクルは次のとおりです。
+
+ * 機能追加のフルリリースは2ヶ月毎（いわゆるminorアップデート）
+ * パッチまたは機能追加のリリースを1ヶ月毎（いわゆるpatchアップデート）
+
+ある機能追加の開発がリリースに間に合わなかったら次のリリースに先送り。
+TypeScriptのリリースはVSCodeのリリースの一週間程度前に行われる。
+という感じです。
+VSCodeは月イチ更新なのでそれが視野に入っているわけです。
+
+なお、各リリースの更新内容は公式ブログ（@<href>{https://blogs.msdn.microsoft.com/typescript/}）や
+Roadmap（@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}）、
+What's new in TypeScript（@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}）を確認するとわかりやすいです。
+
+//footnote[ts-release-schedule][@<href>{https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/}]
+
+===[/column]
