@@ -13,8 +13,6 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 #@# @suppress ParagraphNumber SectionLength
 =={union-types} 直和型（Union Types）
 
-#@# TODO Discriminated union types タグ付きUnion型 in 2.0.0 Beta
-
 #@# 備忘録 特に意識的に注意しないと正しいコードが書けない話じゃないので割愛していく
 #@# 直和型と交差型を組み合わせのノーマライズ (Normalize union/intersection type combinations in 2.1.1
 
@@ -855,6 +853,7 @@ interface HTMLBodyElement extends HTMLElement {
 これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。
 こんなものが必要になってしまうJavaScriptの複雑さよ…。
 
+#@# Discriminated union types タグ付きUnion型 in 2.0.0 Beta
 またunion typesとリテラル型を組み合わせ、switchで条件分岐ができます（@<list>{literalTypes/switch.ts}）。
 
 //list[literalTypes/switch.ts][Union Typesはswitchでえこひいきされている]{
