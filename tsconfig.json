@@ -44,6 +44,7 @@
   ],
   "exclude": [
     "node_modules",
+    "code/tsc-options/helpers/",
     "code/definition-file/usage/",
     "code/definition-file/augmentGlobal/",
     "code/definition-file/issue9831/",

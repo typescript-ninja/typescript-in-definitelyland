@@ -1,8 +1,6 @@
 ={index} Revised^2 型の国のTypeScript
 #@# TODO Revised^2 にしたい(上付き) http://www.r6rs.org/ と同じ感じ
 
-#@# TODO ヘルパライブラリの話 in 2.1.1
-
 #@# TODO DefinitelyTyped周りの変化について解説する
 
 #@# TODO 気が向いたらコラム化する

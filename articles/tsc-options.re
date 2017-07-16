@@ -533,6 +533,83 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 @<code>{tsc --noEmit}とすることでTypeScriptのコンパイルエラーのみをチェックできます。
 これはビルドタスク全体を走らせるよりも手短で、作業ディレクトリに不要なファイルを撒き散らすこともありません。
 
+== --importHelpersと--noEmitHelpers
+
+#@# ヘルパライブラリの話 in 2.1.1
+TypeScriptで@<code>{--target es5}などでダウンパイルした場合、ヘルパ関数が自動生成されます。
+例えば、クラスの継承を行ったときは@<code>{__extends}関数が生成されますね（@<list>{helper-__extends}）。
+
+//list[helper-__extends][生成される__extends関数]{
+var __extends = (this && this.__extends) || (function () {
+  var extendStatics = Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+  return function (d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+})();
+//}
+
+--importHelpersや--noEmitHelpersを併用すると、これらヘルパ関数のファイル毎の生成を抑制し、1つにまとめることができます。
+
+@<code>{--importHelpers}を利用する場合、@<code>{npm install --save tslib}が必要になります。
+ヘルパ関数を生成する代わりにtslibパッケージ内のヘルパ関数を使うようにする構造です（@<list>{helpers/importHelpers/basic.js}）。
+
+//list[helpers/importHelpers/basic.js][tslibが利用される例]{
+#@mapfile(../code/tsc-options/helpers/importHelpers/basic.js)
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var Base = (function () {
+    function Base() {
+    }
+    return Base;
+}());
+exports.Base = Base;
+var Inherit = (function (_super) {
+    tslib_1.__extends(Inherit, _super);
+    function Inherit() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Inherit;
+}(Base));
+exports.Inherit = Inherit;
+#@end
+//}
+
+@<code>{--noEmitHelpers}を利用する場合、単純にヘルパ関数が出力されなくなります。
+つまり、ヘルパ関数がグローバルな空間に定義された状態を作り、生成されたJSコードから参照できるようにしてやる必要があります（@<list>{helpers/noEmitHelpers/basic.js}）。
+
+//list[helpers/noEmitHelpers/basic.js][唐突に参照されるヘルパ関数]{
+#@mapfile(../code/tsc-options/helpers/noEmitHelpers/basic.js)
+"use strict";
+var Base = (function () {
+    function Base() {
+    }
+    return Base;
+}());
+var Inherit = (function (_super) {
+    __extends(Inherit, _super);
+    function Inherit() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Inherit;
+}(Base));
+#@end
+//}
+
+現代的にはJSコードは1つにbundleし、gzipで圧縮して転送されるユースケースが多いでしょう。
+つまり、tslibを使ってもさほど有利にはならないかもしれません。
+TypeScriptのデフォルトのヘルパ関数から実装を差し替えたい場合に使えるかもしれませんね。
+そして、一見便利そうなヘルパライブラリなのですがtscの実装は若干バギー（というか不親切）です。
+tslibはモジュールの形でimportされるため、moduleをcommonjsやesnextなどに指定している場合でもimport句またはexport句がない場合、tslibの参照が行われません。
+@<code>{--importHelpers}と@<code>{--noEmitHelpers}を併用しているとtslibの参照が行われない上にヘルパ関数の生成も行われなくなります。
+両オプションを利用する場合、安全側に倒すため、どちらか片方のオプションだけを利用するほうが安全でしょう。
+
+なお、TypeScript 2.3.2以前でtslibを使う場合、tslibのバージョンは1.6.1を使います。
+
 =={plugin} pluginsの設定
 
 #@# --plugins オプションの追加 Language Service Extensibility in 2.3RC

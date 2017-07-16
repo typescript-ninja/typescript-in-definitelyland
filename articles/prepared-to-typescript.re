@@ -159,6 +159,7 @@ tsconfig.jsonはJSONと言ってるクセにコメントを書くことが可能
   ],
   "exclude": [
     "node_modules",
+    "code/tsc-options/helpers/",
     "code/definition-file/usage/",
     "code/definition-file/augmentGlobal/",
     "code/definition-file/issue9831/",
