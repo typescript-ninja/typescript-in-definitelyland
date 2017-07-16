@@ -1,16 +1,3 @@
-const obj1 = {
-    name: "maya",
-    greeting() {
-        console.log(`Hello, ${this.name}`);
-
-        // 存在しないプロパティにアクセスするとちゃんとエラーにしてくれる
-        // error TS2339: Property 'notExists' does not exist on 
-        //   type '{ name: string; greeting(): void; }'.
-        // console.log(`Hello, ${this.notExists}`);
-    },
-};
-console.log(obj1.greeting());
-
 // ThisType は特殊なマーカーとしての型
 interface Hello {
     hello(): string;

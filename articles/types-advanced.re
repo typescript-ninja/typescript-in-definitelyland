@@ -1071,10 +1071,53 @@ export { }
 
 =={thistype} ThisTypeでthisの型を制御する
 
-#@# TODO thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
+#@# thisの型のコントロールがより柔軟に行われるようになった Controlling this in methods of object literals through contextual type in 2.3RC
 @<code>{--noImplicitThis}オプションを利用した場合、オブジェクトリテラル中のthisがオブジェクトリテラル自体を指すよう正しく認識されます。
+さらに、オブジェクトリテラル中でのthisの型を強力にコントロールしたい場合、@<code>{ThisType<T>}を利用できます（@<list>{types-advanced/thisType/basic.ts}）。
 
-さらに、オブジェクトリテラル中でのthisの型を強力にコントロールしたい場合、@<code>{ThisType<T>}を利用できます。
+//list[types-advanced/thisType/basic.ts][ThisType<T>の利用例など]{
+#@mapfile(../code/types-advanced/thisType/basic.ts)
+const obj1 = {
+  name: "maya",
+  greeting() {
+    console.log(`Hello, ${this.name}`);
+
+    // 存在しないプロパティにアクセスするとちゃんとエラーにしてくれる
+    // error TS2339: Property 'notExists' does not exist on
+    //   type '{ name: string; greeting(): void; }'.
+    // console.log(`Hello, ${this.notExists}`);
+  },
+};
+console.log(obj1.greeting());
+
+// ThisType を使ってthisの値を無理やり制御する
+interface A {
+  name: string;
+}
+interface B {
+  hello(): void;
+}
+
+// objの型はBであり、obj内でのthisの型はAと明示的に指定する
+const obj: B & ThisType<A> = {
+  hello() {
+    // this.name は A的には存在する！
+    console.log(`Hello, ${this.name}`);
+    // Aに存在しないものは存在しない扱い ちなみに this.hello も存在しない扱い
+    // error TS2339: Property 'notExists' does not exist on type 'A'.
+    // console.log(`Hello, ${this.notExists}`);
+  },
+};
+// objは B なので普通にhelloにアクセスできる
+obj.hello();
+
+export { }
+#@end
+//}
+
+オブジェクトリテラルの中でthisの値が期待どおりの値になっています。
+ThisTypeはいわゆるマーカーで、その型がついていること自体に意味があります。
+あまり出番が必要ないほうが嬉しい機能ではありますが、これを使うことでthisの型付けをより安全にすることができる場合もあります。
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/17041
 #@# これコンパイラのバグじゃね？案件を掘り出してしまったので一旦寝かせる
