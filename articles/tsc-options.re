@@ -536,10 +536,9 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 =={plugin} pluginsの設定
 
 #@# --plugins オプションの追加 Language Service Extensibility in 2.3RC
-#@# TODO typescript-as-a-tool が書けなかったら見直し
 
 pluginsも仕組みとして面白いので概要だけ言及しておきます。
-詳しくは@<chapref>{typescript-as-a-tool}で扱います。
+@<chapref>{typescript-as-a-tool}でも少し扱います。
 
 pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができるのはエディタやIDE上のみです。
 コンパイル時の動作には影響を及ぼすことができません。
