@@ -53,10 +53,11 @@ power-assertの型定義ファイルが依存しているモジュールの型�
 
 既存ライブラリに対する型定義ファイルは@types/の下に元ライブラリのパッケージ名と同じ名前で公開される運用です。
 パッケージの検索は@<href>{https://microsoft.github.io/TypeSearch/,TypeSearch}@<fn>{typesearch}で行うか、npm searchを使うとよいでしょう。
-#@# TODO scoped package の命名変換規則について言及すること
 
 また、@typesで導入した型定義ファイルの検索は、モジュールの解決方法（@<code>{--moduleResolution}）がnodeのときのみ行われます@<fn>{issue9831}。
 AMDなどを利用したい場合も、@<code>{--moduleResolution node}を指定するようにしましょう。
+
+注意点として、npmのscopedパッケージを扱う場合、@<code>{vvakame/foobar}に対する型定義ファイルがほしい場合、@<code>{@types/vvakame__fobar}パッケージを参照するネーミングルールになっています。
 
 //footnote[definition-bundled][たとえばAngularやRxJSなど]
 //footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
@@ -66,8 +67,6 @@ AMDなどを利用したい場合も、@<code>{--moduleResolution node}を指定
 //footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
 //footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
 //footnote[issue9831][@<href>{https://github.com/Microsoft/TypeScript/issues/9831}]
-
-#@# TODO 現在メンテナンスを主導しているのはMSのメンバーである旨を書きたい
 
 =={use-definition-files} 型定義ファイルを参照してみよう
 
@@ -390,7 +389,7 @@ export { }
 
 例をひとつ見てみましょう。
 @<code>{String#trimStart}は、文字列の先頭にある空白文字を取り除く機能です。
-本章執筆時点（2017年07月03日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
+本章執筆時点（2017年07月16日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
 そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart.ts}）
 
 //list[interface/stringTrimStart.ts][String#trimStartを生やす]{
@@ -922,10 +921,12 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 これはanyを指定するのと同程度に危険で、なおかつanyより検出しにくいです。
 素直にanyを使いましょう。
 
-筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません。
+筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません@<fn>{primitive-object-type}。
 大抵の場合は、適切な型を定義してそちらを参照するほうが優れています。
 
 そしてanyを使うことに気後れするのであれば、よく調べて適切な型定義を与えるのがよいでしょう。
+
+//footnote[primitive-object-type][@<chapref>{types-basic}で触れたobjectが適切な場合は稀にある…かも？]
 
 ==={scratch-from-document} ドキュメントから書き起こす
 
@@ -992,21 +993,6 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 しかし、そうではなく必ずdataの値が渡されてくる場合は、無用なチェック処理が発生することになります。
 
 間違えないよう、留意しましょう。
-
-#@# @suppress SectionLength ParagraphNumber
-==={dont-use-i-prefix} インタフェースのプリフィクスとしてIをつけるのはやめよう！
-
-#@# TODO この辺どう変化しているか調べるべき 変わってはいないと思うけど根拠になるURLが変わっているはず
-
-とTypeScriptの公式ドキュメントで@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions,明記}@<fn>{writing-dts-files}されました。
-
-C#やJavaよりも、広い範囲でインタフェースが利用されるので"実装を強制させるパーツ"扱いしてはいけないからだそうです。
-
-#@# @suppress JapaneseStyle
-古くはTypeScriptコンパイラ本体のコードもC#の伝統に倣いIプリフィクスを使っていましたが、現在では取り除かれています。
-またDefinitelyTypedでも公式の記述に従い新しい型定義ファイルについてはIプリフィクスを使わぬようレビューしています。
-
-//footnote[writing-dts-files][@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions}]
 
 ==={module-compat} ECMAScriptとCommonJSでのモジュールの互換性について
 
@@ -1404,7 +1390,6 @@ randomizeString("TypeScript", {
 やった！型定義ファイルが書けたぞ！
 出来高に満足する前に、もう少しだけやっておきたいことがあります。
 それが、--strictをつけての試しコンパイルとtslintによるチェックです。
-#@# TODO この辺dtslintとかツールが増えてるのでチェックする
 
 #@# @suppress SectionLength
 ===={tslint} tslint
@@ -1430,7 +1415,7 @@ tslintは設定ファイルを必要とします。
 
 ようこそ！@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped,DefinitelyTyped}@<fn>{dt}へ！
 メンテナのvvakameです。
-#@# TODO 最近サボってる件について 一回調べなおしてみましょう…
+とかいいつつここ最近くらいは筆者はツール類のメンテ以外をサボっていて、MSのメンバーがpull requestの処理を行ってくれています。
 
 DefinitelyTypedではさまざまな型定義ファイルを取り揃えてございます！
 世界中の人々が作った型定義ファイルは集積され、@typesなどを介して広く利用されています。
@@ -1443,33 +1428,31 @@ DefinitelyTypedではさまざまな型定義ファイルを取り揃えてご�
 品質と時間のトレードオフを考えつつ、上品な型定義ファイルを提供していただきたいです。
 
 DefinitelyTypedはGitHub上のリポジトリなので追加、修正についてはpull requestをご利用ください。
+pull requestを送る前に、@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md}と@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/.github/PULL_REQUEST_TEMPLATE.md}を読んでおくとよいでしょう。
 
-この節では、筆者がDefinitelyTypedに送られてきたときにどういう考えでpull requestのレビューをしているかを示します。
-あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことをいわれる場合もあるでしょう。
-実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーを尊重して議論していただきたいと思います。
+#@# この節では、DefinitelyTypedに送られてきたときにどういうチェックが行われるかを簡単に解説します。
+#@# あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことをいわれる場合もあるでしょう。
+#@# 実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーを尊重して議論していただきたいと思います。
 
-とはいえ、メンテナは全員DefinitelyTypedの@<href>{http://definitelytyped.org/guides/contributing.html,Contribution guide}@<fn>{dt-contrib-guide}は読んでいるはずなので、こちらには目を通しておくとよいでしょう。
+簡単なチェックポイントは次のとおりです。
 
-//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
-//footnote[dt-contrib-guide][@<href>{http://definitelytyped.org/guides/contributing.html}]
+ * 新規での型定義ファイルの作成はnpmのdts-genパッケージを使って生成されていること
+ * フォルダ名がnpm上での目的のパッケージ名と一致していること
+ * tscコマンドでコンパイルが通ること
+ * @<code>{npm run lint パッケージ名}で問題が検出されないこと
 
-==={review-about-new-definitions} 新規型定義ファイルの追加のレビューの観点
+新規型定義ファイルはDefinitelyTypedリポジトリをforkし、@<code>{npm install -g dts-gen}で入るdts-genコマンドを使い作成します。
+これには推奨設定のtsconfig.jsonとtslint.jsonと、index.d.tsと簡単なテスト用ファイルも作成されます。
+詳しくは@<href>{https://www.npmjs.com/package/dts-gen}を参照してください。
 
-まずは今までなかった、新しいライブラリに対する型定義ファイルのレビューの観点を解説していきます。
+新規に作成する場合、DefinitelyTypedリポジトリのtypesディレクトリ配下に対象となるnpmパッケージ名と同名のディレクトリに各種ファイルを収めます。
+もし対象となるパッケージがscopedパッケージの場合、たとえば@<code>{vvakame/foobar}に対して型定義ファイルを作成するのであれば@<code>{types/vvakame__fobar}ディレクトリにファイルを作成します。
 
- 1. CIが通っているか
- 2. npmに公開されている名前どおりか。公開されていない場合は競合が発生しないか
- 3. テストが存在しているか
- 4. 幽霊namespaceを使ったほうが構造がきれいになるか
+現在のDefinitelyTypedでは、dtslint@<fn>{dtslint}というtslintを拡張したルールセットでチェックを行っています。
+これは、@<code>{npm run lint パッケージ名}としたときに裏側で動きます。
 
-だいたいこんな感じです。
-
-CIが通っているか。
-これは、ヘッダが定められた形式で書かれているか、--noImplicitAny付きで型定義ファイルやテストがコンパイルできるか、を主に見ています。
-
-npmに公開されている名前どおりか。
-npmに公開されているライブラリはnpmで公開されている名前と同一のディレクトリ名にあわせます。
-もし、npmに公開されていない場合は適当に名前を選ぶしかありませんが、同名の別のライブラリがnpm上に存在していないかなどをチェックしています。
+この他、人力じゃないと判別が付かないようなコードの良し悪しについてチェックします。
+たとえば、幽霊モジュールを使ったほうがコードがきれいになるのでは？とかベストプラクティスにしたがっているか？などです。
 
 逆に、ここに書かれていないことはあまり見ていません。
 たとえば、ライブラリの実装全体に対する型定義ファイルのカバー率やanyの多さなどはあまり見ていません。
@@ -1477,34 +1460,16 @@ npmに公開されているライブラリはnpmで公開されている名前�
 一人でやりきらなくてもいいよな！という発想ですね。
 もちろん最初に高品質高カバー率のものが出てきたほうが「やりおる！」と感心はします。
 
-なおレビュワー次第ですがJSDocがきっちり書かれているか、というのを見る人もいます。
-きちんとドキュメントから転記などしてあるものが送られてきたときはやはり感心しますね。
-
-==={review-about-improvements} 既存型定義ファイルの修正のレビューの観点
-
- 1. CIが通っているか
- 2. 破壊的変更が含まれていないか
- 3. ライブラリ本体のドキュメントまたは実装と照らして変更内容が妥当であるか
-
-これだけです。
-新規追加の場合は比較的レビューがガバガバなのですが、既存のものの変更はすでに利用している人に影響があるため、勢い慎重になってしまいます。
-そのため結構レビューに時間が取られて辛いので、ドキュメントや実装が確認できるURLを添えてくれると大変嬉しいです。
-
-いくつか補足しましょう。
-
-破壊的変更が含まれていないか。
-たとえばコードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊namespaceを使っていないスタイルから使っているスタイルへの変更など。
-または、ある型定義を別の表現へと書き換える場合。
-これらはレビュアーが妥当かどうかを判断します。
-たいてい判断できないのでヘッダに書いてあるDefinitions by:に名前が書いてある人達にGitHub上でmentionが飛ばされ、レビューしてもらって決めます。
-型定義ファイルを作った人は、たいていの場合、実際に使っている人、つまり破壊的変更を加えられると困る人達です。
-変な変更が入りそうな場合、きっと事前に相談してほしいに違いないと考えるわけです。
-
-次に、変更内容が妥当であるかの検証です。
-多くの場合は筆者が当該ライブラリのドキュメントまたは実装を読んで正しいかどうかをverifyします。
-しかし、小規模でドキュメントのURLがちゃんと添付されている場合以外は、前述のとおりDefinitions by:の人たちにレビューの依頼を投げます。
+既存の型定義の変更の場合、コードスタイルの変更や破壊的変更については取り込みは比較的慎重に行われます。
+@dt-botというボットが自動的にレビューするべきであろう人にメンションしてくれるので、反応を待ちましょう。
 
 では、皆様のpull request、お待ちしています！
+
+//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
+//footnote[dtslint][@<href>{https://www.npmjs.com/package/dtslint}]
+
+#@# TODO この辺レビュー復帰して空気感もう一回把握してから親切に書き直すべきかなー
+#@# ababb9cd46339bf156bc96efcbf7d83a0a0e2232 より後のコミットで解説をバッサリ削ったはず。
 
 =={publish-npm-best-practice} 自分のライブラリをnpmで公開するときのベストプラクティス
 
