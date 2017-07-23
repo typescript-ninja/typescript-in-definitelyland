@@ -17,7 +17,7 @@ $ npm install -g typescript
 # 省略
 $ tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.4.1
+Version 2.4.2
 #@end
 $ echo "class Sample {}" > sample.ts
 $ tsc sample.ts
@@ -53,7 +53,7 @@ package.json
 $ npm install --save-dev typescript
 $ ./node_modules/.bin/tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.4.1
+Version 2.4.2
 #@end
 //}
 
@@ -69,7 +69,7 @@ $ npm bin
 $PWD/node_modules/.bin 的なパスが表示される
 $ $(npm bin)/tsc -v
 #@mapoutput(../node_modules/.bin/tsc -v)
-Version 2.4.1
+Version 2.4.2
 #@end
 //}
 

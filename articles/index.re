@@ -45,7 +45,7 @@ Node.js環境やnpmの使い方、@<kw>{OOP,Object Oriented Programming}につ�
 
 本書に登場するすべてのサンプルコードは次のTypeScriptコンパイラでコンパイルできることを確認しています。
 #@mapoutput(../node_modules/.bin/tsc -v | sed -e "s/\n//")
-Version 2.4.1
+Version 2.4.2
 #@end
 
 #@# prh:disable
