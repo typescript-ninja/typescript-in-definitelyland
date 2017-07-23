@@ -822,8 +822,9 @@ export { Suit, suit, Digit, Bool, Falsy, SuitEnum, RedSuit }
 しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
 たとえば、DOMのaddEventListenerなどです。
 指定するイベント名によって、イベントリスナーの型が変わります（@<list>{literalTypes/eventListener.d.ts}）@<fn>{this-definition-was-changed}。
-
 #@# OK REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
+
+//footnote[this-definition-was-changed][なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています]
 
 //list[literalTypes/eventListener.d.ts][イベント名によって型が変わる]{
 #@mapfile(../code/types-advanced/literalTypes/eventListener.d.ts)
@@ -906,8 +907,6 @@ function calc(root: Tree): number {
 export { }
 #@end
 //}
-
-//footnote[this-definition-was-changed][なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています]
 
 =={polymorphic-this-type} 多態性のあるthis型（Polymorphic 'this' Type）
 
@@ -1552,6 +1551,8 @@ mixin用の関数について命名規則は言及されている媒体によっ
 これもかなり複雑な機能です。
 Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equivalent-word}のですが、型の写像という訳にしました。
 
+//footnote[equivalent-word][訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…]
+
 この節ではざっくりと次の事柄について順に説明していきます。
 
  1. 型の切り出し（Loolup Types）
@@ -1751,5 +1752,3 @@ export { }
 これを自力で1からひねり出せるかというと結構難しそうです。
 功夫が必要です。
 やっていきましょう。
-
-//footnote[equivalent-word][訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…]

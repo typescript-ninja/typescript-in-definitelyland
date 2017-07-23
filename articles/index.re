@@ -41,6 +41,8 @@ TypeScriptの基本的な知識（型の使い方）やコンパイラのオプ�
 対象読者は新しめのJavaScript、いわゆるECMAScript 2015とそれ以降@<fn>{js-primer}について理解しているユーザです。
 Node.js環境やnpmの使い方、@<kw>{OOP,Object Oriented Programming}についての効能や利点をある程度理解していることが望ましいです。
 
+//footnote[js-primer][@azu_reさんと@laco0416くんが書いている入門書（書きかけ）があります @<href>{https://github.com/asciidwango/js-primer}]
+
 #@# 128Pくらいでモダンブラウザでの動作に限定した基本的な文法の紹介と主要なツール類の解説を行ったJS本なんか出ないですかね…。
 
 本書に登場するすべてのサンプルコードは次のTypeScriptコンパイラでコンパイルできることを確認しています。
@@ -65,6 +67,9 @@ ECMAScript 2015以降の知識についての詳細は、本書では扱いま�
 本書の内容は@<href>{http://typescript.ninja/typescript-in-definitelyland/,Webサイト}@<fn>{wonderland}にて全文を公開しています。
 誤字や内容の誤り、自分としてはコンパイルが通ると思うのに通らないパターン、深く掘り下げてほしい内容などがある場合、本書リポジトリまで@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
 
+//footnote[wonderland][@<href>{http://typescript.ninja/typescript-in-definitelyland/}]
+//footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
+
 無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。
 
 C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：shatiさん（@<href>{http://utata-ne.net/}）です。
@@ -80,10 +85,6 @@ C87版から上手に味わいを引き継いだ可愛い表紙をありがと�
 なお、booth.pmやCOMIC ZINにて通販を行っております。
 @<href>{http://shop.comiczin.jp/products/detail.php?product_id=29874,紙版の通販}、@<href>{https://techbooster.booth.pm/items/299594?utm_source=webbook&utm_medium=webbook&utm_campaign=ebook,電子版販売}があります。
 
-//footnote[js-primer][@azu_reさんと@laco0416くんが書いている入門書（書きかけ）があります @<href>{https://github.com/asciidwango/js-primer}]
-//footnote[wonderland][@<href>{http://typescript.ninja/typescript-in-definitelyland/}]
-//footnote[issues][@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues}]
-
 =={tour-of-this-book} 本書の内容
 
 本書は@<code>{--strict}を有効にした状態を基本として解説します。
@@ -95,9 +96,13 @@ C87版から上手に味わいを引き継いだ可愛い表紙をありがと�
 targetの指定はInternet Explorer 11でもes5指定で十分なため@<code>{es5}以上とし、@<code>{es3}については本書では考慮しません。
 また、必要があれば@<code>{--downlevelIteration}も利用します。
 
+#@# prh:disable
+//footnote[webpack][@<href>{https://webpack.github.io/}]
+
 TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。
 興味がある方は@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html,公式のドキュメント}@<fn>{jsx}を参照してください。
 #@# TODO SkateJSとかに言及する？
+//footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
 #@# prh:disable
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法とVisual Studio Codeの設定について言及します。
@@ -114,10 +119,6 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 @<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
 @<chapref>{typescript-as-a-tool}では、TypeScriptのLanguage Service APIやLanguage Server Protocolについて概要を紹介します。
-
-#@# prh:disable
-//footnote[webpack][@<href>{https://webpack.github.io/}]
-//footnote[jsx][@<href>{http://www.typescriptlang.org/docs/handbook/jsx.html}]
 
 =={why-typescript} なぜTypeScriptを選ぶべきなのか
 

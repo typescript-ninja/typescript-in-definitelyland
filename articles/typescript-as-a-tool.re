@@ -19,12 +19,12 @@ TypeScriptの優位性を訴えるためにもツールとしてのTypeScriptに
 まずはコンパイラのAPIについて触れます。
 詳しくは本家Wikiのページ@<fn>{compiler-api}を参照してください。
 
+//footnote[compiler-api][@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API}]
+
 Compiler APIはソースコードのファイルパスやソースコードを文字列として投げ込むと、ASTが得られたりコンパイル後のJSを得ることができます。
 
 これをツールとして切り出したものとして、@<href>{https://www.npmjs.com/package/ts-node}や@<href>{https://www.npmjs.com/package/typescript-simple}があります。
 筆者の@<href>{https://www.npmjs.com/package/typescript-formatter}も（undocumentedな）Compiler APIを使っているのですが、後述するLanguage Serviceを使って置き換えられるはずなので置き換えるべきですね…。
-
-//footnote[compiler-api][@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API}]
 
 == Language Service
 
@@ -60,6 +60,8 @@ Language Serviceは主にエディタから使われる機能であり、コン�
 Language Server Protocol（LSP）です。
 Language Service Protocolではないところに注意が必要@<fn>{decode-lsp}です。
 
+//footnote[decode-lsp][筆者はde:code 2017の登壇概要にめっちゃLanguage Service Protocolと書いてしまいました（小声]
+
 ここまで、コンパイラがさまざまな機能をホストしていることを見てきました。
 ソースコードのことを一番よく理解し、コンパイラの変更にもっとも素早く追従していくのはコンパイラ自身なのです。
 エディタともっとも仲良くするべきコンポーネントはコンパイラ自身であることは明白です。
@@ -74,6 +76,9 @@ VimやEmacsなどのエディタはJavaScriptを素直に実行することが�
 LSPはMicrosoftが提唱している仕様@<fn>{lsp-spec}です。
 JSON-RPC@<fn>{json-rpc}を用いてサーバ（言語処理側）とクライアント（エディタ）間の通信を行います。
 これでサーバ側の実装言語が何であるか、クライアント側の実装言語が何なのか、そしてその2つのかみ合わせをどう調整するか、という問題が解決されます。
+
+//footnote[lsp-spec][@<href>{https://github.com/Microsoft/language-server-protocol}]
+//footnote[json-rpc][@<href>{http://www.jsonrpc.org/specification}]
 
 この仕組みの素晴らしいところは、今までは各エディタでそれぞれ各言語に対応することを考えたときの問題がある程度解決することです。
 このシチュエーションで、出て来るエンジニアの人種は3種類です。
@@ -96,6 +101,8 @@ Rustでもrls（Rust Language Server）@<fn>{rust-lsp}の取り組みが始ま�
 これは、Rust自体にTypeScriptのLanguage Service的な仕組みが設計考慮の外だったためではないかと考えられます。
 よいツールを提供するためにはまずコンパイラの設計時点からこのことを念頭に置いて設計しなければならないため、開発の難易度はより難しくなるでしょう。
 
+//footnote[rust-lsp][@<href>{https://github.com/rust-lang-nursery/rls}]
+
 さて、筆者も手持ちのprhという文章構成用ツールにLSPの機能を組み込み、VSCodeで使えるようにしてみました。
 興味がある人は@<href>{https://github.com/prh/prh-languageserver}と@<href>{https://github.com/prh/vscode-prh-extention}からどうぞ。
 その他のLSP関連の開発を行うとき参考になるリソースは次の3つがお勧めです。
@@ -108,10 +115,6 @@ Rustでもrls（Rust Language Server）@<fn>{rust-lsp}の取り組みが始ま�
 TypeScriptには似た仕組みとして後述のtsserverがあるのですが、MicrosoftがLSPを提唱し始めたのはtsserverの後なのです。
 仕方ないですね…。
 
-//footnote[decode-lsp][筆者はde:code 2017の登壇概要にめっちゃLanguage Service Protocolと書いてしまいました（小声]
-//footnote[lsp-spec][@<href>{https://github.com/Microsoft/language-server-protocol}]
-//footnote[json-rpc][@<href>{http://www.jsonrpc.org/specification}]
-//footnote[rust-lsp][@<href>{https://github.com/rust-lang-nursery/rls}]
 //footnote[ts-lsp-issue][@<href>{https://github.com/Microsoft/TypeScript/issues/11274}]
 
 === tsserver

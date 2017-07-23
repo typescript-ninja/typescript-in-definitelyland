@@ -65,6 +65,8 @@ TypeScriptはIDEやエディタとの連携が良好なため、ソースコー�
 型がつけられると何が嬉しいかというと、型に反するようなコードを書くとtscコマンドなどでコンパイルしたときにエラーになることです。
 たとえば@<list>{variable/withAnnotations-invalid.ts}のように、整合性がとれていない箇所をコンパイラが見つけてくれます@<fn>{suppress-warning}。
 
+//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
+
 //list[variable/withAnnotations-invalid.ts][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
 let str: string;
@@ -88,8 +90,6 @@ export {}
 
 コンパイルした段階でソースコードの整合性が保たれていない、きな臭い部分があぶり出されるのは嬉しいです。
 安心安全！
-
-//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
 
 =={class} クラス
 
@@ -393,8 +393,6 @@ new Cat();
 
 =={function} 関数
 
-#@# NOTE クラスの後に関数定義の説明したーーーい！したくない？
-
 ==={standard-function} 普通の関数
 
 いたって普通です（@<list>{function/basic.ts}）。
@@ -508,6 +506,8 @@ async/awaitの振る舞いについてはECMAScript仕様の範囲ですので�
 ES2015で標準仕様に入った非同期処理APIのPromiseがあります。
 これらに簡易な構文を与えたものがAsync関数です（@<list>{asyncFunction/basic.ts}）@<fn>{async-await-downpile}。
 
+//footnote[async-await-downpile][ちなみにasync/awaitのdownpileもTypeScript 2.1.1からサポートされています]
+
 //list[asyncFunction/basic.ts][async/await 便利！]{
 #@mapfile(../code/typescript-basic/asyncFunction/basic.ts)
 function returnByPromise(word: string) {
@@ -549,8 +549,6 @@ Async関数の返り値の型は常にPromiseになります。
 #@# NOTE Asynchronous Iterations https://github.com/Microsoft/TypeScript/issues/11326
 ちなみに、generatorの返り値の型は常に@<code>{IterableIterator}、async generatorの場合は常に@<code>{AsyncIterableIterator}とする必要があります。
 
-//footnote[async-await-downpile][ちなみにasync/awaitのdownpileもTypeScript 2.1.1からサポートされています]
-
 =={module-and-namespace} モジュールのあれこれ
 
 プログラムの規模が大きくなればなるほど、機能ごとに分割して統治し、見通しをよくする必要があります。
@@ -591,6 +589,9 @@ ECMAScript 2015で本格的に"モジュール"の概念が定義されたため
 モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。
 @<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照できます。
 ここでは、./fooがひとつのモジュールとして扱われます。
+
+#@# prh:disable
+//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
 
 #@# @suppress CommaNumber
 TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。
@@ -725,9 +726,6 @@ module.exports = bye;
 //}
 
 #@# TODO ここじゃないほうがいいけど、型としての参照だけだと消される恐れがある旨書く。
-
-#@# prh:disable
-//footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
 
 ==={dynamic-import} 動的インポート（Dynamic Import）
 

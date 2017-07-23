@@ -55,6 +55,8 @@ export { }
 
 オブジェクト型リテラルは型を指定する箇所@<fn>{object-literal-type}であればどこでも使えます（@<list>{objectTypeLiteral/basicUsage.ts}）。
 
+//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません]
+
 //list[objectTypeLiteral/basicUsage.ts][でも、正直読みづらい]{
 #@mapfile(../code/types-basic/objectTypeLiteral/basicUsage.ts)
 // 関数の仮引数や返り値に対して
@@ -84,8 +86,6 @@ export { }
 //}
 
 では、オブジェクト型リテラルで使える書き方を5つ見ていきましょう。
-
-//footnote[object-literal-type][interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません]
 
 ==={property-signatures} プロパティシグニチャ（Property Signatures）
 
@@ -1127,5 +1127,4 @@ export { }
 基本的にはnever型を見かけることがあれば、何かミスをしているな…と考えたほうがよいでしょう。
 
 #@# TODO never と他の型のunion typeはneverが単純に消える
-
 #@# TODO --noImplicitNever 欲しいなってTypeScriptリポジトリにIssue立てる

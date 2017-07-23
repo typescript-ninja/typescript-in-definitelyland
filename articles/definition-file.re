@@ -28,11 +28,19 @@ Node.jsやlodashなどの有名どころはひととおり揃っています。
 ライブラリの作者がTypeScriptユーザで、npm package自体に型定義ファイルがバンドルされていて何も考えずにTypeScriptから使える場合も増えてきました@<fn>{definition-bundled}。
 ですが、現時点では一般的にはDefinitelyTyped@<fn>{definitelytyped}というコミュニティベースの型定義ファイル集積リポジトリを（間接的に）利用することになるでしょう。
 
+//footnote[definition-bundled][たとえばAngularやRxJSなど]
+//footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
+
 #@# @suppress JapaneseStyle
 DefinitelyTypedから型定義ファイルをダウンロードしてくるための方法は複数用意されています。
 TypeScript 2.0.0からは@typesというnpmのscoped package@<fn>{scoped-package}を使って型定義ファイルを利用します。
 2.0.0以前ではtsd@<fn>{tsd}やdtsm@<fn>{dtsm}やtypings@<fn>{typings}というツールを使っていましたが、これらは不要になりました。
 もし、ここで紹介する方法でうまくいかない場合、利用事例やブログ記事などが出回っている旧ツール群のいずれかを使ってみるとよいでしょう。
+
+//footnote[scoped-package][@xxx/ から始まる名前空間が区切られたnpm packageのこと @<href>{https://docs.npmjs.com/misc/scope}]
+//footnote[tsd][@<href>{https://www.npmjs.com/package/tsd}]
+//footnote[dtsm][@<href>{https://www.npmjs.com/package/dtsm}]
+//footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
 
 さて、前置きが長くなりましたが実際に型定義ファイルをダウンロードしてきて使ってみましょう。
 ここではテストで使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードしてみます。
@@ -54,19 +62,14 @@ power-assertの型定義ファイルが依存しているモジュールの型�
 既存ライブラリに対する型定義ファイルは@types/の下に元ライブラリのパッケージ名と同じ名前で公開される運用です。
 パッケージの検索は@<href>{https://microsoft.github.io/TypeSearch/,TypeSearch}@<fn>{typesearch}で行うか、npm searchを使うとよいでしょう。
 
+//footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
+
 また、@typesで導入した型定義ファイルの検索は、モジュールの解決方法（@<code>{--moduleResolution}）がnodeのときのみ行われます@<fn>{issue9831}。
 AMDなどを利用したい場合も、@<code>{--moduleResolution node}を指定するようにしましょう。
 
-注意点として、npmのscopedパッケージを扱う場合、@<code>{vvakame/foobar}に対する型定義ファイルがほしい場合、@<code>{@types/vvakame__fobar}パッケージを参照するネーミングルールになっています。
-
-//footnote[definition-bundled][たとえばAngularやRxJSなど]
-//footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
-//footnote[scoped-package][@xxx/ から始まる名前空間が区切られたnpm packageのこと @<href>{https://docs.npmjs.com/misc/scope}]
-//footnote[tsd][@<href>{https://www.npmjs.com/package/tsd}]
-//footnote[dtsm][@<href>{https://www.npmjs.com/package/dtsm}]
-//footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
-//footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
 //footnote[issue9831][@<href>{https://github.com/Microsoft/TypeScript/issues/9831}]
+
+注意点として、npmのscopedパッケージを扱う場合、@<code>{vvakame/foobar}に対する型定義ファイルがほしい場合、@<code>{@types/vvakame__foobar}パッケージを参照するネーミングルールになっています。
 
 =={use-definition-files} 型定義ファイルを参照してみよう
 
@@ -289,6 +292,8 @@ TypeScriptを書き始めたばかりに作ったものは上達するにつけ�
 また3000行程度のものはわりとごろごろしています…。
 しかし、そんなにも頑張って書いてると余裕で日が暮れてしまいます@<fn>{atom-dts}。
 
+//footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
+
 まずは、使いたいところが、使える！
 それでよいのです。
 ドラゴン・ゲンドーソー＝先生のインストラクション・ワンを思い出しましょう。
@@ -298,8 +303,6 @@ TypeScriptを書き始めたばかりに作ったものは上達するにつけ�
 //}
 
 最初はうまくできなくても数をこなし学習を重ねれば、そのうち立派な型定義ファイルを書けるようになるでしょう。
-
-//footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
 ==={done-is-better-than-perfect} 雑な型定義でやりすごす
 
@@ -356,6 +359,8 @@ export { $, json, sampleFoo, sampleFooBar }
 インタフェースは大変使いやすいパーツです。
 というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging.d.ts}、@<list>{interface/declarationMergingUsage.ts}）@<fn>{open-ended-class}。
 
+//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能です @<href>{https://github.com/Microsoft/TypeScript/issues/3332}]
+
 //list[interface/declarationMerging.d.ts][定義を分割して書く]{
 #@mapfile(../code/definition-file/interface/declarationMerging.d.ts)
 interface Foo {
@@ -392,6 +397,10 @@ export { }
 本章執筆時点（2017年07月16日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
 そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart.ts}）
 
+#@# prh:disable
+//footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
+//footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
+
 //list[interface/stringTrimStart.ts][String#trimStartを生やす]{
 #@mapfile(../code/definition-file/interface/stringTrimStart.ts)
 interface String {
@@ -410,14 +419,12 @@ console.log(str.trimStart());
 この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。
 相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。
 
-//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能です @<href>{https://github.com/Microsoft/TypeScript/issues/3332}]
-#@# prh:disable
-//footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
-//footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
 
 ==={ghost-namespace} 幽霊namespace
 
 幽霊namespace@<fn>{ghost-module}という考え方があります。
+
+//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
 
 namespaceを作ったとしても、即座に実体が生成されるとは限りません。
 namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
@@ -558,8 +565,6 @@ declare var $: jquery.Static;
 可能であれば最初から幽霊namespaceを使うようにしましょう。
 将来的には、このパターンの検出はtslintなどで機械的に行えるようにしたいところですね。
 
-//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
-
 #@# @suppress JapaneseStyle ParagraphNumber SectionLength
 ==={interface-is-not-duct-tape} なんでもかんでもインタフェースにしてはならない
 
@@ -660,6 +665,8 @@ declare namespace assert {
 この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/power-assert,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
 @<list>{interfaceAntipattern/powerAssertAbst-ignore.d.ts}に抜粋＆改変したものを示します。
 
+//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
+
 //list[interfaceAntipattern/powerAssertAbst-ignore.d.ts][関数+namespaceの実例]{
 #@mapfile(../code/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
 declare function assert(value: any, message?: string): void;
@@ -714,8 +721,6 @@ function test() {
 })(test || (test = {}));
 #@end
 //}
-
-//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
 
 ==={class-definitions} クラスはクラスとして定義する
 
@@ -924,9 +929,9 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません@<fn>{primitive-object-type}。
 大抵の場合は、適切な型を定義してそちらを参照するほうが優れています。
 
-そしてanyを使うことに気後れするのであれば、よく調べて適切な型定義を与えるのがよいでしょう。
-
 //footnote[primitive-object-type][@<chapref>{types-basic}で触れたobjectが適切な場合は稀にある…かも？]
+
+そしてanyを使うことに気後れするのであれば、よく調べて適切な型定義を与えるのがよいでしょう。
 
 ==={scratch-from-document} ドキュメントから書き起こす
 
@@ -1069,6 +1074,8 @@ module.exports = hello;
 #@# @suppress JapaneseAmbiguousNounConjunction
 理解を深めるためNode.jsでのCommonJSの実現方法について該当のコードを抜粋@<fn>{node-module-url}します（@<list>{node-module.js}）。
 
+//footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v8.1.3/lib/internal/bootstrap_node.js#L542-L549}]
+
 //list[node-module.js][Node.jsのモジュールの実現方法]{
 NativeModule.wrap = function(script) {
   return NativeModule.wrapper[0] + script + NativeModule.wrapper[1];
@@ -1173,8 +1180,6 @@ TypeScriptでは@<code>{exports.default = ...}とされているコードのみ@
 @<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
 ということです。
 
-//footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v8.1.3/lib/internal/bootstrap_node.js#L542-L549}]
-
 ==={export-and-commonjs} CommonJS形式でちょっと小難しいexport句の使い方
 
 インタフェースやクラスのインスタンス単体をモジュールの外側に見せたい場合、@<list>{export/sample1.d.ts}のように書きます。
@@ -1232,6 +1237,8 @@ declare module "buzz" {
 グローバルに変数が展開されるタイプとモジュールとしての利用が両立しているタイプのライブラリについて考えます。
 具体的に@<kw>{UMD,Universal Module Definition}と呼ばれる形式@<fn>{umd}です。
 ライブラリ内部でモジュールとしての使い方が想定されているのか、そうではないのかを判断し展開の方法を変えます。
+
+//footnote[umd][@<href>{https://github.com/umdjs/umd}]
 
 #@# @suppress JapaneseAmbiguousNounConjunction ParenthesizedSentence
 TypeScriptではこういうパターンのときに使いやすい型定義ファイルの記述方法があります。
@@ -1380,8 +1387,6 @@ randomizeString("TypeScript", {
 
 #@# TODO /// <reference types="jquery" /> 的な記述の調査 https://github.com/Microsoft/TypeScript/issues/7156
 
-//footnote[umd][@<href>{https://github.com/umdjs/umd}]
-
 ==={check-at-last} 最終チェック！
 
 #@# OK REVIEW lc: もはや「型定義ファイルのベストプラクティス」節であることを忘れている気がする
@@ -1399,6 +1404,8 @@ lintという種類のプログラムがあります。
 
 TypeScriptでは@<href>{https://github.com/palantir/tslint,tslint}@<fn>{tslint-repo}というプログラムが一般的に使われています。
 
+//footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
+
 tslintはコンパイルだけでは見つけきれない、悪いにおいのするコードを検出してくれます。
 tslintでは頻繁に新しいルールが追加されるため、本書では詳しくは取り上げません。
 その時々の最適な設定を突き詰めてみてください。
@@ -1407,7 +1414,6 @@ tslintでは頻繁に新しいルールが追加されるため、本書では�
 tslintは設定ファイルを必要とします。
 今のところ、TypeScriptにおける統一見解は存在していないのでtslintが使ってる@<href>{https://github.com/palantir/tslint/blob/master/tslint.json,設定ファイル}@<fn>{tslint-example-config}かTypeScript本体の@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json,tslint.json}@<fn>{tsc-tslint}を参照するとよいでしょう。
 
-//footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
 //footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 //footnote[tsc-tslint][@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json}]
 
@@ -1416,6 +1422,8 @@ tslintは設定ファイルを必要とします。
 ようこそ！@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped,DefinitelyTyped}@<fn>{dt}へ！
 メンテナのvvakameです。
 とかいいつつここ最近くらいは筆者はツール類のメンテ以外をサボっていて、MSのメンバーがpull requestの処理を行ってくれています。
+
+//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
 
 DefinitelyTypedではさまざまな型定義ファイルを取り揃えてございます！
 世界中の人々が作った型定義ファイルは集積され、@typesなどを介して広く利用されています。
@@ -1451,6 +1459,8 @@ pull requestを送る前に、@<href>{https://github.com/DefinitelyTyped/Definit
 現在のDefinitelyTypedでは、dtslint@<fn>{dtslint}というtslintを拡張したルールセットでチェックを行っています。
 これは、@<code>{npm run lint パッケージ名}としたときに裏側で動きます。
 
+//footnote[dtslint][@<href>{https://www.npmjs.com/package/dtslint}]
+
 この他、人力じゃないと判別が付かないようなコードの良し悪しについてチェックします。
 たとえば、幽霊モジュールを使ったほうがコードがきれいになるのでは？とかベストプラクティスにしたがっているか？などです。
 
@@ -1465,11 +1475,8 @@ pull requestを送る前に、@<href>{https://github.com/DefinitelyTyped/Definit
 
 では、皆様のpull request、お待ちしています！
 
-//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
-//footnote[dtslint][@<href>{https://www.npmjs.com/package/dtslint}]
-
 #@# TODO この辺レビュー復帰して空気感もう一回把握してから親切に書き直すべきかなー
-#@# ababb9cd46339bf156bc96efcbf7d83a0a0e2232 より後のコミットで解説をバッサリ削ったはず。
+#@# NOTE ababb9cd46339bf156bc96efcbf7d83a0a0e2232 より後のコミットで解説をバッサリ削ったはず。
 
 =={publish-npm-best-practice} 自分のライブラリをnpmで公開するときのベストプラクティス
 

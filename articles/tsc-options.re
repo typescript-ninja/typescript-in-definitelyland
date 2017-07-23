@@ -75,6 +75,9 @@ compilerOptionsには、コンパイル時に利用するオプションを指�
 #@# @suppress SentenceLength CommaNumber
 tsconfig.jsonで利用可能なcompilerOptionsについては、本章を読むか@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html,公式ハンドブックの解説}@<fn>{handbook-tsconfig}や@<href>{http://json.schemastore.org/tsconfig,JSON Schemaの定義}@<fn>{schemastore-tsconfig}を参照してください。
 
+//footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
+//footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
+
 残る3つはコンパイル対象にするファイルを指定するためのプロパティです。
 3つすべてに共通の挙動として、コンパイル対象に明示的に含めない場合でもTypeScriptコンパイラが自動的に依存関係を解決し必要なファイルを対象に含めてくれる場合があります。
 この機能は歓迎すべき機能で、余計な設定の手間を減らしてくれます。
@@ -138,10 +141,6 @@ libD/bb.ts         # 対象にならない（exclude）
 
 なかなか素直な結果です。
 単にワイルドカードであって、正規表現で記述できるわけではない点に注意しましょう。
-
-//footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
-//footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
-//footnote[tsconfig-cli][@<href>{https://www.npmjs.com/package/tsconfig-cli}]
 
 =={project} --project
 
@@ -460,8 +459,6 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
 
 基本としてnode一択でよいでしょう。
 
-//footnote[rollup.js][@<href>{http://rollupjs.org/}]
-
 =={lib} --lib
 
 #@# lib.d.tsの細分化と--libプロパティによる個別指定 に言及する
@@ -623,14 +620,21 @@ pluginsはその名の通りプラグインなのですが、現時点では効�
 このオプションを設定しておくと、エディタ上のTypeScriptの入力補完やコンパイルエラーの表示などの動作を拡張することができます。
 現時点で実際に使える（と思われる）npmパッケージを次に挙げます@<fn>{plugins-in-real-world}。
 
+//footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
+
  * @angular/language-service
  * ts-graphql-plugin
  * tslint-language-service@<fn>{tslint-plugins-issue}
+
+#@# NOTE https://github.com/Microsoft/TypeScript/issues/15460
+//footnote[tslint-plugins-issue][@<href>{https://github.com/palantir/tslint/issues/2282}]
 
 また、筆者の作った役にも立たないプラグインを@<code>{@vvakame/typescript-plugin-example}@<fn>{vvakame-plugin-example}として公開しています。
 これは入力補完候補の説明文とかクイックインフォの説明文の末尾に猫の絵文字とかを出すだけのものです。
 設定例と動作イメージの紹介にちょうどいいでの確認してみます。
 tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{plugins}です。
+
+//footnote[vvakame-plugin-example][@<href>{https://www.npmjs.com/package/@vvakame/typescript-plugin-example}]
 
 //list[plugins/tsconfig.json][pluginsの設定例]{
 #@mapfile(../code/tsc-options/plugins/tsconfig.json)
@@ -659,8 +663,3 @@ tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{
 
 簡単にエディタの機能を拡張できるので楽しいですね。
 まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。
-
-//footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
-#@# NOTE https://github.com/Microsoft/TypeScript/issues/15460
-//footnote[tslint-plugins-issue][@<href>{https://github.com/palantir/tslint/issues/2282}]
-//footnote[vvakame-plugin-example][@<href>{https://www.npmjs.com/package/@vvakame/typescript-plugin-example}]

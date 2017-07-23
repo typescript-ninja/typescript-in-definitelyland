@@ -6,6 +6,8 @@
 Node.jsのセットアップはすでに完了しているものとします。
 筆者はNode.jsのインストールとバージョン管理に@<href>{https://github.com/hokaccha/nodebrew#nodebrew,nodebrew}@<fn>{nodebrew}を利用しています。
 
+//footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
+
 #@# @suppress JapaneseStyle
 TypeScriptのインストールには、Node.jsのパッケージマネージャである@<kw>{npm, Node Package Manager}を利用します。
 TypeScriptをインストールすると、tscというコマンドが利用可能になります。
@@ -61,8 +63,10 @@ Version 2.4.2
 @<code>{npm bin}コマンドを実行するとパスが得られます。
 macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが取得できます。
 
-さらにnpm scriptsでは$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
+さらにnpm scripts@<fn>{npm-scripts}では$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
 このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
+
+//footnote[npm-scripts][@<href>{https://docs.npmjs.com/misc/scripts}]
 
 //cmd{
 $ npm bin
@@ -72,9 +76,6 @@ $ $(npm bin)/tsc -v
 Version 2.4.2
 #@end
 //}
-
-//footnote[nodebrew][@<href>{https://github.com/hokaccha/nodebrew#nodebrew}]
-//footnote[npm-scripts][@<href>{https://docs.npmjs.com/misc/scripts}]
 
 =={prepare-tsconfig.json} tsconfig.jsonを準備する
 
@@ -192,11 +193,16 @@ tsconfig.jsonができたら、後は単に@<code>{tsc}コマンドを実行す�
 #@# @suppress KatakanaSpellCheck CommaNumber
 Visual Studio Code、Atom、WebStorm、Visual Studio、Vim、Emacs、EclipseなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
 
+//footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
+
 現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
 Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
 Visual Studioの名を冠していますがElectron@<fn>{electron}を利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。
-#@# OK REVIEW lc: s/Window/Windows/
 筆者はmacOSユーザですがTypeScriptを書く時はvscode一本です。
+#@# OK REVIEW lc: s/Window/Windows/
+
+//footnote[vscode][@<href>{https://code.visualstudio.com/}]
+//footnote[electron][@<href>{http://electron.atom.io/}]
 
 tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。
 つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。
@@ -213,16 +219,14 @@ TypeScriptにはLanguage Serviceという仕組みがあるため、IDEを作る
 #@# @suppress SentenceLength
 Language Serviceに興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
 
-//footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
-//footnote[vscode][@<href>{https://code.visualstudio.com/}]
-//footnote[electron][@<href>{http://electron.atom.io/}]
-
 ===[column] TypeScriptのリリースサイクルについて
 
 TypeScriptのリリースサイクルについて解説しておきます。
 以前のTypeScriptは次のリリースは予定された機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。
 このため、すでに開発完了している機能やバグフィクスがなかなか使えるようにならない！という不満がありました。
 最近ではこの問題が改められ、定期的にリリースされる運用に変更@<fn>{ts-release-schedule}されました。
+
+//footnote[ts-release-schedule][@<href>{https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/}]
 
 変更後のリリースサイクルは次のとおりです。
 
@@ -237,7 +241,5 @@ VSCodeは月イチ更新なのでそれが視野に入っているわけです�
 なお、各リリースの更新内容は公式ブログ（@<href>{https://blogs.msdn.microsoft.com/typescript/}）や
 Roadmap（@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}）、
 What's new in TypeScript（@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}）を確認するとわかりやすいです。
-
-//footnote[ts-release-schedule][@<href>{https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/}]
 
 ===[/column]
