@@ -109,6 +109,7 @@ export { }
 
 ==={call-signatures} コールシグニチャ（Call Signatures）
 
+#@# @suppress JapaneseStyle
 2つ目はそのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
 
 //list[objectTypeLiteral/callSignature.ts][関数として利用できる]{
@@ -168,7 +169,7 @@ export { }
 
 ==={constructor-signatures} コンストラクトシグニチャ（Construct Signatures）
 
-#@# @suppress ParenthesizedSentence
+#@# @suppress ParenthesizedSentence JapaneseStyle
 3つ目は対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（@<list>{objectTypeLiteral/constructorSignature.ts}）。
 
 //list[objectTypeLiteral/constructorSignature.ts][newできる]{
@@ -302,6 +303,7 @@ export { str, num, propertyName1, propertyName2, str3 }
 
 ==={method-signatures} メソッドシグニチャ（Method Signatures）
 
+#@# @suppress JapaneseStyle
 最後の5つ目はメソッドシグニチャです。
 あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature.ts}）。
 
@@ -664,7 +666,7 @@ double({
 //}
 
 このコードはコンパイルがちゃんと成功します。
-Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図的な仕様であることが明示できるためより好ましいです。
+Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図した実装だと明示できますね。
 
 なお、省略可能なプロパティは存在していなくても型の互換性として問題ないものとして扱われます（@<list>{structuralSubtypings/optional.ts}）。
 
@@ -1056,6 +1058,7 @@ obj2.data = 1;
 =={object-type} オブジェクト限定型（The Object Type）
 
 #@# object型のサポート Support for the object type in 2.2.1
+#@# @suppress CommaNumber
 プリミティブ型となるnumber、string、boolean、symbol、null、undefined。
 そしてそれ以外のオブジェクト。
 この2種類を区別することにより防げる実行時エラーがあります。

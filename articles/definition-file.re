@@ -427,7 +427,7 @@ console.log(str.trimStart());
 //footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
 
 namespaceを作ったとしても、即座に実体が生成されるとは限りません。
-namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
+namespaceが抱えるのがインタフェースのみの場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
 
 //list[ghostModule/invalid.ts][幽霊namespace]{
 #@mapfile(../code/definition-file/ghostModule/invalid.ts)
@@ -999,11 +999,12 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 
 間違えないよう、留意しましょう。
 
-==={module-compat} ECMAScriptとCommonJSでのモジュールの互換性について
+==={module-compat} ECMAScriptモジュールとCommonJSモジュールの互換性について
 
 最初にまとめを書いておきます。
 まとめ：@<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 現在JavaScriptのモジュールの仕様は過渡期にあります。
 ECMAScriptでモジュールの記法や考え方は定義され、ブラウザでも実装されはじめました。
 しかし、CommonJS形式のモジュールとの互換性なんてECMAScriptの仕様には含まれていません。
@@ -1012,6 +1013,7 @@ ECMAScriptでモジュールの記法や考え方は定義され、ブラウザ�
 TypeScriptが正しいのかBabelが正しいのかという議論は、そもそも仕様が不明なのだから成立しません。
 TypeScriptもBabelもECMAScriptなモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。
 
+#@# @suppress ParenthesizedSentence
 まずはTypeScriptで書いたコードがどのようなCommonJS形式のコードに変換されるかを見てみます（@<list>{commonJSCompat/basic/basic.ts}、@<list>{commonJSCompat/basic/basic.js}）。
 
 //list[commonJSCompat/basic/basic.ts][関数などを素直にexportする]{

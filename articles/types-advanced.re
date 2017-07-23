@@ -152,7 +152,7 @@ union typesを相手にする場合は、次に説明する@<hd>{type-guards}を
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
-#@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
+#@# @suppress SuccessiveWord JapaneseStyle
 type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。
 type guardsは"変数Aが○○という条件を満たすとき、変数Aの型は××である"というルールを用いて、ガード（番人となる条件式など）の後の文脈で変数の型を××に狭めることができます。
 
@@ -225,7 +225,7 @@ export { }
 
 変数のプロパティに対してもtype guardsは利用可能です（@<list>{typeGuards/controlFlowBasedProperty.ts}）。
 コンパイラの実装を想像すると、なにげに大変そうなことをやっていて感心してしまいます。
-最近のTypeScriptコンパイラの努力はめざましく、どこまで込み入った処理について来れるのか、事前に予想するのは難しいですね。
+TypeScriptコンパイラの努力と改善はめざましく、どこまで込み入った処理について来れるのか、事前に予想するのは難しいですね。
 エディタ上で変数がどの時点でどういう型になっているのか簡単に確認できるので困ることは少ないのですが。
 #@# プロパティアクセスについてtype guardsを行う（Type guards on property access）
 
@@ -516,6 +516,7 @@ export { }
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 ややこしいですが、エディタ上で各分岐内での変数の型を確認できるため困ることは少ないでしょう。
 
 ==={type-guards-weakpoint} Type Guardsの弱点
@@ -552,7 +553,7 @@ export { }
 objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。
 コンパイル後のJavaScriptコード（@<list>{typeGuards/weakspot.js}）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然です。
 しかし、TypeScriptコード上で見ると人間の脳としては型を元に判別していると誤解しがちなので注意が必要です。
-不可解な動作に遭遇した場合、JSのコードを確認したりデバッガを併用して実際の処理のフローを確認するようにしましょう。
+不可解な動作に遭遇した場合、JSのコードを確認したりデバッガを併用して実際の処理フローを確認するようにしましょう。
 
 //list[typeGuards/weakspot.js][コンパイル後のJS]{
 #@mapfile(../code/types-advanced/typeGuards/weakspot.js)
@@ -780,7 +781,7 @@ interfaceは定義の統合ができるので後から自由に拡張するこ�
 柔軟性が高いのです。
 interfaceが基本、type aliasは応用、と考えておきましょう。
 
-#@# @suppress ParagraphNumber SectionLength ←なんかこれ実装バグってない？
+#@# @suppress ParagraphNumber SectionLength ParenthesizedSentence
 =={primitive-literal-types} プリミティブ値のリテラル型（String, Number, Boolean and Enum Literal Types）
 
 #@# numberとbooleanもリテラル型に使えるようになった in 2.0.3
@@ -1116,7 +1117,7 @@ export { }
 
 オブジェクトリテラルの中でthisの値が期待どおりの値になっています。
 ThisTypeはいわゆるマーカーで、その型がついていること自体に意味があります。
-あまり出番が必要ないほうが嬉しい機能ではありますが、これを使うことでthisの型付けをより安全にすることができる場合もあります。
+あまり出番が必要ないほうが嬉しい機能ではありますが、これを使うことでthisの型付けをより安全にできる場合もあります。
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/17041
 #@# これコンパイラのバグじゃね？案件を掘り出してしまったので一旦寝かせる
@@ -1558,11 +1559,11 @@ Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equiv
  1. 型の切り出し（Loolup Types）
  2. keyof演算子
  3. 型に対してMap処理をかける（型の写像の作成）
- 4. 組み込みの型のMap処理の紹介
+ 4. 組み込みの型に対するMap処理の紹介
  5. 合せ技の紹介
 
 まずは型の切り出し（Loolup Types）です。
-他の型のプロパティの値の型を参照できる、というものです。
+任意のプロパティの型を参照できる機能です。
 コード例を見てみます（@<list>{keyofAndMappedTypes/lookupTypes.ts}）。
 
 //list[keyofAndMappedTypes/lookupTypes.ts][ある型のプロパティの型を参照できる]{
@@ -1582,7 +1583,7 @@ type NameOrAge = Cat["kind" | "age"];
 #@end
 //}
 
-型注釈でインデックスアクセスのような記法でそのプロパティの型が参照できます。
+型注釈でインデックスアクセスのような記法で指定したプロパティの型が参照できます。
 ドットアクセスだとコンパイルエラーになるので注意しましょう。
 
 全プロパティのキー名を列挙するにはkeyof演算子を使います（@<list>{keyofAndMappedTypes/keyof.ts}）。
@@ -1605,7 +1606,7 @@ type CatPropertyNames = keyof Cat;
 
 型の切り出しやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。
 
-型の写像処理の書き方基本4パターンを次に示します。
+型の写像処理には書き方基本が4パターンあります。
 
 //emlist{
 { [ P in K ] : T }
@@ -1616,9 +1617,9 @@ type CatPropertyNames = keyof Cat;
 
 全然わからないですね。
 全体としてはインデックスシグニチャと同じ書式として読み解くことができます。
-@<code>{K}に含まれる@<code>{P}の値の型にあたる@<code>{T}と読めばいいのでしょうか。
+@<code>{K}に含まれる@<code>{P}という値の型にあたる@<code>{T}と読めばいいのでしょうか。
 前半部分にあたる@<code>{[ P in K ]}相当の部分で操作対象となるプロパティの一覧を定義します。
-それと対になるように変換後のプロパティ個別の値を定義します。
+それと対になるように変換したプロパティの値を定義します。
 
 この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（@<list>{keyofAndMappedTypes/buildinTypes.ts}）。
 
@@ -1649,7 +1650,7 @@ export { Partial, Readonly, Pick, Record }
 //}
 
 写像処理と型の切り出しを組み合わせ、実用的な変換処理を作り出しています。
-これだけだとピンとこないと思いますのでこれらの型の利用例を見ます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
+これだけだとピンとこないと思いますのでこれらの利用例を見ます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
 
 //list[keyofAndMappedTypes/buildinTypesUsage.ts][ビルトインの型の利用例]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypesUsage.ts)

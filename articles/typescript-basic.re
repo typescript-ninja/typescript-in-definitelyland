@@ -469,6 +469,7 @@ export { }
 
 ==={arrow-function} アロー関数
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 @<kw>{アロー関数,Arrow Functions}を見ていきましょう（@<list>{arrowFunctions/basic.ts}）。
 通常の関数とアロー関数の違いについてはECMAScriptの仕様の範囲ですので省略します。
 
@@ -569,7 +570,8 @@ Async関数の返り値の型は常にPromiseになります。
 
 ====[column] モジュールとnamespaceと外部モジュールと内部モジュール
 
-過去の用語の使い方について参考文献としてメモしておきます。
+#@# @suppress JapaneseAmbiguousNounConjunction
+今は使われていない、昔の用語の使い方について参考文献としてメモしておきます。
 ここに書いてあることは知らないほうがよい知識かもしれません。
 
 歴史的経緯により、TypeScriptはモジュールのことを外部モジュール（External Modules）と呼んでいました。
@@ -729,6 +731,7 @@ module.exports = bye;
 
 ==={dynamic-import} 動的インポート（Dynamic Import）
 
+#@# @suppress ParenthesizedSentence
 TypeScript 2.4系からサポートされたECMAScriptの仕様に動的インポートがあります。
 ECMAScriptの仕様上、モジュールのimport文は参照するモジュールを動的に変える余地がありませんでした。
 これは、プログラムを実行しなくてもパースした時点で必要なファイルの全リストを作れるという利点があります。
@@ -983,6 +986,7 @@ console.log(Tree.Node);
 #@end
 //}
 
+#@# @suppress JapaneseAmbiguousNounConjunction
 enumは変数に展開され、const enumは実行コードから消えています。
 enumの値に指定できるのはnumberかstringで、numberの場合は実行時に数値からプロパティの名前を逆引きできるようになっています。
 また、値はある程度の計算の結果を利用することもできます。

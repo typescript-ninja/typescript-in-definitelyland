@@ -247,7 +247,7 @@ export { }
 #@end
 //}
 
-nullやundefinedに対するアクセスが多くの場合未然に防がれ、"コンパイルが通ればもう安全"であるコードが書きやすいことがわかります。
+nullやundefinedに対するアクセスが多くの場合未然に防がれ、"コンパイルが通ればもう安全"なコードが書きやすいことがわかります。
 
 非null指定演算子（@<code>{!}）については@<chapref>{types-advanced}の@<hd>{types-advanced|non-null-assertion-operator}で触れました。
 
@@ -366,7 +366,7 @@ export { }
 #@end
 //}
 
-プログラミングのスタイルとして、elseの漏れや値の返し忘れがあるコードはミスである可能性が高いです。
+プログラミングのスタイルとして、elseの漏れや値の返し忘れがあるコードはミスがある可能性が高いです。
 そういったコードを書くとエラーとして検出できるのは便利ですね。
 
 =={noImplicitThis} --noImplicitThis
@@ -516,12 +516,12 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 =={noEmitOnError-noEmit} --noEmitOnError、--noEmit
 
 @<code>{--noEmitOnError}オプションと@<code>{--noEmit}オプションについて解説します。
-このオプションは成果物である.jsファイル、.js.mapファイル、.d.tsファイルを生成するか否かを制御します。
+このオプションはコンパイルの出力となる.jsファイル、.js.mapファイル、.d.tsファイルを生成するか否かを制御します。
 
 @<code>{--noEmitOnError}はコンパイルが成功した時のみファイルを生成します。
-これはビルドのパイプラインを組む時の「コンパイル成功したつもりだったけど失敗してた。後続のタスクが続いてしまい失敗を見逃した」というパターンに有効です。
+これはビルドのパイプラインを組む時の「コンパイル成功したつもりだが実は失敗してた。後続のタスクが続いてしまい失敗を見逃した」というパターンに有効です。
 前回の生成物を削除してからコンパイルするようにすることで.jsファイルが必要なステップで処理全体が確実に落ちるようにできます。
-「そんなクソみたいなタスク作らないよ！」と思うかもしれないですが、これが案外やりがちなのです。
+「そんなダメタスクは作らないよ！」と思うかもしれないですが、これが案外やりがちなのです。
 プロジェクトの健康を保つためにも、@<code>{--noEmitOnError}オプションは常に有効でよいでしょう。
 
 #@# prh:disable
@@ -530,6 +530,7 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 @<code>{tsc --noEmit}とすることでTypeScriptのコンパイルエラーのみをチェックできます。
 これはビルドタスク全体を走らせるよりも手短で、作業ディレクトリに不要なファイルを撒き散らすこともありません。
 
+#@# @suppress SectionLength
 == --importHelpersと--noEmitHelpers
 
 #@# ヘルパライブラリの話 in 2.1.1
@@ -549,7 +550,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 //}
 
---importHelpersや--noEmitHelpersを併用すると、これらヘルパ関数のファイル毎の生成を抑制し、1つにまとめることができます。
+--importHelpersや--noEmitHelpersを併用すると、ヘルパ関数がファイル毎に生成されるのを抑制し、1つにまとめることができます。
 
 @<code>{--importHelpers}を利用する場合、@<code>{npm install --save tslib}が必要になります。
 ヘルパ関数を生成する代わりにtslibパッケージ内のヘルパ関数を使うようにする構造です（@<list>{helpers/importHelpers/basic.js}）。
@@ -599,7 +600,7 @@ var Inherit = (function (_super) {
 
 現代的にはJSコードは1つにbundleし、gzipで圧縮して転送されるユースケースが多いでしょう。
 つまり、tslibを使ってもさほど有利にはならないかもしれません。
-TypeScriptのデフォルトのヘルパ関数から実装を差し替えたい場合に使えるかもしれませんね。
+TypeScriptが生成するデフォルトのヘルパ関数から実装を差し替えたい場合に使えるかもしれませんね。
 そして、一見便利そうなヘルパライブラリなのですがtscの実装は若干バギー（というか不親切）です。
 tslibはモジュールの形でimportされるため、moduleをcommonjsやesnextなどに指定している場合でもimport句またはexport句がない場合、tslibの参照が行われません。
 @<code>{--importHelpers}と@<code>{--noEmitHelpers}を併用しているとtslibの参照が行われない上にヘルパ関数の生成も行われなくなります。
@@ -617,7 +618,7 @@ pluginsも仕組みとして面白いので概要だけ言及しておきます�
 pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができるのはエディタやIDE上のみです。
 コンパイル時の動作には影響を及ぼすことができません。
 そのため、tscのオプションとしてはpluginsは存在せず、tsconfig.jsonの設定項目としてのみ存在します。
-このオプションを設定しておくと、エディタ上のTypeScriptの入力補完やコンパイルエラーの表示などの動作を拡張することができます。
+このオプションを設定しておくと、エディタでTypeScriptの入力補完やコンパイルエラーの表示などをさせる際の動作を拡張することができます。
 現時点で実際に使える（と思われる）npmパッケージを次に挙げます@<fn>{plugins-in-real-world}。
 
 //footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
