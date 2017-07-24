@@ -1,7 +1,7 @@
 ={tsc-options} オプションを知り己のコードを知れば百戦危うからず
 
 本章ではtscのコマンドラインオプションについて解説していきます。
-すべてを網羅することはしませんが、いくつかの重要なオプションについては知ることができるでしょう。
+すべてを網羅することはしませんが、いくつかの重要なオプションを知ることができます。
 
 本章記載のオプションはtsconfig.jsonのcompilerOptionsに記載可能なプロパティ名と同一です。
 tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できないことに注意してください。
@@ -32,9 +32,10 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@# tsconfig.jsonでextendsが使えるようになった (Configuration inheritance) in 2.1.1
 
 @<code>{--init}オプションについて解説します。
-このオプションを使うと、TypeScriptでコードを始める時に必要なtsconfig.jsonの雛形を生成します。
+このオプションを使うと、TypeScriptでコードを書き始める際に必要なtsconfig.jsonの雛形を生成します。
 生成されたファイルはtscコマンドがコンパイルを行うときに読み込まれます。
 後述の@<code>{--project}オプションも参照してみてください。
+
 TypeScriptではプロジェクトのビルドに必要なコンパイルオプションや、コンパイル対象の指定などをtsconfig.jsonファイルにまとめていきます。
 このファイルはすべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。
 
@@ -57,7 +58,7 @@ TypeScriptではプロジェクトのビルドに必要なコンパイルオプ�
 #@end
 //}
 
-tsconfig.jsonに記述可能なプロパティは概ね次の5つです。
+tsconfig.jsonに記述可能なプロパティは、おおむね次の5つです。
 
  * extends
  * compilerOptions
@@ -78,11 +79,11 @@ tsconfig.jsonで利用可能なcompilerOptionsについては、本章を読む�
 //footnote[handbook-tsconfig][@<href>{http://www.typescriptlang.org/docs/handbook/tsconfig-json.html}]
 //footnote[schemastore-tsconfig][@<href>{http://json.schemastore.org/tsconfig}]
 
-残る3つはコンパイル対象にするファイルを指定するためのプロパティです。
-3つすべてに共通の挙動として、コンパイル対象に明示的に含めない場合でもTypeScriptコンパイラが自動的に依存関係を解決し必要なファイルを対象に含めてくれる場合があります。
+残る3つはコンパイル対象ファイルを指定するためのプロパティです。
+3つすべてに共通の挙動として、コンパイル対象に明示的に含めない場合でもTypeScriptコンパイラが自動的に依存関係を解決し必要なファイルを対象に含める場合があります。
 この機能は歓迎すべき機能で、余計な設定の手間を減らしてくれます。
 
-filesには、コンパイル対象にするファイルを1つ1つ列挙します。
+filesには、コンパイル対象にするファイルを列挙します。
 時期的に後述するincludeやexcludeよりも先に実装されたのですが、現状あまりにも面倒くさいので大抵使いません。
 
 include、excludeはコンパイル対象とするファイルやフォルダを大まかに指定します。
@@ -90,7 +91,7 @@ includeで調べるディレクトリやファイル、excludeで除外するデ
 ディレクトリを指定すると、そこに含まれるすべての.tsファイルと.tsxファイルが対象になります。
 簡単なワイルドカードも利用できます。
 
-includeとexcludeを全く指定しない場合、TypeScriptコンパイラは処理中のディレクトリやサブディレクトリ配下を調べ、すべての.tsファイルや.tsxファイルをコンパイルしようとします。
+includeとexcludeをまったく指定しない場合、TypeScriptコンパイラは処理中のディレクトリやサブディレクトリ配下を調べ、すべての.tsファイルや.tsxファイルをコンパイルしようとします。
 これにはnode_modulesなども含まれてしまうため、大抵は不都合です。
 
 includeとexcludeの利用例を見てみましょう（@<list>{init/globSyntax/tsconfig.json}）。
@@ -153,9 +154,9 @@ libD/bb.ts         # 対象にならない（exclude）
 具体的には@<code>{tsc -p ./}または@<code>{tsc -p ./tsconfig.json}とします。
 
 tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
-しかし、その場合IDE・エディタ側が設定をうまくハンドリングしてくれない場合が多いため、基本的には努力して1プロジェクトにつき1つのtsconfig.jsonとなるようにしましょう。
+しかし、その場合IDE・エディタ側が設定をうまくハンドリングできないことが多いため、基本的には努力して1プロジェクトにつき1つのtsconfig.jsonとなるようにしましょう。
 
-gulpやwebpackなどのタスクランナーやバンドラを使う場合もtsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルを通せる環境を維持するのがよいでしょう。
+gulpやwebpackなどのタスクランナーやバンドラを使う場合もtsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルできる環境を維持するとよいでしょう。
 
 =={noImplicitAny} --noImplicitAny
 
@@ -193,24 +194,24 @@ definition.d.ts(3,5): error TS7010: 'method', which lacks return-type
 返り値の型を書いていなかったり、関数の仮引数の型が指定されていなかったりしたため暗黙的にanyになってしまいました。
 このようなときに、それはダメだ！とコンパイラが教えてくれます。
 anyが紛れ込んで型チェックが意味を成さなくなるとTypeScriptの意義が薄れてしまいます。
-型定義ファイルを書くときも、通常の開発時も、常に--noImplicitAnyを使うようにしましょう。
+型定義ファイルを書くときも、通常の開発時も、常に@<code>{--noImplicitAny}を使うようにしましょう。
 
 =={strict} --strict
 
 #@# --strict オプションの追加 New --strict master option in 2.3RC
-@<code>{tsc --init}したときにデフォルトで有効になっているオプションです。
+@<code>{tsc --init}でデフォルトで生成したときに有効になっているオプションです。
 このオプションは後述の@<code>{--strictNullChecks}、@<code>{--noImplicitAny}、@<code>{--noImplicitThis}、@<code>{--alwaysStrict}の4オプションを一括で有効にします。
+
 これがデフォルトで有効になっているということは、TypeScript開発チームは皆さんにガッツリ堅牢なコードを書いていってほしい、と思っているということですね。
 新規にプロジェクトを作成する場合などは必ず有効にして冒険の旅に出るようにしましょう。
 
 =={strictNullChecks} --strictNullChecks
 
-@<code>{--strictNullChecks}オプションについて解説します。
-このオプションはnullやundefinedの扱いについてより厳格にし、変数の中身についての曖昧さを積極的に排除するよう振る舞います。
+@<code>{--strictNullChecks}オプションはnullやundefinedの扱いについてより厳格にし、変数の中身についての曖昧さを積極的に排除するよう振る舞います。
 nullやundefinedを許容したい場合、union typesや省略可能引数を使って明示的にnullやundefinedとなる可能性を示さなければなりません。
 
-本書は@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
-有効にしている時の挙動は本書のサンプルすべてが該当しますので、この節ではこのオプションを使わないときの挙動について確認します。
+#@# 本書は@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
+#@# 有効にしている時の挙動は本書のサンプルすべてが該当しますので、この節ではこのオプションを使わないときの挙動について確認します。
 
 まずはオプションありの例です（@<list>{strictNullChecks/basic.ts}）。
 
@@ -276,10 +277,11 @@ export { }
 しかし、それはプログラマの不断の努力の上にしか成り立ちません。
 そんな苦労をするよりは、コンパイラにしっかりチェックしてもらえたほうがコードの堅牢さが確かなものになりますね。
 
+もちろん本書も@<code>{--strictNullChecks}オプションを常に有効にしている前提で書いています。
+
 =={noUnusedLocals} --noUnusedLocals
 
-@<code>{--noUnusedLocals}オプションについて解説します。
-その名のとおり、使っていないローカル変数があればエラーにしてくれます。
+@<code>{--noUnusedLocals}オプションは、使っていないローカル変数があればエラーにしてくれます。
 本書のサンプルコードでも有効になっているため、エラー消しのために無意味にexportしている箇所がありました。
 
 例を見てみます（@<list>{noUnusedLocals/basic-invalid.ts}）。
@@ -310,8 +312,7 @@ export let objC = {};
 
 =={noUnusedParameters} --noUnusedParameters
 
-@<code>{--noUnusedParameters}オプションについて解説します。
-関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
+@<code>{--noUnusedParameters}オプションは関数やメソッドの引数に使っていないものがあるとエラーにしてくれます。
 エラーにせず残しておきたい場合、変数名の頭に@<code>{_}（アンダースコア）をつけることでエラーを抑制できます。
 
 例を見てみます（@<list>{noUnusedParameters/basic-invalid.ts}）。
@@ -340,7 +341,7 @@ export class Sample {
 =={noImplicitReturns} --noImplicitReturns
 
 @<code>{--noImplicitReturns}オプションについて解説します。
-関数やメソッドの返り値について、returnで値を返す場合とreturnしない場合、エラーになります。
+関数やメソッドの返り値について、returnで値を返す場合とreturnしない場合が混在したとき、エラーになります。
 
 例を見てみます（@<list>{noImplicitReturns/basic-invalid.ts}）。
 
@@ -372,8 +373,8 @@ export { }
 =={noImplicitThis} --noImplicitThis
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-@<code>{--noImplicitThis}オプションについておさらいします。
-@<chapref>{types-advanced}の「関数のthisの型の指定」で述べたとおり、このオプションを利用すると、thisの型が不明瞭な関数内でthisへアクセスするとエラーになります。
+@<code>{--noImplicitThis}オプションは
+@<chapref>{types-advanced}の「関数のthisの型の指定」で述べたとおり、thisの型が不明瞭な関数内でthisへアクセスするとエラーになります。
 
 例を見てみます（@<list>{noImplicitThis/basic-invalid.ts}）。
 
@@ -399,10 +400,10 @@ export { testB }
 =={alwaysStrict} --alwaysStrict
 
 #@# 無条件にstrict modeにするオプションの追加 (New --alwaysStrict) in 2.1.1
-@<code>{"use strict";}ディレクティブを常時出力してくれるようになるオプションです。
+@<code>{"use strict";}ディレクティブを常時出力するオプションです。
 ECMAScriptのモジュールを使ったときのように言語仕様上必ず@<code>{"use strict";}を出してくれる場合もありました。
 このオプションを使うとそれが常時適用される状態になります。
-今の時代、strictモードをあえて使わないという選択肢はないはずですのでこれも常時使うのがよいオプションです。
+今の時代、strictモードをあえて使わないという選択肢はないはずですのでこれも常時使うことをお勧めするオプションです。
 
 =={target} --target
 
@@ -457,7 +458,7 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
  * node
  * classic（TypeScript 1.6以前の形式）
 
-基本としてnode一択でよいでしょう。
+基本的にはnode一択でよいでしょう。
 
 =={lib} --lib
 
@@ -466,8 +467,10 @@ TypeScriptはモジュールをコンパイルする際に、どの形式に変�
 
 @<code>{--lib}オプションについて解説します。
 TypeScriptのコンパイルを行う際、標準の型定義として何を使うかを個別に指定できます。
-たとえ、@<code>{--target es5}としてダウンパイルする場合でも、利用する型定義はes2015にできるのです。
+たとえ@<code>{--target es5}としてダウンパイルする場合でも、利用する型定義はes2015にできるのです。
 最近はPromiseを使ったAPIは珍しくないですし、かつIE11でも動かしたい場合というのはザラにあります。
+
+#@# mhidaka TODO「利用する型定義はes2015にできるのです。」利用する型定義にes2015を指定できる？「できるのです」の「の」を消したい。ののわさん！
 
 利用可能なオプションの値は次のとおりです。
 複数指定したい場合、コマンドラインオプションの場合は@<code>{,}で区切ります。
@@ -500,7 +503,7 @@ tsconfig.jsonの場合は素直に配列にしましょう。
  * esnext.asynciterable
 
 自分のプロジェクトの用途を考え、適切なものを選びましょう。
-たとえばNode.jsなプロジェクトであればHTMLElementなどは不要でしょうからdomはいらないです。
+たとえばNode.jsプロジェクトであればHTMLElementなどは不要でしょうからdomは不要です。
 多くのプロジェクトではes2017か、＋domの指定があれば十分でしょう。
 
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
@@ -510,6 +513,7 @@ es2017を利用する場合はes2017の型定義にes2016の参照が含まれ�
 
 @<code>{--forceConsistentCasingInFileNames}オプションについて解説します。
 このオプションを有効にすると、ファイル名の参照について大文字小文字の食い違いがあるとエラーにします。
+
 macOSのような非ケースセンシティブな環境と、Linuxのようなケースセンシティブな環境が混在しているとき、macOSではエラーにならないけどLinuxではエラーになる…のようなシチュエーションを防止してくれます。
 チーム内でmacOSに統一されていても、外部の人やCIサーバなどはLinuxを使っている場合などはかなり多いため、とりあえず有効にしてしまってよいでしょう。
 
@@ -521,12 +525,12 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 @<code>{--noEmitOnError}はコンパイルが成功した時のみファイルを生成します。
 これはビルドのパイプラインを組む時の「コンパイル成功したつもりだが実は失敗してた。後続のタスクが続いてしまい失敗を見逃した」というパターンに有効です。
 前回の生成物を削除してからコンパイルするようにすることで.jsファイルが必要なステップで処理全体が確実に落ちるようにできます。
-「そんなダメタスクは作らないよ！」と思うかもしれないですが、これが案外やりがちなのです。
+「そんなダメタスクは作らないよ！」と思うかもしれないですが、これが案外やりがちです。
 プロジェクトの健康を保つためにも、@<code>{--noEmitOnError}オプションは常に有効でよいでしょう。
 
 #@# prh:disable
 @<code>{--noEmit}オプションはコンパイルが成功しようが失敗しようが、常に成果物を何も生成しません。
-@<code>{tsc}でファイルを生成するのとは違う手順でのみビルドを行う場合、例えばwebpackでts-loaderを使っているプロジェクトなどで有効です。
+@<code>{tsc}でファイルを生成する場合と違う手順でのみビルドするとき、例えばwebpackでts-loaderを使っているプロジェクトなどで有効です。
 @<code>{tsc --noEmit}とすることでTypeScriptのコンパイルエラーのみをチェックできます。
 これはビルドタスク全体を走らせるよりも手短で、作業ディレクトリに不要なファイルを撒き散らすこともありません。
 
@@ -550,7 +554,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 //}
 
---importHelpersや--noEmitHelpersを併用すると、ヘルパ関数がファイル毎に生成されるのを抑制し、1つにまとめることができます。
+@<code>{--importHelpers}や@<code>{--noEmitHelpers}を併用すると、ヘルパ関数がファイル毎に生成されるのを抑制し、1つにまとめることができます。
 
 @<code>{--importHelpers}を利用する場合、@<code>{npm install --save tslib}が必要になります。
 ヘルパ関数を生成する代わりにtslibパッケージ内のヘルパ関数を使うようにする構造です（@<list>{helpers/importHelpers/basic.js}）。
@@ -602,6 +606,7 @@ var Inherit = (function (_super) {
 つまり、tslibを使ってもさほど有利にはならないかもしれません。
 TypeScriptが生成するデフォルトのヘルパ関数から実装を差し替えたい場合に使えるかもしれませんね。
 そして、一見便利そうなヘルパライブラリなのですがtscの実装は若干バギー（というか不親切）です。
+
 tslibはモジュールの形でimportされるため、moduleをcommonjsやesnextなどに指定している場合でもimport句またはexport句がない場合、tslibの参照が行われません。
 @<code>{--importHelpers}と@<code>{--noEmitHelpers}を併用しているとtslibの参照が行われない上にヘルパ関数の生成も行われなくなります。
 両オプションを利用する場合、安全側に倒すため、どちらか片方のオプションだけを利用するほうが安全でしょう。
@@ -615,10 +620,11 @@ tslibはモジュールの形でimportされるため、moduleをcommonjsやesne
 pluginsも仕組みとして面白いので概要だけ言及しておきます。
 @<chapref>{typescript-as-a-tool}でも少し扱います。
 
-pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができるのはエディタやIDE上のみです。
+pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができる対象はエディタやIDE上のみです。
 コンパイル時の動作には影響を及ぼすことができません。
 そのため、tscのオプションとしてはpluginsは存在せず、tsconfig.jsonの設定項目としてのみ存在します。
-このオプションを設定しておくと、エディタでTypeScriptの入力補完やコンパイルエラーの表示などをさせる際の動作を拡張することができます。
+
+このオプションを設定しておくと、エディタでTypeScriptの入力補完やコンパイルエラーの表示動作を拡張できます。
 現時点で実際に使える（と思われる）npmパッケージを次に挙げます@<fn>{plugins-in-real-world}。
 
 //footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
@@ -631,7 +637,7 @@ pluginsはその名の通りプラグインなのですが、現時点では効�
 //footnote[tslint-plugins-issue][@<href>{https://github.com/palantir/tslint/issues/2282}]
 
 また、筆者の作った役にも立たないプラグインを@<code>{@vvakame/typescript-plugin-example}@<fn>{vvakame-plugin-example}として公開しています。
-これは入力補完候補の説明文とかクイックインフォの説明文の末尾に猫の絵文字とかを出すだけのものです。
+これは入力補完候補の説明文とかクイックインフォの説明文の末尾に猫の絵文字などを出すだけのものです。
 設定例と動作イメージの紹介にちょうどいいでの確認してみます。
 tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{plugins}です。
 
@@ -661,6 +667,8 @@ tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{
 //image[plugins][tsconfig.jsonの設定内容を反映して顔文字が出ている]{
 にゃーん
 //}
+
+#@# mhidaka にゃーん
 
 簡単にエディタの機能を拡張できるので楽しいですね。
 まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。
