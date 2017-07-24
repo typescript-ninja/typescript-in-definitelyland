@@ -209,7 +209,7 @@ power-assertはテストコード中でimportしますが、テストランナ�
 
 #@# TODO できればmochaの型定義バージョンあげたい
 なお、DefinitelyTypedは規約上、実装本体のパッケージと型定義ファイルのバージョンのmajorとminorが一致します。
-mochaの実装と型定義のメジャーバージョンすらずれているのは本来はあまりよくありません。
+本書の例のようにmochaの実装と型定義のメジャーバージョンすらずれているのは本来はあまりよくありません。
 
 #@# mhidaka TODO @typesをつかって使うはなしがここまでで、型定義を書くはなしがここから下で大分性質がことなるので章の分離があってもいいかもしれない。
 
@@ -649,7 +649,8 @@ interface Assert {
 //}
 
 #@# @suppress ParenthesizedSentence
-たしかに、この定義でも動きます。正直なところassert関数だけの定義だとこのままでもいい気がしますが。
+たしかに、この定義でも動きます。
+正直なところassert関数だけの定義だとこのままでもいい気がしますが。
 
 しかし、これには別のよいやり方があるのです（@<list>{interfaceAntipattern/callableModuleGood-ignore.d.ts}）。
 
@@ -748,7 +749,8 @@ interface TestB {
 #@end
 //}
 
-こんな感じです。クラス定義をするほうが素直ですね。
+こんな感じです。
+クラス定義をするほうが素直ですね。
 
 過去にはこの2つのやり方にそれぞれメリット・デメリットがありました。
 しかし、現在のTypeScriptでは大幅に制限が緩和されたためメリット・デメリットの面で考える必要はなくなってきました（@<list>{declareClass/stretch.ts}）。
@@ -933,7 +935,7 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません@<fn>{primitive-object-type}。
 大抵の場合は、適切な型を定義してそちらを参照するほうが優れています。
 
-//footnote[primitive-object-type][@<chapref>{types-basic}で触れたObjectが適切な場合は稀にある…かも？]
+//footnote[primitive-object-type][@<chapref>{types-basic}で触れたオブジェクト限定型（object）が適切な場合は稀にある…かも？]
 
 そしてanyを使うことに気後れするのであれば、よく調べて適切な型定義を与えるのがよいでしょう。
 
@@ -1098,7 +1100,7 @@ NativeModule.wrapper = [
 
 #@# @suppress KatakanaSpellCheck JapaneseAmbiguousNounConjunction
 大変シンプルなコードが出てきました。
-Node.jsにおいて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後に2行を付け足して、evalしているだけなのです。
+Node.jsにおいて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後に2行付け足して、evalしているだけなのです。
 なので、Node.js初心者がたまにやりがちな@<code>{exports = ...;}というコードは間違いです。
 単に変数の値を差し替えているだけなので当然ですね。
 外部に変更を露出させるには、何かのプロパティの変更（つまり@<code>{module.exports = ...;}）でなければなりません。
