@@ -5,11 +5,11 @@ class Base {
 	// 初期値を与えない場合は型の指定が必要
 	str: string;
 
-	// プロパティ名に ? をつけると省略可能（undefinedである可能性がある）ことを表せる
+	// プロパティ名に?をつけると省略可能（undefinedである可能性がある）ことを表せる
 	regExpOptional?: RegExp;
 
 	constructor(str: string) {
-		// str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+		// strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
 		// 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
 		this.str = str;
 	}

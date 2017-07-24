@@ -2,15 +2,15 @@
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。
-TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては@<chapref>{types-advanced}で紹介します。
+TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や複雑なものについては@<chapref>{types-advanced}で紹介します。
 
 #@# NOTE https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#23-declarations
-まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
+まず、TypeScriptに熟達していく上で必ず意識しなければいけない概念が@<kw>{型の宣言空間,type declaration space}と@<kw>{値の宣言空間,variable declaration space}の存在です。
 別の言い方をすると、型定義と実装の差です。
 #@# OK REVIEW muo: variableなら値というより変数な雰囲気あるけどよくわからぬ
 #@# vv: variableが指す範囲がクラスとかまで含まれてしまうので… あとここは昔のわかめがそう訳したので今変えるのはちょっとつらいという事情もあり
 
-JavaやC#だと、おおむね両者は密接に結びついていて、そこの差で困ることは少ないです。
+JavaやC#だと、おおむね両者は密接に結びついていて、この差で困ることは少ないです。
 筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。
 JavaのGenericsの型パラメータは実行時には消されてしまうため、たとえば@<code>{new T();}というコードを書くことはできません。
 TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
@@ -24,7 +24,7 @@ TypeScriptの型と値の区別は、Javaの例に近いかもしれません。
 
 =={object-type-literals} オブジェクト型リテラル（Object Type Literals）
 
-オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic.ts}）。
+オブジェクト型リテラルは、JavaScriptのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（@<list>{objectTypeLiteral/basic.ts}）。
 
 //list[objectTypeLiteral/basic.ts][基本的な例]{
 #@mapfile(../code/types-basic/objectTypeLiteral/basic.ts)
@@ -91,7 +91,7 @@ export { }
 
 1つ目はすでに登場している、プロパティを示す記法のプロパティシグニチャです（@<list>{objectTypeLiteral/propertySigniture.ts}）。
 
-//list[objectTypeLiteral/propertySigniture.ts][大将！いつものやつ！]{
+//list[objectTypeLiteral/propertySigniture.ts][プロパティシグニチャ]{
 #@mapfile(../code/types-basic/objectTypeLiteral/propertySigniture.ts)
 let obj: {
   property: string;
@@ -110,7 +110,7 @@ export { }
 ==={call-signatures} コールシグニチャ（Call Signatures）
 
 #@# @suppress JapaneseStyle
-2つ目はそのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
+2つ目はオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（@<list>{objectTypeLiteral/callSignature.ts}）。
 
 //list[objectTypeLiteral/callSignature.ts][関数として利用できる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/callSignature.ts)
@@ -134,7 +134,7 @@ export { }
 //}
 
 #@# @suppress ParenthesizedSentence
-オーバーロードも表現できます（@<list>{objectTypeLiteral/call-signature-overload.ts}）。
+コールシグニチャをつかえばオーバーロードも表現できます（@<list>{objectTypeLiteral/call-signature-overload.ts}）。
 
 //list[objectTypeLiteral/call-signature-overload.ts][オーバーロードも表現できる]{
 #@mapfile(../code/types-basic/objectTypeLiteral/callSignatureOverload.ts)
@@ -165,7 +165,7 @@ export { }
 #@end
 //}
 
-実装が煩雑になるのでなるべくオーバーロードを自分のコード内で利用することは避けたいところです。
+実装が煩雑になるのでオーバーロードを自分のコード内で利用することは、なるべく避けたいところです。
 
 ==={constructor-signatures} コンストラクトシグニチャ（Construct Signatures）
 
@@ -299,7 +299,7 @@ export { str, num, propertyName1, propertyName2, str3 }
 #@end
 //}
 
-インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。
+インデックスシグニチャの利用は静的な検証の恩恵を受けられない危険性が高いため、安易に使わないようにしましょう。
 
 ==={method-signatures} メソッドシグニチャ（Method Signatures）
 
@@ -307,7 +307,7 @@ export { str, num, propertyName1, propertyName2, str3 }
 最後の5つ目はメソッドシグニチャです。
 あるプロパティがメソッドであることを表現できます（@<list>{objectTypeLiteral/methodSignature.ts}）。
 
-//list[objectTypeLiteral/methodSignature.ts][メソッドの定義っぽい]{
+//list[objectTypeLiteral/methodSignature.ts][メソッドの定義を示す]{
 #@mapfile(../code/types-basic/objectTypeLiteral/methodSignature.ts)
 let obj: {
   hello(word: string): string;
@@ -339,12 +339,14 @@ export { }
 #@end
 //}
 
-"プロパティシグニチャ+関数型リテラル（後述）"の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。
+"プロパティシグニチャ+関数型リテラル（後述）"の組み合わせでも表現できますが、ぱっと見たときのわかりやすさではメソッドシグニチャのほうがよいですね。
 
 #@# @suppress
 ==={object-literal-and-strict-type-checks} オブジェクトリテラルと厳密なチェック
 
-オブジェクト型リテラルの話と関わりが深いのでここで説明します。
+#@# mhidaka TODO 「オブジェクトリテラルと厳密なチェック」もしページ数が多いならここは項ごと廃してもよいかも
+
+オブジェクト型リテラルの話と関わりが深いのでここでオブジェクトリテラルと厳密なチェックについて説明します。
 
 オブジェクトリテラルを使って値を作る時に、プロパティの過不足について厳しくチェックされる場合があります。
 例を見てみましょう（@<list>{objectTypeLiteral/strictCheck-invalid.ts}）。
@@ -394,12 +396,13 @@ export { }
 
 この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからないかもしれません。
 型定義ファイルを使っていると、型定義ファイルに不足がある場合や時には正規の方法で攻略するのが難しい場合すらあります。
+
 そのようなコンパイルエラーは型定義ファイルを修正して対処してほしいところですが、急いでいるのであればいったん別の変数に代入してから再代入することで回避できます。
-いったん別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。
+別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。
 
 #@# プロパティが全てoptionalな型について特別なサポートを与えるようにした Weak type detection in 2.4.1
 もう一例見てみます。
-TypeScript 2.4系で導入された弱い型の検出（Weak type detection）です（@<list>{objectTypeLiteral/weakTypeDetection-invalid.ts}）。
+TypeScript 2.4系で導入された@<kw>{弱い型の検出,Weak type detection}です（@<list>{objectTypeLiteral/weakTypeDetection-invalid.ts}）。
 これは、別変数作戦を使ったときでも、特定の条件を満たす場合にコンパイルエラーとしてミスを検出できるというものです。
 条件は3つあります。
 
@@ -489,8 +492,8 @@ export { Foo }
 #@end
 //}
 
-もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは普通に変更可能なコードが出力されてきます。
-使うとある程度TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
+もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは変更可能なコードです。
+TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
 
 #@# @suppress ParenthesizedSentence SentenceLength CommaNumber KatakanaSpellCheck
 また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます（@<list>{objectTypeLiteral/autoReadonly.ts}、@<list>{objectTypeLiteral/autoReadonly.d.ts}）。
@@ -518,10 +521,11 @@ export { Sample };
 
 #@# OK REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
 #@# vv: これ知らんかった… 入れるか迷ったけどとりあえず入れてみるか！
+#@# mhidaka TODO ページ数が多い場合はサンプルを廃する
 
 =={function-type-literals} 関数型リテラル（Function Type Literals）
 
-関数も型として表現できます（@<list>{function-types/basic.ts}）。
+関数型リテラルを使うと関数も型として表現できます（@<list>{function-types/basic.ts}）。
 
 //list[function-types/basic.ts][関数も型として表現できる]{
 #@mapfile(../code/types-basic/functionTypes/basic.ts)
@@ -551,7 +555,7 @@ func = (v1: string, v2 = "JavaScript") => `Hello, ${v1} & ${v2}`;
 
 インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。
 TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。
-TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。
+TypeScriptでの基本的な使い方は名前付きオブジェクト型リテラルを作ることです。
 インタフェースの中で許される記法はオブジェクト型リテラルそのままです。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
@@ -582,7 +586,7 @@ let objB: B2 = {
   num: 42,
 };
 
-// interfaceはクラスすら拡張できる！(実装はなかったことになる
+// interfaceはクラスすら拡張できる！(実装はなかったことになる）
 class FooClass {
   constructor(public num: number) {
   }
@@ -598,13 +602,14 @@ let objC: C = {
 //}
 
 #@# インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
-TypeScript 2.2系から@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできるようになりました。
+TypeScriptでは@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできます。
+#@# mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
 
 =={structural-subtyping} 構造的部分型（Structural Subtyping）
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
 TypeScriptでは、プロパティやメソッドなどの構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
-そこにクラスを継承しているかとか、インタフェースを実装しているかというのは必ずしも必要ではありません。
+クラスを継承しているか、インタフェースを実装しているかという厳密さはTypeScriptでは必要ありません。
 
 //list[structuralSubtypings/basic.ts][構造が一緒ならまぁ一緒ってことでいいよね]{
 #@mapfile(../code/types-basic/structuralSubtypings/basic.ts)
@@ -735,7 +740,7 @@ let num: number = str as number;
 //}
 
 基本的に、型アサーションはなるべく使わずに済ませます。
-ある値の型を明示したい場合、値に対して型アサーションを用いるよりは変数のほうに型を明示するやり方のほうがコンパイラのサポートの面で優れています。
+値の型を明示したい場合、値に対して型アサーションを用いるよりは変数のほうに型を明示的に注釈するほうがコンパイラのサポートの面で優れています。
 型アサーションより型注釈です。
 
 ダウンキャストも実行できます（@<list>{typeAssertions/class.ts}）。
@@ -773,11 +778,11 @@ export { }
 #@end
 //}
 
-しかしながら、TypeScriptでは自然なJavaScriptの書き方を行うと適切に型が絞り込まれる仕組みが作られています。
-そのため、型アサーションを使った明示的な型の変換は、絶対に必要なときに限りひとつまみだけ使うのがよいコードです。
+TypeScriptでは自然なJavaScriptを書くと型が適切に絞り込まれるように仕組まれています。
+そのため、型アサーションを使った明示的な型の変換は、絶対に必要なときに限り、ひとつまみだけ使うのがよいコードです。
 
-@<list>{typeAssertions/buggyDefinitionFile.ts}のように、anyを経由することでどうとでも型を誤魔化せますが、これは一種の切り札です。
-型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合にとりあえず誤魔化すためのスパイスとして使ったりします。
+@<list>{typeAssertions/buggyDefinitionFile.ts}のように、anyを経由すると型を誤魔化せますが、これは一種の切り札です。
+型定義ファイルに不足や誤りがある場合、とりあえず誤魔化すためのスパイスとして使うことがあります。
 
 //list[typeAssertions/buggyDefinitionFile.ts][無理やりなんとかする例]{
 #@mapfile(../code/types-basic/typeAssertions/buggyDefinitionFile.ts)
@@ -801,7 +806,7 @@ export { num }
 
 いよいよ来ました。
 最後の大ボスです。
-Javaなどでは総称型とも呼ばれます。
+ジェネリクスはJavaなどでは総称型とも呼ばれます。
 
 ジェネリクスなんて知らんわい！
 という人も、実はすでに色々なところでお世話になっています。
@@ -855,12 +860,12 @@ stringを別のものにして"numberのArray"とか"RegExpのArray"とするこ
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 ここで新しく出てきた@<code>{T}を@<kw>{型パラメータ,type parameters}と呼びます。
-実際、ここで出てくるアルファベットは@<code>{T}ではなくてもかまいせん。
+実際、ここで出てくるアルファベットは@<code>{T}でなくてもかまいせん。
 @<code>{Type}でもいいですし、なんでもよいです。
-ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
+慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。
 代表的な例ではTypeの頭文字のT、アルファベット的にTの次の文字でのUや、Returnの頭文字のRなどが使われます。
 
-さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋した@<list>{genericTypes/arrayDeclaration-invalid.ts}を見てみます。
+さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから抜粋した@<list>{genericTypes/arrayDeclaration-invalid.ts}を見てみます。
 
 //list[genericTypes/arrayDeclaration-invalid.ts][Array<T>が登場する]{
 #@mapfile(../code/types-basic/genericTypes/arrayDeclaration-invalid.ts)
@@ -880,7 +885,7 @@ interface Array<T> {
 
 #@# @suppress SuccessiveWord SentenceLength CommaNumber
 色々な所でTが使われています。
-pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"とか、"○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop"、"○○のArrayに対して、指定した○○の値と同じ要素が何番目にあるかを調べるメソッドindexOf"などの、汎用化された要素がたくさんあります。
+pushの定義を見ると、"○○のArrayに対して、○○の値いくつかを追加するメソッドpush"など汎用化された要素がたくさんあります。
 
 ここで、型パラメータTを実際にstringで具体化します（@<list>{genericTypes/arrayDeclarationString-invalid.ts}）。
 
@@ -901,7 +906,8 @@ interface Array {
 //}
 
 #@# @suppress JapaneseAmbiguousNounConjunction SentenceLength CommaNumber
-"stringのArrayに対して、stringの値をいくつか追加するメソッドpush"や、"stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop"、"stringのArrayに対して、指定したstringの値と同じ要素が何番目にあるかを調べるメソッドindexOf"などになりました。
+stringのArrayに対して、stringの値をいくつか追加するメソッドpushや末尾のstringの値を1つ取得するメソッドpop、
+指定したstringの値と同じ要素が何番目にあるかを調べるメソッドindexOfが読み取れます。
 ジェネリクス、使う分にはめっちゃ簡単ですね！
 
 このように、ジェネリクスを使うと柔軟性と堅牢さを両立させることができます。
@@ -1007,7 +1013,7 @@ export { Base, InheritA, Sample, objA, objC, Service, f };
 //}
 
 型パラメータが満たすべき制約をextendsの形式で指定できます。
-これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。
+これにより、@<code>{T}に何が指定されようとも、Baseに存在するプロパティには安全にアクセスできます。
 
 ==={default-type-parameter} 型パラメータのデフォルト値
 
@@ -1037,23 +1043,25 @@ obj2.data = 1;
 #@end
 //}
 
+#@# mhidaka TODO 結構な頻度で「普通に」がでてくる。なくても困らない言葉なので抜いていきたい
+
 型パラメータが2つも3つもある型を自作する場合、デフォルトの型を指定できないか考えてみるとよいでしょう。
 
-別の活用方法として、すでにあるクラスやインタフェースなどに型パラメータを追加したい場合、関連するすべての箇所を治す必要がありめんどくさいです。
-その対策として、新規に追加した型パラメータにデフォルト型を指定してやると既存のコードを修正する必要がなく、安全性も損なわずに済みます。
+別の活用方法として、すでにあるクラスやインタフェースなどに型パラメータを追加したい場合、関連するすべての箇所を修正する必要がありめんどくさいです。
+その対策として、新規に追加した型パラメータにデフォルト型を指定すると既存のコードを修正する必要がなく、安全性も損なわずに済みます。
 
-==={design-generic-signatures} 自分でジェネリクス有りのコードを書く
+==={design-generic-signatures} ジェネリクスありのコードを書く
 
 #@# @suppress SuccessiveWord JapaneseAmbiguousNounConjunction
-ジェネリクスを使いこなすにあたり、一番難しいのは使うことではなく、使わせることです。
-なぜならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。
-たとえば、"○○のArray"のように、型パラメータ部分が何になっても上手く動くような設計です。
+ジェネリクスを使いこなすにあたり、一番難しいことは使うことではなく、使わせることです。
+なぜならば、ジェネリクスを提供するコードは、何かしらの要素を抽象的なまま扱わねばならないからです。
+たとえば、"○○のArray"のように、型パラメータ部分が何であってもうまく動くような設計です。
 
 逆にいうと、実際に使うときには具体化しなければならないわけで、ジェネリクス有りのコードは"必ず何かと組み合わせて具体化する"必要があります。
-これを上手に使いこなすには一段上の設計力が要求されます。
+これを使いこなすには一段上の設計力が要求されます。
 
-通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。
-まずはジェネリクスを適用できるような、複数の方にまたがる共通の処理を見つけ出す眼力が必要になります。
+自分でジェネリクスを提供するコードを作る機会は通常の範囲ではさほど多くはありません。
+まずはジェネリクスを適用できるような、複数の方にまたがる共通の処理を見つけ出す眼力が必要です。
 
 =={object-type} オブジェクト限定型（The Object Type）
 
@@ -1090,9 +1098,9 @@ receiveObject(undefined);
 //}
 
 正直、自分でコードを書く上で必要になる場面はほぼないでしょう。
-しかし、@<code>{Object.create}や@<code>{Object.setPrototypeOf}、@<code>{Object.assign}などはプリミティブな値を渡すと実行時エラーになります。
-これらのエラーを早期検出するためにこの工夫が必要となったわけです。
-単に{}を使うと、これは"プロパティを何も持たない"という意味のオブジェクト型リテラルになるため、プリミティブ型も条件を満たしてしまい、まずいのです。
+しかし@<code>{Object.create}や@<code>{Object.setPrototypeOf}、@<code>{Object.assign}などはプリミティブな値を渡すと実行時エラーになります。
+これらのエラーを早期検出するために、この工夫が必要となったわけです。
+単に{}を使うと、これは"プロパティを何も持たない"という意味のオブジェクト型リテラルになるため、プリミティブ型も条件を満たしてしまい、マズいのです。
 
 =={never-type} "ありえない"型（The Never Type）
 

@@ -3,13 +3,12 @@
 #@# prh:disable
 @<chapref>{prepared-to-typescript}で述べたとおり、本書ではECMAScriptの文法・仕様についてすべてを解説することはしません。
 ECMAScriptの知識はどんどん広まってきていますし、最近では知っている人も多い知識になってきました。
-ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 この章ではTypeScriptでの基本的な構文を解説します。
-まずは、TypeScriptを使うのに必要最低限の知識を身につけていきましょう。
+まずは必要最低限の知識を身につけていきましょう。
 
 型の基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
-既存のJavaScriptな資産やライブラリを使いたい場合は@<chapref>{definition-file}を見てください。
+既存のJavaScript資産やライブラリを使いたい場合は@<chapref>{definition-file}を参照してください。
 
 #@# @suppress CommaNumber
 また、本書は@<code>{--strict}を有効にした状態を基本として解説します。
@@ -23,13 +22,13 @@ ECMAScriptの知識は、TypeScript固有の知識ではないですからね。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 TypeScriptの変数宣言はおおむねJavaScriptと同じです。
-違うのは、@<list>{variable/withAnnotations.ts}のように変数名の後に@<code>{: 型名}という形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
+違うところは@<list>{variable/withAnnotations.ts}のように変数名のあとに@<code>{: 型名}形式でその変数がどういう型の値の入れ物になるのか指定できるところです。
 これを@<kw>{型注釈,type annotations}と呼びます。
 
-//list[variable/withAnnotations.ts][型注釈付きの変数]{
+//list[variable/withAnnotations.ts][型注釈つきの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
-// JSそのものの書き方
-// 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される
+// JavaScriptそのものの書き方
+// 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される）
 // 省略しても問題のない型の記述は積極的に省略してしまってよい！
 {
   let str = "文字列";
@@ -43,7 +42,7 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 }
 
 // 型推論に頼らずに型注釈を明示的に書いてもよい
-// 特別な理由がない限り、このやり方にあまり長所はない
+// 特別な理由がない限り、このやり方に長所はない
 {
   let str: string = "文字列";
   let num: number = 1;
@@ -59,13 +58,13 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 //}
 
 もちろん、変数に対して初期化子を与えることで変数の型をコンパイラに考えさせる（型推論させる）こともできます。
-TypeScriptはIDEやエディタとの連携が良好なため、ソースコードのある箇所がどういう型になっているかはツールチップなどで簡単に確認できます。
+TypeScriptはIDEやエディタとの連携が良好なため、型情報はツールチップなどで簡単に確認できます。
 このため、型推論を多様しても困ることはほぼないため、安心して短く気持ちよく書きましょう。
 
 型がつけられると何が嬉しいかというと、型に反するようなコードを書くとtscコマンドなどでコンパイルしたときにエラーになることです。
 たとえば@<list>{variable/withAnnotations-invalid.ts}のように、整合性がとれていない箇所をコンパイラが見つけてくれます@<fn>{suppress-warning}。
 
-//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうな export {} などが表れます]
+//footnote[suppress-warning][コンパイルエラーを消すため、今後もサンプルコード中に一見意味のなさそうなexport {}などが表れます]
 
 //list[variable/withAnnotations-invalid.ts][型注釈に反することをやってみる]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations-invalid.ts)
@@ -93,7 +92,7 @@ export {}
 
 =={class} クラス
 
-クラスについて、TypeScriptではいくつかの拡張が用意されています（@<list>{class/basic.ts}）。
+TypeScriptではクラスについて、いくつかの拡張が用意されています（@<list>{class/basic.ts}）。
 
 #@# OK REVIEW lc: ES.next的には「instance fields」と「static properties」っぽいんですが、TSでの呼称は「インスタンス変数」と「クラス変数」なんですか？ https://github.com/jeffmo/es-class-public-fields
 #@# OK REVIEW lc: spec読んだら「class members」と「static class members」だった
@@ -108,11 +107,11 @@ class Base {
   // 初期値を与えない場合は型の指定が必要
   str: string;
 
-  // プロパティ名に ? をつけると省略可能（undefinedである可能性がある）ことを表せる
+  // プロパティ名に?をつけると省略可能（undefinedである可能性がある）ことを表せる
   regExpOptional?: RegExp;
 
   constructor(str: string) {
-    // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+    // strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
     // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
     this.str = str;
   }
@@ -140,7 +139,7 @@ export { };
 
 クラスのメンバーを定義する箇所にプロパティを記述していくやり方はTypeScriptの拡張で、ECMAScriptの範囲ではありません。
 ECMAScriptの場合はコンストラクタ内部でプロパティの設定を行います。
-コンパイルして出て来るjsコード（@<list>{class/basic.js}）との差を見てみるとわかりやすいです。
+コンパイルして出てくるjsコード（@<list>{class/basic.js}）との差を見てみるとわかりやすいです。
 
 //list[class/basic.js][jsにコンパイルしたの出力]{
 #@mapfile(../code/typescript-basic/class/basic.js)
@@ -150,7 +149,7 @@ class Base {
     constructor(str) {
         // インスタンス変数
         this.num = 1;
-        // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+        // strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
         // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
         this.str = str;
     }
@@ -171,15 +170,15 @@ console.log(base.hello());
 //}
 
 また、プロパティには省略可能（optional）かを明示する@<kw>{?}を指定できます。
-コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能でことを明示するようにしましょう。
+コンストラクタ内の処理が終わるまでの間に値がセットされないプロパティについては、省略可能なことを明示するようにしましょう。
 #@# クラスのプロパティが省略可能かどうか指定の追加（Optional properties in classes）
 #@# OK REVIEW lc: s/旨/旨を/
 
 #@# get、setアクセサについても少し触れておきます。
 #@# これを含んだコードをコンパイルするときは、@<code>{--target es5}以上を指定します。
 
-次に、クラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
-superを使い親クラスのメソッドを参照することも普通にできます。
+次にクラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
+superを使い親クラスのメソッドを参照できます。
 
 //list[class/inherit.ts][普通に継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
@@ -252,6 +251,8 @@ base.b;
 #@end
 //}
 
+#@# mhidaka ソースコード中のコメントについて変数の前後に半角スペースがある場合は排除してください（紙面の都合）
+
 次にコンパイル後のJSファイルを見てみます（@<list>{class/modifier.js}）。
 
 //list[class/modifier.js][アクセス修飾子はJSコードに影響しない]{
@@ -291,8 +292,8 @@ base.b;
 
 アクセス修飾子がきれいさっぱり消えていますね。
 アクセス修飾子はコンパイル時のみに影響がある機能で、@<code>{any}のような何でもあり型にキャストすると隠したはずのプロパティにアクセスできてしまいます。
-アクセス修飾子をつけても外部からの変更を100%防げる！と考えることはできないということですね。
-そのため筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
+外部からの変更を100%防げる！と考えることはできません。
+筆者はアクセス修飾子を使うだけではなく、privateな要素のprefixに_を使い、ドキュメントコメントに@<code>{@internal}をつけるといった工夫をしています。
 
 ==={class-parameter-property-declaration} 引数プロパティ宣言
 
@@ -322,7 +323,7 @@ export { BaseA, BaseB }
 ==={abstract-class} 抽象クラス（Abstract Class）
 
 ECMAScriptにはない機能として、抽象クラスが作成できます。
-抽象クラスは単独ではインスタンス化できません。
+抽象クラス単独ではインスタンス化できません。
 その代わり、抽象クラスを継承したクラスに対して、abstractで指定した要素の実装を強制できます。
 例を見てみましょう（@<list>{class/abstract.ts}）。
 
@@ -358,8 +359,8 @@ export { }
 #@end
 //}
 
-便利ですね。
 privateやprotectedに比べると使い勝手がよい機能といえます。
+便利ですね。
 
 コンパイル後のJavaScriptを見てみると、単なる普通のクラスに変換されていることがわかります（@<list>{class/abstract.js}）。
 
@@ -393,9 +394,11 @@ new Cat();
 
 =={function} 関数
 
+#@# mhidaka TODO 内容のない節・項は避けてみてくださいまし
+
 ==={standard-function} 普通の関数
 
-いたって普通です（@<list>{function/basic.ts}）。
+関数定義は、いたって普通です（@<list>{function/basic.ts}）。
 型注釈の書き方で通常のJavaScriptと差が出ます。
 確認していきましょう。
 
@@ -445,7 +448,7 @@ export { }
 //}
 
 #@# @suppress LongKanjiChain
-なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりするのはNGです（@<list>{function/invalid.ts}）。
+なお、省略可能引数の後に省略不可な引数を配置したり、可変長引数を最後以外に配置したりすることはできません（@<list>{function/invalid.ts}）。
 
 //list[function/invalid.ts][こういうパターンはNG]{
 #@mapfile(../code/typescript-basic/function/invalid.ts)
@@ -494,7 +497,7 @@ export { }
 アロー関数も普通の関数同様、型注釈の与え方以外ECMAScriptの仕様との差分はありません。
 書きやすくてよいですね。
 
-アロー関数は親スコープのthisをそのまま受け継ぎます。
+アロー関数では親スコープのthisをそのまま受け継ぎます。
 この仕組みのおかげでクラスのメソッドなどでコールバック関数を使うときに無用な混乱をおこさずに済みます。
 特別な理由が思いつかない限りアロー関数を使っておけばよいでしょう。
 
@@ -560,11 +563,11 @@ Async関数の返り値の型は常にPromiseになります。
 #@# @suppress SentenceLength CommaNumber
 #@# prh:disable
 歴史的経緯により、TypeScriptではモジュールの他に@<code>{namespace}という機能があります。
-モジュールの考え方がまだ発達していなかった時代に、関数を使ってモジュールのようなものを涙ぐましく作っていた名残ですね。
+モジュールの考え方がまだ発達していなかった時代に、関数を使ってモジュールのようなものを作っていた名残ですね。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 仕様としてモジュールが策定され、ブラウザでの実装も進んでいる今、namespaceを使ってプログラムを分割・構成するのは悪手です@<fn>{tsc-namespace}。
-これから新規にプロジェクトを作成する場合は実行する環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
+これから新規にプロジェクトを作成する場合は実行環境がNode.jsであれ、ブラウザであれ、モジュールを使って構成するべきでしょう。
 
 //footnote[tsc-namespace][なお、TypeScriptコンパイラ本体はまだnamespaceを使っている模様]
 
@@ -589,25 +592,24 @@ ECMAScript 2015で本格的に"モジュール"の概念が定義されたため
 ==={module} モジュール
 
 モジュールは前述のとおり、1ファイル＝1モジュールとしてプロジェクトを構成していく方式です。
-@<code>{import * as foo from "./foo";}のように書くと、そのファイルから./foo.ts@<fn>{require-ext}を参照できます。
-ここでは、./fooがひとつのモジュールとして扱われます。
+@<code>{import * as foo from "./foo";}のように書くと、記述したファイルから@<tt>{./foo.ts}@<fn>{require-ext}を参照できます。
+ここでは、@<tt>{./foo}がひとつのモジュールとして扱われます。
 
 #@# prh:disable
 //footnote[require-ext][Node.js上の仕様（TypeScriptではない）について細かくいうと、require("./foo")すると最初に./foo.js が探され、次に./foo.json、./foo.nodeと検索します]
 
 #@# @suppress CommaNumber
 TypeScriptではCommonJS、AMD、System（SystemJS）、UMD、ECMAScript 2015によるモジュールの利用に対応しています。
-いずれの形式で出力するかについては@<code>{--module commonjs}というようにオプションで指定できます。
+いずれの形式で出力するかについては@<code>{--module commonjs}オプションで指定できます。
 
 #@# prh:disable
 本書ではNode.jsでもBrowserifyやwebpackで広く利用しやすいCommonJS形式についてのみ言及します。
 rollup.jsなどの普及により、es2015形式のまま出力し別途bundlerで処理する場合もあるかもしれません。
-AMDやSystemJSは正直最近廃れてきていると思いますので興味がある人は自分で調べてみてください。
 
 #@# OK REVIEW lc: s/WebPack/Webpack/
 
 #@# @suppress SentenceLength CommaNumber
-さて、実際のコード例を見てみましょう。
+さて、実際にコードを見てみましょう。
 foo.ts（@<list>{externalModule/foo.ts}）、bar.ts（@<list>{externalModule/bar.ts}）、buzz.ts（@<list>{externalModule/buzz.ts}）というファイルがあるとき、それぞれがモジュールになるので3モジュールある、という考え方になります。
 
 //list[externalModule/foo.ts][foo.ts]{
@@ -668,7 +670,7 @@ export = bye;
 #@end
 //}
 
-各モジュールのトップレベルでexportしたものが別のファイルからimportされたときに利用できているのがわかります。
+各モジュールのトップレベルでexportしたものが別のファイルからimportして利用できているのがわかります。
 コンパイルして結果を確かめてみましょう。
 Node.jsに慣れている人なら、見覚えのある形式のコードが出力されていることが分かるでしょう。
 
@@ -735,6 +737,7 @@ module.exports = bye;
 TypeScript 2.4系からサポートされたECMAScriptの仕様に動的インポートがあります。
 ECMAScriptの仕様上、モジュールのimport文は参照するモジュールを動的に変える余地がありませんでした。
 これは、プログラムを実行しなくてもパースした時点で必要なファイルの全リストを作れるという利点があります。
+
 この仕様は90%のユースケースを満足させるかもしれませんが、動的に必要なモジュールを決定できることにより得られる柔軟性もあります。
 そのために、動的インポートの仕様が策定されています。
 コード例を見てみましょう（@<list>{dynamicImport/index.ts}、@<list>{dynamicImport/sub.ts}）。
@@ -769,17 +772,20 @@ export function hello(word = "world") {
 
 わかりやすいですね。
 TypeScript上での特徴として、importに渡す文字列が固定の場合、これは実行せずに解析できるため得られたモジュールにはしっかりと型がついています。
-動的に組み立てた文字列を渡した場合、なんでもアリのanyになってしまうため、自分で独自に型注釈を与えたほうが安全に使えます。
+動的に組み立てた文字列を渡した場合、なんでもありのanyになってしまうため、自分で独自に型注釈を与えたほうが安全に使えます。
 
 なお、動的インポートを無変換でJSに出力したい場合、@<code>{--module esnext}が必要で、@<code>{--module es2015}ではエラーになるので注意しましょう。
 
 ==={namespace} namespace
 
-現実的にコードを書く時にはnamespaceを使わないほうがよいのです。
+現実的にコードを書く時にはnamespaceを使わないほうがよいです。
 ですので、できればnamespaceについては説明したくないのですが、そうはいかない理由があります。
 それが、型定義ファイルの存在です。
+
 型定義ファイルの中ではインタフェースや関数などをきれいに取りまとめるためにnamespaceの仕組みを活用する場面がでてきます。
-そのため、TypeScriptの習熟度を高めるうえでnamespaceは避けては通れないのです。
+そのため、TypeScriptの習熟度を高めるうえでnamespaceは避けては通れない要素です。
+
+#@# mhidaka TODO namespaceが何をどうやって機能しているか簡単な説明が欲しい（いままでの機能紹介ではあったけどここではやりたくないけどやるんだ！クララのバカ！としか書かれてないのでソースコードを読むのが若干おもい）
 
 まずは簡単な例を見てみましょう（@<list>{internalModule/basic.ts}）。
 
@@ -921,8 +927,8 @@ namespace b {
 #@# const enum in 1.4.1
 #@# enumの値にstringが使えるようになった String valued members in enums in 2.4.1
 
-基本なのかと問われるとちょっと微妙な気持ちになるenumです。
-ECMAScriptの範囲にある仕様ではない、TypeScript独自の仕様なのでenumはなるべく仕様せず、const enumだけで運用していきたいものです。
+基本となる知識かと問われるとちょっと微妙な気持ちになるenumです。
+ECMAScriptの範囲にある仕様ではない、TypeScript独自の仕様なのでenumはなるべく利用せず、const enumだけで運用していきたいものです。
 
 enumを使うと、自分で選んだ名前と値の集合を作ることができます。
 const enumはそこから一歩進んで、コンパイル時にすべての値をインライン展開し定数値に置き換えます。
@@ -989,10 +995,11 @@ console.log(Tree.Node);
 #@# @suppress JapaneseAmbiguousNounConjunction
 enumは変数に展開され、const enumは実行コードから消えています。
 enumの値に指定できるのはnumberかstringで、numberの場合は実行時に数値からプロパティの名前を逆引きできるようになっています。
-また、値はある程度の計算の結果を利用することもできます。
+また、値はある程度、計算結果を利用できます。
 
-TypeScript 2.4系から値にstringを使えるようになったため、木構造を構築するのがだいぶやりやすくなりました。
-前は必ずnumberになってしまうため、JSONなどの構造にダンプしたときに人間にはわかりにくい値になってしまうという難点がありましたが、これが解消された形です。
+#@# TypeScript 2.4系から値にstringを使えるようになったため、木構造を構築するのがだいぶやりやすくなりました。
+#@# 前は必ずnumberになってしまうため、JSONなどの構造にダンプしたときに人間にはわかりにくい値になってしまうという難点がありましたが、これが解消された形です。
+#@# mhidaka enumではなかったので削除したよ
 
 const enumについて、tscに@<code>{--preserveConstEnums}オプションを渡してやるとenum相当のコードが生成されるようになります。
 デバッグ時にはこのオプションを用いたほうが処理を追いかけやすい場合もあるでしょう。

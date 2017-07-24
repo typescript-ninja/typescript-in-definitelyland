@@ -1,10 +1,11 @@
 ={types-advanced} アドバンスド型戦略
 
-型のうち、難しいけど便利な話や、標準の型定義を読むのに必要な知識や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
-タプル型（tuple types）や直和型（union types）についての解説もありますよ！
+型のうち、難しいけど便利な話や、標準の型定義を読むために必要な知識や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。
+@<kw>{タプル型,tuple types}や@<kw>{直和型,union types}についての解説もありますよ！
+
 なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています@<fn>{bad-code}。
 
-TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
+TypeScriptでは、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。
 そういったときに本章の内容が活きてくる場面があるでしょう。
 しかし、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと考えてよいでしょう。
 
@@ -27,7 +28,7 @@ TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型
 #@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
 では解説していきましょう。
 union typesはいわゆる直和型です。
-たとえば@<code>{string | null | undefined}という型注釈がある場合、この変数の値はstringか、nullか、undefinedのどれか！ということを表します。
+たとえば@<code>{string | null | undefined}という型注釈がある場合、この変数の値はstringか、nullか、undefinedのいずれかを表します。
 union typesはnullやundefinedとの組み合わせ、各種literal typesなどTypeScriptの中でも出番がたくさんあります。
 JavaScriptという現実と安全な世界を構築するTypeScriptの橋渡しをしてくれる機能といえます。
 
@@ -110,7 +111,7 @@ export { func, b, c, d }
 
 union typesな値を使うときは、型アサーションを使うこともできますがなるべくなら避けましょう（@<list>{unionTypes/typeAssertion.ts}）。
 
-//list[unionTypes/typeAssertion.ts][一応使えるよ こうすれば]{
+//list[unionTypes/typeAssertion.ts][一応使えるよ。こうすれば]{
 #@mapfile(../code/types-advanced/unionTypes/typeAssertion.ts)
 // 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
 // 型アサーションは悪い。常に悪い。なるべく使わないこと。
@@ -149,6 +150,9 @@ union typesを相手にする場合は、次に説明する@<hd>{type-guards}を
 =={type-guards} 型の番人（Type Guards）
 
 #@# TODO 型の番人、最近あまり用語として出てこない気がする… 型の絞込 とかでよくない？
+
+#@# mhidaka TODO 本節だけぶっちぎりで長い。構成を大胆に工夫する余地がある。「更に細かくする」「独立愚連して章になる」「削る」など
+#@# mhidaka TODO アドバンスド型戦略は悪いコードとつきあうためのテクニカルなアレを感じる。必然サンプルコードが増えるが全てを網羅的に必要としていないので悩ましい
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -224,9 +228,7 @@ export { }
 //}
 
 変数のプロパティに対してもtype guardsは利用可能です（@<list>{typeGuards/controlFlowBasedProperty.ts}）。
-コンパイラの実装を想像すると、なにげに大変そうなことをやっていて感心してしまいます。
-TypeScriptコンパイラの努力と改善はめざましく、どこまで込み入った処理について来れるのか、事前に予想するのは難しいですね。
-エディタ上で変数がどの時点でどういう型になっているのか簡単に確認できるので困ることは少ないのですが。
+書いたコードがどういう型に絞り込まれているか想像できない場合、エディタ上のツールチップの表示でどういう変数になっているか確認します。
 #@# プロパティアクセスについてtype guardsを行う（Type guards on property access）
 
 //list[typeGuards/controlFlowBasedProperty.ts][変数のプロパティも絞り込める]{
@@ -399,7 +401,7 @@ export { }
 
 ==={user-defined-type-guards} ユーザ定義のType Guards（User-defined Type Guards）
 
-ユーザが定義した関数によって、ある値がなんの型なのかをTypeScriptコンパイラに教える方法があります（@<list>{typeGuards/userDefined.ts}）。
+ユーザが定義した関数を使って、値の型をTypeScriptコンパイラに指示する方法があります（@<list>{typeGuards/userDefined.ts}）。
 型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
 この書き方をした場合、返り値はbooleanでなければなりません。
 
@@ -601,7 +603,7 @@ let obj: Sample = {
 
 =={intersection-types} 交差型（Intersection Types）
 
-union typesに似た記法のintersection types（交差型）です。
+union typesに似た記法の@<kw>{交差型,intersection types}です。
 intersection typesは2つの型を合成し、1つの型にできます。
 union typesと違って利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。
 
@@ -711,7 +713,7 @@ intersection typesを使いこなした書き方のほうが、圧倒的に謎�
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
-type aliasもunion typesの扱いを便利にするために導入された機能です。
+@<kw>{型の別名,type alias}もunion typesの扱いを便利にするために導入された機能です。
 機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。
 それだけです。
 例を見てみましょう（@<list>{typeAlias/basic.ts}）。
@@ -790,7 +792,7 @@ interfaceが基本、type aliasは応用、と考えておきましょう。
 パッと読んだだけでは、意味がわからないですね。
 まずは例を見てみましょう（@<list>{literalTypes/basic.ts}）。
 
-//list[literalTypes/basic.ts][カードのスートを型として表す]{
+//list[literalTypes/basic.ts][トランプのスート（マーク）を型として表す]{
 #@mapfile(../code/types-advanced/literalTypes/basic.ts)
 // "文字列" が 型 です。値ではない！
 type Suit = "Heart" | "Diamond" | "Club" | "Spade";
@@ -822,7 +824,7 @@ export { Suit, suit, Digit, Bool, Falsy, SuitEnum, RedSuit }
 文字列が型というのは見慣れないとなかなか気持ちが悪いですね。
 しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。
 たとえば、DOMのaddEventListenerなどです。
-指定するイベント名によって、イベントリスナーの型が変わります（@<list>{literalTypes/eventListener.d.ts}）@<fn>{this-definition-was-changed}。
+指定するイベント名によって、イベントリスナーの型@<fn>{this-definition-was-changed}が変わります（@<list>{literalTypes/eventListener.d.ts}）。
 #@# OK REVIEW lc: "指定するイベント名によって、イベントリスナーの型が変わります"？
 
 //footnote[this-definition-was-changed][なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています]
@@ -852,13 +854,14 @@ interface HTMLBodyElement extends HTMLElement {
 #@end
 //}
 
-これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。
-こんなものが必要になってしまうJavaScriptの複雑さよ…。
+これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます@<fn>{js-dirty-overload}。
+
+//footnote[js-dirty-overload][こんなものが必要になってしまうJavaScriptの複雑さよ…]
 
 #@# Discriminated union types タグ付きUnion型 in 2.0.0 Beta
 またunion typesとリテラル型を組み合わせ、switchで条件分岐ができます（@<list>{literalTypes/switch.ts}）。
 
-//list[literalTypes/switch.ts][Union Typesはswitchでえこひいきされている]{
+//list[literalTypes/switch.ts][Union Typesはswitchで優遇されている]{
 #@mapfile(../code/types-advanced/literalTypes/switch.ts)
 // 足し算
 interface Add {
@@ -967,17 +970,17 @@ export { }
 thisを型として記述するという発想がすごいですね。
 引数や返り値の型としてthisを利用しています。
 fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。
-
 この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。
-とはいえ、仮引数の型として使ったりすると、実際に受け取れる値に対して制約がきつくなったりする場合があるため乱用は控えましょう。
-@<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがよい塩梅かもしれません。
+
+とはいえ、仮引数の型として使うと実際に受け取れる値に対して制約がきつくなる場合があるため乱用は控えましょう。
+@<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがちょうどよいかもしれません。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 =={specifying-this-types-for-functions} 関数のthisの型の指定（Specifying This Types For Functions）
 
 JavaScriptでは@<code>{Function.prototype.bind}や@<code>{Function.prototype.call}、@<code>{Function.prototype.apply}などの関数により、関数呼び出し時のthisの値の型を変更できます。
 この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。
-TypeScriptではこの仕様も頑張って自然なサポートを与えようとしています。
+TypeScriptでもこの仕様に対して自然なサポートを与えようと頑張っています。
 
 まずは簡単な例を見てみます（@<list>{thisTypeForFunctions/basic.ts}）。
 関数の1つ目の仮引数の名前を@<code>{this}にするだけです。
@@ -1183,11 +1186,10 @@ export { Foo }
 
 =={type-queries} 型クエリ（Type Queries）
 
-型クエリは指定した変数（やメソッドなど）の型をコピーします。
-たとえば、@<list>{typeQueries/basic.ts}のようなクラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。
-そういうときに型クエリを使います。
+@<kw>{型クエリ,Type Queries}は指定したクラスや変数などの型をコピーします。
+たとえば、クラスそのものを型として指定したい場合、@<list>{typeQueries/basic.ts}のように型クエリを使います。
 
-//list[typeQueries/basic.ts][クラスそのものの型だよ！]{
+//list[typeQueries/basic.ts][クラスそのものの型を指定する]{
 #@mapfile(../code/types-advanced/typeQueries/basic.ts)
 class Sample {
   str: string;
@@ -1216,7 +1218,7 @@ export { }
 //}
 
 メソッドなどの値も取れますが、thisを使うことはできないため、少しトリッキーなコードになる場合もあります。
-@<list>{typeQueries/cheapTrick.ts}の例は、prototypeプロパティを使っているためJavaScript力が多少必要になりますね。
+@<list>{typeQueries/cheapTrick.ts}の例は、prototypeプロパティを使っているためJavaScriptの知識が試されます。
 
 //list[typeQueries/cheapTrick.ts][prototypeを参照するとメソッドの型が取れる]{
 #@mapfile(../code/types-advanced/typeQueries/cheapTrick.ts)
@@ -1234,7 +1236,7 @@ export { }
 
 #@# @suppress JapaneseAmbiguousNounConjunction
 型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合があります。
-@<list>{typeQueries/copy.ts}では、ひとつ目の引数の型をふたつ目の引数や返り値の型にもコピーして使っています。
+@<list>{typeQueries/copy.ts}では、ひとつ目の引数の型をふたつ目の引数や返り値の型にコピーして使っています。
 
 //list[typeQueries/copy.ts][ここまで複雑にするならインタフェース使って]{
 #@mapfile(../code/types-advanced/typeQueries/copy.ts)
@@ -1265,7 +1267,7 @@ export { }
 #@end
 //}
 
-ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがよいですね。
+この例のレベルまでやってしまうとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがよいですね。
 
 #@# @suppress ParagraphNumber SectionLength
 =={tuple-types} タプル型（Tuple Types）
@@ -1282,15 +1284,17 @@ export { }
 tuple（タプル）は、任意の数の要素の組です。
 JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleはただのArrayで表現されます。
 
+#@# mhidaka TODO タプル型（Tuple Types）の名称がtupleまたはタプル型、タプルの3種類が登場するので統一を図ってほしい
+
 既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
 タプル型はそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではありません。
 というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないのです。
 
 タプル型は型（TypeScript）の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。
-記述方法は配列の型指定へ @<code>{[typeA, typeB]} のように配列の要素の代わりに型名を記述していくだけです。
+記述方法は配列の型指定へ@<code>{[typeA, typeB]}のように配列の要素の代わりに型名を記述していくだけです。
 例を見てみましょう（@<list>{tuple/basic.ts}）。
 
-//list[tuple/basic.ts][基本的な例]{
+//list[tuple/basic.ts][基本的なtupleの例]{
 #@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
 // これは別の箇所で解説している union typesで表現され (number | string | boolean)[]
@@ -1312,7 +1316,7 @@ export { array }
 #@end
 //}
 
-各要素の型を指定すると、その要素のindexでアクセスしたときに適切な型で扱われます。
+各要素の型を指定すると、要素のindexでアクセスしたときに適切な型で扱われます。
 
 さて、タプル型について重箱の隅をつついていきましょう。
 要素数が多すぎる場合、指定されていない値の型はunion typesになります。
@@ -1331,9 +1335,9 @@ let value = tuple[2];
 #@end
 //}
 
-お次は要素の順序がズレた場合、どうなるかを見てみましょう（@<list>{tuple/unshift.ts}）。
+次は要素の順序がずれた場合、どうなるかを見てみましょう（@<list>{tuple/unshift.ts}）。
 
-//list[tuple/unshift.ts][絶望に身をよじれ…！]{
+//list[tuple/unshift.ts][順序の変化には弱い]{
 #@mapfile(../code/types-advanced/tuple/unshift.ts)
 let tuple: [string, number] = ["str", 1];
 
@@ -1348,24 +1352,25 @@ export { }
 #@end
 //}
 
-…悲しい結果になりました。
+悲しい結果になりました。
 @<code>{[1, true]}のような配列のリテラルをタプル型に推論しないのはおそらくこのためです。
 
-unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。
+@<code>{unshift}や@<code>{pop}など、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。
 タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。
 
 なるべくなら、タプルは使いたくないですね。
 
 =={non-null-assertion-operator} 非null指定演算子（Non-null Assertion Operator）
 
-非null指定演算子（@<code>{!}）は、変数やプロパティのお尻に指定することで値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
-基本的に、この演算子は使わないにこしたことはありません。
+非null指定演算子（@<code>{!}）は、変数やプロパティの末尾に指定して利用します。
+値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
 新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。
+基本的に使わずに済ませたいものです。
 
 しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合もあります。
 @<code>{--strictNullChecks}オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。
 警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。
-もちろん、将来的には徐々にリファクタリングしこの演算子の利用箇所を消滅させていくべきです。
+もちろん、将来的には徐々にリファクタリングして、この演算子の利用箇所を消滅させていくべきです。
 
 例を見てみましょう（@<list>{nonNullAssertionOperator/basic.ts}）。
 
@@ -1430,8 +1435,9 @@ export { Config, processB, processC }
 
 人間がundefinedやnullではないと確信できる場合、エラーとなる箇所の末尾に@<code>{!}をつけていきます。
 非null指定演算子をなるべく使わない手段として使う前に初期値を代入する、undefinedやnullを含まない型の値に詰め直すなどが考えられます。
+
 他の方法も見てみます（@<list>{nonNullAssertionOperator/intersectionTypes.ts}）。
-先に見た@<list>{nonNullAssertionOperator/basic.ts}も併せ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょうか。
+先に見た@<list>{nonNullAssertionOperator/basic.ts}もあわせ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょう。
 
 //list[nonNullAssertionOperator/intersectionTypes.ts][デフォルト値と付き合う]{
 #@mapfile(../code/types-advanced/nonNullAssertionOperator/intersectionTypes.ts)
@@ -1467,8 +1473,9 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 
 #@# @suppress SentenceLength ParenthesizedSentence
 他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。
-筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに@<href>{https://github.com/Microsoft/TypeScript/issues/10065,Issue}@<fn>{issue10065}を立てています。
-もし興味があれば覗いてみて、何か意見を書いていってください。
+筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに提案もしてみました@<fn>{issue10065}。
+しかし、設計上の制約（ようするに実装が難しい）ので現時点では対応策無し、とのことでした。
+残念。
 
 //footnote[issue10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]
 
@@ -1476,7 +1483,9 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 
 #@# クラスのMixinパターンのサポート Mixin classes in 2.2.1
 クラスにmixinで要素や機能を追加できます。
-拡張用の関数に対してコンストラクタを渡すとそれを機能拡張する形で継承したものを返す、というだけの関数です（@<list>{mixin/basic.ts}）。
+拡張用の関数に対してコンストラクタを渡すと機能拡張する形で継承したものを返す、というだけの関数です（@<list>{mixin/basic.ts}）。
+
+#@# mhidaka TODO mixin Mixinで表記に揺れ
 
 //list[mixin/basic.ts][任意のクラスにmixinで機能を追加する]{
 #@mapfile(../code/types-advanced/mixin/basic.ts)
@@ -1549,7 +1558,7 @@ mixin用の関数について命名規則は言及されている媒体によっ
 #@# keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
 #@# ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
 
-これもかなり複雑な機能です。
+keyofと型の写像の組み合わせは、複雑な機能です。
 Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equivalent-word}のですが、型の写像という訳にしました。
 
 //footnote[equivalent-word][訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…]
@@ -1565,6 +1574,8 @@ Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equiv
 まずは型の切り出し（Loolup Types）です。
 任意のプロパティの型を参照できる機能です。
 コード例を見てみます（@<list>{keyofAndMappedTypes/lookupTypes.ts}）。
+
+#@# mhidaka TODO 切り出しは適切な訳文か？ loolは洗う？洗い出しのほうが日本語ぽくないかな？
 
 //list[keyofAndMappedTypes/lookupTypes.ts][ある型のプロパティの型を参照できる]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/lookupTypes.ts)
@@ -1602,11 +1613,11 @@ type CatPropertyNames = keyof Cat;
 #@end
 //}
 
-型に対してプロパティが増減した時も自動的に対応が行われるのがいいですね。
+型に対してプロパティが増減した時も自動的に対応できる点がいいですね。
 
 型の切り出しやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。
 
-型の写像処理には書き方基本が4パターンあります。
+型の写像処理には書き方の基本が4パターンあります。
 
 //emlist{
 { [ P in K ] : T }
@@ -1615,15 +1626,18 @@ type CatPropertyNames = keyof Cat;
 { readonly [ P in K ] ? : T }
 //}
 
-全然わからないですね。
+みただけでは全然わからないですね。
 全体としてはインデックスシグニチャと同じ書式として読み解くことができます。
+
 @<code>{K}に含まれる@<code>{P}という値の型にあたる@<code>{T}と読めばいいのでしょうか。
 前半部分にあたる@<code>{[ P in K ]}相当の部分で操作対象となるプロパティの一覧を定義します。
 それと対になるように変換したプロパティの値を定義します。
 
 この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（@<list>{keyofAndMappedTypes/buildinTypes.ts}）。
 
-//list[keyofAndMappedTypes/buildinTypes.ts][ビルトインの型の写像を作るパーツたち]{
+#@# mhidaka TODO 癖かもしれないがちょいちょいかかりつけが遠い修飾語を発見する。
+
+//list[keyofAndMappedTypes/buildinTypes.ts][型の写像を作るビルトインのパーツたち]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypes.ts)
 // 指定した型の全ブロパティを省略可能にする
 type Partial<T> = {
@@ -1650,7 +1664,7 @@ export { Partial, Readonly, Pick, Record }
 //}
 
 写像処理と型の切り出しを組み合わせ、実用的な変換処理を作り出しています。
-これだけだとピンとこないと思いますのでこれらの利用例を見ます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
+これだけだとピンとこないでしょうから、利用例を見てみます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
 
 //list[keyofAndMappedTypes/buildinTypesUsage.ts][ビルトインの型の利用例]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypesUsage.ts)
@@ -1697,10 +1711,10 @@ export { c1, c2, c3, c4, c5 }
 #@end
 //}
 
-雰囲気はわかります。
+雰囲気が掴めてきませんか。
 とりあえずビルトイン型の存在を認識して、便利に使えるようになるところから始めるのがよさそうです。
 
-これらの武器をうまく使うと、自然なJavaScript的コードに対して複雑な型チェックを行わせることができます（@<list>{keyofAndMappedTypes/usage-invalid.ts}）。
+これらの武器をうまく使うと、JavaScriptの自然なコードに対して複雑な型チェックを実施できます（@<list>{keyofAndMappedTypes/usage-invalid.ts}）。
 
 //list[keyofAndMappedTypes/usage-invalid.ts][この節のパーツを組み合わせてより強い安全さを作り出す]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/usage-invalid.ts)
@@ -1750,6 +1764,6 @@ export { }
 #@end
 //}
 
-これを自力で1からひねり出せるかというと結構難しそうです。
+このような工夫をこらしたコードを自力で1からひねり出せるかというとかなりの難易度です。
 功夫が必要です。
 やっていきましょう。

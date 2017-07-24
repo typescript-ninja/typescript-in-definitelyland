@@ -10,3 +10,5 @@ imports:
 rules:
   - expected: asm.js
     pattern:  ams.js
+  - expected: tuple
+    pattern:  taple
