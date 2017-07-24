@@ -44,8 +44,9 @@ Version 2.5.0-dev.20170712
 #@# TODO 定期的にこの辺更新したほうがよさそう
 
 実際にはプロジェクトごとに利用するTypeScriptのバージョンを変えたい場合がほとんどでしょう。
-常に最新のバージョンだけを使い続けるのは自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。
-その方法を次に示します。
+最新のバージョンだけを使い続ける方法は自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。
+
+プロジェクトごとにバージョンを指定する方法を次に示します。
 
 //cmd{
 $ npm init -y
@@ -59,12 +60,12 @@ Version 2.4.2
 #@end
 //}
 
-この、@<code>{node_modules/.bin}にはプロジェクトローカルに導入された実行ファイルが集められています。
+@<code>{node_modules/.bin}にはプロジェクトローカルに導入された実行ファイルが集められています。
 @<code>{npm bin}コマンドを実行するとパスが得られます。
 macOSやLinux環境下では@<code>{$(npm bin)/tsc}とするとプロジェクトローカルのtscコマンドへのパスが取得できます。
 
 さらにnpm scripts@<fn>{npm-scripts}では$PATHに@<code>{node_modules/.bin}が自動的に追加されます。
-このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
+このため、npm scriptsを活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。
 
 //footnote[npm-scripts][@<href>{https://docs.npmjs.com/misc/scripts}]
 
@@ -101,10 +102,11 @@ $ cat tsconfig.json
 }
 //}
 
-tsconfig.jsonはJSONと言ってるクセにコメントを書くことが可能です。
-大変便利なんですが一般的な規約をぶっ壊してくるのは勘弁していただきたい…
+tsconfig.jsonはJSONですがコメントを書くことが可能@<fn>{jsoncomment}です。
 
-さて、TypeScriptが出力するデフォルトの設定はかなり一般向けの設定です。
+//footnote[jsoncomment][大変便利なのですが一般的な規約をぶっ壊してくるのは勘弁していただきたい…]
+
+TypeScriptが出力するデフォルトの設定は一般向けの設定です。
 初心者がとりあえず使い始める足がかりとしては十分です。
 @<code>{--strict}がデフォルトでtrueになっているあたりにTypeScriptの強い気持ちが感じられますね。
 
@@ -182,29 +184,29 @@ tsconfig.jsonはJSONと言ってるクセにコメントを書くことが可能
 =={compile} 試しにコンパイルしてみる
 
 #@# @suppress KatakanaSpellCheck
-tsconfig.jsonができたら、後は単に@<code>{tsc}コマンドを実行するだけです。
-引数無しで実行した場合、デフォルトでtsconfig.jsonを参照しコンパイルが行われます。
+tsconfig.jsonができたら、後は@<code>{tsc}コマンドを実行するだけです。
+引数無しで実行した場合、デフォルトでtsconfig.jsonを参照してコンパイルが行われます。
 
-本節についてもより詳しい説明は@<chapref>{tsc-options}を参照してください。
+本節についても詳細は@<chapref>{tsc-options}を参照してください。
 
 #@# @suppress KatakanaSpellCheck
 =={editor-and-ide} エディタ・IDEの環境を整えよう
 
 #@# @suppress KatakanaSpellCheck CommaNumber
-Visual Studio Code、Atom、WebStorm、Visual Studio、Vim、Emacs、EclipseなどさまざまなTypeScript対応のIDE・エディタが存在しています@<fn>{ts-editor}。
+Visual Studio Code、Atom、WebStorm、Visual Studio、Vim、Emacs、EclipseなどTypeScript対応のIDE・エディタが数多く存在@<fn>{ts-editor}しています。
 
 //footnote[ts-editor][@<href>{https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support}]
 
 現時点での筆者のお勧めは@<href>{https://code.visualstudio.com/,Visual Studio Code}@<fn>{vscode}です。
 Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。
-Visual Studioの名を冠していますがElectron@<fn>{electron}を利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。
+Visual Studioの名を冠していますがElectron@<fn>{electron}を利用したマルチプラットフォームなエディタで、Windows以外でも利用できます。
 筆者はmacOSユーザですがTypeScriptを書く時はvscode一本です。
 #@# OK REVIEW lc: s/Window/Windows/
 
 //footnote[vscode][@<href>{https://code.visualstudio.com/}]
 //footnote[electron][@<href>{http://electron.atom.io/}]
 
-tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。
+vscodeはプロジェクト内に配置されたtsconfig.jsonから必要な設定を読み込みます。
 つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。
 
 #@# OK REVIEW lc: 節にしては薄すぎる気がする・・・これはエディタ・IDE節の中の項なのでは？むしろ、話の展開として先にVCSがTSサポート厚いから使う話をして、同様のサポートが他のエディタでもあります、その理由は〜という展開のほうが読みやすい気がする？
@@ -217,29 +219,34 @@ TypeScriptにはLanguage Serviceという仕組みがあるため、IDEを作る
 #@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
 
 #@# @suppress SentenceLength
-Language Serviceに興味がある場合、@<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}や@<href>{https://github.com/Microsoft/language-server-protocol}などを参照するとよいでしょう。
+Language Serviceに興味がある場合、次の文献を参照するとよいでしょう。
+
+ * @<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}
+ * @<href>{https://github.com/Microsoft/language-server-protocol}
 
 ===[column] TypeScriptのリリースサイクルについて
 
 TypeScriptのリリースサイクルについて解説しておきます。
-以前のTypeScriptは次のリリースは予定された機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。
-このため、すでに開発完了している機能やバグフィクスがなかなか使えるようにならない！という不満がありました。
-最近ではこの問題が改められ、定期的にリリースされる運用に変更@<fn>{ts-release-schedule}されました。
+以前は目玉となる機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。
+このため、すでに開発完了している機能やバグフィクスがあってもなかなか使えるようにならない！という不満がありました。
+最近ではこの問題が改められ、定期的にリリースする運用に変更@<fn>{ts-release-schedule}されました。
 
 //footnote[ts-release-schedule][@<href>{https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/}]
 
 変更後のリリースサイクルは次のとおりです。
 
- * 機能追加のフルリリースは2ヶ月毎（いわゆるminorアップデート）
- * パッチまたは機能追加のリリースを1ヶ月毎（いわゆるpatchアップデート）
+ * 機能追加のフルリリースは2ヶ月毎（minorアップデート）
+ * パッチまたは機能追加のリリースを1ヶ月毎（patchアップデート）
 
-ある機能追加の開発がリリースに間に合わなかったら次のリリースに先送り。
+ある機能追加の開発が間に合わなかったら次のリリースに先送り。
 TypeScriptのリリースはVSCodeのリリースの一週間程度前に行われる。
 という感じです。
-VSCodeは月イチ更新なのでそれが視野に入っているわけです。
+VSCodeが月イチ更新なのでエディタとの連携を視野に入れているわけです。
 
-なお、各リリースの更新内容は公式ブログ（@<href>{https://blogs.msdn.microsoft.com/typescript/}）や
-Roadmap（@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}）、
-What's new in TypeScript（@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}）を確認するとわかりやすいです。
+なお、各リリースの更新内容は公式ブログ@<fn>{official}やRoadmap@<fn>{tsroadmap}、What's new in TypeScript@<fn>{whatsnewin}を確認するとわかりやすいです。
+
+//footnote[official][@<href>{https://blogs.msdn.microsoft.com/typescript/}]
+//footnote[tsroadmap][@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}]
+//footnote[whatsnewin][@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}]
 
 ===[/column]

@@ -39,7 +39,7 @@
 TypeScriptの基本的な知識（型の使い方）やコンパイラのオプション、型定義ファイルの作り方やエコシステムについて解説します。
 
 対象読者は新しめのJavaScript、いわゆるECMAScript 2015とそれ以降@<fn>{js-primer}について理解しているユーザです。
-Node.js環境やnpmの使い方、@<kw>{OOP,Object Oriented Programming}についての効能や利点をある程度理解していることが望ましいです。
+Node.js環境やnpmの使い方、@<kw>{OOP,Object Oriented Programming}の効能や利点をある程度理解していることが望ましいです。
 
 //footnote[js-primer][@azu_reさんと@laco0416くんが書いている入門書（書きかけ）があります @<href>{https://github.com/asciidwango/js-primer}]
 
@@ -56,13 +56,13 @@ Version 2.4.2
 
 前回頒布した時のTypeScriptは2.0.0でした。
 TypeScriptは進歩を続け、ますます堅牢で安全で、そして最新のECMAScript仕様が使えるようになっています。
-「よりよいJavaScriptコード」を書くことで、型の絞込が行われたりnullやundefinedのチェックができるようになっていっています。
-つまり、型周りの記法を覚え、JSとしてよいコードを書き、コンパイルが通れば実行時エラーが発生する心配をほぼしなくてもよい環境が手に入るのです。
+「よりよいJavaScriptコード」を書くことで型の絞込が行われ、@<code>{null}や@<code>{undefined}のチェックができます。
+つまり、型に関する記法を覚え、JavaScriptとしてよいコードを書き、コンパイルできれば実行時エラーが発生する心配をほぼしなくてもよい環境が手に入ります。
 
-さて、今回の改訂では本の方針を変更し、TypeScriptについての網羅的な解説からTypeScriptを使う上で知っているべき知識の効率的な摂取にシフトすることにしました。
-というのも、TypeScript本体に重箱の隅をフォローする仕様が増え、網羅的に仕様を把握・解説するのが困難になり、読むのも苦痛だろうからです。
+今回の改訂では方針を変更し、TypeScriptについての網羅的な解説から知識の効率的な摂取にシフトすることにしました。
+というのも、TypeScript本体に重箱の隅をフォローする仕様が増え、網羅的に仕様を把握・解説することが困難になり、読むのも苦痛だろうからです。
 ECMAScript 2015以降の知識についての詳細は、本書では扱いません。
-主に型周りの説明、TypeScriptコンパイラ自体の説明、周辺仕様の解説を行います。
+主に型周りの説明、TypeScriptコンパイラ自体の説明、周辺仕様を解説します。
 
 本書の内容は@<href>{http://typescript.ninja/typescript-in-definitelyland/,Webサイト}@<fn>{wonderland}にて全文を公開しています。
 誤字や内容の誤り、自分としてはコンパイルが通ると思うのに通らないパターン、深く掘り下げてほしい内容などがある場合、本書リポジトリまで@<href>{https://github.com/typescript-ninja/typescript-in-definitelyland/issues,Issue}@<fn>{issues}として報告していただけますと幸いです。
@@ -108,28 +108,28 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 @<chapref>{prepared-to-typescript}では、TypeScriptコンパイラのセットアップ方法とVisual Studio Codeの設定について言及します。
 
 #@# prh:disable
-@<chapref>{typescript-basic}では、TypeScriptの基本構文を簡単に解説し、このあとの章を読み解くための基礎知識を蓄えます。
+@<chapref>{typescript-basic}では基本構文を解説し、このあとの章を読み解くための基礎知識を蓄えます。
 
-@<chapref>{types-basic}では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。
+@<chapref>{types-basic}では開発する上で理解しておきたい型についての知識を蓄えます。
 
 @<chapref>{types-advanced}では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。
 
-@<chapref>{tsc-options}では、tscコマンドやtsconfig.jsonで利用可能なオプションについて、重要なオプションを中心に解説します。
+@<chapref>{tsc-options}では、tscコマンドやtsconfig.jsonで利用できるオプションについて、重要なオプションを中心に解説します。
 
-@<chapref>{definition-file}では、既存のJS用資産を活かすための型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
+@<chapref>{definition-file}では、既存のJavaScript用の資産を活かすため型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
-@<chapref>{typescript-as-a-tool}では、TypeScriptのLanguage Service APIやLanguage Server Protocolについて概要を紹介します。
+@<chapref>{typescript-as-a-tool}では、TypeScriptのLanguage Service APIやLanguage Server Protocolの概要を紹介します。
 
 =={why-typescript} なぜTypeScriptを選ぶべきなのか
 
-TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（JavaScript）に静的な型付けによる検証を導入したものです。
+TypeScriptはMicrosoftが主導となって開発している言語で、@<kw>{ECMAScript,JavaScript}に静的な型付けによる検証を導入したものです。
 現実を見据えた言語仕様で、"未来のJavaScriptそのもの"になることを目指しています。
 
-TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜しています。
+TypeScriptはECMAScriptの@<kw>{superset,上位互換}であることを標榜しています。
 つまり、ECMAScript＋静的型付け＝TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けようとしています。
 
-稀にTypeScriptのリポジトリに「TypeScriptにLIatoimNQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってくることがあります。
+TypeScriptのリポジトリには稀に「TypeScriptにLIatoimNQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってきます。
 しかしながら、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。
 どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体にその仕様を入れる努力が必要でしょう。
 
@@ -138,11 +138,11 @@ TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜し�
 どちらか片方だけでは成り立たず、両輪を理解し活用することが上達への近道です。
 
 さらにTypeScriptを勧めたい点として、TypeScriptコンパイラーが内蔵するエディタ支援のための機能群です。
-コンパイラに密に結合された（つまり更新遅延のない）エディタサポートは、強く信頼できる、まさにコンパイラと同等レベルの型推論や入力補完を提供してくれます。
-高機能で信頼できる、曖昧さが排除されたエディタを使いたい場合、TypeScriptはうってつけの選択肢といえます。
+コンパイラに密に結合された（つまり更新遅延のない）エディタサポートは、強く信頼できる型推論や入力補完を提供します。
+高機能で信頼できる、曖昧さが排除されたエディタを使いたい場合、TypeScriptはうってつけの選択肢です。
 
 これらTypeScriptの利点が支持された結果として、いくつかのフレームワークや多くの人々がTypeScriptを使い始めています。
-たとえばSlack@<fn>{slack-ts}、Reddit@<fn>{reddit-ts}、Google@<fn>{google-ts}（そういえば、もちろんMicrosoftも）などのビッグサービスです。
+たとえばSlack@<fn>{slack-ts}、Reddit@<fn>{reddit-ts}、Google@<fn>{google-ts}、Microsoftなどのビッグサービスです。
 乗るしかない！このビッグウェーブに！
 
 //footnote[slack-ts][@<href>{https://slack.engineering/typescript-at-slack-a81307fa288d}]
@@ -153,12 +153,13 @@ TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜し�
 
 一番大きなデメリットは、JavaScriptにプラスした学習コストが発生します。
 JavaScriptの書き方に加え、TypeScriptで型注釈を与える記法を学ばねばなりません。
-基本的な書き方はすぐに習得できると思いますが、既存のJavaScriptライブラリと組み合わせようとしたときに少し高度なTypeScriptに対する理解が必要になります。
-本書ではそのための専門知識について解説し、TypeScriptを自由自在に使いこなすお手伝いをします。
+
+基本的な書き方はすぐに習得できますが、既存のJavaScriptライブラリと組み合わせようとしたときにTypeScriptに対する応用的な理解が必要になります。
+本書ではそのための専門知識について解説し、TypeScriptを自由自在に使いこなす手伝いをしていきます。
 
 #@# prh:disable
-その他の懸念として、「TypeScriptにロックインされてしまうのでは？」という不安を耳にすることがあります。
+懸念として「TypeScriptにロックインされてしまうのでは？」という不安を耳にすることがあります。
 これについては脱出口が用意されています。
-TypeScriptできれいに書いたコードは@<code>{--target esnext}で出力すると、単に型注釈を取り除いただけの素直なJavaScriptが出力されてきます。
-簡単なコードを自分で書いてみて、それをJSに変換して確認してみるとよいでしょう。
+TypeScriptできれいに書いたコードは@<code>{--target esnext}で出力すると、単に型注釈を取り除いただけの素直なJavaScriptが出力されます。
+簡単なコードを自分で書いてみて、それを変換して確認してみるとよいでしょう。
 まずは、恐れずにTypeScriptに取り組んでみましょう。
