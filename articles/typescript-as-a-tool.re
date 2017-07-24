@@ -52,11 +52,11 @@ Language Serviceは主にエディタから使われる機能であり、コン�
 エディタ上で使うべきLanguage Serviceのインスタンス、@<code>{ts.LanguageHost}がまるごとポン！と渡されるので、任意のメソッドを自分の好きな実装に差し替えます。
 つまり@<code>{getQuickInfoAtPosition}の実装を差し替えればエディタ上で表示されるツールチップ（クイックインフォ）の表示を変更できる、というわけです。
 
-プラグインの作り方については公式のガイド@<fn>{howtoplugin}を参照するのがもっともわかりやすいでしょう。
+プラグインの作り方については公式のガイド@<fn>{how-to-make-plugin}を参照するのがもっともわかりやすいでしょう。
 筆者もtypescript-plugin-exampleというプラグインのサンプルを公開@<fn>{typescript-plugin-example}しているので、こちらを参照してみてください。
 また、中の人であるRyan Cavanaughのサンプル@<fn>{RyanCavanaugh}もあります。
 
-//footnote[howtoplugin][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin}]
+//footnote[how-to-make-plugin][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin}]
 //footnote[typescript-plugin-example][@<href>{https://www.npmjs.com/package/@vvakame/typescript-plugin-example}]
 //footnote[RyanCavanaugh][@<href>{https://github.com/RyanCavanaugh/sample-ts-plugin}]
 
