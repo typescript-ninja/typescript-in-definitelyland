@@ -122,14 +122,14 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 
 =={why-typescript} なぜTypeScriptを選ぶべきなのか
 
-TypeScriptはMicrosoftが主導となって開発している言語で、@<kw>{ECMAScript,JavaScript}に静的な型付けによる検証を導入したものです。
+TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（≒JavaScript）に静的な型付けによる検証を導入したものです。
 現実を見据えた言語仕様で、"未来のJavaScriptそのもの"になることを目指しています。
 
 TypeScriptはECMAScriptの@<kw>{superset,上位互換}であることを標榜しています。
 つまり、ECMAScript＋静的型付け＝TypeScriptです。
 そして、"TypeScript独自の実装として表れる仕様"を注意深く避けようとしています。
 
-TypeScriptのリポジトリには稀に「TypeScriptにLIatoimNQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってきます。
+TypeScriptのリポジトリには稀に「TypeScriptにLINQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってきます。
 しかしながら、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。
 どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体にその仕様を入れる努力が必要でしょう。
 
@@ -142,7 +142,7 @@ TypeScriptのリポジトリには稀に「TypeScriptにLIatoimNQを導入して
 高機能で信頼できる、曖昧さが排除されたエディタを使いたい場合、TypeScriptはうってつけの選択肢です。
 
 これらTypeScriptの利点が支持された結果として、いくつかのフレームワークや多くの人々がTypeScriptを使い始めています。
-たとえばSlack@<fn>{slack-ts}、Reddit@<fn>{reddit-ts}、Google@<fn>{google-ts}、Microsoftなどのビッグサービスです。
+たとえばSlack@<fn>{slack-ts}、Reddit@<fn>{reddit-ts}、Google@<fn>{google-ts}、そしてTypeScript開発元であるMicrosoftなどのビッグサービスです。
 乗るしかない！このビッグウェーブに！
 
 //footnote[slack-ts][@<href>{https://slack.engineering/typescript-at-slack-a81307fa288d}]

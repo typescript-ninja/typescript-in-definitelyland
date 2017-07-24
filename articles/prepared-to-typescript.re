@@ -243,10 +243,10 @@ TypeScriptのリリースはVSCodeのリリースの一週間程度前に行わ�
 という感じです。
 VSCodeが月イチ更新なのでエディタとの連携を視野に入れているわけです。
 
-なお、各リリースの更新内容は公式ブログ@<fn>{official}やRoadmap@<fn>{tsroadmap}、What's new in TypeScript@<fn>{whatsnewin}を確認するとわかりやすいです。
+なお、各リリースの更新内容は公式ブログ@<fn>{official}やRoadmap@<fn>{ts-roadmap}、What's new in TypeScript@<fn>{whats-new}を確認するとわかりやすいです。
 
 //footnote[official][@<href>{https://blogs.msdn.microsoft.com/typescript/}]
-//footnote[tsroadmap][@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}]
-//footnote[whatsnewin][@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}]
+//footnote[ts-roadmap][@<href>{https://github.com/Microsoft/TypeScript/wiki/Roadmap}]
+//footnote[whats-new][@<href>{https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript}]
 
 ===[/column]

@@ -21,7 +21,7 @@ let objB: B2 = {
 	num: 42,
 };
 
-// interfaceはクラスすら拡張できる！(実装はなかったことになる
+// interfaceはクラスすら拡張できる！(実装はなかったことになる）
 class FooClass {
 	constructor(public num: number) {
 	}

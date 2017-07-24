@@ -28,7 +28,7 @@ TypeScriptでは、JavaScriptで書かれたコードを型定義ファイルを
 #@# @suppress InvalidExpression CommaNumber JapaneseAmbiguousNounConjunction
 では解説していきましょう。
 union typesはいわゆる直和型です。
-たとえば@<code>{string | null | undefined}という型注釈がある場合、この変数の値はstringか、nullか、undefinedのどれかを表します。
+たとえば@<code>{string | null | undefined}という型注釈がある場合、この変数の値はstringか、nullか、undefinedのいずれかを表します。
 union typesはnullやundefinedとの組み合わせ、各種literal typesなどTypeScriptの中でも出番がたくさんあります。
 JavaScriptという現実と安全な世界を構築するTypeScriptの橋渡しをしてくれる機能といえます。
 
@@ -228,9 +228,7 @@ export { }
 //}
 
 変数のプロパティに対してもtype guardsは利用可能です（@<list>{typeGuards/controlFlowBasedProperty.ts}）。
-#@# コンパイラの実装を想像すると、なにげに大変そうなことをやっていて感心してしまいます。
-#@# TypeScriptコンパイラの努力と改善はめざましく、どこまで込み入った処理について来れるのか、事前に予想するのは難しいですね。
-#@# エディタ上で変数がどの時点でどういう型になっているのか簡単に確認できるので困ることは少ないのですが。
+書いたコードがどういう型に絞り込まれているか想像できない場合、エディタ上のツールチップの表示でどういう変数になっているか確認します。
 #@# プロパティアクセスについてtype guardsを行う（Type guards on property access）
 
 //list[typeGuards/controlFlowBasedProperty.ts][変数のプロパティも絞り込める]{
@@ -403,7 +401,7 @@ export { }
 
 ==={user-defined-type-guards} ユーザ定義のType Guards（User-defined Type Guards）
 
-ユーザが定義した関数によって、ある値の型をTypeScriptコンパイラに教える方法があります（@<list>{typeGuards/userDefined.ts}）。
+ユーザが定義した関数を使って、値の型をTypeScriptコンパイラに指示する方法があります（@<list>{typeGuards/userDefined.ts}）。
 型判別用の関数を作成し、そこで返り値に@<code>{仮引数名 is 型名}という形式で判別結果を指定します。
 この書き方をした場合、返り値はbooleanでなければなりません。
 
@@ -794,7 +792,7 @@ interfaceが基本、type aliasは応用、と考えておきましょう。
 パッと読んだだけでは、意味がわからないですね。
 まずは例を見てみましょう（@<list>{literalTypes/basic.ts}）。
 
-//list[literalTypes/basic.ts][トランプのマークを型として表す]{
+//list[literalTypes/basic.ts][トランプのスート（マーク）を型として表す]{
 #@mapfile(../code/types-advanced/literalTypes/basic.ts)
 // "文字列" が 型 です。値ではない！
 type Suit = "Heart" | "Diamond" | "Club" | "Spade";
@@ -856,9 +854,9 @@ interface HTMLBodyElement extends HTMLElement {
 #@end
 //}
 
-これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます@<fn>{vv-comment}。
+これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます@<fn>{js-dirty-overload}。
 
-//footnote[vv-comment][こんなものが必要になってしまうJavaScriptの複雑さよ…]
+//footnote[js-dirty-overload][こんなものが必要になってしまうJavaScriptの複雑さよ…]
 
 #@# Discriminated union types タグ付きUnion型 in 2.0.0 Beta
 またunion typesとリテラル型を組み合わせ、switchで条件分岐ができます（@<list>{literalTypes/switch.ts}）。
@@ -974,7 +972,7 @@ thisを型として記述するという発想がすごいですね。
 fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。
 この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。
 
-とはいえ、仮引数の型として使うには、実際に受け取れる値に対して制約がきつくなる場合があるため乱用は控えましょう。
+とはいえ、仮引数の型として使うと実際に受け取れる値に対して制約がきつくなる場合があるため乱用は控えましょう。
 @<code>{return this;}を使った時に、メソッドの返り値が暗黙的に@<code>{this}になるのを利用する、くらいがちょうどよいかもしれません。
 
 #@# @suppress JapaneseAmbiguousNounConjunction
@@ -1188,9 +1186,8 @@ export { Foo }
 
 =={type-queries} 型クエリ（Type Queries）
 
-@<kw>{型クエリ,Type Queries}は指定した変数やメソッドなどの型をコピーします。
-たとえば、@<list>{typeQueries/basic.ts}のようにクラスそのものを型として指定したい場合、そのような書き方は用意されていません。
-そういうときに型クエリを使います。
+@<kw>{型クエリ,Type Queries}は指定したクラスや変数などの型をコピーします。
+たとえば、クラスそのものを型として指定したい場合、@<list>{typeQueries/basic.ts}のように型クエリを使います。
 
 //list[typeQueries/basic.ts][クラスそのものの型を指定する]{
 #@mapfile(../code/types-advanced/typeQueries/basic.ts)
@@ -1221,7 +1218,7 @@ export { }
 //}
 
 メソッドなどの値も取れますが、thisを使うことはできないため、少しトリッキーなコードになる場合もあります。
-@<list>{typeQueries/cheapTrick.ts}の例は、prototypeプロパティを使っているためJavaScriptの応用力が試されます。
+@<list>{typeQueries/cheapTrick.ts}の例は、prototypeプロパティを使っているためJavaScriptの知識が試されます。
 
 //list[typeQueries/cheapTrick.ts][prototypeを参照するとメソッドの型が取れる]{
 #@mapfile(../code/types-advanced/typeQueries/cheapTrick.ts)
@@ -1270,7 +1267,7 @@ export { }
 #@end
 //}
 
-この例まで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがよいですね。
+この例のレベルまでやってしまうとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがよいですね。
 
 #@# @suppress ParagraphNumber SectionLength
 =={tuple-types} タプル型（Tuple Types）
@@ -1297,7 +1294,7 @@ JavaScriptではtupleはサポートされていないため、TypeScriptでのt
 記述方法は配列の型指定へ@<code>{[typeA, typeB]}のように配列の要素の代わりに型名を記述していくだけです。
 例を見てみましょう（@<list>{tuple/basic.ts}）。
 
-//list[tuple/basic.ts][基本的なtapleの例]{
+//list[tuple/basic.ts][基本的なtupleの例]{
 #@mapfile(../code/types-advanced/tuple/basic.ts)
 // まずは今までどおりの配列から
 // これは別の箇所で解説している union typesで表現され (number | string | boolean)[]
@@ -1340,7 +1337,7 @@ let value = tuple[2];
 
 次は要素の順序がずれた場合、どうなるかを見てみましょう（@<list>{tuple/unshift.ts}）。
 
-//list[tuple/unshift.ts][順序の変化があった場合の例]{
+//list[tuple/unshift.ts][順序の変化には弱い]{
 #@mapfile(../code/types-advanced/tuple/unshift.ts)
 let tuple: [string, number] = ["str", 1];
 
@@ -1365,8 +1362,10 @@ export { }
 
 =={non-null-assertion-operator} 非null指定演算子（Non-null Assertion Operator）
 
-非null指定演算子（@<code>{!}）は、変数やプロパティの末尾に指定して利用します。値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
-新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。基本的に使わないで済ましたいものです。
+非null指定演算子（@<code>{!}）は、変数やプロパティの末尾に指定して利用します。
+値が@<code>{null}や@<code>{undefined}ではないことを人力でコンパイラに教えてやるための記法です。
+新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。
+基本的に使わずに済ませたいものです。
 
 しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合もあります。
 @<code>{--strictNullChecks}オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。
@@ -1474,12 +1473,11 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 
 #@# @suppress SentenceLength ParenthesizedSentence
 他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。
-筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに@<href>{https://github.com/Microsoft/TypeScript/issues/10065,Issue}@<fn>{issue10065}を立てています。
-興味があれば覗いてみて、何か意見を書いていってください。
+筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに提案もしてみました@<fn>{issue10065}。
+しかし、設計上の制約（ようするに実装が難しい）ので現時点では対応策無し、とのことでした。
+残念。
 
 //footnote[issue10065][@<href>{https://github.com/Microsoft/TypeScript/issues/10065}]
-
-#@# mhidaka TODO https://github.com/Microsoft/TypeScript/issues/10065 はCloseしている。どういう結末なのか書いておく（または削除でも）いいのでは？
 
 =={mixin-classes} クラスのMixin
 
@@ -1560,7 +1558,7 @@ mixin用の関数について命名規則は言及されている媒体によっ
 #@# keyof と 型の切り出し Static types for dynamically named properties (keyof T and T[K]) in 2.1.4
 #@# ある型のフィールドの修飾子の変換(Map処理)が可能に apped types (e.g. { [P in K]: T[P] }) in 2.1.4
 
-keyofと型の写像は、複雑な機能です。
+keyofと型の写像の組み合わせは、複雑な機能です。
 Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equivalent-word}のですが、型の写像という訳にしました。
 
 //footnote[equivalent-word][訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…]
@@ -1766,5 +1764,6 @@ export { }
 #@end
 //}
 
-このような工夫をこらしたコードを自力で1からひねり出せるかというとかなりの難易度です。功夫が必要です。
+このような工夫をこらしたコードを自力で1からひねり出せるかというとかなりの難易度です。
+功夫が必要です。
 やっていきましょう。

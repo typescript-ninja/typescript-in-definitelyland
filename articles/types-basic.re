@@ -525,7 +525,7 @@ export { Sample };
 
 =={function-type-literals} 関数型リテラル（Function Type Literals）
 
-関数型リテラルがあるため関数も型として表現できます（@<list>{function-types/basic.ts}）。
+関数型リテラルを使うと関数も型として表現できます（@<list>{function-types/basic.ts}）。
 
 //list[function-types/basic.ts][関数も型として表現できる]{
 #@mapfile(../code/types-basic/functionTypes/basic.ts)
@@ -586,7 +586,7 @@ let objB: B2 = {
   num: 42,
 };
 
-// interfaceはクラスすら拡張できる！(実装はなかったことになる
+// interfaceはクラスすら拡張できる！(実装はなかったことになる）
 class FooClass {
   constructor(public num: number) {
   }
@@ -601,8 +601,6 @@ let objC: C = {
 #@end
 //}
 
-#@# mhidaka TODO // interfaceはクラスすら拡張できる！(実装はなかったことになる ← このようなコメントでも）の閉じをお忘れなく！
-
 #@# インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
 TypeScriptでは@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできます。
 #@# mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
@@ -611,7 +609,7 @@ TypeScriptでは@<chapref>{types-advanced}で紹介する交差型など、よ�
 
 構造的部分型は、乱暴にいうと静的型付け用のduck typingです。
 TypeScriptでは、プロパティやメソッドなどの構造が一致するかどうかで型の互換性を判定します（@<list>{structuralSubtypings/basic.ts}）。
-クラスを継承しているか、インタフェースを実装しているかという厳密性は必ずしも必要ではありません。
+クラスを継承しているか、インタフェースを実装しているかという厳密さはTypeScriptでは必要ありません。
 
 //list[structuralSubtypings/basic.ts][構造が一緒ならまぁ一緒ってことでいいよね]{
 #@mapfile(../code/types-basic/structuralSubtypings/basic.ts)
@@ -806,7 +804,8 @@ export { num }
 
 =={generic-types} ジェネリクス（Generic Types）
 
-いよいよ来ました。最後の大ボスです。
+いよいよ来ました。
+最後の大ボスです。
 ジェネリクスはJavaなどでは総称型とも呼ばれます。
 
 ジェネリクスなんて知らんわい！

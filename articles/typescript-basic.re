@@ -27,8 +27,8 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 
 //list[variable/withAnnotations.ts][型注釈つきの変数]{
 #@mapfile(../code/typescript-basic/variable/withAnnotations.ts)
-// JSそのものの書き方
-// 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される
+// JavaScriptそのものの書き方
+// 変数に初期値を与えると初期値の型がそのまま変数の型になる（型推論される）
 // 省略しても問題のない型の記述は積極的に省略してしまってよい！
 {
   let str = "文字列";
@@ -42,7 +42,7 @@ TypeScriptの変数宣言はおおむねJavaScriptと同じです。
 }
 
 // 型推論に頼らずに型注釈を明示的に書いてもよい
-// 特別な理由がない限り、このやり方にあまり長所はない
+// 特別な理由がない限り、このやり方に長所はない
 {
   let str: string = "文字列";
   let num: number = 1;
@@ -107,11 +107,11 @@ class Base {
   // 初期値を与えない場合は型の指定が必要
   str: string;
 
-  // プロパティ名に ? をつけると省略可能（undefinedである可能性がある）ことを表せる
+  // プロパティ名に?をつけると省略可能（undefinedである可能性がある）ことを表せる
   regExpOptional?: RegExp;
 
   constructor(str: string) {
-    // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+    // strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
     // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
     this.str = str;
   }
@@ -149,7 +149,7 @@ class Base {
     constructor(str) {
         // インスタンス変数
         this.num = 1;
-        // str は省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+        // strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
         // 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
         this.str = str;
     }
