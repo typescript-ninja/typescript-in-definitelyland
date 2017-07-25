@@ -603,7 +603,7 @@ let objC: C = {
 
 #@# インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
 TypeScriptでは@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできます。
-#@# mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
+#@# OK mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
 
 =={structural-subtyping} 構造的部分型（Structural Subtyping）
 
