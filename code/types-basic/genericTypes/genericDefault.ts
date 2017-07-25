@@ -6,12 +6,12 @@ class DataContainer<T = string> {
 	}
 }
 
-// 省略したら T は string
+// 省略したらTはstring
 const obj1 = new DataContainer();
 obj1.data = "";
 // defaultはstringなのでこれはダメ
 // obj1.data = 1;
 
-// 省略しなかったので普通に T は number
+// 省略しなかったのでTはnumber
 const obj2 = new DataContainer<number>();
 obj2.data = 1;

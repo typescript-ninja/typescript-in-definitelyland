@@ -61,6 +61,7 @@ Language Serviceは主にエディタから使われる機能であり、コン�
 //footnote[RyanCavanaugh][@<href>{https://github.com/RyanCavanaugh/sample-ts-plugin}]
 
 #@# mhidaka TODO 項が1つだけでバランスがよくない。節に含めてよいのでは？
+#@# Language Service と Language Service Pluginは別のものなので分けておきたい…
 
 == Language Server Protocol
 
@@ -128,9 +129,8 @@ TypeScriptには似た仕組みとして後述のtsserverがあるのですが�
 
 //footnote[ts-lsp-issue][@<href>{https://github.com/Microsoft/TypeScript/issues/11274}]
 
-=== tsserver
+====[column] tsserver
 
-というわけでtsserverです。
 TypeScriptはLSPをまだ実装していない代わりに、同等のJSONっぽいRPCを使ったLanguage Serviceをホストするコマンドをバンドルしています。
 それがtsserverコマンドです。
 
@@ -139,4 +139,5 @@ TypeScriptはLSPをまだ実装していない代わりに、同等のJSONっぽ
 
 //footnote[tsserver][@<href>{https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29}]
 
-#@# mhidaka TODO 項が1つだけでバランスがよくない。Columnでもよいのでは？
+#@# OK mhidaka 項が1つだけでバランスがよくない。Columnでもよいのでは？
+====[/column]

@@ -21,6 +21,7 @@ namespace a {
 	// let tmp = new Sample();
 }
 
+// ネストしたnamespace
 namespace b {
 	export namespace c {
 		export function hello() {
@@ -28,6 +29,7 @@ namespace b {
 		}
 	}
 }
+// ネストしたnamespaceの短縮表記も存在する
 namespace d.e {
 	export function hello() {
 		return a.obj.hello();

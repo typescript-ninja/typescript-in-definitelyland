@@ -13,7 +13,7 @@ class Score {
 	constructor(public point: number) { }
 }
 
-// mixinできる
+// Mixinできる
 const TaggedScore = Tagged(Score);
 
 const ts = new TaggedScore(1);
@@ -24,7 +24,7 @@ console.log(ts.tag, ts.point);
 // error TS2345: Argument of type '"s"' is not assignable to parameter of type 'number'.
 // new TaggedScore("s");
 
-// mixinしたクラスも分け隔てなく継承できる
+// Mixinしたクラスも分け隔てなく継承できる
 class RankingScore extends TaggedScore {
 	constructor(public rank: number, tag: string, point: number) {
 		super(point);
