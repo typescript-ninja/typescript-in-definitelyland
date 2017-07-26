@@ -444,7 +444,7 @@ declare namespace ghost {
   }
 }
 
-// 型としては普通にアクセスできる
+// 型としてはしっかり存在していてアクセスできる
 let test: ghost.Test;
 test.str;
 
@@ -604,11 +604,11 @@ declare var foo: Foo;
 #@# @suppress InvalidExpression
 この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
-普通に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts}のように書きましょう。
+素直に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts}のように書きましょう。
 
 //list[interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts][素直にこうしよう]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
-// 普通にコレでいいだろ！！
+// 素直にこうしよう！
 declare namespace foo.bar.buzz {
   let str: string;
 }
@@ -736,7 +736,7 @@ function test() {
 
 //list[declareClass/basic.d.ts][素直にクラス定義 vs インタフェース+変数]{
 #@mapfile(../code/definition-file/declareClass/basic.d.ts)
-// A. 普通にクラスを定義する
+// A. クラスを定義する
 declare class TestA {
 }
 
@@ -784,7 +784,7 @@ let Animal: AnimalConstructor = class {
   }
 };
 /* tslint:enable:variable-name */
-// Animalはただの変数だが普通に継承できる！
+// Animalはただの変数だが問題なく継承できる！
 class Cat extends Animal {
   speak() {
     return "meow";
@@ -806,7 +806,7 @@ export { }
 
 質問：どれが一番、元々の関数の仕様がわかりやすいですか？
 
-//list[overload/useOverload.ts][普通に使えます]{
+//list[overload/useOverload.ts][書き方あれこれ]{
 #@mapfile(../code/definition-file/overload/useOverload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 // 1関数でget, set両方の役目を果たす場合…
@@ -905,7 +905,7 @@ declare module "foo" {
 #@end
 //}
 
-//list[externalModuleDeclarationMerging/usage.ts][普通に使えます]{
+//list[externalModuleDeclarationMerging/usage.ts][統合された定義が使えます]{
 #@mapfile(../code/definition-file/externalModuleDeclarationMerging/usage.ts)
 import * as foo from "foo";
 foo.str;
@@ -1368,7 +1368,7 @@ strutilExtra.happy("TypeScript");
 
 #@# @suppress JapaneseStyle
 モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module.ts}）。
-普通にモジュールであるかのように利用できますね。
+モジュールとしてimport句の対象にできています。
 
 //list[augmentGlobal/lib/module.ts][lib/module.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/lib/module.ts)

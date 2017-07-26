@@ -180,7 +180,7 @@ console.log(base.hello());
 次にクラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
 superを使い親クラスのメソッドを参照できます。
 
-//list[class/inherit.ts][普通に継承もあるよ]{
+//list[class/inherit.ts][もちろん継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
@@ -756,7 +756,7 @@ async function main() {
 }
 
 function mainAnother() {
-  // こういうのも普通にイケる
+  // こういうのも当然OK！
   import("./sub").then(sub => {
     console.log(sub.hello());
   });
@@ -913,7 +913,7 @@ namespace a {
 }
 
 namespace b {
-  // 他のモジュールも普通に参照できる
+  // 他のモジュールも参照できる
   let objA: a.Sample;
   objA = new a.Sample();
 

@@ -127,11 +127,11 @@ let obj: string | number | Date = null as any;
 // Date 扱いしてみる
 (obj as Date).getTime();
 
-// 値の集合に含まれない型にしてみると普通に怒られる
+// 値の集合に含まれない型にしてみるとしっかり怒られる
 // error TS2352: Type 'string | number | Date' cannot be converted to type 'RegExp'.
 //   Type 'Date' is not comparable to type 'RegExp'.
 //     Property 'exec' is missing in type 'Date'.
-// (<RegExp>obj).test("test");
+// (obj as RegExp).test("test");
 
 export { }
 #@end
@@ -164,7 +164,7 @@ type guardsは"変数Aが○○という条件を満たすとき、変数Aの型
 
 #@# @suppress JapaneseStyle
 さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
-名前が長いですが、普通にコードを書いていった時、変数の型が確定するようなコードを書くと書いたとおりに変数の型が絞り込まれるというものです。
+名前が長いですが、JavaScriptとして素直にコードを書き、変数の型が確定するような分岐などがあると書いたとおりに変数の型が絞り込まれるというものです。
 
 例を見ていきましょう。
 TypeScriptを書いていて一番対処を迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か＋@<code>{undefined}の形式でしょう。
@@ -499,7 +499,7 @@ if (typeof obj === "string" || typeof obj === "boolean") {
   // 消去法でnumber！
 }
 
-// 三項演算子は普通にif文と一緒の挙動
+// 三項演算子はif文と一緒の挙動
 typeof obj === "string" ? obj.charAt(0) : obj;
 // 次と等価
 if (typeof obj === "string") {
@@ -510,7 +510,7 @@ if (typeof obj === "string") {
 
 // 一応、否定演算子にも対応している
 if (!(typeof obj !== "string")) {
-  // 否定の否定は普通にそのまんまstringだな！ちゃんと絞り込まれます
+  // 否定の否定はそのまんまstringだな！ちゃんと絞り込まれます
   obj.charAt(0);
 }
 
@@ -1111,7 +1111,7 @@ const obj: B & ThisType<A> = {
     // console.log(`Hello, ${this.notExists}`);
   },
 };
-// objは B なので普通にhelloにアクセスできる
+// objは B なので問題なくhelloにアクセスできる
 obj.hello();
 
 export { }
@@ -1310,7 +1310,7 @@ let tuple: [number, string, boolean] = [1, "str", true];
 // string は charAt を持つ！
 tuple[1].charAt(0);
 
-// TypeScriptのtuple typesは普通にArrayでもあるのだ
+// TypeScriptのtuple typesはArrayでもあるのだ
 tuple.forEach(v => console.log(v));
 
 export { array }

@@ -4,7 +4,7 @@ const obj1 = {
 		console.log(`Hello, ${this.name}`);
 
 		// 存在しないプロパティにアクセスするとちゃんとエラーにしてくれる
-		// error TS2339: Property 'notExists' does not exist on 
+		// error TS2339: Property 'notExists' does not exist on
 		//   type '{ name: string; greeting(): void; }'.
 		// console.log(`Hello, ${this.notExists}`);
 	},
@@ -29,7 +29,7 @@ const obj: B & ThisType<A> = {
 		// console.log(`Hello, ${this.notExists}`);
 	},
 };
-// objは B なので普通にhelloにアクセスできる
+// objは B なので問題なくhelloにアクセスできる
 obj.hello();
 
 export { }

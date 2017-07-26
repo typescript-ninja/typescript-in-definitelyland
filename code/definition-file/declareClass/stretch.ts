@@ -23,7 +23,7 @@ let Animal: AnimalConstructor = class {
 	}
 };
 /* tslint:enable:variable-name */
-// Animalはただの変数だが普通に継承できる！
+// Animalはただの変数だが問題なく継承できる！
 class Cat extends Animal {
 	speak() {
 		return "meow";
