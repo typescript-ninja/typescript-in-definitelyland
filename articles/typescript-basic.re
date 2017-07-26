@@ -8,7 +8,7 @@ ECMAScriptの知識はどんどん広まってきていますし、最近では�
 まずは必要最低限の知識を身につけていきましょう。
 
 型の基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
-既存のJavaScript資産やライブラリを使いたい場合は@<chapref>{definition-file}を参照してください。
+既存のJavaScript資産やライブラリを使いたい場合は@<chapref>{at-types}や@<chapref>{definition-file}を参照してください。
 
 #@# @suppress CommaNumber
 また、本書は@<code>{--strict}を有効にした状態を基本として解説します。
