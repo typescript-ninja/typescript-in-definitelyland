@@ -16,7 +16,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --noFallthroughCasesInSwitch
 #@#   --pretty
 #@#   --traceResolution
-#@#   --types
 #@#   --allowJs
 #@#   --experimentalDecorators
 #@#   --emitDecoratorMetadata
@@ -505,6 +504,35 @@ tsconfig.jsonの場合は素直に配列にしましょう。
 
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
 どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
+
+=={types} --types
+
+@<code>{--types}オプションについて解説します。
+TypeScriptのコンパイルを行う際、参照するべき型定義ファイルを明示的に指定します。
+
+通常、ソースコード中でimportしたモジュールのための型定義ファイルはルールに従って発見されるため、この設定は不要です。
+しかしながら、Node.jsやテスティングフレームワークのmochaなど、実行環境に初めからセットアップされているものはimportの機会がありません。
+このため、何らかの方法でコンパイラに環境の情報を伝える必要があります。
+そこで使うのが@<code>{--types}オプションです（@<list>{types/tsconfig.json}）。
+
+//list[types/tsconfig.json][types指定でnodeとmochaを参照する]{
+#@mapfile(../code/tsc-options/types/tsconfig.json)
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "types": [
+      "node",
+      "mocha"
+    ]
+  }
+}
+#@end
+//}
+
+ここで利用する型定義ファイルは@<chapref>{at-types}で紹介する@typesからnpmで引っ張ってくるのがお手軽です。
+@<code>{npm install --save-dev @types/node @types/mocha}という具合ですね。
 
 =={forceConsistentCasingInFileNames} --forceConsistentCasingInFileNames
 

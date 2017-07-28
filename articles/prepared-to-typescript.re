@@ -162,6 +162,7 @@ TypeScriptが出力するデフォルトの設定は一般向けの設定です�
   ],
   "exclude": [
     "node_modules",
+    "code/tsc-options/types/",
     "code/tsc-options/helpers/",
     "code/at-types/usage/",
     "code/definition-file/augmentGlobal/",
