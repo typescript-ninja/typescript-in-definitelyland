@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    review (2.2.0)
+    review (2.3.0)
       rouge
       rubyzip
     review-peg (0.2.2)
@@ -12,8 +12,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  review (= 2.2.0)
+  review (= 2.3.0)
   review-peg (= 0.2.2)
 
 BUNDLED WITH
-   1.15.1
+   1.15.3
