@@ -6,7 +6,10 @@ interface PropertyDescriptor<T> {
 	get?(): T;
 	set?(v: T): void;
 }
-function defineProperty<T, K extends keyof T>(o: T, p: K, attributes: PropertyDescriptor<T[K]>): any {
+function defineProperty<T, K extends keyof T>(
+	o: T, p: K,
+	attributes: PropertyDescriptor<T[K]>,
+): any {
 	return Object.defineProperty(o, p, attributes);
 }
 
@@ -23,7 +26,7 @@ defineProperty(foo, "a", {
 });
 
 // ダメ a に number
-// error TS2345: Argument of type '{ enumerable: false; value: number; }' 
+// error TS2345: Argument of type '{ enumerable: false; value: number; }'
 //   is not assignable to parameter of type 'PropertyDescriptor<string>'.
 //  Types of property 'value' are incompatible.
 //    Type 'number' is not assignable to type 'string'.

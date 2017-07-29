@@ -1,4 +1,4 @@
-={index} Revised^2 型の国のTypeScript
+={index} Revised Revised 型の国のTypeScript
 #@# TODO Revised^2 にしたい(上付き) http://www.r6rs.org/ と同じ感じ
 
 #@# TODO 気が向いたらコラム化する

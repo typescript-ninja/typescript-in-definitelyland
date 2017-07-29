@@ -21,7 +21,8 @@ ts.tag = "vv";
 console.log(ts.tag, ts.point);
 
 // これはちゃんと怒られる
-// error TS2345: Argument of type '"s"' is not assignable to parameter of type 'number'.
+// error TS2345: Argument of type '"s"' is not assignable to
+//   parameter of type 'number'.
 // new TaggedScore("s");
 
 // Mixinしたクラスも分け隔てなく継承できる

@@ -1,4 +1,4 @@
-={writing-dts-files} 型定義ファイルを自作する
+={writing-dts-files} 型定義ファイルを作成する
 
 @<chapref>{at-types}で型定義ファイルの取得方法、使い方を学びました。
 しかし、世の中にあるJavaScriptライブラリのうち、型定義ファイルが書かれていないものはまだまだあります。

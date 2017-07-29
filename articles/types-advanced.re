@@ -1515,7 +1515,8 @@ ts.tag = "vv";
 console.log(ts.tag, ts.point);
 
 // これはちゃんと怒られる
-// error TS2345: Argument of type '"s"' is not assignable to parameter of type 'number'.
+// error TS2345: Argument of type '"s"' is not assignable to
+//   parameter of type 'number'.
 // new TaggedScore("s");
 
 // Mixinしたクラスも分け隔てなく継承できる
@@ -1731,7 +1732,10 @@ interface PropertyDescriptor<T> {
   get?(): T;
   set?(v: T): void;
 }
-function defineProperty<T, K extends keyof T>(o: T, p: K, attributes: PropertyDescriptor<T[K]>): any {
+function defineProperty<T, K extends keyof T>(
+  o: T, p: K,
+  attributes: PropertyDescriptor<T[K]>,
+): any {
   return Object.defineProperty(o, p, attributes);
 }
 

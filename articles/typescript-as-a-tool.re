@@ -124,17 +124,14 @@ Rustでもrls（Rust Language Server）@<fn>{rust-lsp}の取り組みが始ま�
  * @<href>{https://github.com/Microsoft/vscode-languageserver-node-example}
 
 ちなみに、TypeScriptはLSPを実装していません@<fn>{ts-lsp-issue}（！？）。
-TypeScriptには似た仕組みとして後述のtsserverがあるのですが、MicrosoftがLSPを提唱し始めたのはtsserverの後なのです。
-仕方ないですね…。
+MicrosoftがLSPを提唱し始めたのはtsserverの後なのです。仕方ないですね…。
 
 //footnote[ts-lsp-issue][@<href>{https://github.com/Microsoft/TypeScript/issues/11274}]
 
 ====[column] tsserver
 
-TypeScriptはLSPをまだ実装していない代わりに、同等のJSONっぽいRPCを使ったLanguage Serviceをホストするコマンドをバンドルしています。
-それがtsserverコマンドです。
-
-本書ではtsserverについてはあまり詳しく扱いませんが、自分の好きなエディタにTypeScriptサポートを追加したい！と考えている人はこのコマンドについて調べるとよいでしょう。
+TypeScriptはLSPを実装していない代わりに、同等のJSONっぽいRPCを使ったLanguage Serviceをホストするコマンドをバンドルしています。
+それがtsserverコマンドです。自分の好きなエディタにTypeScriptサポートを追加したい！と考えている人はこのコマンドについて調べるとよいでしょう。
 公式サイトのガイド@<fn>{tsserver}を参照してください。
 
 //footnote[tsserver][@<href>{https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29}]

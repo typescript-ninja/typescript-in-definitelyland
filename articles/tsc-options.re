@@ -574,7 +574,8 @@ var __extends = (this && this.__extends) || (function () {
   return function (d, b) {
     extendStatics(d, b);
     function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    d.prototype = b === null ?
+        Object.create(b) : (__.prototype = b.prototype, new __());
   };
 })();
 //}
