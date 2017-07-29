@@ -8,7 +8,7 @@ ECMAScriptの知識はどんどん広まってきていますし、最近では�
 まずは必要最低限の知識を身につけていきましょう。
 
 型の基本は@<chapref>{types-basic}を、難しいことや便利なことは@<chapref>{types-advanced}を見てください。
-既存のJavaScript資産やライブラリを使いたい場合は@<chapref>{definition-file}を参照してください。
+既存のJavaScript資産やライブラリを使いたい場合は@<chapref>{at-types}や@<chapref>{definition-file}を参照してください。
 
 #@# @suppress CommaNumber
 また、本書は@<code>{--strict}を有効にした状態を基本として解説します。
@@ -180,7 +180,7 @@ console.log(base.hello());
 次にクラスの継承も見て行きましょう（@<list>{class/inherit.ts}）。
 superを使い親クラスのメソッドを参照できます。
 
-//list[class/inherit.ts][普通に継承もあるよ]{
+//list[class/inherit.ts][もちろん継承もあるよ]{
 #@mapfile(../code/typescript-basic/class/inherit.ts)
 class Base {
   greeting(name: string) {
@@ -251,7 +251,7 @@ base.b;
 #@end
 //}
 
-#@# mhidaka ソースコード中のコメントについて変数の前後に半角スペースがある場合は排除してください（紙面の都合）
+#@# OK mhidaka ソースコード中のコメントについて変数の前後に半角スペースがある場合は排除してください（紙面の都合）
 
 次にコンパイル後のJSファイルを見てみます（@<list>{class/modifier.js}）。
 
@@ -394,7 +394,11 @@ new Cat();
 
 =={function} 関数
 
-#@# mhidaka TODO 内容のない節・項は避けてみてくださいまし
+関数について解説します。
+JavaScriptでは関数は一級市民ですので、変数に入れたり関数に関数を渡す、いわゆる高階関数もお手の物です。
+JavaScriptを使いこなすうえで関数のことをしっかり理解すれば、人が書いたコードも読みやすくなります。
+TypeScriptでも同じことがいえますので、しっかり覚えていきましょう。
+#@# OK mhidaka 内容のない節・項は避けてみてくださいまし
 
 ==={standard-function} 普通の関数
 
@@ -752,7 +756,7 @@ async function main() {
 }
 
 function mainAnother() {
-  // こういうのも普通にイケる
+  // こういうのも当然OK！
   import("./sub").then(sub => {
     console.log(sub.hello());
   });
@@ -785,7 +789,10 @@ TypeScript上での特徴として、importに渡す文字列が固定の場合�
 型定義ファイルの中ではインタフェースや関数などをきれいに取りまとめるためにnamespaceの仕組みを活用する場面がでてきます。
 そのため、TypeScriptの習熟度を高めるうえでnamespaceは避けては通れない要素です。
 
-#@# mhidaka TODO namespaceが何をどうやって機能しているか簡単な説明が欲しい（いままでの機能紹介ではあったけどここではやりたくないけどやるんだ！クララのバカ！としか書かれてないのでソースコードを読むのが若干おもい）
+ECMAScript 5以前の時代にはモジュールはおろかブロックスコープという概念もありませんでした。
+これを補うため、関数を定義するとスコープが作れることを応用し、モジュールっぽい構造を自力で作成していました。
+その工夫に対して、独自の構文を割り当てたものがTypeScriptのnamespaceです。
+#@# OK mhidaka namespaceが何をどうやって機能しているか簡単な説明が欲しい（いままでの機能紹介ではあったけどここではやりたくないけどやるんだ！クララのバカ！としか書かれてないのでソースコードを読むのが若干おもい）
 
 まずは簡単な例を見てみましょう（@<list>{internalModule/basic.ts}）。
 
@@ -814,6 +821,7 @@ namespace a {
   // let tmp = new Sample();
 }
 
+// ネストしたnamespace
 namespace b {
   export namespace c {
     export function hello() {
@@ -821,6 +829,7 @@ namespace b {
     }
   }
 }
+// ネストしたnamespaceの短縮表記も存在する
 namespace d.e {
   export function hello() {
     return a.obj.hello();
@@ -861,6 +870,7 @@ var a;
     // error TS2304: Cannot find name 'Sample'.
     // let tmp = new Sample();
 })(a || (a = {}));
+// ネストしたnamespace
 var b;
 (function (b) {
     let c;
@@ -871,6 +881,7 @@ var b;
         c.hello = hello;
     })(c = b.c || (b.c = {}));
 })(b || (b = {}));
+// ネストしたnamespaceの短縮表記も存在する
 var d;
 (function (d) {
     var e;
@@ -888,8 +899,8 @@ console.log(d.e.hello());
 #@end
 //}
 
-関数を使って名前空間を擬似的に作っています。
-モジュールもletやconstのようなブロックスコープもなかった頃の名残ですね。
+関数を使って名前空間を擬似的に作っている様子が確認できます。
+モジュールもブロックスコープもなかった時代は辛かったですね。
 
 #@# @suppress JapaneseStyle
 長い名前を使うのが嫌なときは@<list>{internalModule/import.ts}のように、import句を使うこともできます。
@@ -902,7 +913,7 @@ namespace a {
 }
 
 namespace b {
-  // 他のモジュールも普通に参照できる
+  // 他のモジュールも参照できる
   let objA: a.Sample;
   objA = new a.Sample();
 
@@ -999,7 +1010,7 @@ enumの値に指定できるのはnumberかstringで、numberの場合は実行�
 
 #@# TypeScript 2.4系から値にstringを使えるようになったため、木構造を構築するのがだいぶやりやすくなりました。
 #@# 前は必ずnumberになってしまうため、JSONなどの構造にダンプしたときに人間にはわかりにくい値になってしまうという難点がありましたが、これが解消された形です。
-#@# mhidaka enumではなかったので削除したよ
+#@# OK mhidaka enumではなかったので削除したよ
 
 const enumについて、tscに@<code>{--preserveConstEnums}オプションを渡してやるとenum相当のコードが生成されるようになります。
 デバッグ時にはこのオプションを用いたほうが処理を追いかけやすい場合もあるでしょう。

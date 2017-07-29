@@ -1,4 +1,4 @@
-// A. 普通にクラスを定義する
+// A. クラスを定義する
 declare class TestA {
 }
 

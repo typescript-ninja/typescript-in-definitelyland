@@ -79,7 +79,10 @@ C87冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 C90冊子版の表紙はイラスト：shatiさん（@<href>{http://utata-ne.net/}）、デザイン：siosioさんです。
 C87版から上手に味わいを引き継いだ可愛い表紙をありがとうございます！
 
-#@# TODO C92版の表紙について言及する
+C92冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/}）、デザイン：siosioさんです。
+筆者がケモ好きということが周知されてきた気配を感じます。
+1版から数えてもう2年半も経つんですね。
+可愛い猫耳をありがとうございます！
 
 #@# prh:disable
 なお、booth.pmやCOMIC ZINにて通販を行っております。
@@ -116,7 +119,9 @@ TypeScriptはJSXのサポートを含みますが、筆者が今のところJSX�
 
 @<chapref>{tsc-options}では、tscコマンドやtsconfig.jsonで利用できるオプションについて、重要なオプションを中心に解説します。
 
-@<chapref>{definition-file}では、既存のJavaScript用の資産を活かすため型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
+@<chapref>{at-types}では、@typesで用意されている型定義ファイルの使い方について解説します。
+
+@<chapref>{definition-file}では、自分で型定義ファイルを書くための方法、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。
 
 @<chapref>{typescript-as-a-tool}では、TypeScriptのLanguage Service APIやLanguage Server Protocolの概要を紹介します。
 

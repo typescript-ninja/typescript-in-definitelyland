@@ -6,7 +6,7 @@ async function main() {
 }
 
 function mainAnother() {
-	// こういうのも普通にイケる
+	// こういうのも当然OK！
 	import("./sub").then(sub => {
 		console.log(sub.hello());
 	});

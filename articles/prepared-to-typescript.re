@@ -39,7 +39,7 @@ cutting edgeな最新版コンパイラを利用したい場合はnpmにリリ�
 $ npm install -g typescript@next
 # 省略
 $ tsc -v
-Version 2.5.0-dev.20170712
+Version 2.5.0-dev.20170727
 //}
 #@# TODO 定期的にこの辺更新したほうがよさそう
 
@@ -162,8 +162,9 @@ TypeScriptが出力するデフォルトの設定は一般向けの設定です�
   ],
   "exclude": [
     "node_modules",
+    "code/tsc-options/types/",
     "code/tsc-options/helpers/",
-    "code/definition-file/usage/",
+    "code/at-types/usage/",
     "code/definition-file/augmentGlobal/",
     "code/definition-file/issue9831/",
     "code/**/*-invalid.ts",

@@ -16,7 +16,6 @@ tsconfig.jsonでは短縮形（@<code>{-d}や@<code>{-p}）は利用できない
 #@#   --noFallthroughCasesInSwitch
 #@#   --pretty
 #@#   --traceResolution
-#@#   --types
 #@#   --allowJs
 #@#   --experimentalDecorators
 #@#   --emitDecoratorMetadata
@@ -467,7 +466,7 @@ TypeScriptのコンパイルを行う際、標準の型定義として何を使�
 たとえ@<code>{--target es5}としてダウンパイルする場合でも、@<code>{--lib es2015}オプションで使用する型定義をes2015にできます。
 最近はPromiseを使ったAPIは珍しくないですし、かつIE11でも動かしたい場合というのはザラにあります。
 
-#@# OK mhidaka TODO「利用する型定義はes2015にできるのです。」利用する型定義にes2015を指定できる？「できるのです」の「の」を消したい。ののわさん！
+#@# OK mhidaka 「利用する型定義はes2015にできるのです。」利用する型定義にes2015を指定できる？「できるのです」の「の」を消したい。ののわさん！
 
 利用可能なオプションの値は次のとおりです。
 複数指定したい場合、コマンドラインオプションの場合は@<code>{,}で区切ります。
@@ -505,6 +504,35 @@ tsconfig.jsonの場合は素直に配列にしましょう。
 
 es2017を利用する場合はes2017の型定義にes2016の参照が含まれます。
 どの標準型定義ファイルが何を参照しているかが気になる場合は直接型定義ファイルを見るか、@<code>{--listFiles}オプションをつけてコンパイルしてみたりするとよいでしょう。
+
+=={types} --types
+
+@<code>{--types}オプションについて解説します。
+TypeScriptのコンパイルを行う際、参照するべき型定義ファイルを明示的に指定します。
+
+通常、ソースコード中でimportしたモジュールのための型定義ファイルはルールに従って発見されるため、この設定は不要です。
+しかしながら、Node.jsやテスティングフレームワークのmochaなど、実行環境に初めからセットアップされているものはimportの機会がありません。
+このため、何らかの方法でコンパイラに環境の情報を伝える必要があります。
+そこで使うのが@<code>{--types}オプションです（@<list>{types/tsconfig.json}）。
+
+//list[types/tsconfig.json][types指定でnodeとmochaを参照する]{
+#@mapfile(../code/tsc-options/types/tsconfig.json)
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "types": [
+      "node",
+      "mocha"
+    ]
+  }
+}
+#@end
+//}
+
+ここで利用する型定義ファイルは@<chapref>{at-types}で紹介する@typesからnpmで引っ張ってくるのがお手軽です。
+@<code>{npm install --save-dev @types/node @types/mocha}という具合ですね。
 
 =={forceConsistentCasingInFileNames} --forceConsistentCasingInFileNames
 
@@ -665,7 +693,7 @@ tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{
 にゃーん
 //}
 
-#@# mhidaka にゃーん
+#@# OK mhidaka にゃーん
 
 簡単にエディタの機能を拡張できるので楽しいですね。
 まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。

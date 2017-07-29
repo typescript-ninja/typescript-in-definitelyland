@@ -127,11 +127,11 @@ let obj: string | number | Date = null as any;
 // Date 扱いしてみる
 (obj as Date).getTime();
 
-// 値の集合に含まれない型にしてみると普通に怒られる
+// 値の集合に含まれない型にしてみるとしっかり怒られる
 // error TS2352: Type 'string | number | Date' cannot be converted to type 'RegExp'.
 //   Type 'Date' is not comparable to type 'RegExp'.
 //     Property 'exec' is missing in type 'Date'.
-// (<RegExp>obj).test("test");
+// (obj as RegExp).test("test");
 
 export { }
 #@end
@@ -152,7 +152,8 @@ union typesを相手にする場合は、次に説明する@<hd>{type-guards}を
 #@# TODO 型の番人、最近あまり用語として出てこない気がする… 型の絞込 とかでよくない？
 
 #@# mhidaka TODO 本節だけぶっちぎりで長い。構成を大胆に工夫する余地がある。「更に細かくする」「独立愚連して章になる」「削る」など
-#@# mhidaka TODO アドバンスド型戦略は悪いコードとつきあうためのテクニカルなアレを感じる。必然サンプルコードが増えるが全てを網羅的に必要としていないので悩ましい
+#@# mhidaka アドバンスド型戦略は悪いコードとつきあうためのテクニカルなアレを感じる。必然サンプルコードが増えるが全てを網羅的に必要としていないので悩ましい
+#@# この辺は「コンパイルエラーレスキュー24時」的なくくりとして独立させたいようなそうでもないような… 単離しても11P分くらいだけなんだよね
 
 #@# @<strong>{導入されるバージョン 1.4.0}
 
@@ -164,7 +165,7 @@ type guardsは"変数Aが○○という条件を満たすとき、変数Aの型
 
 #@# @suppress JapaneseStyle
 さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。
-名前が長いですが、普通にコードを書いていった時、変数の型が確定するようなコードを書くと書いたとおりに変数の型が絞り込まれるというものです。
+名前が長いですが、JavaScriptとして素直にコードを書き、変数の型が確定するような分岐などがあると書いたとおりに変数の型が絞り込まれるというものです。
 
 例を見ていきましょう。
 TypeScriptを書いていて一番対処を迫られるunion typesのパターンはおそらく@<code>{T | undefined}のような、何か＋@<code>{undefined}の形式でしょう。
@@ -499,7 +500,7 @@ if (typeof obj === "string" || typeof obj === "boolean") {
   // 消去法でnumber！
 }
 
-// 三項演算子は普通にif文と一緒の挙動
+// 三項演算子はif文と一緒の挙動
 typeof obj === "string" ? obj.charAt(0) : obj;
 // 次と等価
 if (typeof obj === "string") {
@@ -510,7 +511,7 @@ if (typeof obj === "string") {
 
 // 一応、否定演算子にも対応している
 if (!(typeof obj !== "string")) {
-  // 否定の否定は普通にそのまんまstringだな！ちゃんと絞り込まれます
+  // 否定の否定はそのまんまstringだな！ちゃんと絞り込まれます
   obj.charAt(0);
 }
 
@@ -1111,7 +1112,7 @@ const obj: B & ThisType<A> = {
     // console.log(`Hello, ${this.notExists}`);
   },
 };
-// objは B なので普通にhelloにアクセスできる
+// objは B なので問題なくhelloにアクセスできる
 obj.hello();
 
 export { }
@@ -1123,7 +1124,7 @@ ThisTypeはいわゆるマーカーで、その型がついていること自体
 あまり出番が必要ないほうが嬉しい機能ではありますが、これを使うことでthisの型付けをより安全にできる場合もあります。
 
 #@# TODO https://github.com/Microsoft/TypeScript/issues/17041
-#@# これコンパイラのバグじゃね？案件を掘り出してしまったので一旦寝かせる
+#@# コンパイラのバグで、報告したら直してもらえたけどリリースは2.5.0だと思われるので今回は寝かせる
 
 =={local-types} ローカル型（Local Types）
 
@@ -1281,10 +1282,11 @@ export { }
 #@# @<strong>{導入されたバージョン 1.3.0}
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-tuple（タプル）は、任意の数の要素の組です。
-JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleはただのArrayで表現されます。
+@<kw>{タプル,tuple}は、任意の数の要素の組です。
+JavaScriptではタプルはサポートされていないため、TypeScriptでのタプルはただのArrayで表現されます。
 
-#@# mhidaka TODO タプル型（Tuple Types）の名称がtupleまたはタプル型、タプルの3種類が登場するので統一を図ってほしい
+#@# OK mhidaka タプル型（Tuple Types）の名称がtupleまたはタプル型、タプルの3種類が登場するので統一を図ってほしい
+#@# タプルとタプル型に統一
 
 既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。
 タプル型はそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではありません。
@@ -1309,7 +1311,7 @@ let tuple: [number, string, boolean] = [1, "str", true];
 // string は charAt を持つ！
 tuple[1].charAt(0);
 
-// TypeScriptのtuple typesは普通にArrayでもあるのだ
+// TypeScriptのtuple typesはArrayでもあるのだ
 tuple.forEach(v => console.log(v));
 
 export { array }
@@ -1482,12 +1484,13 @@ Control flow based type analysisが賢く処理してくれることに賭ける
 =={mixin-classes} クラスのMixin
 
 #@# クラスのMixinパターンのサポート Mixin classes in 2.2.1
-クラスにmixinで要素や機能を追加できます。
+クラスにMixinで要素や機能を追加できます。
 拡張用の関数に対してコンストラクタを渡すと機能拡張する形で継承したものを返す、というだけの関数です（@<list>{mixin/basic.ts}）。
 
-#@# mhidaka TODO mixin Mixinで表記に揺れ
+#@# OK mhidaka mixin Mixinで表記に揺れ
+#@# ミックスインにするか悩んだけどMixinに統一するか…って感じ
 
-//list[mixin/basic.ts][任意のクラスにmixinで機能を追加する]{
+//list[mixin/basic.ts][任意のクラスにMixinで機能を追加する]{
 #@mapfile(../code/types-advanced/mixin/basic.ts)
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -1504,7 +1507,7 @@ class Score {
   constructor(public point: number) { }
 }
 
-// mixinできる
+// Mixinできる
 const TaggedScore = Tagged(Score);
 
 const ts = new TaggedScore(1);
@@ -1515,7 +1518,7 @@ console.log(ts.tag, ts.point);
 // error TS2345: Argument of type '"s"' is not assignable to parameter of type 'number'.
 // new TaggedScore("s");
 
-// mixinしたクラスも分け隔てなく継承できる
+// Mixinしたクラスも分け隔てなく継承できる
 class RankingScore extends TaggedScore {
   constructor(public rank: number, tag: string, point: number) {
     super(point);
@@ -1531,7 +1534,7 @@ console.log(rs.rank, rs.tag, rs.point);
 過去に存在した問題として、このやり方をしてもTypeScriptがreturnしている新しいクラスに対して上手に型付けができませんでした。
 これを、TypeScriptでは@<list>{mixin/compat.ts}のようなルールを設けることで回避しました。
 
-//list[mixin/compat.ts][mixinのためのルール]{
+//list[mixin/compat.ts][Mixinのためのルール]{
 #@mapfile(../code/types-advanced/mixin/compat.ts)
 // 2つのコンストラクタとそれぞれの返り値の型
 // コンストラクタの片方は ...args: any[] を引数に取る
@@ -1547,10 +1550,10 @@ const A2: ConstructorA<Date, RegExp> = B;
 #@end
 //}
 
-mixinクラスのコンストラクタ引数が@<code>{...args: any[]}なのがポイントですね。
+Mixinクラスのコンストラクタ引数が@<code>{...args: any[]}なのがポイントですね。
 @<list>{mixin/basic.ts}で出てくるTagged関数は@<code>{ConstructorA}に似た型定義になりますが、他の箇所では@<code>{ConstructorB}のように扱われるため、意図どおりの活用ができるようになります。
 
-mixin用の関数について命名規則は言及されている媒体によってCamelCaseやcamelCaseのようにバラバラで、まだコンセンサスがないようです。
+Mixin用の関数について命名規則は言及されている媒体によってCamelCaseやcamelCaseのようにバラバラで、まだコンセンサスがないようです。
 ここではTypeScriptのWhat's newの規則に則っています。
 
 =={keyof-and-mapped-types} keyofと型の写像（keyof and Mapped Types）
@@ -1565,17 +1568,18 @@ Mapped Typesにどういう訳語を当てるべきか大変悩んだ@<fn>{equiv
 
 この節ではざっくりと次の事柄について順に説明していきます。
 
- 1. 型の切り出し（Loolup Types）
+ 1. 型のルックアップ（Lookup Types）
  2. keyof演算子
  3. 型に対してMap処理をかける（型の写像の作成）
  4. 組み込みの型に対するMap処理の紹介
  5. 合せ技の紹介
 
-まずは型の切り出し（Loolup Types）です。
+まずは型のルックアップ（Lookup Types）です。
 任意のプロパティの型を参照できる機能です。
 コード例を見てみます（@<list>{keyofAndMappedTypes/lookupTypes.ts}）。
 
-#@# mhidaka TODO 切り出しは適切な訳文か？ loolは洗う？洗い出しのほうが日本語ぽくないかな？
+#@# OK mhidaka 切り出しは適切な訳文か？ lookは洗う？洗い出しのほうが日本語ぽくないかな？
+#@# 切り出しも洗い出しも検索もちょっと微妙だったのでルックアップをそのまま使うことにした
 
 //list[keyofAndMappedTypes/lookupTypes.ts][ある型のプロパティの型を参照できる]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/lookupTypes.ts)
@@ -1615,7 +1619,7 @@ type CatPropertyNames = keyof Cat;
 
 型に対してプロパティが増減した時も自動的に対応できる点がいいですね。
 
-型の切り出しやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。
+型のルックアップやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。
 
 型の写像処理には書き方の基本が4パターンあります。
 
@@ -1635,7 +1639,8 @@ type CatPropertyNames = keyof Cat;
 
 この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（@<list>{keyofAndMappedTypes/buildinTypes.ts}）。
 
-#@# mhidaka TODO 癖かもしれないがちょいちょいかかりつけが遠い修飾語を発見する。
+#@# OK mhidaka 癖かもしれないがちょいちょいかかりつけが遠い修飾語を発見する。
+#@# 自分では気がついてないけど羊の修正例見ると確かにそうだなーってなる 今後自力で直せる予感はあまりしない
 
 //list[keyofAndMappedTypes/buildinTypes.ts][型の写像を作るビルトインのパーツたち]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypes.ts)
@@ -1663,7 +1668,7 @@ export { Partial, Readonly, Pick, Record }
 #@end
 //}
 
-写像処理と型の切り出しを組み合わせ、実用的な変換処理を作り出しています。
+写像処理と型のルックアップを組み合わせ、実用的な変換処理を作り出しています。
 これだけだとピンとこないでしょうから、利用例を見てみます（@<list>{keyofAndMappedTypes/buildinTypesUsage.ts}）。
 
 //list[keyofAndMappedTypes/buildinTypesUsage.ts][ビルトインの型の利用例]{

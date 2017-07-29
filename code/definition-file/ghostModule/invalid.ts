@@ -4,7 +4,7 @@ declare namespace ghost {
 	}
 }
 
-// 型としては普通にアクセスできる
+// 型としてはしっかり存在していてアクセスできる
 let test: ghost.Test;
 test.str;
 

@@ -3,7 +3,7 @@ namespace a {
 }
 
 namespace b {
-	// 他のモジュールも普通に参照できる
+	// 他のモジュールも参照できる
 	let objA: a.Sample;
 	objA = new a.Sample();
 

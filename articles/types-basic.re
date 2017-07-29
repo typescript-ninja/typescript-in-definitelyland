@@ -278,7 +278,7 @@ let obj = {
   num: 1,
 };
 
-// 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
+// 文字列リテラルによるアクセスだと . アクセス同様の型情報が得られる
 let str: string = obj["str"];
 let num: number = obj["num"];
 // ちなみに、存在しない要素にアクセスすると any になる
@@ -344,7 +344,8 @@ export { }
 #@# @suppress
 ==={object-literal-and-strict-type-checks} オブジェクトリテラルと厳密なチェック
 
-#@# mhidaka TODO 「オブジェクトリテラルと厳密なチェック」もしページ数が多いならここは項ごと廃してもよいかも
+#@# OK mhidaka 「オブジェクトリテラルと厳密なチェック」もしページ数が多いならここは項ごと廃してもよいかも
+#@# これはコンパイルが通る想定なのに通らなくてなんでやろ の代表例なので削ったらあかん重要なパートなのです
 
 オブジェクト型リテラルの話と関わりが深いのでここでオブジェクトリテラルと厳密なチェックについて説明します。
 
@@ -496,32 +497,12 @@ export { Foo }
 TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。
 
 #@# @suppress ParenthesizedSentence SentenceLength CommaNumber KatakanaSpellCheck
-また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます（@<list>{objectTypeLiteral/autoReadonly.ts}、@<list>{objectTypeLiteral/autoReadonly.d.ts}）。
-
-//list[objectTypeLiteral/autoReadonly.ts][getアクセサのみの実装]{
-#@mapfile(../code/types-basic/objectTypeLiteral/autoReadonly.ts)
-class Sample {
-  get name() {
-    return "TypeScript";
-  }
-}
-
-export { Sample }
-#@end
-//}
-
-//list[objectTypeLiteral/autoReadonly.d.ts][readonly修飾子に変換される]{
-#@mapfile(../code/types-basic/objectTypeLiteral/autoReadonly.d.ts)
-declare class Sample {
-    readonly name: string;
-}
-export { Sample };
-#@end
-//}
+また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます。
 
 #@# OK REVIEW lc: 同じ名前でsetterがなくてgetterがないときに吐かれるd.tsにreadonlyが自動的に付く話はしない？
 #@# vv: これ知らんかった… 入れるか迷ったけどとりあえず入れてみるか！
-#@# mhidaka TODO ページ数が多い場合はサンプルを廃する
+#@# OK mhidaka ページ数が多い場合はサンプルを廃する
+#@# あまり重要じゃないので文字で言及するにとどめた
 
 =={function-type-literals} 関数型リテラル（Function Type Literals）
 
@@ -603,7 +584,7 @@ let objC: C = {
 
 #@# インタフェースが object-like typeならなんでも拡張できるようになった Allow deriving from object and intersection types in 2.2.1
 TypeScriptでは@<chapref>{types-advanced}で紹介する交差型など、より多くのobject-likeな型をextendsできます。
-#@# mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
+#@# OK mhidaka 古いバージョンについて言及している部分はポジティブに受け止められるように変更していく（〜から可能になったという情報はなくてもいいかな）
 
 =={structural-subtyping} 構造的部分型（Structural Subtyping）
 
@@ -1031,19 +1012,20 @@ class DataContainer<T = string> {
   }
 }
 
-// 省略したら T は string
+// 省略したらTはstring
 const obj1 = new DataContainer();
 obj1.data = "";
 // defaultはstringなのでこれはダメ
 // obj1.data = 1;
 
-// 省略しなかったので普通に T は number
+// 省略しなかったのでTはnumber
 const obj2 = new DataContainer<number>();
 obj2.data = 1;
 #@end
 //}
 
-#@# mhidaka TODO 結構な頻度で「普通に」がでてくる。なくても困らない言葉なので抜いていきたい
+#@# OK mhidaka 結構な頻度で「普通に」がでてくる。なくても困らない言葉なので抜いていきたい
+#@# 全体的に普通に殺しした
 
 型パラメータが2つも3つもある型を自作する場合、デフォルトの型を指定できないか考えてみるとよいでしょう。
 

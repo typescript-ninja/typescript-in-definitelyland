@@ -61,6 +61,7 @@ Language Serviceは主にエディタから使われる機能であり、コン�
 //footnote[RyanCavanaugh][@<href>{https://github.com/RyanCavanaugh/sample-ts-plugin}]
 
 #@# mhidaka TODO 項が1つだけでバランスがよくない。節に含めてよいのでは？
+#@# Language Service と Language Service Pluginは別のものなので分けておきたい…
 
 == Language Server Protocol
 
@@ -92,10 +93,10 @@ JSON-RPC@<fn>{json-rpc}を用いてサーバ（言語処理側）とクライア
 
  1. 言語開発者
  2. IDE・エディタ開発者
- 3. 普通に開発をしたいだけの開発者
+ 3. 自分の開発をしたいだけの開発者
 
 言語開発者は言語自体の開発をしたいですし、IDE・エディタの開発者も全言語の対応は非現実的なのでプラグインを開発してなんとかしてねとなりがちです。
-そうすると普通に開発したいだけの開発者が、いつのまにかプラグインを書いたりといった余計な仕事を始めることになります。
+そうすると自分の開発したいだけの開発者が、いつのまにかプラグインを書いたりといった余計な仕事を始めることになります。
 普通に開発したいだけなのに！
 
 言語の数×エディタの数だけ実装が必要だと地獄です。
@@ -128,9 +129,8 @@ TypeScriptには似た仕組みとして後述のtsserverがあるのですが�
 
 //footnote[ts-lsp-issue][@<href>{https://github.com/Microsoft/TypeScript/issues/11274}]
 
-=== tsserver
+====[column] tsserver
 
-というわけでtsserverです。
 TypeScriptはLSPをまだ実装していない代わりに、同等のJSONっぽいRPCを使ったLanguage Serviceをホストするコマンドをバンドルしています。
 それがtsserverコマンドです。
 
@@ -139,4 +139,5 @@ TypeScriptはLSPをまだ実装していない代わりに、同等のJSONっぽ
 
 //footnote[tsserver][@<href>{https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29}]
 
-#@# mhidaka TODO 項が1つだけでバランスがよくない。Columnでもよいのでは？
+#@# OK mhidaka 項が1つだけでバランスがよくない。Columnでもよいのでは？
+====[/column]

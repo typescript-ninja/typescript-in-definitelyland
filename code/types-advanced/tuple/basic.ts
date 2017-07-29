@@ -11,7 +11,7 @@ let tuple: [number, string, boolean] = [1, "str", true];
 // string は charAt を持つ！
 tuple[1].charAt(0);
 
-// TypeScriptのtuple typesは普通にArrayでもあるのだ
+// TypeScriptのtuple typesはArrayでもあるのだ
 tuple.forEach(v => console.log(v));
 
 export { array }
