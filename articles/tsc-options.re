@@ -645,12 +645,10 @@ tslibはモジュールの形でimportされるため、moduleをcommonjsやesne
 
 pluginsも仕組みとして面白いので概要だけ言及しておきます。
 @<chapref>{typescript-as-a-tool}でも少し扱います。
-
-pluginsはその名の通りプラグインなのですが、現時点では効果を及ぼすことができる対象はエディタやIDE上のみです。
-コンパイル時の動作には影響を及ぼすことができません。
+プラグインでの制御対象はエディタやIDE上のみです。コンパイル時の動作には影響を及ぼすことができません。
 そのため、tscのオプションとしてはpluginsは存在せず、tsconfig.jsonの設定項目としてのみ存在します。
 
-このオプションを設定しておくと、エディタでTypeScriptの入力補完やコンパイルエラーの表示動作を拡張できます。
+エディタでTypeScriptの入力補完やコンパイルエラーの表示動作を拡張する仕組みです。
 現時点で実際に使える（と思われる）npmパッケージを次に挙げます@<fn>{plugins-in-real-world}。
 
 //footnote[plugins-in-real-world][@<href>{https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#real-world-plugins}]
@@ -662,39 +660,10 @@ pluginsはその名の通りプラグインなのですが、現時点では効�
 #@# NOTE https://github.com/Microsoft/TypeScript/issues/15460
 //footnote[tslint-plugins-issue][@<href>{https://github.com/palantir/tslint/issues/2282}]
 
-また、筆者の作った役にも立たないプラグインを@<code>{@vvakame/typescript-plugin-example}@<fn>{vvakame-plugin-example}として公開しています。
-これは入力補完候補の説明文とかクイックインフォの説明文の末尾に猫の絵文字などを出すだけのものです。
-設定例と動作イメージの紹介にちょうどいいでの確認してみます。
-tsconfig.jsonの内容は@<list>{plugins/tsconfig.json}で、動作例は@<img>{plugins}です。
+筆者も習作を公開@<fn>{vvakame-plugin-example}しています。
+入力補完候補の説明文やクイックインフォの説明文の末尾に猫の絵文字などを出すだけのシンプルなプラグインです。作り方の参考になるでしょう。
+
+プラグインでは簡単にエディタの機能を拡張できますが、
+まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。
 
 //footnote[vvakame-plugin-example][@<href>{https://www.npmjs.com/package/@vvakame/typescript-plugin-example}]
-
-//list[plugins/tsconfig.json][pluginsの設定例]{
-#@mapfile(../code/tsc-options/plugins/tsconfig.json)
-{
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "plugins": [
-      {
-        // name は全プラグイン共通で必須
-        "name": "@vvakame/typescript-plugin-example",
-        // プラグイン固有の設定を行う場合がある
-        "verbose": true,
-        "goody": "(`_´)"
-      }
-    ]
-  }
-}
-#@end
-//}
-
-//image[plugins][tsconfig.jsonの設定内容を反映して顔文字が出ている]{
-にゃーん
-//}
-
-#@# OK mhidaka にゃーん
-
-簡単にエディタの機能を拡張できるので楽しいですね。
-まだまだこの仕組を使っているパッケージは少ないので、よいアイディアがあればどんどんやってみましょう。

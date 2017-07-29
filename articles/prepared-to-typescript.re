@@ -220,21 +220,14 @@ TypeScriptにはLanguage Serviceという仕組みがあるため、IDEを作る
 #@# OK REVIEW: lc s/負けるとも劣らない/勝るとも劣らない/ (わざと？)
 
 #@# @suppress SentenceLength
-Language Serviceに興味がある場合、次の文献を参照するとよいでしょう。
-
- * @<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}
- * @<href>{https://github.com/Microsoft/language-server-protocol}
+#@# Language Serviceに興味がある場合、次の文献を参照するとよいでしょう。
+#@#
+#@# * @<href>{https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API}
+#@# * @<href>{https://github.com/Microsoft/language-server-protocol}
 
 ===[column] TypeScriptのリリースサイクルについて
 
-TypeScriptのリリースサイクルについて解説しておきます。
-以前は目玉となる機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。
-このため、すでに開発完了している機能やバグフィクスがあってもなかなか使えるようにならない！という不満がありました。
-最近ではこの問題が改められ、定期的にリリースする運用に変更@<fn>{ts-release-schedule}されました。
-
-//footnote[ts-release-schedule][@<href>{https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/}]
-
-変更後のリリースサイクルは次のとおりです。
+TypeScriptのリリースサイクルは次のとおりです。
 
  * 機能追加のフルリリースは2ヶ月毎（minorアップデート）
  * パッチまたは機能追加のリリースを1ヶ月毎（patchアップデート）
