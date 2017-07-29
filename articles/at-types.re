@@ -201,7 +201,7 @@ TypeScriptコンパイラがこれらの型定義ファイルを認識できれ�
 
 #@# @suppress JapaneseStyle
 power-assertはテストコード中でimportしますが、テストランナーであるmochaの定義はソースコード中からの参照がありません。
-そのため、power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。
+power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。
 
 しかしmochaはそのような機会がないため、TypeScriptコンパイラは型定義を探しにいってくれません。
 このままコンパイルするとmochaがグローバルに値を展開しているdescribeやitなどが見つからないといわれてしまいます。
