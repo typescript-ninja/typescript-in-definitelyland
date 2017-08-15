@@ -29,6 +29,7 @@ TypeScriptはJavaScriptに対して後付で型による制約を付け足した
 全世界がTypeScriptに制覇されることによりこの葛藤は解消される予定です。
 #@# OK mhidaka このような不均衡な状態とどうやってつきあっていってるの？という一言があるといいかもしれない。基本は我慢？
 
+#@# prh:disable
 =={good-definitions-bad-definitions} 良い型定義ファイル、悪い型定義ファイル
 
 型定義ファイルにも良し悪しがあります。
