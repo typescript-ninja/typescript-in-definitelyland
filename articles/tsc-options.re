@@ -155,6 +155,7 @@ libD/bb.ts         # 対象にならない（exclude）
 tsconfig.jsonではない名前のファイルを使って、プロジェクト内に複数のビルド構成を作ることもできます。
 しかし、その場合IDE・エディタ側が設定をうまくハンドリングできないことが多いため、基本的には努力して1プロジェクトにつき1つのtsconfig.jsonとなるようにしましょう。
 
+#@# prh:disable:web
 gulpやwebpackなどのタスクランナーやバンドラを使う場合もtsconfig.jsonを用意し@<code>{--project}オプションのみでコンパイルできる環境を維持するとよいでしょう。
 
 =={noImplicitAny} --noImplicitAny
@@ -510,7 +511,7 @@ es2017を利用する場合はes2017の型定義にes2016の参照が含まれ�
 @<code>{--types}オプションについて解説します。
 TypeScriptのコンパイルを行う際、参照するべき型定義ファイルを明示的に指定します。
 
-通常、ソースコード中でimportしたモジュールのための型定義ファイルはルールに従って発見されるため、この設定は不要です。
+通常、ソースコード中でimportしたモジュールのための型定義ファイルはルールにしたがって発見されるため、この設定は不要です。
 しかしながら、Node.jsやテスティングフレームワークのmochaなど、実行環境に初めからセットアップされているものはimportの機会がありません。
 このため、何らかの方法でコンパイラに環境の情報を伝える必要があります。
 そこで使うのが@<code>{--types}オプションです（@<list>{types/tsconfig.json}）。
@@ -564,7 +565,7 @@ macOSのような非ケースセンシティブな環境と、Linuxのような�
 
 #@# ヘルパライブラリの話 in 2.1.1
 TypeScriptで@<code>{--target es5}などでダウンパイルした場合、ヘルパ関数が自動生成されます。
-例えば、クラスの継承を行ったときは@<code>{__extends}関数が生成されますね（@<list>{helper-__extends}）。
+たとえば、クラスの継承を行ったときは@<code>{__extends}関数が生成されますね（@<list>{helper-__extends}）。
 
 //list[helper-__extends][生成される__extends関数]{
 var __extends = (this && this.__extends) || (function () {
