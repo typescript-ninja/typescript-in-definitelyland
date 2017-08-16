@@ -26,6 +26,7 @@ module.exports = grunt => {
 					`${articles}/*.html`,
 					`${articles}/*.xml`,
 					`${articles}/*.txt`,
+					`${articles}/*.md`,
 				]
 			},
 			publish: {
@@ -35,7 +36,7 @@ module.exports = grunt => {
 		copy: {
 			publish: {
 				files: [
-					{expand: true, cwd: `${articles}/webroot/`, src: ['**'], dest: `${publish}/`},
+					{ expand: true, cwd: `${articles}/webroot/`, src: ['**'], dest: `${publish}/` },
 				],
 			},
 		},
@@ -63,6 +64,14 @@ module.exports = grunt => {
 					},
 				},
 				command: `${reviewCompile} --target=text`,
+			},
+			compile2markdown: {
+				options: {
+					execOptions: {
+						cwd: articles,
+					},
+				},
+				command: `${reviewCompile} --target=markdown`,
 			},
 			compile2html: {
 				options: {
@@ -129,6 +138,11 @@ module.exports = grunt => {
 		"text",
 		"原稿をコンパイルしてTextファイルにする",
 		generateTask("text"));
+
+	grunt.registerTask(
+		"markdown",
+		"原稿をコンパイルしてMarkdownファイルにする",
+		generateTask("markdown"));
 
 	grunt.registerTask(
 		"html",
