@@ -14,13 +14,14 @@
     "postweb": "cp -r publish/ docs/",
     "html": "npm run build && grunt html",
     "epub": "npm run build && grunt epub",
+    "check:prh": "prh --verify --verbose articles/*.re",
     "build:sub": "npm run build:sub1 && npm run build:sub2 && npm run build:sub3 && npm run build:sub4 && npm run build:sub5",
     "build:sub1": "tsc -p code/at-types/usage/",
     "build:sub2": "tsc -p code/definition-file/augmentGlobal/",
     "build:sub3": "tsc -p code/tsc-options/helpers/vanilla/",
     "build:sub4": "tsc -p code/tsc-options/helpers/noEmitHelpers/",
     "build:sub5": "tsc -p code/tsc-options/helpers/importHelpers/",
-    "build": "tsc -p ./ && npm run build:sub"
+    "build": "tsc -p ./ && npm run build:sub && npm run check:prh"
   },
   "dependencies": {},
   "devDependencies": {
