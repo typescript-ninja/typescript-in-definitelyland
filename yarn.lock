@@ -231,6 +231,10 @@ commandpost@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/commandpost/-/commandpost-1.1.0.tgz#3524ac70002f3e8a5efcc2850294517b0bd60cd1"
 
+commandpost@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/commandpost/-/commandpost-1.2.1.tgz#2e9c4c7508b9dc704afefaa91cab92ee6054cc68"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -287,7 +291,7 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
-diff@^3.2.0:
+diff@^3.2.0, diff@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.3.0.tgz#056695150d7aa93237ca7e378ac3b1682b7963b9"
 
@@ -693,6 +697,13 @@ js-yaml@^3.8.4:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+js-yaml@^3.9.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.9.1.tgz#08775cebdfdd359209f0d2acd383c8f86a6904a0"
+  dependencies:
+    argparse "^1.0.7"
+    esprima "^4.0.0"
+
 js-yaml@~3.5.2:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.5.5.tgz#0377c38017cabc7322b0d1fbcd25a491641f2fbe"
@@ -1032,6 +1043,22 @@ pkg-up@^1.0.0:
   dependencies:
     find-up "^1.0.0"
 
+prh-languageserver@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/prh-languageserver/-/prh-languageserver-0.4.0.tgz#4c23f7b539cd86f4444bd6e52dbf0025795d3808"
+  dependencies:
+    prh "^5.3.0"
+    vscode-languageserver "3.2.2"
+    vscode-uri "1.0.1"
+
+prh@^5.3.0, prh@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/prh/-/prh-5.4.0.tgz#2be8789ad8449c73e94e5a6057ee7c85b5bd1788"
+  dependencies:
+    commandpost "^1.2.1"
+    diff "^3.3.0"
+    js-yaml "^3.9.1"
+
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
@@ -1367,6 +1394,25 @@ verror@1.3.6:
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.3.6.tgz#cff5df12946d297d2baaefaa2689e25be01c005c"
   dependencies:
     extsprintf "1.0.2"
+
+vscode-jsonrpc@^3.2.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-3.3.1.tgz#b7857be58b97af664a8cdd071c91891d6c7d6a67"
+
+vscode-languageserver-types@^3.2.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.3.0.tgz#8964dc7c2247536fbefd2d6836bf3febac80dd00"
+
+vscode-languageserver@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver/-/vscode-languageserver-3.2.2.tgz#9a7b66e1252838ea51a0061145089a2b88a9516a"
+  dependencies:
+    vscode-jsonrpc "^3.2.0"
+    vscode-languageserver-types "^3.2.0"
+
+vscode-uri@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-1.0.1.tgz#11a86befeac3c4aa3ec08623651a3c81a6d0bbc8"
 
 which-module@^1.0.0:
   version "1.0.0"

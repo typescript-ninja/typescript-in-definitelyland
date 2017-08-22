@@ -36,6 +36,8 @@
     "js-yaml": "^3.8.4",
     "load-grunt-tasks": "^3.5.0",
     "node-sass": "^4.5.3",
+    "prh": "^5.4.0",
+    "prh-languageserver": "^0.4.0",
     "tslint": "^5.4.3",
     "typescript": "2.4.2",
     "typescript-formatter": "^5.2.0"
