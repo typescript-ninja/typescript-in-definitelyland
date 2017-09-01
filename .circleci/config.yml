@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    working_directory: /book
+    docker:
+      - image: vvakame/review
+    steps:
+      - checkout
+      - run: git submodule init && git submodule update
+
+      - restore_cache:
+          keys:
+            - yarn-cache-{{ checksum "yarn.lock" }}
+      - run: npm run global
+      - run: yarn install
+      - save_cache:
+          key: yarn-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      - run: npm run pdf
+      - store_artifacts:
+          path: /book/articles/revised2-typescript-in-definitelyland.pdf
+          destination: PDF data
+
+      - run: npm run epub
+      - store_artifacts:
+          path: /book/articles/revised2-typescript-in-definitelyland.epub
+          destination: EPUB data
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
