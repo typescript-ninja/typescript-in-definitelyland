@@ -1,10 +1,14 @@
-class Sample {
+class BaseA {
 	constructor(public str: string) {
 	}
 }
 
-let obj = new Sample("TypeScript");
-// TypeScript と表示される
-console.log(obj.str);
+// BaseA と等価な定義
+class BaseB {
+	str: string;
+	constructor(str: string) {
+		this.str = str;
+	}
+}
 
-export { }
+export { BaseA, BaseB }

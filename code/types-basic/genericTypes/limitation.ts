@@ -5,7 +5,7 @@ class InheritA extends Base {
 	num: number;
 }
 
-// TはBaseを継承済の型でなければならない制約
+// TはBaseという制約を満たす型でなければならない
 interface Sample<T extends Base> {
 	method(): T;
 }

@@ -1,66 +1,34 @@
 class Base {
 	// インスタンス変数
-	numA: number;
-	strA = "string";
-	public numB: number;
-	private numC: number;
-	protected numD: number;
-	regexpA?: RegExp;
+	num = 1;
 
-	// クラス変数
-	static numA: number;
-	public static numB: number;
-	private static numC: number;
-	protected static numD: number;
-	static regexpA?: RegExp;
+	// 初期値を与えない場合は型の指定が必要
+	str: string;
 
-	// コンストラクタ
-	constructor(boolA: boolean,
-		public boolB: boolean,
-		private boolC: boolean,
-		protected boolD: boolean) {
-		// エラー消し 一回も使われない可能性があると怒られる
-		console.log(boolA, this.numC, this.boolC, Base.numC);
+	// プロパティ名に?をつけると省略可能（undefinedである可能性がある）ことを表せる
+	regExpOptional?: RegExp;
+
+	constructor(str: string) {
+		// strは省略可能じゃないのでコンストラクタで初期値を設定しなければならない
+		// 設定し忘れても現在のTypeScriptはエラーにしてくれないので注意が必要…
+		this.str = str;
 	}
 
-	// メソッド
-	hello(word: string): string {
-		return "Hello, " + word;
+	// メソッドの定義 返り値は省略してもOK
+	hello(): string {
+		return `Hello, ${this.str}`;
 	}
 
-	// get, setアクセサ
-	// コンパイル時に --target es5 以上が必要です
-	/** @internal **/
-	private _date: Date;
-	get dateA(): Date {
-		return this._date;
-	}
-	set dateA(value: Date) {
-		this._date = value;
-	}
-
-	optional() {
-		// 省略可能なプロパティは値の存在チェックが必要です
-		if (this.regexpA != null) {
-			this.regexpA.test("Hi!");
+	get regExp() {
+		if (!this.regExpOptional) {
+			return new RegExp("test");
 		}
-		if (Base.regexpA != null) {
-			Base.regexpA.test("Hi!");
-		}
+
+		return this.regExpOptional;
 	}
 }
 
-let obj = new Base(true, false, true, false);
-obj.numA;
-obj.strA;
-obj.numB;
-// obj.numC; // private   なメンバにはアクセスできない
-// obj.numD; // protected なメンバにもアクセスできない
-obj.boolB;
-// obj.boolC; // private   なメンバにはアクセスできない
-// obj.boolD; // protected なメンバにもアクセスできない
-obj.hello("TypeScript");
-obj.dateA = new Date();
-obj.dateA;
+const base = new Base("world");
+console.log(base.hello());
 
-export { }
+export { };

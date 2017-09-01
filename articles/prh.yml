@@ -1,64 +1,15 @@
+# https://gist.github.com/inao/f55e8232e150aee918b9
+# from WEB+DB PRESS
+# 対応は不完全(途中で飽きた) 一部手心を加えている
 version: 1
 
 imports:
-  - prh-techbooster.yml
+  # 気合で移行した気持ちになった
+  - ../prh-rules/media/techbooster.yml
+  - ../prh-rules/files/review.yml
 
 rules:
-  - expected: 型$1
-    pattern:  /方(注釈|推論)/
-    specs:
-      - from: 方注釈
-        to:   型注釈
-  - expected: TypeScript
-    pattern:  /typescript(?!lang\.org|.ninja|-in-definitelyland|-formatter)/
-  - expected: TypeScript
-    pattern:  /TypeScri(ot|op|tp)/
-  - expected: ECMAScript
-  - expected: ECMAScript
-    pattern:  /ECMAScri(ot|op|tp)/
-  - expected: JavaScript
-  - expected: JavaScript
-    pattern:  /JavaScri(ot|op|tp)/
-  - expected: ECMAScript $1
-    pattern:  /ECMAScript(3|5|2015|2016|2017)/
-  - expected: ECMAScript 2015
-    pattern:  ECMAScript 6
-  - expected: Arrow Functions
-    pattern:  /arrow.function.expression/i
-    prh:      ECMAScript 2015の言葉遣いに揃える
-  - expected: アロー関数
-    pattern:  アロー関数式
-    prh:      ECMAScript 2015の言葉遣いに揃える
-  - expected: ???
-    pattern:  BCT
-    prh:      Best Common Type はなくなりました…
-  - expected: ネームスペース
-    pattern:  内部モジュール
-  - expected: string literal types
-    pattern:  /string types? literals?/
-  - expected: DefinitelyTyped
-    pattern:  borisyankov
-    prh:      リポジトリはリネームされました
-  - expected: type guards
-    pattern:  /type guard(?!s)/
-  - expected: 省略可能
-    pattern:  オプショナル
-  - expected: プロポーザル
-    pattern:  プロポーサル
-  - expected: 幽霊namespace
-    pattern:  幽霊モジュール
-
-  - expected: Visual Studio code
-    pattern:  VisualStudioCode
-  - expected: Microsoft
-    pattern:  MicroSoft
-#  - expected: macOS
-#    pattern:  Mac OS X
-
-# わかめの手癖チェック用
-#  - expected: ""
-#    pattern:  するように
-#    prh:      この"するように"、本当に必要？
-  - expected: ""
-    pattern:  することが
-    prh:      この"することが"、本当に必要？
+  - expected: asm.js
+    pattern:  ams.js
+  - expected: tuple
+    pattern:  taple

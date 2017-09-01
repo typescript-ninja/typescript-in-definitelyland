@@ -11,7 +11,7 @@ console.log(p.name, p.age);
 
 // interfaceを使ったクラスの構成でも
 interface AnimalConstructor {
-	new (): Animal;
+	new(): Animal;
 }
 interface Animal {
 	speak(): string;
@@ -23,7 +23,7 @@ let Animal: AnimalConstructor = class {
 	}
 };
 /* tslint:enable:variable-name */
-// Animalはただの変数だが普通に継承できる！
+// Animalはただの変数だが問題なく継承できる！
 class Cat extends Animal {
 	speak() {
 		return "meow";

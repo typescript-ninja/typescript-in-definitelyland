@@ -11,7 +11,7 @@ if (typeof v1 === "string") {
 	// ここではvはまだstring
 	f();
 
-	// ここでvがnumberに！
+	// ここでvがnumberに！fの思惑と食い違う
 	v1 = 1;
 	f();
 }
@@ -24,9 +24,4 @@ if (typeof v2 === "string") {
 		console.log(v2.toUpperCase());
 	};
 	f();
-
-	// constなので再代入しようとするとエラーになる
-	// error TS2450: Left-hand side of assignment expression
-	//   cannot be a constant or a read-only property.
-	v2 = 1;
 }

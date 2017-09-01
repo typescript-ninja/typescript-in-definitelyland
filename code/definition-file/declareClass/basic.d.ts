@@ -1,11 +1,11 @@
-// A. 普通にクラスを定義する
+// A. クラスを定義する
 declare class TestA {
 }
 
 // B. クラスの分解定義 変数 + インタフェース2つ
 declare let TestB: TestBConstructor;
 interface TestBConstructor {
-	new (): TestB;
+	new(): TestB;
 }
 interface TestB {
 }

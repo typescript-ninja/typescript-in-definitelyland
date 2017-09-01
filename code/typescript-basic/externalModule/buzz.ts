@@ -7,5 +7,5 @@ function bye(word = "TypeScript") {
 //   and cannot be imported using this construct.
 namespace bye { }
 
-// CommonJS向け ECMAScript 2015では×
+// CommonJS向け ECMAScript 2015では× 今後は使わなくてよし！
 export = bye;

@@ -13,7 +13,7 @@ if (typeof obj === "string" || typeof obj === "boolean") {
 	// 消去法でnumber！
 }
 
-// 三項演算子は普通にif文と一緒の挙動
+// 三項演算子はif文と一緒の挙動
 typeof obj === "string" ? obj.charAt(0) : obj;
 // 次と等価
 if (typeof obj === "string") {
@@ -24,7 +24,7 @@ if (typeof obj === "string") {
 
 // 一応、否定演算子にも対応している
 if (!(typeof obj !== "string")) {
-	// 否定の否定は普通にそのまんまstringだな！ちゃんと絞り込まれます
+	// 否定の否定はそのまんまstringだな！ちゃんと絞り込まれます
 	obj.charAt(0);
 }
 

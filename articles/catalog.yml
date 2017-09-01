@@ -7,6 +7,9 @@ CHAPS:
   - types-basic.re
   - types-advanced.re
   - tsc-options.re
+  - at-types.re
   - definition-file.re
+  - typescript-as-a-tool.re
 
 POSTDEF:
+ - postdef.re

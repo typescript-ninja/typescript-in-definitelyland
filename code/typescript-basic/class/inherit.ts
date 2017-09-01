@@ -1,12 +1,12 @@
 class Base {
 	greeting(name: string) {
-		return "Hi! " + name;
+		return `Hi! ${name}`;
 	}
 }
 
 class Inherit extends Base {
 	greeting(name: string) {
-		return super.greeting(name) + ". How are you?";
+		return `${super.greeting(name)}. How are you?`;
 	}
 }
 

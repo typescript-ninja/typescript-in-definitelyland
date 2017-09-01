@@ -25,94 +25,103 @@ module.exports = grunt => {
 					`${articles}/*.epub`,
 					`${articles}/*.html`,
 					`${articles}/*.xml`,
-					`${articles}/*.txt`
+					`${articles}/*.txt`,
+					`${articles}/*.md`,
 				]
 			},
 			publish: {
 				src: `${publish}/`
-			}
+			},
 		},
 		copy: {
 			publish: {
 				files: [
-					{expand: true, cwd: `${articles}/webroot/`, src: ['**'], dest: `${publish}/`}
-				]
-			}
+					{ expand: true, cwd: `${articles}/webroot/`, src: ['**'], dest: `${publish}/` },
+				],
+			},
 		},
 		shell: {
 			preprocess: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewPreproc} -r --tabwidth=2 *.re`
+				command: `${reviewPreproc} -r --tabwidth=2 *.re`,
 			},
 			sass: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `node-sass ./ -o ./`
+				command: `node-sass ./ -o ./`,
 			},
 			compile2text: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewCompile} --target=text`
+				command: `${reviewCompile} --target=text`,
+			},
+			compile2markdown: {
+				options: {
+					execOptions: {
+						cwd: articles,
+					},
+				},
+				command: `${reviewCompile} --target=markdown`,
 			},
 			compile2html: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewCompile} --target=html --yaml=config.yml --chapterlink --footnotetext`
+				command: `${reviewCompile} --target=html --yaml=config.yml --chapterlink --footnotetext`,
 			},
 			compile2latex: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewCompile} --target=latex --footnotetext`
+				command: `${reviewCompile} --target=latex --footnotetext`,
 			},
 			compile2idgxml: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewCompile} --target=idgxml`
+				command: `${reviewCompile} --target=idgxml`,
 			},
 			compile2web: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewWebMaker} config.yml`
+				command: `${reviewWebMaker} config.yml`,
 			},
 			compile2pdf: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewPdfMaker} config.yml`
+				command: `${reviewPdfMaker} config.yml`,
 			},
 			compile2epub: {
 				options: {
 					execOptions: {
 						cwd: articles,
-					}
+					},
 				},
-				command: `${reviewEpubMaker} config.yml`
+				command: `${reviewEpubMaker} config.yml`,
 			},
-		}
+		},
 	});
 
 	function generateTask(target, pretask) {
@@ -129,6 +138,11 @@ module.exports = grunt => {
 		"text",
 		"原稿をコンパイルしてTextファイルにする",
 		generateTask("text"));
+
+	grunt.registerTask(
+		"markdown",
+		"原稿をコンパイルしてMarkdownファイルにする",
+		generateTask("markdown"));
 
 	grunt.registerTask(
 		"html",

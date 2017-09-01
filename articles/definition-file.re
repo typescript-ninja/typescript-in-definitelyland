@@ -1,245 +1,17 @@
-={definition-file} JS資産と型定義ファイル
+={writing-dts-files} 型定義ファイルを作成する
 
-#@# REVIEW muo: 6章けっこう長めなので章として切断できないかな。
-#@# REVIEW muo: 基礎編・応用編と分けるのはむずかしいかもしれないけど、「このへんまで頑張ったら一息つける」「ここまでやってくれる人はほめてあげよう」ぐらいに分かれていると、トピック拾いやすいかもしらん
-
-=={use-js-assets} JavaScriptの資産が使いたい
-
-TypeScriptはJavaScriptの上位互換であり、JavaScriptを置き換えるものです。
-とはいえ、現時点ではWebアプリの世界はJavaScriptで成り立っていますし、すでに莫大な資産があります。
-それらを放り出してしまうのはあまりにもったいないので、TypeScriptでも活用したいものです。
-そのためにTypeScriptは既存のJavaScript用資産を活用するための仕組みを持っています。
-それが、型定義ファイルです。
-
-通常のTypeScriptコードは拡張子が.tsなのに対して、型定義ファイルは拡張子を.d.tsとします。
-拡張子を.d.tsとしたファイルに実装を含むようなコードを書くとtscがエラーにするので、ケアレスミス予防のためにも型定義ファイルの拡張子は必ず.d.tsにします。
-
-TypeScriptでは、JavaScriptの自由奔放（かつ、危険がてんこ盛り）の世界に後付で型を与えます。
-もとからTypeScriptで書かれている場合、実装と型定義を同時に書いているためこのふたつがズレて（つまりバグって）しまうことはありません。
-一方、型定義ファイルはすでに実装があるJavaScriptに後付かつ手書きで型をつけていくため、ズレる（バグる）可能性が大いに有ります。
-そこのところを十分に気をつけないといけません。
-
-#@# @suppress ParagraphNumber SectionLength
-=={use-at-types} @typesを使う
-
-さて、まずは自分で型定義ファイルを作るよりも、既存のものを使ってみましょう。
-jQueryやlodashなどの有名どころはひととおり揃っています。
-
-ライブラリの作者がTypeScriptユーザで、npm package自体に型定義ファイルがバンドルされていて何も考えずにTypeScriptから使える場合もありますが、今のところまだ稀です。
-基本的にはDefinitelyTyped@<fn>{definitelytyped}というコミュニティベースの型定義ファイル集積リポジトリを利用することになるでしょう。
-
-#@# @suppress JapaneseStyle
-DefinitelyTypedから型定義ファイルをダウンロードしてくるための方法は複数用意されています。
-TypeScript 2.0.0からは@typesというnpmのscoped package@<fn>{scoped-package}を使って型定義ファイルを利用します。
-2.0.0以前ではtsd@<fn>{tsd}やdtsm@<fn>{dtsm}やtypings@<fn>{typings}というツールを使っていましたが、これらが不要になります。
-
-しばらくは過渡期になるため、混乱があったり利用の仕方がわかりにくかったり型定義ファイルが壊れていたりする場合があるかもしれません。
-コミュニティの力によって徐々に前進し、やがてはみんなが@typesを使うようになるでしょう。
-もし、ここで紹介する方法でうまくいかない場合、利用事例やブログ記事などが出回っている旧ツール群のいずれかを使ってみるとよいでしょう。
-
-さて、前置きが長くなりましたが実際に型定義ファイルをダウンロードしてきて使ってみましょう。
-ここではテストで使う便利ライブラリ、power-assertを題材にして型定義ファイルをダウンロードしてみます。
-
-//cmd{
-# 型定義ファイルをinstall
-$ npm install --save-dev @types/power-assert
-└─┬ @types/power-assert@0.0.27
-   ├── @types/empower@0.0.28
-   └── @types/power-assert-formatter@0.0.26
-//}
-#@# TODO power-assertの型定義ファイルに記載のライブラリ本体のバージョン更新しないと…
-
-power-assertの型定義ファイルが依存しているモジュールの型定義も芋づる式に取得できています。
-便利ですね。
-型定義ファイルのパッケージには残念ながらライブラリの実体は含まれていないため@<code>{npm install power-assert}で別途インストールする必要があります。
-
-既存ライブラリに対する型定義ファイルは@types/の下に元ライブラリのパッケージ名と同じ名前で公開される運用です。
-パッケージの検索は@<href>{https://microsoft.github.io/TypeSearch/,TypeSearch}@<fn>{typesearch}で行うか、npm searchを使うとよいでしょう。
-
-また、@typesで導入した型定義ファイルの検索は、モジュールの解決方法（@<code>{--moduleResolution}）がnodeのときのみ行われます@<fn>{issue9831}。
-AMDなどを利用したい場合、現時点では@<code>{--moduleResolution node}を指定するようにしましょう。
-
-//footnote[definitelytyped][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
-//footnote[scoped-package][@xxx/ から始まる名前空間が区切られたnpm packageのこと @<href>{https://docs.npmjs.com/misc/scope}]
-//footnote[tsd][@<href>{https://www.npmjs.com/package/tsd}]
-//footnote[dtsm][@<href>{https://www.npmjs.com/package/dtsm}]
-//footnote[typings][@<href>{https://www.npmjs.com/package/typings}]
-//footnote[typesearch][@<href>{https://microsoft.github.io/TypeSearch/}]
-//footnote[issue9831][@<href>{https://github.com/Microsoft/TypeScript/issues/9831}]
-
-===[column] @typesとDefinitelyTypedの今
-
-@typesの対応はMicrosoftのTypeScriptチームが主体となって始めました。
-DefinitelyTypedは規模は大きくなっていくもののアクティブにメンテを続けるメンバーが少なく、運用上徐々に無理が生じてきていたと思います。
-現在、TypeScript 2.0に向けてMicrosoftのTypeScriptチームがどんどん参加してきてくれています。
-彼らは給料を貰い、仕事の時間内にコミュニティを回すための時間を割いてくれているため、今後は今までよりも回転が早くなるでしょう。
-#@# OK REVIEW lc: s/2.0/2.0.0/ のほうが適切？
-#@# vv: うーん… 悩ましいけど… せっかくアドバイス貰ったから反映だ！
-
-執筆時点（2016年08月01日）では、DefinitelyTypedリポジトリのtypes-2.0ブランチでTypeScript 2.0対応が行われています。
-もし、@typesへ変更を反映してほしい人がいる場合、現時点ではtypes-2.0ブランチにpull requestを送ってください。
-また、TypeScript 2.0リリース付近で、この辺りの運用についてTypeScriptチームから正式な発表があるでしょう。
-
-参考になるURLを示しておきます。
-
- * types-publisher @<href>{https://github.com/Microsoft/types-publisher}
- * TypeSearch @<href>{https://microsoft.github.io/TypeSearch/}
-   * 上記サイトのリポジトリ @<href>{https://github.com/Microsoft/TypeSearch}
-
-===[/column]
-
-=={use-definition-files} 型定義ファイルを参照してみよう
-
-型定義ファイルを参照するには、tscコマンドでコンパイルするときにコンパイル対象に含める必要があります。
-node_modules/@types にある型定義ファイルは特別扱いされ、モジュールをimportした時や、tsconfig.jsonのtypesに記述したモジュールの解決時に自動的に走査されます。
-要するにnpm installしたら、後は何も気にしなくてもTypeScriptコンパイラが型定義ファイルを探しだしてきてくれるのです。
-
-古くはリファレンスコメントとして、ソースコードの先頭に@<code>{/// <reference path="相対パスor絶対パス" />}の形式で書く方法もありましたがtsconfig.jsonの登場により廃れました。
-基本として依存性の解決などはtsconfig.jsonで行うようにします。
-
-mocha＋power-assertでテストを書く場合を例に、使い方を解説していきます。
-
-テスト対象のコードは@<code>{./lib/index.ts}です（@<list>{usage/lib/index.ts}）。
-
-//list[usage/lib/index.ts][至って普通のモジュール]{
-#@mapfile(../code/definition-file/usage/lib/index.ts)
-export function hello(word = "TypeScript") {
-  return `Hello, ${word}`;
-}
-#@end
-//}
-
-これに対してテストコードとして@<code>{./test/indexSpec.ts}を書いてみましょう（@<list>{usage/test/indexSpec.ts}）。
-
-//list[usage/test/indexSpec.ts][mocha+power-assertでテストを書く]{
-#@mapfile(../code/definition-file/usage/test/indexSpec.ts)
-import * as assert from "power-assert";
-
-import { hello } from "../lib/";
-
-describe("lib", () => {
-  describe("hello function", () => {
-    it("generate string with default value", () => {
-      let str = hello();
-      assert(str === "Hello, TypeScript");
-    });
-    it("generate string with parameter", () => {
-      let str = hello("JavaScript");
-      assert(str === "Hello, JavaScript");
-    });
-  });
-});
-#@end
-//}
-
-普通ですね。「特定のinputを与えるとoutputが得られる」ことを検証するコードです。
-
-ここで問題なのは、TypeScriptコンパイラが安全にコードを処理するためには、mochaとpower-assertについての情報が必要であることです。
-たとえば、assert関数はpower-assertが提供するものですし、describeとitはmochaが提供しています。
-JavaScriptの世界では静的な型検査などありませんので問題ありませんが、TypeScriptではそうはいかないため外部ライブラリの型情報をどうにかしてコンパイラに教えてあげる必要があります。
-そこで使われるのが型定義ファイルです。
-
-#@# @suppress ParenthesizedSentence
-mocha（@<list>{usage/abstract/mocha.d.ts}）とpower-assert（@<list>{usage/abstract/power-assert.d.ts}）の型定義ファイルを抜粋・簡略化したものを見てみましょう。
-
-//list[usage/abstract/mocha.d.ts][mocha.d.ts抜粋]{
-#@mapfile(../code/definition-file/usageAbstract/mocha.d.ts)
-interface MochaDone {
-  (error?: Error): void;
-}
-declare let describe: {
-  (description: string, spec: () => void): any;
-};
-declare let it: {
-  (expectation: string, assertion?: () => void): any;
-  (expectation: string, assertion?: (done: MochaDone) => void): any;
-};
-#@end
-//}
-
-//list[usage/abstract/power-assert.d.ts][power-assert.d.ts抜粋]{
-#@mapfile(../code/definition-file/usageAbstract/power-assert.d.ts)
-export = assert;
-export as namespace assert;
-
-declare function assert(value: any, message?: string): void;
-#@end
-//}
-
-型定義ファイルを見るとmochaとpower-assertそれぞれのAPIが表現されています。
-TypeScriptコンパイラがこれらの型定義ファイルを認識できれば、矛盾なくコンパイルを通すことができそうです。
-そのためのpackage.json（@<list>{usage/package.json}）とtsconfig.json（@<list>{usage/tsconfig.json}）を確認します。
-
-//list[usage/package.json][package.json]{
-#@mapfile(../code/definition-file/usage/package.json)
-{
-  "name": "typescript-in-definitelyland-sample",
-  "private": true,
-  "version": "1.0.0",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "tsc -p ./",
-    "pretest": "npm run build",
-    "test": "mocha"
-  },
-  "author": "vvakame",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/mocha": "^2.2.28",
-    "@types/power-assert": "0.0.27",
-    "mocha": "^2.5.3",
-    "power-assert": "^1.4.1"
-  }
-}
-#@end
-//}
-
-//list[usage/tsconfig.json][tsconfig.json]{
-#@mapfile(../code/definition-file/usage/tsconfig.json)
-{
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "types": [
-            "mocha"
-        ]
-    },
-    "exclude": [
-        "node_modules"
-    ]
-}
-#@end
-//}
-
-#@# @suppress JapaneseStyle
-power-assertはテストコード中でimportしますが、テストランナーであるmochaの定義はソースコード中からの参照がありません。
-そのため、power-assertについてはTypeScriptコンパイラが必要であることを判別し、型定義ファイルを探しにいってくれます。
-
-しかしmochaはそのような機会がないため、TypeScriptコンパイラは型定義を探しにいってくれません。
-このままコンパイルするとmochaがグローバルに値を展開しているdescribeやitなどが見つからないと言われてしまいます。
-これを解決するためにtsconfig.jsonのtypesプロパティ中でmochaを参照するよう指定します。
-
-あわせて型定義ファイルへの参照が意図どおり処理されずに困った場合のデバッグ方法を紹介しておきます。
-コンパイルに利用したファイルをリスト表示する@<code>{--listFiles}オプションと、型定義ファイルを見つけるためにコンパイラがどういう探索を行ったかを表示する@<code>{--traceResolution}オプションを試してみてください。
-
-=={writing-dts-files} 型定義ファイルを書こう
-
-さて型定義ファイルの取得方法、使い方はわかりました。
-しかし、世の中にあるJavaScriptライブラリのうち、型定義ファイルが書かれていないものはまだまだ数多くあります。
-特に、門外不出の社内ライブラリなどは誰も手をつけていない前人未到の地です。
+@<chapref>{at-types}で型定義ファイルの取得方法、使い方を学びました。
+しかし、世の中にあるJavaScriptライブラリのうち、型定義ファイルが書かれていないものはまだまだあります。
+特に、門外不出の社内ライブラリなどは誰も手をつけて（いるわけが）ない前人未到の地です。
 
 #@# @suppress InvalidExpression
 しからば！自分で書くしかあるまいよ！
 ぶっちゃけた話、めんどくさいのですが、後々の安心・安全を得るための投資として割りきりましょう。
 
-なお、自分で型定義ファイルを書く覚悟無しにTypeScriptをやるのは茨の道だと思いますので頑張ってください。
-「誰かがやってくれないと自分ではできません」なんて甘えた根性では型サバンナでは到底生きていけないのです@<fn>{types-savannah}。
+なお、自分で型定義ファイルを1行も書かずにTypeScriptをやると、どこかの時点で不便に感じるでしょう。
+最初のうちは無理かもしれませんが、まずは人が書いた型定義ファイルを読んで知識を蓄え、この世界に入ってきてくれると嬉しいです。
 
-//footnote[types-savannah][DefinitelyTypedメンテナ（＝筆者）の意見です]
-
-==={types-and-values} 型、実体、そして42。
+=={types-and-values} 型、実体、そして42。
 
 TypeScriptはJavaScriptに対して後付で型による制約を付け足した言語です。
 そのため、JavaやC#のような最初から型ありきの言語より少し考え方が複雑です。
@@ -253,8 +25,12 @@ TypeScriptはJavaScriptに対して後付で型による制約を付け足した
 一方、JavaScriptでコードを書いてTypeScriptで型定義ファイルを作成して使う場合、実装と型が個別に定義されることになります。
 そのため、型と実体が分離してしまい、この2つの間に乖離が生じると（つまりバグると）コンパイルが通るのに実行時エラーが多発する、というありさまになるわけです。
 型定義ファイルを書いて"この変数は、あります！"と宣言したけれど、実際には存在せず実行時エラーになるというのは広く使われている型定義ファイルですらままある話です。
+これはもうどうしようもない話ですので、我慢するか自分で修正するしかありません。
+全世界がTypeScriptに制覇されることによりこの葛藤は解消される予定です。
+#@# OK mhidaka このような不均衡な状態とどうやってつきあっていってるの？という一言があるといいかもしれない。基本は我慢？
 
-==={good-definitions-bad-definitions} 良い型定義ファイル、悪い型定義ファイル
+#@# prh:disable
+=={good-definitions-bad-definitions} 良い型定義ファイル、悪い型定義ファイル
 
 型定義ファイルにも良し悪しがあります。
 その基準は至って簡単です。
@@ -298,13 +74,17 @@ DefinitelyTypedにpull requestを送ってくれる人にもそういう人は�
 
 型定義ファイルの品質の良さにこだわるあまり、完成しない、使いたいライブラリが使えない、というのがもっともよくない状態です。
 型定義ファイルの良し悪しを判断する力は、TypeScript自体への理解度に大きく依存します。
-TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見えてくるのは避けられません。
+TypeScriptを書き始めたばかりに作ったものは上達するにつけ後々粗が見えてくるのは避けられません。
+つまり、避けられないことを気にしたってしかたないよな！
 まずは"使える"状態にすることを目指しましょう。
 
 品質や"ライブラリ全体をカバーしている"かは気になるところではあります。
 しかし、まずは使いたいところが使えればいいのです。
-スゴいものになると、1万行を超える型定義ファイルがあります。また3000行程度のものはわりとごろごろしています…。
+スゴいものになると、1万行を超える型定義ファイルがあります。
+また3000行程度のものはわりとごろごろしています…。
 しかし、そんなにも頑張って書いてると余裕で日が暮れてしまいます@<fn>{atom-dts}。
+
+//footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
 
 まずは、使いたいところが、使える！
 それでよいのです。
@@ -316,67 +96,53 @@ TypeScriptを書き始めの頃は、品質を気にした所で後々粗が見�
 
 最初はうまくできなくても数をこなし学習を重ねれば、そのうち立派な型定義ファイルを書けるようになるでしょう。
 
-//footnote[atom-dts][なお筆者はGitHubの作っているエディタ、Atomの型定義ファイルを3日かけて書いたことがあります。アレがジゴクだ]
+==={done-is-better-than-perfect} 雑な型定義でやりすごす
 
-#@# @suppress InvalidExpression
-===={done-is-better-than-perfect} 最高に雑な型定義ファイルを作る
+はい。まずは気軽にスタートする方法から入っていきましょう。
+何も考えずにスタートするとanyが至るところに流入してくるので少しずつ定義を育てていき、立派な安全さを得ていきましょう。
 
-テキトーにやるためにまずは最高に雑な、とりあえず動く型定義ファイルを作ってみます（@<list>{wildcard/basic-invalid.d.ts}）。
-モジュール名しか指定しなかったり、anyな変数を用意したりしてコンパイルエラーを回避します。
+#@# 型付けなしの気軽なimport句 Untyped (implicit-any) imports in 2.1.4
+まず一番簡単なのは@<code>{--noImplicitAny}オプションが指定されていない場合に限り、型定義のないモジュールをimportするとエラーにならずにanyとして参照できるというものです。
+これは簡単に始められますが@<code>{--noImplicitAny}を使わないというのがそもそも厳しいため、書き捨てのスクリプトを作るときくらいしか出番が無さそうです。
 
-//list[wildcard/basic-invalid.d.ts][雑な型定義ファイルの例]{
-#@mapfile(../code/definition-file/wildcard/basic-invalid.d.ts)
-// 名前だけ定義すると全てanyでとりあえず使える
-declare module "lodash";
+#@# 雑な型定義の作成法の追加とワイルドカード（Shorthand ambient module declarations and wildcard matching in module names） in 2.0Beta
+次に使える手法として、モジュールの型定義を簡略表記する方法とワイルドカードがあります。
+定義の例@<list>{shorthand/module.d.ts}とそれを使う例@<list>{shorthand/usage.ts}を確認してみます。
 
-// 必要な変数をとりあえずanyで生やす
-declare let $: any;
+//list[shorthand/module.d.ts][定義の例 名前を書くだけ]{
+#@mapfile(../code/definition-file/shorthand/module.d.ts)
+declare module "jquery";
 
-// 特定のパッケージ配下をとりあえず全部anyで
-declare module "sample/*";
-
-
-// webpackなど特殊なローダー用
-declare module "json!*";
-
-// 同上
-// モジュール読んだらモジュールは文字列
-declare module "*!text" {
-  const _: string;
-  export = _;
+// こういう定義と同等
+declare module "jquery-alt" {
+  var _temp: any;
+  export = _temp;
 }
+
+// ワイルドカードも使える
+declare module "json!*";
+declare module "sample/*";
 #@end
 //}
 
-この例だと、@<code>{--noImplicitAny}オプションを有効にするとエラーになってしまいます。
-そのため、コンパイルエラーを無くしたらなるべく早く@<code>{--noImplicitAny}を有効にできるように頑張りたいところです。
+//list[shorthand/usage.ts][利用例 とりあえず使える]{
+#@mapfile(../code/definition-file/shorthand/usage.ts)
+import * as $ from "jquery";
 
-この型定義ファイルの利用例を見てみます（@<code>{wildcard/basicUsage-ignore}）。
+// $ はany
+$.notExists();
 
-#@# tsc code/definition-file/wildcard/basicUsage-ignore.ts code/definition-file/wildcard/basic-invalid.d.ts
+// これらもコンパイルが通る
+import * as json from "json!package.json";
+import * as sampleFoo from "sample/foo";
+import * as sampleFooBar from "sample/foo/bar";
 
-//list[wildcard/basicUsage-ignore.ts][型定義ファイルの利用例]{
-#@mapfile(../code/definition-file/wildcard/basicUsage-ignore.ts)
-import * as _ from "lodash";
-import * as sample from "sample/foobar";
-import * as data from "json!./bar.json";
-import * as text from "./foo.txt!text";
-
-// _はany
-_.map([1, 2, 3], n => n * 3);
-// $はany
-$("#id");
-// sampleはany
-sample;
-// dataもany
-data;
-// textはstring
-text.toUpperCase();
+export { $, json, sampleFoo, sampleFooBar }
 #@end
 //}
 
-anyばっかりですね。
-しかし、コンパイルはとおります。
+簡単ですね！
+とりあえず、開発を始めることができます。
 
 #@# @suppress ParagraphNumber SectionLength
 ==={interface-the-best-friend} インタフェースを活用する
@@ -384,6 +150,8 @@ anyばっかりですね。
 #@# @suppress SentenceLength ParenthesizedSentence
 インタフェースは大変使いやすいパーツです。
 というのも、インタフェースには@<strong>{後から定義を拡張できる}という特性があるからです（@<list>{interface/declarationMerging.d.ts}、@<list>{interface/declarationMergingUsage.ts}）@<fn>{open-ended-class}。
+
+//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能です @<href>{https://github.com/Microsoft/TypeScript/issues/3332}]
 
 //list[interface/declarationMerging.d.ts][定義を分割して書く]{
 #@mapfile(../code/definition-file/interface/declarationMerging.d.ts)
@@ -402,7 +170,7 @@ interface Foo {
 #@mapfile(../code/definition-file/interface/declarationMergingUsage.ts)
 /// <reference path="./declarationMerging.d.ts" />
 // ↑ 昔はこのようにreference commentを使ってファイル間の依存関係を明示していましたが、
-//   最近はtsconfig.jsonに依存関係を書くため見かけることが大変少なくなりました
+//   最近はtsconfig.jsonに依存関係を書くため見かけることはほぼなくなりました
 
 let foo: Foo = null as any;
 
@@ -418,8 +186,12 @@ export { }
 
 例をひとつ見てみましょう。
 @<code>{String#trimStart}は、文字列の先頭にある空白文字を取り除く機能です。
-本章執筆時点（2016年08月01日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
+本章執筆時点（2017年07月16日）では、この提案@<fn>{string-trimStart}はTC39のプロポーザルでstage 2@<fn>{tc39-proposal}で、TypeScriptにはまだ入ってきていません。
 そのためStringインタフェースを拡張する形でコンパイルを通せるようにしてみましょう（@<list>{interface/stringTrimStart.ts}）
+
+#@# prh:disable
+//footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
+//footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
 
 //list[interface/stringTrimStart.ts][String#trimStartを生やす]{
 #@mapfile(../code/definition-file/interface/stringTrimStart.ts)
@@ -439,17 +211,16 @@ console.log(str.trimStart());
 この手法は、他人が作った型定義ファイルを拡張する場合にも活用できます。
 相乗りできるのであれば遠慮なく乗っかっていってしまいましょう。
 
-//footnote[open-ended-class][ちなみに、classの定義も後から拡張可能になりました @<href>{https://github.com/Microsoft/TypeScript/issues/3332}]
-#@# prh:disable
-//footnote[string-trimStart][@<href>{https://github.com/sebmarkbage/ecmascript-string-left-right-trim}]
-//footnote[tc39-proposal][@<href>{https://tc39.github.io/process-document/}]
+#@# OK mhidaka めっちゃかんたんやん！って驚く例で大変良い
 
 ==={ghost-namespace} 幽霊namespace
 
 幽霊namespace@<fn>{ghost-module}という考え方があります。
 
+//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
+
 namespaceを作ったとしても、即座に実体が生成されるとは限りません。
-namespaceが抱えるのがインタフェースのみである場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
+namespaceが抱えるものがインタフェースのみの場合、実体がある扱いにはならないのです（@<list>{ghostModule/invalid.ts}）。
 
 //list[ghostModule/invalid.ts][幽霊namespace]{
 #@mapfile(../code/definition-file/ghostModule/invalid.ts)
@@ -459,7 +230,7 @@ declare namespace ghost {
   }
 }
 
-// 型としては普通にアクセスできる
+// 型としてはしっかり存在していてアクセスできる
 let test: ghost.Test;
 test.str;
 
@@ -474,8 +245,9 @@ export { }
 これを活用して大量のインタフェースをもつようなライブラリの定義をひとまとまりにできます。
 
 実際の例を見てみましょう。
-@<list>{ghostModule/jqueryWithoutGhostModule-ignore.d.ts}はjQueryの型定義ファイルからの抜粋（＆一部改変）です。
+@<list>{ghostModule/jqueryWithoutGhostModule-ignore.d.ts}はjQueryの型定義ファイルからの抜粋（および一部改変）です。
 
+#@# TODO 最新の例に更新したいところ
 //list[ghostModule/jqueryWithoutGhostModule-ignore.d.ts][実際のjQueryの型定義の例]{
 #@mapfile(../code/definition-file/ghostModule/jqueryWithoutGhostModule-ignore.d.ts)
 interface JQuery {
@@ -516,9 +288,9 @@ declare var $: JQueryStatic;
 #@end
 //}
 
-トップレベルに複数の型がいくつも散乱してしまうのがよくありません。
+トップレベルに複数の型がいくつも散乱してしまう点がよくありません。
 それに@<code>{JQuery}というprefixが乱舞していて目を惑わせます。
-ライブラリ内部でAPI同士が参照する場合でも引数や返り値にプリフィクスが必要なのはめんどうくさいです。
+ライブラリ内部でAPI同士が参照する場合でも引数や返り値にプリフィクスが必要だと面倒です。
 IDE上で型注釈を手書きするときも候補がたくさんサジェストされてしまうことでしょう。
 
 #@# @suppress ParenthesizedSentence
@@ -568,36 +340,34 @@ declare var $: jquery.Static;
 
 #@# @suppress SuccessiveWord
 インタフェース名が短く、かつわかりやすくなりました。
-やっぱり、こういうのがいいですね。
+やっぱり、シンプルなほうがいいですね。
 
 もちろん、無理に幽霊namespaceを使う必要はありません。
 クラスや変数や関数などを持ち、通常の実体をもつnamespaceが存在している場合は、そのnamespaceに相乗りしてしまったほうが楽でしょう。
 
 #@# @suppress JapaneseStyle
 #@# prh:disable
-…どうしてDefinitelyTyped上にある型定義ファイルでそうなってないものが多いのかって？
+どうしてDefinitelyTyped上にある型定義ファイルで幽霊namespaceを使っていないものが多いのかって？
 よい質問です。
 ひとつは幽霊namespaceの認知度が低いこと、もうひとつは型定義ファイルの大幅な書き換えは互換性の破壊を生み出すからです。
 先で説明しましたが、インタフェースは定義の統合ができます。
-この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまうのです。
-特にjQueryプラグインとかはインタフェースを拡張する形で型定義するのでその量たるや…。
+この性質を利用して定義の拡張を行っているので、うかつにJQueryStaticからjquery.Staticに型名を変更するとjQueryの型定義に依存しているさまざまなライブラリの色々なところが壊れてしまいます。
+特にjQueryプラグインはインタフェースを拡張する形で型定義するのでその量たるや…。
 
-ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊namespaceに切り替えるのは難しい場合があります。
+ともあれ、過去の定義との互換性を壊すことに繋がるため、途中から幽霊namespaceに切り替える選択は難しくなります。
 可能であれば最初から幽霊namespaceを使うようにしましょう。
 将来的には、このパターンの検出はtslintなどで機械的に行えるようにしたいところですね。
 
-//footnote[ghost-module][TypeScriptリファレンスでは非インスタンス化モジュールという名前で紹介しました。その後、DefinitelyTypedのbest practicesでghost moduleと表記された]
-
 #@# @suppress JapaneseStyle ParagraphNumber SectionLength
-==={interface-is-not-duct-tape} なんでもかんでもインタフェースにしてはならない
+==={interface-is-not-duct-tape} インタフェースは万能ではない
 
 少し前の文章であんだけインタフェースを持ち上げといてこれかぁ！？
 と思われたかもしれませんが、なんでもかんでも乱用すればいいってものではありません。
 
 #@# @suppress ParenthesizedSentence
-具体的にはnamespace様の構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts}）。
+具体的にはnamespace的な構造をインタフェースを使って作ってはいけません（@<list>{interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts}）。
 
-//list[interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts][インタフェースでnamespaceを表現してしまう。何故なのか…]{
+//list[interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts][namespaceを使えばいいのにインタフェースで表現してしまう。何故なのか…]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceBad-ignore.d.ts)
 interface Foo {
   bar: FooBar;
@@ -620,20 +390,18 @@ declare var foo: Foo;
 #@# @suppress InvalidExpression
 この型定義ファイルを読み解いて一瞬で使えるのは、元のJavaScriptコードを熟知している人だけでしょう。
 少なくとも、この型定義ファイルをヒントに実際のコードを書くことには大いなる苦痛を伴います。
-筆者は絶対に使いません。絶対です。
-普通に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts}のように書きましょう。
+素直に@<list>{interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts}のように書きましょう。
 
 //list[interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts][素直にこうしよう]{
 #@mapfile(../code/definition-file/interfaceAntipattern/moduleByInterfaceGood-ignore.d.ts)
-// 普通にコレでいいだろ！！
+// 素直にこうしよう！
 declare namespace foo.bar.buzz {
   let str: string;
 }
 #@end
 //}
 
-さて次です。
-通常@<list>{interfaceAntipattern/callableModuleUsage-ignore.ts}のような型定義ファイルを書こうとは思わないと思いますが、こういうコードが必要になる場合が稀にあります。
+通常@<list>{interfaceAntipattern/callableModuleUsage-ignore.ts}のような型定義ファイルを書こうとはしませんが、このようなコードが必要になる場合が稀にあります。
 関数としても呼べるし、namespaceのようにも振る舞うオブジェクトの型定義を作成したいときです。
 
 //list[interfaceAntipattern/callableModuleUsage-ignore.ts][関数・namespace どっちなの？]{
@@ -645,8 +413,7 @@ assert.ok(value);
 //}
 
 #@# @suppress SentenceLength
-呼び出し可能で、プロパティをもつ。
-この場合、すぐに考えつく型定義は@<list>{interfaceAntipattern/callableModuleBad1-ignore.d.ts}か、@<list>{interfaceAntipattern/callableModuleBad2-ignore.d.ts}でしょう。
+呼び出し可能で、プロパティをもつ場合、すぐに考えつく型定義は@<list>{interfaceAntipattern/callableModuleBad1-ignore.d.ts}か、@<list>{interfaceAntipattern/callableModuleBad2-ignore.d.ts}でしょう。
 
 //list[interfaceAntipattern/callableModuleBad1-ignore.d.ts][こうしてしまいたい、気持ち]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleBad1-ignore.d.ts)
@@ -669,11 +436,12 @@ interface Assert {
 //}
 
 #@# @suppress ParenthesizedSentence
-たしかに、この定義でも動きます（正直、assert関数だけの定義だとこのままでもいい気がしますが…）。
+たしかに、この定義でも動きます。
+正直なところassert関数だけの定義だとこのままでもいい気がしますが。
 
 しかし、これには別のよいやり方があるのです（@<list>{interfaceAntipattern/callableModuleGood-ignore.d.ts}）。
 
-//list[interfaceAntipattern/callableModuleGood-ignore.d.ts][関数とnamespace 両方やらなきゃいけないのが辛いところだ]{
+//list[interfaceAntipattern/callableModuleGood-ignore.d.ts][関数とnamespace、両方やらなきゃいけないのが辛いところだ]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModuleGood-ignore.d.ts)
 declare function assert(value: any): void;
 declare namespace assert {
@@ -682,12 +450,14 @@ declare namespace assert {
 #@end
 //}
 
-関数とnamespaceを同名で宣言できるのです。
+関数とnamespaceを同名で宣言できる手法です。
 メリットは階層構造を素直に表現できることと、前項で説明した幽霊namespaceの書き方を併用できるところです。
 
 #@# @suppress SentenceLength
-この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
-@<list>{interfaceAntipattern/powerAssertAbst-ignore.d.ts}に抜粋＆改変したものを示します。
+この手法は、実際に@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/power-assert,power-assertの型定義ファイル}@<fn>{power-assert-dts}でも利用されています。
+@<list>{interfaceAntipattern/powerAssertAbst-ignore.d.ts}に抜粋および改変したものを示します。
+
+//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
 
 //list[interfaceAntipattern/powerAssertAbst-ignore.d.ts][関数+namespaceの実例]{
 #@mapfile(../code/definition-file/interfaceAntipattern/powerAssertAbst-ignore.d.ts)
@@ -707,12 +477,12 @@ declare namespace assert {
 #@end
 //}
 
-外部に公開されている関数は@<code>{assert}のみで、そこに追加でプロパティが生えている形式です。
+外部に公開されている関数は@<code>{assert}のみで、そこにプロパティを追加している形式です。
 namespaceにOptionsインタフェースがうまく取り込まれています。
 余計な名前を階層の浅いところにバラ撒かず、厳密さも損なっていません。
-この書き方は、意外とよく登場するパターンなので覚えておきましょう。
+この書き方は、よく登場するパターンなので覚えておきましょう。
 
-実は、このやり方は型定義ファイルだけではなく通常のTypeScriptコードでも使えます（@<list>{interfaceAntipattern/callableModule.ts}）。
+実は、この手法は型定義ファイルだけではなく通常のTypeScriptコードでも使えます（@<list>{interfaceAntipattern/callableModule.ts}）。
 
 //list[interfaceAntipattern/callableModule.ts][関数が先、namespaceは後！絶対！]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModule.ts)
@@ -731,10 +501,10 @@ namespace test {
 
 //list[interfaceAntipattern/callableModule.js][JSとして正しい構造だ]{
 #@mapfile(../code/definition-file/interfaceAntipattern/callableModule.js)
+"use strict";
 function test() {
     return "test!";
 }
-var test;
 (function (test) {
     function func() {
         return "function!";
@@ -744,24 +514,22 @@ var test;
 #@end
 //}
 
-//footnote[power-assert-dts][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/power-assert/}]
-
 ==={class-definitions} クラスはクラスとして定義する
 
-クラスを型定義として起こす方法について解説します。
+クラスの型定義を行う方法を解説します。
 歴史的経緯により、TypeScriptではクラスの型定義を行う時に2つの代表的なやり方が存在しています。
 まずはその2つのやり方を見てみましょう（@<list>{declareClass/basic.d.ts}）。
 
 //list[declareClass/basic.d.ts][素直にクラス定義 vs インタフェース+変数]{
 #@mapfile(../code/definition-file/declareClass/basic.d.ts)
-// A. 普通にクラスを定義する
+// A. クラスを定義する
 declare class TestA {
 }
 
 // B. クラスの分解定義 変数 + インタフェース2つ
 declare let TestB: TestBConstructor;
 interface TestBConstructor {
-  new (): TestB;
+  new(): TestB;
 }
 interface TestB {
 }
@@ -769,7 +537,7 @@ interface TestB {
 //}
 
 こんな感じです。
-普通にクラス定義をするほうが素直ですね。
+クラス定義をするほうが素直ですね。
 
 過去にはこの2つのやり方にそれぞれメリット・デメリットがありました。
 しかし、現在のTypeScriptでは大幅に制限が緩和されたためメリット・デメリットの面で考える必要はなくなってきました（@<list>{declareClass/stretch.ts}）。
@@ -790,7 +558,7 @@ console.log(p.name, p.age);
 
 // interfaceを使ったクラスの構成でも
 interface AnimalConstructor {
-  new (): Animal;
+  new(): Animal;
 }
 interface Animal {
   speak(): string;
@@ -802,7 +570,7 @@ let Animal: AnimalConstructor = class {
   }
 };
 /* tslint:enable:variable-name */
-// Animalはただの変数だが普通に継承できる！
+// Animalはただの変数だが問題なく継承できる！
 class Cat extends Animal {
   speak() {
     return "meow";
@@ -815,19 +583,16 @@ export { }
 #@end
 //}
 
-#@# TODO https://github.com/Microsoft/TypeScript/issues/10624 の結果次第で削ったコードを復活させる
-
 #@# OK REVIEW lc: s/以下のような分/以下のような文/
 
-==={pretty-good-overload} オーバーロードを上手く使おう！
+==={pretty-good-overload} オーバーロードをうまく使おう！
 
 #@# @suppress JapaneseAmbiguousNounConjunction
-正しいライブラリの使い方を導くこと。
-を心に秘めて、@<list>{overload/useOverload.ts}を見てください。
+正しいライブラリの使い方を導く気持ちを心に秘めて、@<list>{overload/useOverload.ts}を見てください。
 
 質問：どれが一番、元々の関数の仕様がわかりやすいですか？
 
-//list[overload/useOverload.ts][普通に使えます]{
+//list[overload/useOverload.ts][書き方あれこれ]{
 #@mapfile(../code/definition-file/overload/useOverload.ts)
 // 同じ実装に対して、どの型定義が一番便利かな？
 // 1関数でget, set両方の役目を果たす場合…
@@ -844,13 +609,13 @@ declare let valueC: Function;
 #@end
 //}
 
-答え：一番最初のやつ。
+答え：一番最初の方法。
 
 JavaScriptのライブラリは1つの関数にさまざまな使い方をさせようとする場合がままあります。
 つまり、1つの関数が複数の顔をもつということです。
 その顔ひとつひとつに個別の型定義を割り振ってやるテクニックをオーバーロードと呼びます。
 
-なおTypeScriptコードを書くときは普通はオーバーロードをあまり使わないのがよいスタイルです。
+なおTypeScriptコードを書くときはオーバーロードをあまり使わないほうがよいスタイルです。
 実装が煩雑になってしまいますからね。
 素直にメソッドを分けましょう。
 
@@ -898,13 +663,10 @@ funcB(obj);
 #@end
 //}
 
-この問題は@<href>{https://github.com/Microsoft/TypeScript/issues/5766,Issue}@<fn>{issue5766}として管理されています。
-"Accepting PRs"ラベルがついているため、TypeScriptチームが積極的に直す候補にはなっていないけれどコミュニティの誰かがやる気を出せば修正される、という状態です。
-
-//footnote[issue5766][@<href>{https://github.com/Microsoft/TypeScript/issues/5766}]
+#@# NOTE: https://github.com/Microsoft/TypeScript/issues/5766 で解決されるかと思ったら型定義が直されて解決された…
 
 #@# @suppress SectionLength JapaneseAmbiguousNounConjunction
-==={module-declaration-merging} モジュールの定義の統合
+==={module-declaration-merging} モジュールの定義を統合する
 
 #@# OK REVIEW lc: なんか「ベストプラクティス」からずれている気がする・・・
 #@# vv: 心得に変えました
@@ -929,7 +691,7 @@ declare module "foo" {
 #@end
 //}
 
-//list[externalModuleDeclarationMerging/usage.ts][普通に使えます]{
+//list[externalModuleDeclarationMerging/usage.ts][統合された定義が使えます]{
 #@mapfile(../code/definition-file/externalModuleDeclarationMerging/usage.ts)
 import * as foo from "foo";
 foo.str;
@@ -938,15 +700,18 @@ foo.num;
 //}
 
 #@# @suppress SuccessiveWord SentenceLength JapaneseAmbiguousNounConjunction
-DefinitelyTypedではモジュールの型定義の外側にnamespaceを使った定義を掃き出し、モジュールの型定義の外側に拡張ポイントを設ける例がありました。
-モジュールを利用しないnamespaceだけの構成です。
+既存のライブラリに勝手にメソッドを生やす（＝型を拡張する）ようなライブラリがあります。
+DefinitelyTypedではモジュールの型定義を容易に拡張するために、モジュールの型定義とそれとは独立したnamespaceを組み合わせて使うパターンがあります。
 たとえば、lodashやjQueryのようなグローバルな名前空間に変数を生やすような場合に、いまだに有効です。
+#@# OK mhidaka モジュールの型定義とモジュールの定義という２つの言葉を使い分けていそうだけどそうじゃない感じもする。
+#@# TODO このあたりDTでのやり方の分布に変化が生じてる気もするので気が向いたら調査する
+#@# https://github.com/Microsoft/types-publisher#fields-in-datadefinitionsjson kindのとこみたいな例があるはず
 
-==={any-vs-object} anyと{}とObject
+==={any-vs-object} どれ使う？anyと{}とObject
 
 もしも型定義ファイルを書いていて具体的な型がわからないとき、頭を使わずにとりあえずコンパイルを通したいときは、素直に@<code>{any}を使いましょう。
 こういったシチュエーションで、稀にObjectを指定する人がいます。
-これはJavaScriptの仕様として、プロトタイプチェーンの頂点にいるObjectを使おう！と思ったのでしょう。
+プロトタイプチェーンの頂点にいるObjectをとりあえず据えておこう！という考えかもしれませんがこれは悪いやり方です。
 
 関数の引数にObjectや{}を指定するのは、どういう性質の値がほしいのかを述べていません。
 本当にどのような値でも受け入れるのであれば、anyにするべきです。
@@ -955,11 +720,12 @@ DefinitelyTypedではモジュールの型定義の外側にnamespaceを使っ�
 これはanyを指定するのと同程度に危険で、なおかつanyより検出しにくいです。
 素直にanyを使いましょう。
 
-筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません。
+筆者は今のところ、Objectや{}が型注釈として適切な場面を見たことがありません@<fn>{primitive-object-type}。
 大抵の場合は、適切な型を定義してそちらを参照するほうが優れています。
 
-#@# @suppress SuccessiveWord
-そしてanyを使うことに気後れするのであれば、よくよく調べて適切な型定義を与えるようにしましょう。
+//footnote[primitive-object-type][@<chapref>{types-basic}で触れたオブジェクト限定型（object）が適切な場合は稀にある…かも？]
+
+そしてanyを使うことに気後れするのであれば、よく調べて適切な型定義を与えるのがよいでしょう。
 
 ==={scratch-from-document} ドキュメントから書き起こす
 
@@ -970,14 +736,11 @@ Visual StudioなどのIDEでは、型定義ファイル上に書かれたJSDoc�
 #@# @suppress KatakanaSpellCheck
 サンプルをテスト用コードとしてTypeScriptコードに移植し、ドキュメントどおりの記述が可能かも確かめるとよいです。
 型定義ファイルは書き起こしたけれどもドキュメント中に書かれている利用例のコードをコンパイルしてみて失敗するようであれば、それは悪い型定義だといえます。
-たまにドキュメントのほうが間違っている場合があるのでその場合は修正のpull requestを送るチャンスです。
+たまにドキュメントのほうが間違っているときがありますが、その場合は本家に修正のpull requestを送るチャンスです。
 
-世の中、ドキュメントにコストをあまり掛けることのできないプロジェクトも多くあるため絶対的なルールではありません。
+世の中、ドキュメントにコストをあまり掛けることのできないプロジェクトも多くあります。
+そのため、この指針は絶対的なルールではありません。
 この場合、コードから型定義ファイルを起こすことになるのは仕方のないことです。
-
-現在、DefinitelyTypedにあるjQueryの型定義ファイルを熱心に面倒みてくれているJohn Reillyは特にドキュメントとの整合性を熱心に見ます。
-そのため、もしjQueryのドキュメント自体が間違っている場合はjQueryのドキュメントを直すところから始めるとよいでしょう。
-コントリビュートの輪！
 
 ==={be-careful-about-optional} コールバック関数の引数を無闇に省略可能（optional）にしない
 
@@ -1030,33 +793,22 @@ dataがundefinedかもしれないため、if文などで中身をチェック�
 
 間違えないよう、留意しましょう。
 
-#@# @suppress SectionLength ParagraphNumber
-==={dont-use-i-prefix} インタフェースのプリフィクスとしてIをつけるのはやめよう！
-
-とTypeScriptの公式ドキュメントで@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions,明記}@<fn>{writing-dts-files}されました。
-
-C#やJavaよりも、広い範囲でインタフェースが利用されるので"実装を強制させるパーツ"扱いしてはいけないからだそうです。
-
-#@# @suppress JapaneseStyle
-古くはTypeScriptコンパイラ本体のコードもC#の伝統に倣いIプリフィクスを使っていましたが、現在では取り除かれています。
-またDefinitelyTypedでも公式の記述に従い新しい型定義ファイルについてはIプリフィクスを使わぬようレビューしています。
-
-//footnote[writing-dts-files][@<href>{https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html#naming-conventions}]
-
-==={module-compat} ECMAScript 2015とCommonJSでのモジュールの互換性について
+==={module-compat} ECMAScriptモジュールとCommonJSモジュールの互換性について
 
 最初にまとめを書いておきます。
+
 まとめ：@<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
 
-現在JavaScriptのモジュールの仕様は過渡期にあります。
-ECMAScript 2015でモジュールの記法や考え方は定義されましたが、実際ブラウザにはまだ実装されていません。
-ブラウザ上でのスクリプトの読み込みは煩雑で、まだ実装のための仕様も固まっていない段階です。
-さらにCommonJS形式のモジュールとの互換性なんて、ECMAScriptの仕様には含まれていません。
+#@# @suppress JapaneseAmbiguousNounConjunction
+現在JavaScriptのモジュール仕様は過渡期にあります。
+ECMAScriptでモジュールの記法や考え方は定義され、ブラウザでも実装されはじめました。
+しかし、CommonJS形式のモジュールとの互換性なんてECMAScriptの仕様には含まれていません。
 
-そのためにTypeScriptやBabelなど、各種トランスパイラ毎にECMAScript 2015とCommonJS間の変換方法は食い違っています。
-TypeScriptが正しいのかBabelが正しいのかという議論は、そもそも仕様が不明なのだから成立しません。
-TypeScriptもBabelもECMAScript 2015なモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。
+そのためにTypeScriptやBabelなど、各種トランスパイラ毎にECMAScriptとCommonJS間の変換方法は食い違っています。
+TypeScriptが正しいのかBabelが正しいのかという議論は、そもそも仕様が不明なので成立しません。
+TypeScriptもBabelもECMAScriptなモジュール記法からCommonJS形式などへの変換ルールを定めているため、我々はその特徴を知り、正しく使いこなす必要があります。
 
+#@# @suppress ParenthesizedSentence
 まずはTypeScriptで書いたコードがどのようなCommonJS形式のコードに変換されるかを見てみます（@<list>{commonJSCompat/basic/basic.ts}、@<list>{commonJSCompat/basic/basic.js}）。
 
 //list[commonJSCompat/basic/basic.ts][関数などを素直にexportする]{
@@ -1074,6 +826,7 @@ export function bye(word = "JavaScript") {
 //list[commonJSCompat/basic/basic.js][CommonJS形式ではexports.xxx = となる]{
 #@mapfile(../code/definition-file/commonJSCompat/basic/basic.js)
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function hello(word = "TypeScript") {
     console.log(`Hello, ${word}`);
 }
@@ -1118,6 +871,8 @@ module.exports = hello;
 #@# @suppress JapaneseAmbiguousNounConjunction
 理解を深めるためNode.jsでのCommonJSの実現方法について該当のコードを抜粋@<fn>{node-module-url}します（@<list>{node-module.js}）。
 
+//footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v8.1.3/lib/internal/bootstrap_node.js#L542-L549}]
+
 //list[node-module.js][Node.jsのモジュールの実現方法]{
 NativeModule.wrap = function(script) {
   return NativeModule.wrapper[0] + script + NativeModule.wrapper[1];
@@ -1133,14 +888,14 @@ NativeModule.wrapper = [
 
 #@# @suppress KatakanaSpellCheck JapaneseAmbiguousNounConjunction
 大変シンプルなコードが出てきました。
-Node.jsにおいて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後にあの2行を付け足して、evalしているだけなのです。
+Node.jsにおいて、モジュール固有の変数というのはモジュールのオリジナルのコードの前後に2行付け足して、evalしているだけなのです。
 なので、Node.js初心者がたまにやりがちな@<code>{exports = ...;}というコードは間違いです。
 単に変数の値を差し替えているだけなので当然ですね。
 外部に変更を露出させるには、何かのプロパティの変更（つまり@<code>{module.exports = ...;}）でなければなりません。
 
 互換性の話に戻ります。
 この@<code>{export = ...;}の記法に対応した"正規の"importの書き方は先ほど見た@<code>{import xxx = require("...");}形式です。
-これを無理やりECMAScript 2015形式のimport文に書き直すと@<list>{commonJSCompat/exportsAssignment2/main.ts}になります。
+これを無理やりECMAScript形式のimport文に書き直すと@<list>{commonJSCompat/exportsAssignment2/main.ts}になります。
 
 //list[commonJSCompat/exportsAssignment2/main.ts][import モジュール全体 as 名前]{
 #@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/main.ts)
@@ -1156,7 +911,7 @@ util("CommonJS");
 #@end
 //}
 
-このやり方は若干良くなく、@<code>{export =}する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（@<list>{commonJSCompat/exportsAssignment2/util.ts}）。
+ECMAScript形式でのimportは若干良くなくて、@<code>{export =}する対象が変数ではない場合、エラーになるためワークアラウンドが必要です（@<list>{commonJSCompat/exportsAssignment2/util.ts}）。
 
 //list[commonJSCompat/exportsAssignment2/util.ts][同名のnamespaceを被せてごまかす]{
 #@mapfile(../code/definition-file/commonJSCompat/exportsAssignment2/util.ts)
@@ -1173,10 +928,10 @@ export = hello;
 //}
 
 いまいち優雅ではありませんね。
-この場合は無理にECMAScript 2015のモジュール記法を使わないほうが無難かもしれません。
+この場合は無理にECMAScriptのモジュール記法を使わないほうが無難かもしれません。
 世間的にも意見が分かれるところです。
 
-さて、ここで問題になるのがTypeScriptとBabelで@<code>{module.exports = ...;}形式のモジュールを利用する際、どうECMAScript 2015形式にマッピングするかの解釈が異なる点です。
+さて、ここで問題になる点がTypeScriptとBabelで@<code>{module.exports = ...;}形式のモジュールを利用する際、どうECMAScript形式にマッピングするかの解釈が異なる点です。
 Babelの変換結果を見てみます。
 @<list>{babel-before.js}をコンパイルすると@<list>{babel-after.js}（@<list>{babel-after-rewrite.js}）となります。
 
@@ -1213,7 +968,7 @@ util.default();
 Babelは、@<code>{module.exports = ...;}形式のコードに対して特別な配慮を行い、@<code>{import util from "./util";}形式でも動作します。
 TypeScriptが@<code>{import * as util from "./util";}形式しか許していないため、ここに齟齬があります。
 
-ECMAScript 2015形式＋BabelのコードをTypeScriptから参照したり、ECMAScript 2015＋TypeScriptのコードをBabelから参照したりすることには大きな問題はありません。
+ECMAScript形式＋BabelのコードをTypeScriptから参照したり、ECMAScript＋TypeScriptのコードをBabelから参照したりすることには大きな問題はありません。
 しかし@<code>{module.exports = ...;}なコードの取り扱いには注意が必要なのです。
 
 この話題はDefinitelyTypedでよくあるトラブルの1つで、TypeScript＋Babelの両方を組み合わせて使うユーザからこのあたりがごっちゃになったコードや修正が来ます。
@@ -1221,8 +976,6 @@ ECMAScript 2015形式＋BabelのコードをTypeScriptから参照したり、EC
 TypeScriptでは@<code>{exports.default = ...}とされているコードのみ@<code>{export default ...}という型定義を与えてよいのです。
 @<strong>{元のJavaScriptコード中にdefaultの文字がないならimportのdefaultは使うな}。
 ということです。
-
-//footnote[node-module-url][@<href>{https://github.com/nodejs/node/blob/v6.3.1/lib/internal/bootstrap_node.js#L434-L441}]
 
 ==={export-and-commonjs} CommonJS形式でちょっと小難しいexport句の使い方
 
@@ -1282,9 +1035,11 @@ declare module "buzz" {
 具体的に@<kw>{UMD,Universal Module Definition}と呼ばれる形式@<fn>{umd}です。
 ライブラリ内部でモジュールとしての使い方が想定されているのか、そうではないのかを判断し展開の方法を変えます。
 
+//footnote[umd][@<href>{https://github.com/umdjs/umd}]
+
 #@# @suppress JapaneseAmbiguousNounConjunction ParenthesizedSentence
 TypeScriptではこういうパターンのときに使いやすい型定義ファイルの記述方法があります。
-しかし、TypeScript 2.0.0までは任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識させる方法がなかったため、役に立ってはいませんでした。
+しかし、TypeScript 2.0.0以前は任意の場所においてある型定義ファイルを特定の名前のモジュールだと認識させる方法がなかったため、役に立ってはいませんでした。
 この形式が使われているのはDefinitelyTypedの@typesパッケージシリーズ（本書執筆時点ではtypes-2.0ブランチ）だけではないでしょうか。
 
 説明のためにstrutilとstrutil-extraという架空のライブラリについて考えてみます。
@@ -1347,9 +1102,9 @@ declare global {
 //}
 
 既存モジュールの定義の拡張もできています。
-この形式だと、どのライブラリを拡張しているのか明示するところが利点です。
+この形式だと、どのライブラリを拡張しているのか明示できるところが利点です。
 
-これらを@<code>{import ... from "strutil";}したりするためのtsconfig.jsonを確認しておきます（@<list>{augmentGlobal/tsconfig.json}）。
+これらを@<code>{import ... from "strutil";}するためのtsconfig.jsonを確認しておきます（@<list>{augmentGlobal/tsconfig.json}）。
 
 //list[augmentGlobal/tsconfig.json][tsconfig.jsonの例]{
 #@mapfile(../code/definition-file/augmentGlobal/tsconfig.json)
@@ -1373,6 +1128,7 @@ declare global {
 
 baseUrlとpathsの指定があります。
 TypeScript 2.0.0からこうして任意の場所の型定義ファイルを任意の名前に紐付けられるようになったため、ローカル環境でも利用しやすくなりました。
+#@# TODO この辺typesRootを使えばもっときれいにかけるのでは？
 
 次に前述の型定義ファイルを利用する例を見てみます。
 まずはグローバルに展開される例です（@<list>{augmentGlobal/lib/bare.ts}）。
@@ -1394,12 +1150,11 @@ strutilExtra.happy("TypeScript");
 #@end
 //}
 
-なるほど。
 @<code>{export as namespace ...}形式を使わないUMD形式の対応方法もありますが、importと混ぜるとエラーになるところがよいですね。
 
 #@# @suppress JapaneseStyle
 モジュール形式も見てみましょう（@<list>{augmentGlobal/lib/module.ts}）。
-普通にモジュールであるかのように利用できますね。
+モジュールとしてimport句の対象にできています。
 
 //list[augmentGlobal/lib/module.ts][lib/module.ts]{
 #@mapfile(../code/definition-file/augmentGlobal/lib/module.ts)
@@ -1424,11 +1179,9 @@ randomizeString("TypeScript", {
 //}
 
 この形式がどこまで普及するかはわかりませんが、時とともにDefinitelyTyped内部でも見かける頻度が増えていくでしょう。
-ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけ、注意が必要です。
+ファイル名を見ただけではどういう名前に解決されるかがわかりにくいところだけは注意が必要です。
 
 #@# TODO /// <reference types="jquery" /> 的な記述の調査 https://github.com/Microsoft/TypeScript/issues/7156
-
-//footnote[umd][@<href>{https://github.com/umdjs/umd}]
 
 ==={check-at-last} 最終チェック！
 
@@ -1437,25 +1190,21 @@ randomizeString("TypeScript", {
 
 やった！型定義ファイルが書けたぞ！
 出来高に満足する前に、もう少しだけやっておきたいことがあります。
-それが、--noImplicitAnyや--strictNullChecksをつけての試しコンパイルとtslintによるチェックです。
+それが、@<code>{--strict}をつけてのコンパイルの試運転とtslintによるチェックです。
 
-#@# @suppress SectionLength
-===={tslint} tslint
-
-lintという種類のプログラムがあります。
-ざっくり、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくるツールを指します。
-
+lintとは、プログラムを静的に解析してバグになりそうな箇所や悪いコードスタイルを見つけてくるツールを指します。
 TypeScriptでは@<href>{https://github.com/palantir/tslint,tslint}@<fn>{tslint-repo}というプログラムが一般的に使われています。
+
+//footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
 
 tslintはコンパイルだけでは見つけきれない、悪いにおいのするコードを検出してくれます。
 tslintでは頻繁に新しいルールが追加されるため、本書では詳しくは取り上げません。
 その時々の最適な設定を突き詰めてみてください。
 
 #@# @suppress SentenceLength
-tslintは設定ファイルを必要とします。
+利用には設定ファイルを必要とします。
 今のところ、TypeScriptにおける統一見解は存在していないのでtslintが使ってる@<href>{https://github.com/palantir/tslint/blob/master/tslint.json,設定ファイル}@<fn>{tslint-example-config}かTypeScript本体の@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json,tslint.json}@<fn>{tsc-tslint}を参照するとよいでしょう。
 
-//footnote[tslint-repo][@<href>{https://github.com/palantir/tslint}]
 //footnote[tslint-example-config][@<href>{https://github.com/palantir/tslint/blob/master/tslint.json}]
 //footnote[tsc-tslint][@<href>{https://github.com/Microsoft/TypeScript/blob/master/tslint.json}]
 
@@ -1463,6 +1212,9 @@ tslintは設定ファイルを必要とします。
 
 ようこそ！@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped,DefinitelyTyped}@<fn>{dt}へ！
 メンテナのvvakameです。
+とかいいつつここ最近くらいは筆者はツール類のメンテ以外をサボっていて、Microsoftのメンバーがpull requestの処理を行ってくれています。
+
+//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
 
 DefinitelyTypedではさまざまな型定義ファイルを取り揃えてございます！
 世界中の人々が作った型定義ファイルは集積され、@typesなどを介して広く利用されています。
@@ -1475,33 +1227,35 @@ DefinitelyTypedではさまざまな型定義ファイルを取り揃えてご�
 品質と時間のトレードオフを考えつつ、上品な型定義ファイルを提供していただきたいです。
 
 DefinitelyTypedはGitHub上のリポジトリなので追加、修正についてはpull requestをご利用ください。
+pull requestを送る前に、@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md,README.md}@<fn>{README.md}と@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/.github/PULL_REQUEST_TEMPLATE.md,PULL_REQUEST_TEMPLATE.md}@<fn>{PULL_REQUEST_TEMPLATE.md}を読んでおくとよいでしょう。
 
-この節では、筆者がDefinitelyTypedに送られてきたときにどういう考えでpull requestのレビューをしているかを示します。
-あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことを言われる場合もあるでしょう。
-実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーを尊重して議論していただきたいと思います。
+//footnote[README.md][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md}]
+//footnote[PULL_REQUEST_TEMPLATE.md][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/.github/PULL_REQUEST_TEMPLATE.md}]
+#@# この節では、DefinitelyTypedに送られてきたときにどういうチェックが行われるかを簡単に解説します。
+#@# あくまで、ここに書いてあることは筆者固有の観点なので、レビュワーによって別のことをいわれる場合もあるでしょう。
+#@# 実際にpull requestを送ってみて、ここに書いてある以外の理由で拒否されたとしても、そこは実際のレビュワーを尊重して議論していただきたいと思います。
 
-とはいえ、メンテナは全員DefinitelyTypedの@<href>{http://definitelytyped.org/guides/contributing.html,Contribution guide}@<fn>{dt-contrib-guide}は読んでいるはずなので、こちらには目を通しておくとよいでしょう。
+簡単なチェックポイントは次のとおりです。
 
-//footnote[dt][@<href>{https://github.com/DefinitelyTyped/DefinitelyTyped}]
-//footnote[dt-contrib-guide][@<href>{http://definitelytyped.org/guides/contributing.html}]
+ * 新規での型定義ファイルの作成はnpmのdts-genパッケージを使って生成されていること
+ * フォルダ名がnpm上での目的のパッケージ名と一致していること
+ * tscコマンドでコンパイルが通ること
+ * @<code>{npm run lint パッケージ名}で問題が検出されないこと
 
-==={review-about-new-definitions} 新規型定義ファイルの追加のレビューの観点
+新規型定義ファイルはDefinitelyTypedリポジトリをforkし、@<code>{npm install -g dts-gen}で入るdts-genコマンドを使い作成します。
+これには推奨設定のtsconfig.jsonとtslint.jsonと、index.d.tsと簡単なテスト用ファイルも作成されます。
+詳しくは@<href>{https://www.npmjs.com/package/dts-gen}を参照してください。
 
-まずは今までなかった、新しいライブラリに対する型定義ファイルのレビューの観点を解説していきます。
+新規に作成する場合、DefinitelyTypedリポジトリのtypesディレクトリ配下に対象となるnpmパッケージ名と同名のディレクトリに各種ファイルを収めます。
+もし対象となるパッケージがscopedパッケージの場合、たとえば@<code>{vvakame/foobar}に対して型定義ファイルを作成するのであれば@<code>{types/vvakame__fobar}ディレクトリにファイルを作成します。
 
- 1. CIが通っているか
- 2. npmまたはbowerに公開されている名前どおりか。公開されていない場合は競合が発生しないか
- 3. テストが存在しているか
- 4. 幽霊namespaceを使ったほうが構造がきれいになるか
+現在のDefinitelyTypedでは、dtslint@<fn>{dtslint}というtslintを拡張したルールセットでチェックを行っています。
+これは、@<code>{npm run lint パッケージ名}としたときに裏側で動きます。
 
-だいたいこんな感じです。
+//footnote[dtslint][@<href>{https://www.npmjs.com/package/dtslint}]
 
-CIが通っているか。
-これは、ヘッダが定められた形式で書かれているか、--noImplicitAny付きで型定義ファイルやテストがコンパイルできるか、を主に見ています。
-
-npm, またはbowerに公開されている名前どおりか。
-npmに公開されているライブラリはnpmで公開されている名前と同一のディレクトリ名にあわせます。
-もし、npmに公開されていない場合は適当に名前を選ぶしかありませんが、同名の別のライブラリがnpm上に存在していないかなどをチェックしています。
+この他、人力じゃないと判別が付かないようなコードの良し悪しについてチェックします。
+たとえば、幽霊モジュールを使ったほうがコードがきれいになるのでは？とかベストプラクティスにしたがっているか？などです。
 
 逆に、ここに書かれていないことはあまり見ていません。
 たとえば、ライブラリの実装全体に対する型定義ファイルのカバー率やanyの多さなどはあまり見ていません。
@@ -1509,39 +1263,18 @@ npmに公開されているライブラリはnpmで公開されている名前�
 一人でやりきらなくてもいいよな！という発想ですね。
 もちろん最初に高品質高カバー率のものが出てきたほうが「やりおる！」と感心はします。
 
-なおレビュワー次第ですがJSDocがきっちり書かれているか、というのを見る人もいます。
-きちんとドキュメントから転記などしてあるものが送られてきたときはやはり感心しますね。
+既存の型定義の変更の場合、コードスタイルの変更や破壊的変更については取り込みは比較的慎重に行われます。
+@dt-botというボットが自動的にレビューするべきであろう人にメンションしてくれるので、反応を待ちましょう。
 
-==={review-about-improvements} 既存型定義ファイルの修正のレビューの観点
+では皆様のpull request、お待ちしています！
 
- 1. CIが通っているか
- 2. 破壊的変更が含まれていないか
- 3. ライブラリ本体のドキュメントまたは実装と照らして変更内容が妥当であるか
-
-これだけです。
-新規追加の場合は比較的レビューがガバガバなのですが、既存のものの変更はすでに利用している人に影響があるため、勢い慎重になってしまいます。
-そのため結構レビューに時間が取られて辛いので、ドキュメントや実装が確認できるURLを添えてくれると大変嬉しいです。
-
-いくつか補足しましょう。
-
-破壊的変更が含まれていないか。
-たとえばコードスタイルの変更（インタフェースのプリフィクスにIをつける、つけない など）や、幽霊namespaceを使っていないスタイルから使っているスタイルへの変更など。
-または、ある型定義を別の表現へと書き換える場合。
-これらはレビュアーが妥当かどうかを判断します。
-たいてい判断できないのでヘッダに書いてあるDefinitions by:に名前が書いてある人達にGitHub上でmentionが飛ばされ、レビューしてもらって決めます。
-型定義ファイルを作った人は、たいていの場合、実際に使っている人、つまり破壊的変更を加えられると困る人達です。
-変な変更が入りそうな場合、きっと事前に相談してほしいに違いないと考えるわけです。
-
-次に、変更内容が妥当であるかの検証です。
-多くの場合は筆者が当該ライブラリのドキュメントまたは実装を読んで正しいかどうかをverifyします。
-しかし、小規模でドキュメントのURLがちゃんと添付されている場合以外は、前述のとおりDefinitions by:の人たちにレビューの依頼を投げます。
-
-では、皆様のpull request、お待ちしています！
+#@# TODO この辺レビュー復帰して空気感もう一回把握してから親切に書き直すべきかなー
+#@# NOTE ababb9cd46339bf156bc96efcbf7d83a0a0e2232 より後のコミットで解説をバッサリ削ったはず。
 
 =={publish-npm-best-practice} 自分のライブラリをnpmで公開するときのベストプラクティス
 
 自分の作ったライブラリをnpmに公開する時のベストプラクティスについて説明します。
-ここで説明するのはTypeScriptによってコードが書かれているライブラリを前提とします。
+ここで説明する内容はTypeScriptによってコードが書かれているライブラリを前提とします。
 また、npmにパッケージを公開するための基本的な説明はここでは行いません。
 
 ポイントは.tsファイルをリリースに含めないこと、.d.tsファイルをTypeScriptコンパイラに生成させること、.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにすることです。
@@ -1559,9 +1292,9 @@ lib/**/*.ts
 !lib/**/*.d.ts
 //}
 
-@<strong>{.d.tsファイルをTypeScriptコンパイラに生成させる}のは、.tsコードをコンパイルするときに@<code>{--declaration}オプションを利用するだけなので簡単です。
+@<strong>{.d.tsファイルをTypeScriptコンパイラに生成させる}ための作業は、.tsコードをコンパイルするときに@<code>{--declaration}オプションを利用するだけなので簡単です。
 
-つぎに@<strong>{.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにする}理由ですが、これは単純にそのほうが使いやすいからです。
+次に@<strong>{.d.tsファイルをTypeScriptコンパイラが自動的に見つけられるようにする}理由ですが、これは単純に使いやすいからです。
 実現するためにはTypeScriptコンパイラの検索パスに自身の型定義ファイルが入るようにします。
 
 そのための方法はいくつかあります。
