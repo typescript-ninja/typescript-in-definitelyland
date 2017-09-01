@@ -6,8 +6,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
   <link rel="stylesheet" type="text/css" href="style.css" />
   <link rel="stylesheet" type="text/css" href="style-web.css" />
-<link rel="next" title="TypeScriptの基本" href="typescript-basic.html"><link rel="prev" title="Revised 型の国のTypeScript" href="index.html">  <meta name="generator" content="Re:VIEW" />
-  <title>戦闘準備だ！TypeScript！ | Revised TypeScript in Definitelyland</title>
+<link rel="next" title="TypeScriptの基本" href="typescript-basic.html"><link rel="prev" title="Revised Revised 型の国のTypeScript" href="index.html">  <meta name="generator" content="Re:VIEW" />
+  <title>戦闘準備だ！TypeScript！ | Revised Revised TypeScript in Definitelyland</title>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -34,16 +34,19 @@
 
   <div class="book">
     <nav class="side-content">
-      <h1>Revised TypeScript in Definitelyland</h1>
+      <h1>Revised Revised TypeScript in Definitelyland</h1>
       <ul class="book-toc">
 <li><a href="index.html">TOP</a></li>
-<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./index.html">Revised Revised 型の国のTypeScript</a></li>
 <li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
 <li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
 <li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
 <li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
 <li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
-<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+<li><a href="./at-types.html">6 JavaScriptの資産と@types</a></li>
+<li><a href="./definition-file.html">7 型定義ファイルを作成する</a></li>
+<li><a href="./typescript-as-a-tool.html">8 ツールとしてのTypeScript</a></li>
+<li><a href="./postdef.html">型の国からの手紙</a></li>
 </ul>
       <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
     </nav>
@@ -55,13 +58,14 @@
 
 <h2 id="install"><a id="h1-1"></a><span class="secno">1.1　</span>インストールしてみよう</h2>
 <p>Node.jsのセットアップはすでに完了しているものとします。筆者はNode.jsのインストールとバージョン管理に<a href="https://github.com/hokaccha/nodebrew#nodebrew" class="link">nodebrew</a><a id="fnb-nodebrew" href="#fn-nodebrew" class="noteref" epub:type="noteref">*1</a>を利用しています。</p>
+<div class="footnote" epub:type="footnote" id="fn-nodebrew"><p class="footnote">[*1] <a href="https://github.com/hokaccha/nodebrew#nodebrew" class="link">https://github.com/hokaccha/nodebrew#nodebrew</a></p></div>
 <p>TypeScriptのインストールには、Node.jsのパッケージマネージャである<b class="kw">npm (Node Package Manager)</b><!-- IDX:npm -->を利用します。TypeScriptをインストールすると、tscというコマンドが利用可能になります。tscコマンドでTypeScriptコードのコンパイルを行います。</p>
 <div class="cmd-code">
 <pre class="cmd"># -g をつけるとグローバルなコマンドとしてインストールする
 $ npm install -g typescript
 # 省略
 $ tsc -v
-Version 2.0.0
+Version 2.4.2
 $ echo &quot;class Sample {}&quot; &gt; sample.ts
 $ tsc sample.ts
 $ cat sample.js
@@ -72,38 +76,37 @@ var Sample = (function () {
 }());
 </pre>
 </div>
-<p>なお、本書執筆時点では<code class="inline-code tt">npm install -g typescript</code>で導入できるTypeScriptバージョンは1.8.10です。2.0.0以降が使いたい場合はしばらくの間は<code class="inline-code tt">npm install -g typescript@beta</code>とする必要があります。</p>
-<p>ともあれ、これで準備は整いました。</p>
-<p>cutting edgeな最新版コンパイラを利用したい場合は次の手順で行います。</p>
+<p>なお、本書執筆時点では<code class="inline-code tt">npm install -g typescript</code>で導入できるTypeScriptバージョンは2.4.1です。</p>
+<p>cutting edgeな最新版コンパイラを利用したい場合はnpmにリリースされているnextタグやrcタグを使います。</p>
 <div class="cmd-code">
 <pre class="cmd">$ npm install -g typescript@next
 # 省略
 $ tsc -v
-Version 2.1.0-dev.20160716
+Version 2.5.0-dev.20170727
 </pre>
 </div>
-<p>実際にはプロジェクトごとに利用するTypeScriptのバージョンを変えたい場合がほとんどでしょう。常に最新のバージョンだけを使い続けるのは自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。その方法を次に示します。</p>
+<p>実際にはプロジェクトごとに利用するTypeScriptのバージョンを変えたい場合がほとんどでしょう。最新のバージョンだけを使い続ける方法は自分の管理するプロジェクトが増えれば増えるほど難しくなりますからね。</p>
+<p>プロジェクトごとにバージョンを指定する方法を次に示します。</p>
 <div class="cmd-code">
-<pre class="cmd">$ npm init
-# Enter連打
+<pre class="cmd">$ npm init -y
+# 省略
 $ ls package.json
 package.json
 $ npm install --save-dev typescript
 $ ./node_modules/.bin/tsc -v
-Version 2.0.0
+Version 2.4.2
 </pre>
 </div>
-<p>この、<code class="inline-code tt">node_modules/.bin</code>にはプロジェクトローカルに導入された実行ファイルが集められています。<code class="inline-code tt">npm bin</code>コマンドを実行するとパスが得られます。macOSやLinux環境下では<code class="inline-code tt">$(npm bin)/tsc</code>とするとプロジェクトローカルのtscコマンドへのパスが取得できます。</p>
-<p>さらにnpm scriptsでは$PATHに<code class="inline-code tt">node_modules/.bin</code>が自動的に追加されます。このため、npm scriptsをうまく活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。</p>
+<p><code class="inline-code tt">node_modules/.bin</code>にはプロジェクトローカルに導入された実行ファイルが集められています。<code class="inline-code tt">npm bin</code>コマンドを実行するとパスが得られます。macOSやLinux環境下では<code class="inline-code tt">$(npm bin)/tsc</code>とするとプロジェクトローカルのtscコマンドへのパスが取得できます。</p>
+<p>さらにnpm scripts<a id="fnb-npm-scripts" href="#fn-npm-scripts" class="noteref" epub:type="noteref">*2</a>では$PATHに<code class="inline-code tt">node_modules/.bin</code>が自動的に追加されます。このため、npm scriptsを活用してプロジェクトのビルド環境を構築すると上手かつ自然にプロジェクトローカルなビルド環境が整えられるでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-npm-scripts"><p class="footnote">[*2] <a href="https://docs.npmjs.com/misc/scripts" class="link">https://docs.npmjs.com/misc/scripts</a></p></div>
 <div class="cmd-code">
 <pre class="cmd">$ npm bin
 $PWD/node_modules/.bin 的なパスが表示される
 $ $(npm bin)/tsc -v
-Version 2.0.0
+Version 2.4.2
 </pre>
 </div>
-<div class="footnote" epub:type="footnote" id="fn-nodebrew"><p class="footnote">[*1] <a href="https://github.com/hokaccha/nodebrew#nodebrew" class="link">https://github.com/hokaccha/nodebrew#nodebrew</a></p></div>
-<div class="footnote" epub:type="footnote" id="fn-npm-scripts"><p class="footnote">[*2] <a href="https://docs.npmjs.com/misc/scripts" class="link">https://docs.npmjs.com/misc/scripts</a></p></div>
 
 <h2 id="prepare-tsconfig.json"><a id="h1-2"></a><span class="secno">1.2　</span>tsconfig.jsonを準備する</h2>
 <p>TypeScriptではtsconfig.jsonという設定ファイルを利用します。必要なコンパイルオプションやコンパイル対象となるファイルはすべてtsconfig.jsonに記述します。すべてのツールやIDE・エディタ間で共通に利用できる設定ファイルになるため、大変役立ちます。</p>
@@ -113,93 +116,120 @@ Version 2.0.0
 message TS6071: Successfully created a tsconfig.json file.
 $ cat tsconfig.json
 {
-    &quot;compilerOptions&quot;: {
-        &quot;module&quot;: &quot;commonjs&quot;,
-        &quot;target&quot;: &quot;es5&quot;,
-        &quot;noImplicitAny&quot;: false,
-        &quot;sourceMap&quot;: false
-    },
-    &quot;exclude&quot;: [
-        &quot;node_modules&quot;
-    ]
+  // かなり長い内容のJSONが出力されます
+  // もっと色々なオプションの説明が書いてあるので試してみてください
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;es5&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;strict&quot;: true
+  }
 }
 </pre>
 </div>
-<p>この設定ではTypeScriptが利用できる制約の多くをONにしていないため、完全にガバガバな設定です。一番最初に利用する例としてはいいかもしれませんが、運用するにあたってTypeScriptが与える堅牢さのすべてを享受することはできません。</p>
-<p>本書のサンプルコード用tsconfig.jsonをリスト1.1に示します。この設定をベースに自分たちにとって都合がよい設定値へ変更したり制限を緩めたりすることをお勧めします。具体的に&quot;include&quot;や&quot;exclude&quot;の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。</p>
-<div class="caption-code">
+<p>tsconfig.jsonはJSONですがコメントを書くことが可能<a id="fnb-jsoncomment" href="#fn-jsoncomment" class="noteref" epub:type="noteref">*3</a>です。</p>
+<div class="footnote" epub:type="footnote" id="fn-jsoncomment"><p class="footnote">[*3] 大変便利なのですが一般的な規約をぶっ壊してくるのは勘弁していただきたい…</p></div>
+<p>TypeScriptが出力するデフォルトの設定は一般向けの設定です。初心者がとりあえず使い始める足がかりとしては十分です。<code class="inline-code tt">--strict</code>がデフォルトでtrueになっているあたりにTypeScriptの強い気持ちが感じられますね。</p>
+<p>さらに制約を強化した本書のサンプルコード用tsconfig.jsonを<span class="listref">リスト1.1</span>に示します。この設定をベースに自分たちにとって都合がよい設定値へ変更したり制限を緩めたりすることをお勧めします。具体的に&quot;include&quot;や&quot;exclude&quot;の値は一般的なフォルダ構成を対象にしたものではないので変更したほうがよいでしょう。</p>
+<div id="tsconfig.json" class="caption-code">
 <p class="caption">リスト1.1: 本書サンプルコード用のtsconfig.json</p>
 <pre class="list language-json">{
-    &quot;compilerOptions&quot;: {
-        &quot;module&quot;: &quot;commonjs&quot;,
-        &quot;moduleResolution&quot;: &quot;node&quot;,
-        &quot;target&quot;: &quot;es6&quot;,
-        &quot;declaration&quot;: true,
-        &quot;lib&quot;: [
-            &quot;dom&quot;,
-            &quot;es2017&quot;
-        ],
-        &quot;types&quot;: [
-            &quot;node&quot;
-        ],
-        &quot;noImplicitAny&quot;: true,
-        &quot;strictNullChecks&quot;: true,
-        &quot;noFallthroughCasesInSwitch&quot;: true,
-        &quot;noImplicitReturns&quot;: true,
-        &quot;noImplicitThis&quot;: true,
-        &quot;noUnusedLocals&quot;: true,
-        &quot;noUnusedParameters&quot;: true,
-        &quot;noImplicitUseStrict&quot;: false,
-        &quot;sourceMap&quot;: false,
-        &quot;emitDecoratorMetadata&quot;: true,
-        &quot;experimentalDecorators&quot;: true,
-        &quot;forceConsistentCasingInFileNames&quot;: true,
-        &quot;traceResolution&quot;: false,
-        &quot;listFiles&quot;: false,
-        &quot;stripInternal&quot;: true,
-        &quot;skipDefaultLibCheck&quot;: true,
-        &quot;skipLibCheck&quot;: false,
-        &quot;pretty&quot;: false,
-        &quot;noEmitOnError&quot;: true
-    },
-    &quot;include&quot;: [
-        &quot;code/**/*.ts&quot;
+  &quot;compilerOptions&quot;: {
+    /* Basic Options */
+    &quot;target&quot;: &quot;esnext&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;lib&quot;: [
+      &quot;dom&quot;,
+      &quot;esnext&quot;,
+      &quot;esnext.asynciterable&quot;
     ],
-    &quot;exclude&quot;: [
-        &quot;node_modules&quot;,
-        &quot;code/definition-file/usage/&quot;,
-        &quot;code/definition-file/augmentGlobal/&quot;,
-        &quot;code/definition-file/issue9831/&quot;,
-        &quot;code/**/*-invalid.ts&quot;,
-        &quot;code/**/*-invalid.d.ts&quot;,
-        &quot;code/**/invalid.ts&quot;,
-        &quot;code/**/invalid.d.ts&quot;,
-        &quot;code/**/*-ignore.ts&quot;,
-        &quot;code/**/*-ignore.d.ts&quot;,
-        &quot;code/**/ignore.ts&quot;,
-        &quot;code/**/ignore.d.ts&quot;
-    ]
+
+    /* Strict Type-Checking Options */
+    &quot;strict&quot;: true,
+
+    /* Additional Checks */
+    &quot;noUnusedLocals&quot;: true,
+    &quot;noUnusedParameters&quot;: true,
+    &quot;noImplicitReturns&quot;: true,
+    &quot;noFallthroughCasesInSwitch&quot;: true,
+
+    /* Module Resolution Options */
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;types&quot;: [
+      &quot;node&quot;
+    ],
+
+    /* Experimental Options */
+    &quot;experimentalDecorators&quot;: true,
+    &quot;emitDecoratorMetadata&quot;: true,
+
+    /* Other Options. tsc --init で今のところ出力されないもの */
+    &quot;noStrictGenericChecks&quot;: false,
+    &quot;forceConsistentCasingInFileNames&quot;: true,
+    &quot;traceResolution&quot;: false,
+    &quot;listFiles&quot;: false,
+    &quot;stripInternal&quot;: true,
+    &quot;skipDefaultLibCheck&quot;: true,
+    &quot;skipLibCheck&quot;: false,
+    &quot;pretty&quot;: false,
+    &quot;noEmitOnError&quot;: true
+  },
+  &quot;include&quot;: [
+    &quot;code/**/*.ts&quot;
+  ],
+  &quot;exclude&quot;: [
+    &quot;node_modules&quot;,
+    &quot;code/tsc-options/types/&quot;,
+    &quot;code/tsc-options/helpers/&quot;,
+    &quot;code/at-types/usage/&quot;,
+    &quot;code/definition-file/augmentGlobal/&quot;,
+    &quot;code/definition-file/issue9831/&quot;,
+    &quot;code/**/*-invalid.ts&quot;,
+    &quot;code/**/*-invalid.d.ts&quot;,
+    &quot;code/**/invalid.ts&quot;,
+    &quot;code/**/invalid.d.ts&quot;,
+    &quot;code/**/*-ignore.ts&quot;,
+    &quot;code/**/*-ignore.d.ts&quot;,
+    &quot;code/**/ignore.ts&quot;,
+    &quot;code/**/ignore.d.ts&quot;
+  ]
 }
 </pre>
 </div>
 <p>より詳しい説明は第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
 
 <h2 id="compile"><a id="h1-3"></a><span class="secno">1.3　</span>試しにコンパイルしてみる</h2>
-<p>tsconfig.jsonができたら、後はコンパイルするだけです。コンパイルの方法はtsconfig.jsonがあれば、どんな環境でも<code class="inline-code tt">--project</code>オプションを使うだけです。それ以外のオプションについてはtsconfig.jsonにすべて記述されています。具体的に、<code class="inline-code tt">tsc -p ./</code>または<code class="inline-code tt">tsc -p ./tsconfig.json</code>とします。</p>
-<p>本節についてもより詳しい説明は第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
+<p>tsconfig.jsonができたら、後は<code class="inline-code tt">tsc</code>コマンドを実行するだけです。引数無しで実行した場合、デフォルトでtsconfig.jsonを参照してコンパイルが行われます。</p>
+<p>本節についても詳細は第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
 
 <h2 id="editor-and-ide"><a id="h1-4"></a><span class="secno">1.4　</span>エディタ・IDEの環境を整えよう</h2>
-<p>Atom、Eclipse、Emacs、Vim、Visual Studio、WebStormなどさまざまなTypeScript対応のIDE・エディタが存在しています<a id="fnb-ts-editor" href="#fn-ts-editor" class="noteref" epub:type="noteref">*3</a>。</p>
-<p>TypeScriptにはlanguage serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体から変数の種類やメソッドの有無などの情報を得えられます。そのため多数のIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。</p>
-<p>language serviceに興味がある場合、<a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API" class="link">https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API</a>や<a href="https://github.com/Microsoft/language-server-protocol" class="link">https://github.com/Microsoft/language-server-protocol</a>などを参照するとよいでしょう。</p>
-<div class="footnote" epub:type="footnote" id="fn-ts-editor"><p class="footnote">[*3] <a href="https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support" class="link">https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support</a></p></div>
+<p>Visual Studio Code、Atom、WebStorm、Visual Studio、Vim、Emacs、EclipseなどTypeScript対応のIDE・エディタが数多く存在<a id="fnb-ts-editor" href="#fn-ts-editor" class="noteref" epub:type="noteref">*4</a>しています。</p>
+<div class="footnote" epub:type="footnote" id="fn-ts-editor"><p class="footnote">[*4] <a href="https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support" class="link">https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support</a></p></div>
+<p>現時点での筆者のお勧めは<a href="https://code.visualstudio.com/" class="link">Visual Studio Code</a><a id="fnb-vscode" href="#fn-vscode" class="noteref" epub:type="noteref">*5</a>です。Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。Visual Studioの名を冠していますがElectron<a id="fnb-electron" href="#fn-electron" class="noteref" epub:type="noteref">*6</a>を利用したマルチプラットフォームなエディタで、Windows以外でも利用できます。筆者はmacOSユーザですがTypeScriptを書く時はvscode一本です。</p>
+<div class="footnote" epub:type="footnote" id="fn-vscode"><p class="footnote">[*5] <a href="https://code.visualstudio.com/" class="link">https://code.visualstudio.com/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-electron"><p class="footnote">[*6] <a href="http://electron.atom.io/" class="link">http://electron.atom.io/</a></p></div>
+<p>vscodeはプロジェクト内に配置されたtsconfig.jsonから必要な設定を読み込みます。つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。</p>
+<p>TypeScriptにはLanguage Serviceという仕組みがあるため、IDEを作る時にTypeScriptコンパイラ本体から変数の種類やメソッドの有無などの情報を得えられます。そのため多数のIDE・エディタでVisual Studioに勝るとも劣らないサポートを得ることができます。</p>
+<p>Language Serviceに興味がある場合、次の文献を参照するとよいでしょう。</p>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API" class="link">https://github.com/Microsoft/TypeScript/wiki/Using-the-Language-Service-API</a></li>
+<li><a href="https://github.com/Microsoft/language-server-protocol" class="link">https://github.com/Microsoft/language-server-protocol</a></li>
+</ul>
+<div class="column">
 
-<h3 id="vscode"><a id="h1-4-1"></a>Visual Studio Codeを使ってみる</h3>
-<p>現時点での筆者のお勧めは<a href="https://code.visualstudio.com/" class="link">Visual Studio Code</a><a id="fnb-vscode" href="#fn-vscode" class="noteref" epub:type="noteref">*4</a>です。Visual Studio Code（略称：vscode）はMicrosoftが提供している無料のエディタです。Visual Studioの名を冠していますがElectron<a id="fnb-electron" href="#fn-electron" class="noteref" epub:type="noteref">*5</a>を利用して組まれているマルチプラットフォームなエディタで、Windows以外でも利用できます。</p>
-<p>筆者はMac OS XユーザですがTypeScriptを書く時はvscode一本です。</p>
-<p>tsconfig.jsonがプロジェクト内に配置されていればvscodeはそこから必要な設定を読み込みます。つまり、設定に手間をかけることなくTypeScriptコードを書き始めることができます。</p>
-<div class="footnote" epub:type="footnote" id="fn-vscode"><p class="footnote">[*4] <a href="https://code.visualstudio.com/" class="link">https://code.visualstudio.com/</a></p></div>
-<div class="footnote" epub:type="footnote" id="fn-electron"><p class="footnote">[*5] <a href="http://electron.atom.io/" class="link">http://electron.atom.io/</a></p></div>
+<h3><a id="column-1"></a>TypeScriptのリリースサイクルについて</h3>
+<p>TypeScriptのリリースサイクルについて解説しておきます。以前は目玉となる機能の開発完了やビジネス上の都合（イベントの開催など）ありきのリリースサイクルでした。このため、すでに開発完了している機能やバグフィクスがあってもなかなか使えるようにならない！という不満がありました。最近ではこの問題が改められ、定期的にリリースする運用に変更<a id="fnb-ts-release-schedule" href="#fn-ts-release-schedule" class="noteref" epub:type="noteref">*7</a>されました。</p>
+<div class="footnote" epub:type="footnote" id="fn-ts-release-schedule"><p class="footnote">[*7] <a href="https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/" class="link">https://blogs.msdn.microsoft.com/typescript/2017/03/27/typescripts-new-release-cadence/</a></p></div>
+<p>変更後のリリースサイクルは次のとおりです。</p>
+<ul>
+<li>機能追加のフルリリースは2ヶ月毎（minorアップデート）</li>
+<li>パッチまたは機能追加のリリースを1ヶ月毎（patchアップデート）</li>
+</ul>
+<p>ある機能追加の開発が間に合わなかったら次のリリースに先送り。TypeScriptのリリースはVSCodeのリリースの一週間程度前に行われる。という感じです。VSCodeが月イチ更新なのでエディタとの連携を視野に入れているわけです。</p>
+<p>なお、各リリースの更新内容は公式ブログ<a id="fnb-official" href="#fn-official" class="noteref" epub:type="noteref">*8</a>やRoadmap<a id="fnb-ts-roadmap" href="#fn-ts-roadmap" class="noteref" epub:type="noteref">*9</a>、What's new in TypeScript<a id="fnb-whats-new" href="#fn-whats-new" class="noteref" epub:type="noteref">*10</a>を確認するとわかりやすいです。</p>
+<div class="footnote" epub:type="footnote" id="fn-official"><p class="footnote">[*8] <a href="https://blogs.msdn.microsoft.com/typescript/" class="link">https://blogs.msdn.microsoft.com/typescript/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-ts-roadmap"><p class="footnote">[*9] <a href="https://github.com/Microsoft/TypeScript/wiki/Roadmap" class="link">https://github.com/Microsoft/TypeScript/wiki/Roadmap</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-whats-new"><p class="footnote">[*10] <a href="https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript" class="link">https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript</a></p></div>
+</div>
       </div>
       <nav class="book-navi book-prev">
                 <a href="index.html">

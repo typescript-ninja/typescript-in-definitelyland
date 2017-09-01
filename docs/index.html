@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="style.css" />
   <link rel="stylesheet" type="text/css" href="style-web.css" />
 <link rel="next" title="戦闘準備だ！TypeScript！" href="prepared-to-typescript.html">  <meta name="generator" content="Re:VIEW" />
-  <title>Revised 型の国のTypeScript | Revised TypeScript in Definitelyland</title>
+  <title>Revised Revised 型の国のTypeScript | Revised Revised TypeScript in Definitelyland</title>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -34,16 +34,19 @@
 
   <div class="book">
     <nav class="side-content">
-      <h1>Revised TypeScript in Definitelyland</h1>
+      <h1>Revised Revised TypeScript in Definitelyland</h1>
       <ul class="book-toc">
 <li><a href="index.html">TOP</a></li>
-<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./index.html">Revised Revised 型の国のTypeScript</a></li>
 <li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
 <li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
 <li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
 <li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
 <li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
-<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+<li><a href="./at-types.html">6 JavaScriptの資産と@types</a></li>
+<li><a href="./definition-file.html">7 型定義ファイルを作成する</a></li>
+<li><a href="./typescript-as-a-tool.html">8 ツールとしてのTypeScript</a></li>
+<li><a href="./postdef.html">型の国からの手紙</a></li>
 </ul>
       <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
     </nav>
@@ -51,57 +54,55 @@
       <header>
       </header>
       <div class="book-page">
-        <h1 id="index"><a id="h"></a>Revised 型の国のTypeScript</h1>
+        <h1 id="index"><a id="h"></a>Revised Revised 型の国のTypeScript</h1>
 
 <h2 id="about-this-book"><a id="h-1"></a>本書について</h2>
-<p>本書はC87で頒布した『型の国のTypeScript』の改訂（C90）版です。あなたが読んでいるこの文章は<a href="http://techbooster.github.io/c90/#typescript" class="link">C90で頒布されたRevised TypeScript in Definitelyland</a>の全文です。</p>
-<p>前回頒布した時はTypeScript 1.3.0が安定版で、ちらほら1.4.1の形が見えている…という時期だったと記憶しています。そこから、本書の扱うTypeScript 2.0.0までの間にいくつもの魅力的な変更がありました。本書を改訂するにあたり、さまざまな「こういう制限に注意するように」や「この方法は使うべきではない」といった文章を削りました。こうして振り返ってみるとTypeScriptチームの大きな働き、コードの積み重ねに感謝するばかりです。</p>
-<p>本書の内容は<a href="http://typescript.ninja/typescript-in-definitelyland/" class="link">Webサイト</a><a id="fnb-wonderland" href="#fn-wonderland" class="noteref" epub:type="noteref">*1</a>にて全文を公開しています。誤字や内容の誤り、深く掘り下げてほしい内容などがある場合、本書リポジトリまで<a href="https://github.com/typescript-ninja/typescript-in-definitelyland/issues" class="link">Issue</a><a id="fnb-issues" href="#fn-issues" class="noteref" epub:type="noteref">*2</a>として報告していただけますと幸いです。</p>
+<p>本書はJavaScriptにコンパイル可能な言語のTypeScriptについて解説した本です。TypeScriptの基本的な知識（型の使い方）やコンパイラのオプション、型定義ファイルの作り方やエコシステムについて解説します。</p>
+<p>対象読者は新しめのJavaScript、いわゆるECMAScript 2015とそれ以降<a id="fnb-js-primer" href="#fn-js-primer" class="noteref" epub:type="noteref">*1</a>について理解しているユーザです。Node.js環境やnpmの使い方、<b class="kw">OOP (Object Oriented Programming)</b><!-- IDX:OOP -->の効能や利点をある程度理解していることが望ましいです。</p>
+<div class="footnote" epub:type="footnote" id="fn-js-primer"><p class="footnote">[*1] @azu_reさんと@laco0416くんが書いている入門書（書きかけ）があります <a href="https://github.com/asciidwango/js-primer" class="link">https://github.com/asciidwango/js-primer</a></p></div>
+<p>本書に登場するすべてのサンプルコードは次のTypeScriptコンパイラでコンパイルできることを確認しています。</p>
+<p>Version 2.4.2</p>
+<p>本書はC87、C90で頒布した『型の国のTypeScript』の改訂（C92）版です。あなたが読んでいるこの文章は<a href="http://techbooster.github.io/c92/#typescript" class="link">C92で頒布されたRevised Revised TypeScript in Definitelyland</a>の全文です。</p>
+<p>前回頒布した時のTypeScriptは2.0.0でした。TypeScriptは進歩を続け、ますます堅牢で安全で、そして最新のECMAScript仕様が使えるようになっています。「よりよいJavaScriptコード」を書くことで型の絞込が行われ、<code class="inline-code tt">null</code>や<code class="inline-code tt">undefined</code>のチェックができます。つまり、型に関する記法を覚え、JavaScriptとしてよいコードを書き、コンパイルできれば実行時エラーが発生する心配をほぼしなくてもよい環境が手に入ります。</p>
+<p>今回の改訂では方針を変更し、TypeScriptについての網羅的な解説から知識の効率的な摂取にシフトすることにしました。というのも、TypeScript本体に重箱の隅をフォローする仕様が増え、網羅的に仕様を把握・解説することが困難になり、読むのも苦痛だろうからです。ECMAScript 2015以降の知識についての詳細は、本書では扱いません。主に型周りの説明、TypeScriptコンパイラ自体の説明、周辺仕様を解説します。</p>
+<p>本書の内容は<a href="http://typescript.ninja/typescript-in-definitelyland/" class="link">Webサイト</a><a id="fnb-wonderland" href="#fn-wonderland" class="noteref" epub:type="noteref">*2</a>にて全文を公開しています。誤字や内容の誤り、自分としてはコンパイルが通ると思うのに通らないパターン、深く掘り下げてほしい内容などがある場合、本書リポジトリまで<a href="https://github.com/typescript-ninja/typescript-in-definitelyland/issues" class="link">Issue</a><a id="fnb-issues" href="#fn-issues" class="noteref" epub:type="noteref">*3</a>として報告していただけますと幸いです。</p>
+<div class="footnote" epub:type="footnote" id="fn-wonderland"><p class="footnote">[*2] <a href="http://typescript.ninja/typescript-in-definitelyland/" class="link">http://typescript.ninja/typescript-in-definitelyland/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-issues"><p class="footnote">[*3] <a href="https://github.com/typescript-ninja/typescript-in-definitelyland/issues" class="link">https://github.com/typescript-ninja/typescript-in-definitelyland/issues</a></p></div>
 <p>無料配布版では、表紙データなどは含まれないため可愛い表紙の冊子が欲しい場合はぜひ紙版をお買い上げください。</p>
 <p>C87冊子版の表紙はイラスト：Jecyさん（<a href="http://jecy.main.jp/" class="link">http://jecy.main.jp/</a>）、デザイン：shatiさん（<a href="http://utata-ne.net/" class="link">http://utata-ne.net/</a>）です。この表紙のおかげで書名が決まりました。可愛い表紙を本当にありがとうございます！</p>
 <p>C90冊子版の表紙はイラスト：shatiさん（<a href="http://utata-ne.net/" class="link">http://utata-ne.net/</a>）、デザイン：siosioさんです。C87版から上手に味わいを引き継いだ可愛い表紙をありがとうございます！</p>
-<p>なお、booth.pmやCOMIC ZINにて通販を行っております。<a href="http://shop.comiczin.jp/products/detail.php?product_id=29874" class="link">紙版の通販</a>、<a href="https://techbooster.booth.pm/items/299594?utm_source=webbook&amp;utm_medium=webbook&amp;utm_campaign=ebook" class="link">電子版販売</a>、そして<a href="https://techbooster.booth.pm/items/307694?utm_source=webbook&amp;utm_medium=webbook&amp;utm_campaign=rubber-strap" class="link">わかめこちゃんラバスト &amp; てくぶコットンバッグ</a>（図1）があります。特にラバストは原価と戦うために結構多めに作ったため、在庫が潤沢にあります。本文を読んで、お役に立った場合、是非赤字解消への協力をご検討ください…！</p>
-<div id="rubber-strap" class="image">
-<img src="images/index/rubber-strap.jpg" alt="わかめこちゃんラバスト（イメージ）" />
-<p class="caption">
-図1: わかめこちゃんラバスト（イメージ）
-</p>
-</div>
-<div class="footnote" epub:type="footnote" id="fn-wonderland"><p class="footnote">[*1] <a href="http://typescript.ninja/typescript-in-definitelyland/" class="link">http://typescript.ninja/typescript-in-definitelyland/</a></p></div>
-<div class="footnote" epub:type="footnote" id="fn-issues"><p class="footnote">[*2] <a href="https://github.com/typescript-ninja/typescript-in-definitelyland/issues" class="link">https://github.com/typescript-ninja/typescript-in-definitelyland/issues</a></p></div>
+<p>C92冊子版の表紙はイラスト：Jecyさん（<a href="http://jecy.main.jp/" class="link">http://jecy.main.jp/</a>）、デザイン：siosioさんです。筆者がケモ好きということが周知されてきた気配を感じます。1版から数えてもう2年半も経つんですね。可愛いけも耳をありがとうございます！</p>
 
-<h2 id="main-target"><a id="h-2"></a>対象読者</h2>
-<p>本書はECMAScript 2015について理解しているユーザを対象にしています。<b class="kw">OOP (Object Oriented Programming)</b><!-- IDX:OOP -->についても効能や利点をある程度理解していることが望ましいです。もし、これらの理解に不安がある場合、azuさんとlacoが執筆中のECMAScript 2015時代のためのJavaScript入門書『<a href="https://github.com/asciidwango/js-primer" class="link">js-primer</a>』<a id="fnb-js-primer" href="#fn-js-primer" class="noteref" epub:type="noteref">*3</a>などを参考にしてください。今のところまだ書き終わっていないようですが2016年中くらいには書き終わるのではないでしょうか。</p>
-<p>また解説するTypeScriptの内容は2.0.0（Beta）に準拠するため、現時点での最新の安定版である1.8.10では動作しない内容が多く含まれます。本書に登場するすべてのサンプルコードは<code class="inline-code tt">npm install typescript@beta</code>でインストールできるTypeScript 2.0.0 Betaでコンパイルの確認をしています。</p>
-<p>本書で利用しているTypeScriptコンパイラは次のものです。</p>
-<p>Version 2.0.0</p>
-<div class="footnote" epub:type="footnote" id="fn-js-primer"><p class="footnote">[*3] <a href="https://github.com/asciidwango/js-primer" class="link">https://github.com/asciidwango/js-primer</a></p></div>
-
-<h2 id="tour-of-this-book"><a id="h-3"></a>本書の内容</h2>
-<p>本書は<code class="inline-code tt">--noImplicitAny</code>、<code class="inline-code tt">--strictNullChecks</code>、<code class="inline-code tt">--noImplicitReturns</code>、<code class="inline-code tt">--noImplicitThis</code>を有効にした状態を基本として解説します。各オプションの詳細については第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
-<p>またNode.js、ブラウザを問わずモジュールの仕組みを使います。これはブラウザでの実行にはBrowserify<a id="fnb-browserify" href="#fn-browserify" class="noteref" epub:type="noteref">*4</a>なりwebpack<a id="fnb-webpack" href="#fn-webpack" class="noteref" epub:type="noteref">*5</a>なりのツールを使う前提があることを意味します。targetの指定はInternet Explorer 11でもes5指定で十分なため<code class="inline-code tt">es5</code>以上とし、<code class="inline-code tt">es3</code>については本書では考慮しません。</p>
-<p>TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。興味がある方は<a href="http://www.typescriptlang.org/docs/handbook/jsx.html" class="link">公式のドキュメント</a><a id="fnb-jsx" href="#fn-jsx" class="noteref" epub:type="noteref">*6</a>を参照してください。</p>
+<h2 id="tour-of-this-book"><a id="h-2"></a>本書の内容</h2>
+<p>本書は<code class="inline-code tt">--strict</code>を有効にした状態を基本として解説します。オプションの詳細については第5章「オプションを知り己のコードを知れば百戦危うからず」を参照してください。</p>
+<p>またNode.js、ブラウザを問わずモジュールの仕組みを使います。これはブラウザでの実行にはwebpack<a id="fnb-webpack" href="#fn-webpack" class="noteref" epub:type="noteref">*4</a>などのbundlingツールを使う前提であることを意味します。targetの指定はInternet Explorer 11でもes5指定で十分なため<code class="inline-code tt">es5</code>以上とし、<code class="inline-code tt">es3</code>については本書では考慮しません。また、必要があれば<code class="inline-code tt">--downlevelIteration</code>も利用します。</p>
+<div class="footnote" epub:type="footnote" id="fn-webpack"><p class="footnote">[*4] <a href="https://webpack.github.io/" class="link">https://webpack.github.io/</a></p></div>
+<p>TypeScriptはJSXのサポートを含みますが、筆者が今のところJSXないしReactに興味がないため、本書では扱いません。興味がある方は<a href="http://www.typescriptlang.org/docs/handbook/jsx.html" class="link">公式のドキュメント</a><a id="fnb-jsx" href="#fn-jsx" class="noteref" epub:type="noteref">*5</a>を参照してください。</p>
+<div class="footnote" epub:type="footnote" id="fn-jsx"><p class="footnote">[*5] <a href="http://www.typescriptlang.org/docs/handbook/jsx.html" class="link">http://www.typescriptlang.org/docs/handbook/jsx.html</a></p></div>
 <p>第1章「戦闘準備だ！TypeScript！」では、TypeScriptコンパイラのセットアップ方法とVisual Studio Codeの設定について言及します。</p>
-<p>第2章「TypeScriptの基本」では、TypeScriptの基本構文を簡単に解説し、このあとの章を読み解くための基礎知識を蓄えます。</p>
-<p>第3章「型は便利だ楽しいな」では、TypeScriptによる開発を行う上で理解しておきたい型についての知識を蓄えます。</p>
+<p>第2章「TypeScriptの基本」では基本構文を解説し、このあとの章を読み解くための基礎知識を蓄えます。</p>
+<p>第3章「型は便利だ楽しいな」では開発する上で理解しておきたい型についての知識を蓄えます。</p>
 <p>第4章「アドバンスド型戦略」では、TypeScriptで利用可能な型のちょっと難しいところ、利用頻度は低いが知っておくと嬉しいことについて解説します。</p>
-<p>第5章「オプションを知り己のコードを知れば百戦危うからず」では、tscコマンドやtsconfig.jsonで利用可能なオプションについて、重要なオプションを中心に解説します。</p>
-<p>第6章「JS資産と型定義ファイル」では、既存のJS用資産を活かすための型定義ファイルについての解説と書き方、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。</p>
-<div class="footnote" epub:type="footnote" id="fn-browserify"><p class="footnote">[*4] <a href="http://browserify.org/" class="link">http://browserify.org/</a></p></div>
-<div class="footnote" epub:type="footnote" id="fn-webpack"><p class="footnote">[*5] <a href="https://webpack.github.io/" class="link">https://webpack.github.io/</a></p></div>
-<div class="footnote" epub:type="footnote" id="fn-jsx"><p class="footnote">[*6] <a href="http://www.typescriptlang.org/docs/handbook/jsx.html" class="link">http://www.typescriptlang.org/docs/handbook/jsx.html</a></p></div>
+<p>第5章「オプションを知り己のコードを知れば百戦危うからず」では、tscコマンドやtsconfig.jsonで利用できるオプションについて、重要なオプションを中心に解説します。</p>
+<p>第6章「JavaScriptの資産と@types」では、@typesで用意されている型定義ファイルの使い方について解説します。</p>
+<p>第7章「型定義ファイルを作成する」では、自分で型定義ファイルを書くための方法、さらにDefinitelyTypedへのコントリビュートの仕方について解説します。</p>
+<p>第8章「ツールとしてのTypeScript」では、TypeScriptのLanguage Service APIやLanguage Server Protocolの概要を紹介します。</p>
 
-<h2 id="why-typescript"><a id="h-4"></a>なぜTypeScriptを選ぶべきなのか</h2>
-<p>TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（JavaScript）に静的な型付けによる検証を導入したものです。現実を見据えた言語仕様で、&quot;未来のJavaScriptそのもの&quot;になることを目指しています。</p>
-<p>TypeScriptはECMAScriptのsuperset（上位互換）であることを標榜しています。つまり、ECMAScript＋静的型付け＝TypeScriptです。そして、&quot;TypeScript独自の実装として表れる仕様&quot;を注意深く避けてきています。</p>
-<p>この方針ではECMAScriptのクソな仕様の数々は（勝手に闇に葬るわけにはいかないので）残ってしまうため、自力で避ける必要があります。with構文やtry-catch構文などは、TypeScript的に使いにくい仕様になっているためそれと分かるでしょう。</p>
-<p>ですが、その代わりにTypeScriptは将来&quot;正式な&quot;JavaScriptになる可能性があります<a id="fnb-jonathandturner-left" href="#fn-jonathandturner-left" class="noteref" epub:type="noteref">*7</a>。…あるんじゃないかな！</p>
-<p>稀にTypeScriptのリポジトリに「TypeScriptにLINQを導入してほしい」などというECMAScript仕様にない独自の要望が上がってくることがありますが、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体に入れる努力が必要でしょう。</p>
-<div class="footnote" epub:type="footnote" id="fn-jonathandturner-left"><p class="footnote">[*7] 過去にTypesの正式な仕様化について<a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#types" class="link">TC39ミーティングで話された</a>ことがあったがJonathan TurnerがMicrosoftを離れたため以後の進捗はよくない</p></div>
+<h2 id="why-typescript"><a id="h-3"></a>なぜTypeScriptを選ぶべきなのか</h2>
+<p>TypeScriptはMicrosoftが主導となって開発している言語で、ECMAScript（≒JavaScript）に静的な型付けによる検証を導入したものです。現実を見据えた言語仕様で、&quot;未来のJavaScriptそのもの&quot;になることを目指しています。</p>
+<p>TypeScriptはECMAScriptの<b class="kw">superset (上位互換)</b><!-- IDX:superset -->であることを標榜しています。つまり、ECMAScript＋静的型付け＝TypeScriptです。そして、&quot;TypeScript独自の実装として表れる仕様&quot;を注意深く避けようとしています。</p>
+<p>TypeScriptのリポジトリには稀に「TypeScriptにLINQを導入してほしい」などのECMAScript仕様にない独自の要望が上がってきます。しかしながら、上記のポリシーを考えればそのような要望が取り込まれないのは明らかです。どうしてもTypeScriptに独自の仕様を入れたい場合、まずはECMAScript本体にその仕様を入れる努力が必要でしょう。</p>
+<p>現代的で、よいJavaScriptコードを書くことは、よいTypeScriptコードを書くことに繋がります。そしてTypeScriptで得た知識やベストプラクティスは、JavaScriptを書く上でも正しい習慣を得るための補助輪として機能します。どちらか片方だけでは成り立たず、両輪を理解し活用することが上達への近道です。</p>
+<p>さらにTypeScriptを勧めたい点として、TypeScriptコンパイラーが内蔵するエディタ支援のための機能群です。コンパイラに密に結合された（つまり更新遅延のない）エディタサポートは、強く信頼できる型推論や入力補完を提供します。高機能で信頼できる、曖昧さが排除されたエディタを使いたい場合、TypeScriptはうってつけの選択肢です。</p>
+<p>これらTypeScriptの利点が支持された結果として、いくつかのフレームワークや多くの人々がTypeScriptを使い始めています。たとえばSlack<a id="fnb-slack-ts" href="#fn-slack-ts" class="noteref" epub:type="noteref">*6</a>、Reddit<a id="fnb-reddit-ts" href="#fn-reddit-ts" class="noteref" epub:type="noteref">*7</a>、Google<a id="fnb-google-ts" href="#fn-google-ts" class="noteref" epub:type="noteref">*8</a>、そしてTypeScript開発元であるMicrosoftなどのビッグサービスです。乗るしかない！このビッグウェーブに！</p>
+<div class="footnote" epub:type="footnote" id="fn-slack-ts"><p class="footnote">[*6] <a href="https://slack.engineering/typescript-at-slack-a81307fa288d" class="link">https://slack.engineering/typescript-at-slack-a81307fa288d</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-reddit-ts"><p class="footnote">[*7] <a href="https://redditblog.com/2017/06/30/why-we-chose-typescript/" class="link">https://redditblog.com/2017/06/30/why-we-chose-typescript/</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-google-ts"><p class="footnote">[*8] <a href="http://www.publickey1.jp/blog/17/googletypescriptng-conf_2017.html" class="link">http://www.publickey1.jp/blog/17/googletypescriptng-conf_2017.html</a></p></div>
 
-<h2 id="disclaimer"><a id="h-5"></a>TypeScriptを選んだ時のデメリット</h2>
-<p>一番大きなデメリットは学習コストが追加で発生します。JavaScriptの書き方に加え、TypeScriptで型注釈を与える記法を学ばねばなりません。基本的な書き方はすぐに習得できると思いますが、既存のJavaScriptライブラリと組み合わせようとしたときに専門知識が必要になります。本書ではそのための専門知識について解説し、TypeScriptを自由自在に使いこなすお手伝いをします。</p>
-<p>その他の懸念としてTypeScriptにロックインされてしまうのでは？という不安を耳にすることがあります。これについては脱出口が用意されています。TypeScriptできれいに書いたコードは<code class="inline-code tt">--target es6</code>で出力すると、単に型注釈を取り除いただけの素直なJavaScriptが出力されてきます。簡単なコードを自分で書いてみて、それをECMAScript 2015なJSに変換して確認してみるとよいでしょう。まずは、恐れずにTypeScriptに挑戦してみましょう。</p>
+<h2 id="disclaimer"><a id="h-4"></a>TypeScriptを選んだ時のデメリット</h2>
+<p>一番大きなデメリットは、JavaScriptにプラスした学習コストが発生します。JavaScriptの書き方に加え、TypeScriptで型注釈を与える記法を学ばねばなりません。</p>
+<p>基本的な書き方はすぐに習得できますが、既存のJavaScriptライブラリと組み合わせようとしたときにTypeScriptに対する応用的な理解が必要になります。本書ではそのための専門知識について解説し、TypeScriptを自由自在に使いこなす手伝いをしていきます。</p>
+<p>懸念として「TypeScriptにロックインされてしまうのでは？」という不安を耳にすることがあります。これについては脱出口が用意されています。TypeScriptできれいに書いたコードは<code class="inline-code tt">--target esnext</code>で出力すると、単に型注釈を取り除いただけの素直なJavaScriptが出力されます。簡単なコードを自分で書いてみて、それを変換して確認してみるとよいでしょう。まずは、恐れずにTypeScriptに取り組んでみましょう。</p>
       </div>
       <nav class="book-navi book-prev">
               </nav>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style-web.css" />
+<link rel="next" title="型の国からの手紙" href="postdef.html"><link rel="prev" title="型定義ファイルを作成する" href="definition-file.html">  <meta name="generator" content="Re:VIEW" />
+  <title>ツールとしてのTypeScript | Revised Revised TypeScript in Definitelyland</title>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-6628015-6', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrapper">
+      <a class="site-title" href="/">TypeScript Ninja</a>
+      <nav class="site-nav">
+        <div class="trigger">
+            <a class="page-link" href="/typescript-in-definitelyland/">本のトップ</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="book">
+    <nav class="side-content">
+      <h1>Revised Revised TypeScript in Definitelyland</h1>
+      <ul class="book-toc">
+<li><a href="index.html">TOP</a></li>
+<li><a href="./index.html">Revised Revised 型の国のTypeScript</a></li>
+<li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
+<li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
+<li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
+<li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
+<li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
+<li><a href="./at-types.html">6 JavaScriptの資産と@types</a></li>
+<li><a href="./definition-file.html">7 型定義ファイルを作成する</a></li>
+<li><a href="./typescript-as-a-tool.html">8 ツールとしてのTypeScript</a></li>
+<li><a href="./postdef.html">型の国からの手紙</a></li>
+</ul>
+      <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
+    </nav>
+    <div class="book-body">
+      <header>
+      </header>
+      <div class="book-page">
+        <h1 id="typescript-as-a-tool"><a id="h8"></a><span class="secno">第8章　</span>ツールとしてのTypeScript</h1>
+<p>TypeScriptの優位性を訴えるためにもツールとしてのTypeScriptを紹介します。</p>
+<p>プログラミング言語のコンパイラはコンパイルを行う。だからといって、コンパイルのみを行うと限られているわけではありません。プログラムをパースした結果の<b class="kw">AST (Abstract Syntax Tree)</b><!-- IDX:AST -->、変数の型や返り値の型など、コンパイラが利用・理解しているものは余すところなく使いたいところです。エディタを使ってコードを書く際、インスタンスにどういうメソッドが存在するかはコンパイラ自身が一番良く理解しています。</p>
+<p>実際、TypeScriptはコンパイラとしての機能やプログラムに関する情報、入力補完のAPIなどさまざまな使い勝手のよいAPIを備え、我々に公開してくれています。多くのエディタやIDEでリッチな、Visual Studioと比べても遜色ない入力補完やエラー表示の機能をサポートしている理由は、TypeScriptがそれらの機能をホストしているからなのです。バックエンドに同じものを使っていれば、色々なエディタで同じように強力な機能が使えることはある意味当然といえます。</p>
+<p>本章ではTypeScriptのツールとしての側面をざっくりと紹介していきます。詳しくはTypeScriptのソースを読んでください。</p>
+
+<h2><a id="h8-1"></a><span class="secno">8.1　</span>Compiler API</h2>
+<p>まずはコンパイラのAPI<a id="fnb-compiler-api" href="#fn-compiler-api" class="noteref" epub:type="noteref">*1</a>について触れます。Compiler APIはソースコードのファイルパスやソースコードを文字列として投げ込むと、ASTが得られたりコンパイル後のJSを得ることができます。</p>
+<div class="footnote" epub:type="footnote" id="fn-compiler-api"><p class="footnote">[*1] <a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API" class="link">https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API</a></p></div>
+<p>これをツールとして切り出したものとして次の2つがあります。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/ts-node" class="link">https://www.npmjs.com/package/ts-node</a></li>
+<li><a href="https://www.npmjs.com/package/typescript-simple" class="link">https://www.npmjs.com/package/typescript-simple</a></li>
+</ul>
+<p>筆者の<a href="https://www.npmjs.com/package/typescript-formatter" class="link">typescript-formatter</a>も（undocumentedな）Compiler APIを使っているのですが、後述するLanguage Serviceを使って置き換えられるはずなので置き換えるべきですね…。</p>
+
+<h2><a id="h8-2"></a><span class="secno">8.2　</span>Language Service</h2>
+<p>Language Serviceは言語の機能、エディタ向けの支援を切り出したAPIです。ざっくり、コンパイルエラーやソースコード上の指定した場所に当てはまる入力補完候補、シンボルのリネームで影響のある箇所の抽出、定義の実装箇所や、メソッドなどの呼び出し元の参照、コードフォーマット、QuickFixの候補、リファクタリングの候補、などなど紹介するのも面倒な多数の機能があります。</p>
+
+<h3><a id="h8-2-1"></a>Language Service Plugin</h3>
+<p>Language Service Pluginはその名のとおり、Language Serviceを独自に拡張できる仕組みです。Language Serviceは主にエディタから使われる機能であり、コンパイラ、つまりtscの動作には影響しません。だから、tsconfing.jsonでpluginsを設定してもtscの動作には影響がないわけですね。</p>
+<p>プラグインと言いますがその実現方法はなかなかダイナミックです。エディタ上で使うべきLanguage Serviceのインスタンス、<code class="inline-code tt">ts.LanguageHost</code>がまるごとポン！と渡されるので、任意のメソッドを自分の好きな実装に差し替えます。つまり<code class="inline-code tt">getQuickInfoAtPosition</code>の実装を差し替えればエディタ上で表示されるツールチップ（クイックインフォ）の表示を変更できる、というわけです。</p>
+<p>プラグインの作り方については公式のガイド<a id="fnb-how-to-make-plugin" href="#fn-how-to-make-plugin" class="noteref" epub:type="noteref">*2</a>を参照するのがもっともわかりやすいでしょう。筆者もtypescript-plugin-exampleというプラグインのサンプルを公開<a id="fnb-typescript-plugin-example" href="#fn-typescript-plugin-example" class="noteref" epub:type="noteref">*3</a>しているので、こちらを参照してみてください。また、中の人であるRyan Cavanaughのサンプル<a id="fnb-RyanCavanaugh" href="#fn-RyanCavanaugh" class="noteref" epub:type="noteref">*4</a>もあります。</p>
+<div class="footnote" epub:type="footnote" id="fn-how-to-make-plugin"><p class="footnote">[*2] <a href="https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin" class="link">https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-typescript-plugin-example"><p class="footnote">[*3] <a href="https://www.npmjs.com/package/@vvakame/typescript-plugin-example" class="link">https://www.npmjs.com/package/@vvakame/typescript-plugin-example</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-RyanCavanaugh"><p class="footnote">[*4] <a href="https://github.com/RyanCavanaugh/sample-ts-plugin" class="link">https://github.com/RyanCavanaugh/sample-ts-plugin</a></p></div>
+
+<h2><a id="h8-3"></a><span class="secno">8.3　</span>Language Server Protocol</h2>
+<p>Language Server Protocol（LSP）です。Language Service Protocolではないところに注意が必要<a id="fnb-decode-lsp" href="#fn-decode-lsp" class="noteref" epub:type="noteref">*5</a>です。</p>
+<div class="footnote" epub:type="footnote" id="fn-decode-lsp"><p class="footnote">[*5] 筆者はde:code 2017の登壇概要にめっちゃLanguage Service Protocolと書いてしまいました（小声</p></div>
+<p>ここまで、コンパイラがさまざまな機能をホストしている事例を見てきました。ソースコードのことを一番よく理解し、コンパイラの変更にもっとも素早く追従していくのはコンパイラ自身なのです。エディタともっとも仲良くするべきコンポーネントはコンパイラ自身であることは明白です。</p>
+<p>さて、ではエディタがこれらの機能にアクセスするにはどうしたらよいでしょうか？TypeScript自身はTypeScriptで書かれているため、JavaScriptの実行環境が必要です。さらに、ソースコード全体を読み込み解釈してデータを返すたびに起動しなおしていては処理速度が低速になりすぎるため、プロセスを常駐したほうが好都合です。VimやEmacsなどのエディタはJavaScriptを素直に実行することができません。つまりLanguage Serviceを任意のプロセスから簡単に使えるための仕組みが必要なのです。それが、Language Server Protocolです。</p>
+<p>LSPはMicrosoftが提唱している仕様<a id="fnb-lsp-spec" href="#fn-lsp-spec" class="noteref" epub:type="noteref">*6</a>です。JSON-RPC<a id="fnb-json-rpc" href="#fn-json-rpc" class="noteref" epub:type="noteref">*7</a>を用いてサーバ（言語処理側）とクライアント（エディタ）間の通信を行います。これでサーバ側の実装言語が何であるか、クライアント側の実装言語が何なのか、そしてその2つのかみ合わせをどう調整するか、という問題が解決されます。</p>
+<div class="footnote" epub:type="footnote" id="fn-lsp-spec"><p class="footnote">[*6] <a href="https://github.com/Microsoft/language-server-protocol" class="link">https://github.com/Microsoft/language-server-protocol</a></p></div>
+<div class="footnote" epub:type="footnote" id="fn-json-rpc"><p class="footnote">[*7] <a href="http://www.jsonrpc.org/specification" class="link">http://www.jsonrpc.org/specification</a></p></div>
+<p>この仕組みの素晴らしいところはエディタでプログラミング言語をサポートする際にあった問題が、ある程度解決することです。このシチュエーションで登場するエンジニアの人種は3種類です。</p>
+<ol>
+<li>言語開発者</li>
+<li>IDE・エディタ開発者</li>
+<li>自分の開発をしたいだけの開発者</li>
+</ol>
+<p>言語開発者は言語自体の開発をしたいですし、IDE・エディタの開発者も全言語の対応は非現実的なのでプラグインを開発してなんとかしてねとなりがちです。そうすると自分の開発したいだけの開発者が、いつのまにかプラグインを書いたりといった余計な仕事を始めることになります。普通に開発したいだけなのに！</p>
+<p>言語の数×エディタの数だけ実装が必要だと地獄です。しかし、LSPの導入により言語側のサポート、エディタ側のサポートが成立すれば、言語の数＋エディタの数の実装があれば十分です。素晴らしい！</p>
+<p>素晴らしいLSPですが、各言語側にLSPサポートが始まらないとお話になりません。Rustでもrls（Rust Language Server）<a id="fnb-rust-lsp" href="#fn-rust-lsp" class="noteref" epub:type="noteref">*8</a>の取り組みが始まっていますが、TypeScriptほど便利ではありません。メソッドチェーンをさせた時にどういう型になるか拾えなかったりするんですね。これは、Rust自体にTypeScriptのLanguage Service的な仕組みが設計考慮の外だったためではないかと考えられます。よいツールを提供するためにはまずコンパイラの設計時点からこのことを念頭に置いて設計しなければならないため、開発の難易度はより難しくなるでしょう。</p>
+<div class="footnote" epub:type="footnote" id="fn-rust-lsp"><p class="footnote">[*8] <a href="https://github.com/rust-lang-nursery/rls" class="link">https://github.com/rust-lang-nursery/rls</a></p></div>
+<p>さて、筆者も手持ちのprhという文章構成用ツールにLSPの機能を組み込み、VSCodeで使えるようにしてみました。興味がある人は次からどうぞ。</p>
+<ul>
+<li><a href="https://github.com/prh/prh-languageserver" class="link">https://github.com/prh/prh-languageserver</a></li>
+<li><a href="https://github.com/prh/vscode-prh-extention" class="link">https://github.com/prh/vscode-prh-extention</a></li>
+</ul>
+<p>その他のLSP関連の開発を行うとき参考になるリソースは次の3つがお勧めです。</p>
+<ul>
+<li><a href="https://github.com/Microsoft/vscode-tslint" class="link">https://github.com/Microsoft/vscode-tslint</a></li>
+<li><a href="https://github.com/Microsoft/vscode-languageserver-node" class="link">https://github.com/Microsoft/vscode-languageserver-node</a></li>
+<li><a href="https://github.com/Microsoft/vscode-languageserver-node-example" class="link">https://github.com/Microsoft/vscode-languageserver-node-example</a></li>
+</ul>
+<p>ちなみに、TypeScriptはLSPを実装していません<a id="fnb-ts-lsp-issue" href="#fn-ts-lsp-issue" class="noteref" epub:type="noteref">*9</a>（！？）。MicrosoftがLSPを提唱し始めたのはtsserverの後なのです。仕方ないですね…。</p>
+<div class="footnote" epub:type="footnote" id="fn-ts-lsp-issue"><p class="footnote">[*9] <a href="https://github.com/Microsoft/TypeScript/issues/11274" class="link">https://github.com/Microsoft/TypeScript/issues/11274</a></p></div>
+<div class="column">
+
+<h4><a id="column-1"></a>tsserver</h4>
+<p>TypeScriptはLSPを実装していない代わりに、同等のJSONっぽいRPCを使ったLanguage Serviceをホストするコマンドをバンドルしています。それがtsserverコマンドです。自分の好きなエディタにTypeScriptサポートを追加したい！と考えている人はこのコマンドについて調べるとよいでしょう。公式サイトのガイド<a id="fnb-tsserver" href="#fn-tsserver" class="noteref" epub:type="noteref">*10</a>を参照してください。</p>
+<div class="footnote" epub:type="footnote" id="fn-tsserver"><p class="footnote">[*10] <a href="https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29" class="link">https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29</a></p></div>
+</div>
+      </div>
+      <nav class="book-navi book-prev">
+                <a href="definition-file.html">
+          <div class="book-cursor"><span class="cursor-prev">◀</span></div>
+        </a>
+              </nav>
+      <nav class="book-navi book-next">
+                <a href="postdef.html">
+          <div class="book-cursor"><span class="cursor-next">▶</span></div>
+        </a>
+              </nav>
+    </div>
+  </div>
+
+  <!--
+  <footer>
+      </footer>
+    -->
+
+  <footer class="site-footer">
+    <div class="wrapper">
+      <h2 class="footer-heading">TypeScript Ninja</h2>
+      <div class="footer-col-wrapper">
+        <div class="footer-col  footer-col-1">
+          <ul class="contact-list">
+            <li>TypeScript Ninja</li>
+            <li><a href="mailto:vvakame+typescript@gmail.com">vvakame+typescript@gmail.com</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col  footer-col-2">
+          <ul class="social-media-list">
+            <li>
+              <a href="https://github.com/vvakame">
+                <span class="icon  icon--github">
+                  <svg viewBox="0 0 16 16">
+                    <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path>
+                  </svg>
+                </span>
+                <span class="username">vvakame</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="https://twitter.com/vvakame">
+                <span class="icon  icon--twitter">
+                  <svg viewBox="0 0 16 16">
+                    <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                    c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"></path>
+                  </svg>
+                </span>
+                <span class="username">vvakame</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col  footer-col-3">
+          <p class="text">TypeScriptについて色々書くよ。忍者！</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/typescript.min.js"></script>
+  <script>document.querySelectorAll("pre.list").forEach(function(b) { hljs.highlightBlock(b); });</script>
+</body>
+</html>

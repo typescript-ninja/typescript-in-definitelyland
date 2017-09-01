@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="style.css" />
   <link rel="stylesheet" type="text/css" href="style-web.css" />
 <link rel="next" title="アドバンスド型戦略" href="types-advanced.html"><link rel="prev" title="TypeScriptの基本" href="typescript-basic.html">  <meta name="generator" content="Re:VIEW" />
-  <title>型は便利だ楽しいな | Revised TypeScript in Definitelyland</title>
+  <title>型は便利だ楽しいな | Revised Revised TypeScript in Definitelyland</title>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -34,16 +34,19 @@
 
   <div class="book">
     <nav class="side-content">
-      <h1>Revised TypeScript in Definitelyland</h1>
+      <h1>Revised Revised TypeScript in Definitelyland</h1>
       <ul class="book-toc">
 <li><a href="index.html">TOP</a></li>
-<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./index.html">Revised Revised 型の国のTypeScript</a></li>
 <li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
 <li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
 <li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
 <li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
 <li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
-<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+<li><a href="./at-types.html">6 JavaScriptの資産と@types</a></li>
+<li><a href="./definition-file.html">7 型定義ファイルを作成する</a></li>
+<li><a href="./typescript-as-a-tool.html">8 ツールとしてのTypeScript</a></li>
+<li><a href="./postdef.html">型の国からの手紙</a></li>
 </ul>
       <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
     </nav>
@@ -52,16 +55,15 @@
       </header>
       <div class="book-page">
         <h1 id="types-basic"><a id="h3"></a><span class="secno">第3章　</span>型は便利だ楽しいな</h1>
-<p>TypeScriptの華はやはり型！第2章「TypeScriptの基本」など所詮児戯に過ぎぬわッ！！</p>
-<p>この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や、仕様的に少し複雑なものについては第4章「アドバンスド型戦略」で紹介します。</p>
-<p>まず、TypeScriptに熟達していく上で必ず意識しなければいけないのが<b class="kw">型の宣言空間 (type declaration space)</b><!-- IDX:型の宣言空間 -->と<b class="kw">値の宣言空間 (variable declaration space)</b><!-- IDX:値の宣言空間 -->の存在です。別の言い方をすると、型定義と実装の差です。</p>
-<p>JavaやC#だと、おおむね両者は密接に結びついていて、そこの差で困ることは少ないです。筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。JavaのGenericsの型パラメータは実行時には消されてしまうため、たとえば<code class="inline-code tt">new T();</code>というコードを書くことはできません。TypeScriptの型と値の区別は、Javaの例に近いかもしれません。</p>
+<p>この章ではTypeScriptの型の仕組みのうち、日常的に使う箇所を重点的に解説していきます。TypeScriptコードを書く分には使わない範囲（型定義ファイルで主に使う範囲）や複雑なものについては第4章「アドバンスド型戦略」で紹介します。</p>
+<p>まず、TypeScriptに熟達していく上で必ず意識しなければいけない概念が<b class="kw">型の宣言空間 (type declaration space)</b><!-- IDX:型の宣言空間 -->と<b class="kw">値の宣言空間 (variable declaration space)</b><!-- IDX:値の宣言空間 -->の存在です。別の言い方をすると、型定義と実装の差です。</p>
+<p>JavaやC#だと、おおむね両者は密接に結びついていて、この差で困ることは少ないです。筆者が簡単に思いつく範囲では、似たような事例はJavaでのGenericsの型パラメータのtype erasureぐらいでしょうか。JavaのGenericsの型パラメータは実行時には消されてしまうため、たとえば<code class="inline-code tt">new T();</code>というコードを書くことはできません。TypeScriptの型と値の区別は、Javaの例に近いかもしれません。</p>
 <p>情報として型が存在していても、値として存在していない。そういう場面はTypeScriptではたくさん遭遇します。差を理解し積極的に活用できるようになるとTypeScript上級者といえるでしょう。</p>
-<p>この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。実用上のテクニックは第4章「アドバンスド型戦略」や第6章「JS資産と型定義ファイル」でも言及します。</p>
+<p>この章では、そんなTypeScriptの型の宣言空間で活躍する要素を紹介していきます。実用上のテクニックは第4章「アドバンスド型戦略」や第7章「型定義ファイルを作成する」でも言及します。</p>
 
 <h2 id="object-type-literals"><a id="h3-1"></a><span class="secno">3.1　</span>オブジェクト型リテラル（Object Type Literals）</h2>
-<p>オブジェクト型リテラルは、JSのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（リスト3.1）。</p>
-<div class="caption-code">
+<p>オブジェクト型リテラルは、JavaScriptのオブジェクトリテラルに似た記法で、匿名の型を作り出す機能です（<span class="listref">リスト3.1</span>）。</p>
+<div id="id_objectTypeLiteral_2Fbasic.ts" class="caption-code">
 <p class="caption">リスト3.1: 基本的な例</p>
 <pre class="list language-ts">// オブジェクトリテラルで値を作成！
 let objA = {
@@ -85,8 +87,9 @@ export { }
 </pre>
 </div>
 <p>値の代わりに型名を、要素の終わりに<code class="inline-code tt">,</code>ではなく<code class="inline-code tt">;</code>を書くだけです。簡単ですね。</p>
-<p>オブジェクト型リテラルは型を指定する箇所<a id="fnb-object-literal-type" href="#fn-object-literal-type" class="noteref" epub:type="noteref">*1</a>であればどこでも使えます（リスト3.2）。</p>
-<div class="caption-code">
+<p>オブジェクト型リテラルは型を指定する箇所<a id="fnb-object-literal-type" href="#fn-object-literal-type" class="noteref" epub:type="noteref">*1</a>であればどこでも使えます（<span class="listref">リスト3.2</span>）。</p>
+<div class="footnote" epub:type="footnote" id="fn-object-literal-type"><p class="footnote">[*1] interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません</p></div>
+<div id="id_objectTypeLiteral_2FbasicUsage.ts" class="caption-code">
 <p class="caption">リスト3.2: でも、正直読みづらい</p>
 <pre class="list language-ts">// 関数の仮引数や返り値に対して
 function move(
@@ -114,12 +117,11 @@ export { }
 </pre>
 </div>
 <p>では、オブジェクト型リテラルで使える書き方を5つ見ていきましょう。</p>
-<div class="footnote" epub:type="footnote" id="fn-object-literal-type"><p class="footnote">[*1] interfaceのextendsの後とかtypeofの後の識別子とかは厳密にいうと型を指定する箇所ではありません</p></div>
 
 <h3 id="property-signatures"><a id="h3-1-1"></a>プロパティシグニチャ（Property Signatures）</h3>
-<p>1つ目は、実はすでに登場しているプロパティを示す記法、プロパティシグニチャです（リスト3.3）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.3: 大将！いつものやつ！</p>
+<p>1つ目はすでに登場している、プロパティを示す記法のプロパティシグニチャです（<span class="listref">リスト3.3</span>）。</p>
+<div id="id_objectTypeLiteral_2FpropertySigniture.ts" class="caption-code">
+<p class="caption">リスト3.3: プロパティシグニチャ</p>
 <pre class="list language-ts">let obj: {
   property: string;
 };
@@ -134,8 +136,8 @@ export { }
 <p>素直でわかりやすいですね。</p>
 
 <h3 id="call-signatures"><a id="h3-1-2"></a>コールシグニチャ（Call Signatures）</h3>
-<p>2つ目は、そのオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（リスト3.4）。</p>
-<div class="caption-code">
+<p>2つ目はオブジェクトが関数として呼び出し可能であることを示す記法、コールシグニチャです（<span class="listref">リスト3.4</span>）。</p>
+<div id="id_objectTypeLiteral_2FcallSignature.ts" class="caption-code">
 <p class="caption">リスト3.4: 関数として利用できる</p>
 <pre class="list language-ts">let obj: {
   (word: string): string;
@@ -155,8 +157,8 @@ console.log(str);
 export { }
 </pre>
 </div>
-<p>オーバーロードも表現できます（リスト3.5）。</p>
-<div class="caption-code">
+<p>コールシグニチャをつかえばオーバーロードも表現できます（<span class="listref">リスト3.5</span>）。</p>
+<div id="id_objectTypeLiteral_2Fcall-signature-overload.ts" class="caption-code">
 <p class="caption">リスト3.5: オーバーロードも表現できる</p>
 <pre class="list language-ts">let obj: {
   // overloadもできるよ
@@ -184,14 +186,14 @@ console.log(num);
 export { }
 </pre>
 </div>
-<p>実装が煩雑になるのでなるべくオーバーロードを自分のコード内で利用することは避けたいところです。</p>
+<p>実装が煩雑になるのでオーバーロードを自分のコード内で利用することは、なるべく避けたいところです。</p>
 
 <h3 id="constructor-signatures"><a id="h3-1-3"></a>コンストラクトシグニチャ（Construct Signatures）</h3>
-<p>3つ目は、対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（リスト3.6）。</p>
-<div class="caption-code">
+<p>3つ目は対象オブジェクトがコンストラクタとして利用可能であることを示す記法、コンストラクトシグニチャです（<span class="listref">リスト3.6</span>）。</p>
+<div id="id_objectTypeLiteral_2FconstructorSignature.ts" class="caption-code">
 <p class="caption">リスト3.6: newできる</p>
 <pre class="list language-ts">let clazz: {
-  new (): any;
+  new(): any;
 };
 
 // 当てはまる値はこんな感じ
@@ -212,14 +214,11 @@ export { }
 <p>コンストラクトシグニチャは主に型定義ファイルの作成時にお世話になります。</p>
 
 <h3 id="index-signatures"><a id="h3-1-4"></a>インデックスシグニチャ（Index Signatures）</h3>
-<p>4つ目は、インデックスシグニチャです。添字によるプロパティアクセスに対して、型を当てはめられます（リスト3.7）。</p>
-<div class="caption-code">
+<p>4つ目は、インデックスシグニチャです。添字によるプロパティアクセスに対して、型を当てはめられます（<span class="listref">リスト3.7</span>）。</p>
+<div id="id_objectTypeLiteral_2FindexSignature.ts" class="caption-code">
 <p class="caption">リスト3.7: プロパティアクセスの例</p>
 <pre class="list language-ts">let objA: {
   [index: number]: string;
-} = {};
-let objB: {
-  [index: string]: string;
 } = {};
 
 // どういった使い方ができるの？
@@ -231,6 +230,10 @@ let s1 = objA[1];
 // var s2 = objA[&quot;test&quot;];
 
 // インデックスの型指定が string の場合 string でも number でもOK
+let objB: {
+  [index: string]: string;
+} = {};
+
 let s3 = objB[1];
 let s4 = objB[&quot;test&quot;];
 
@@ -270,41 +273,40 @@ export { s1, s3, s4 }
 </pre>
 </div>
 <p>インデックスシグニチャの型と、インデックスシグニチャ以外（たとえばプロパティシグニチャ）の型との間に矛盾が生じないようにする必要があります。</p>
-<p>ちなみに、TypeScriptはリスト3.8のように、文字列リテラルによるアクセスも許可しています。</p>
-<div class="caption-code">
+<p>ちなみに、TypeScriptは<span class="listref">リスト3.8</span>のように、文字列リテラルによるアクセスも許可しています。</p>
+<div id="id_objectTypeLiteral_2FindexAccessSample.ts" class="caption-code">
 <p class="caption">リスト3.8: 実はドットによるアクセスと同じ堅牢さを誇る</p>
 <pre class="list language-ts">let obj = {
   str: &quot;string&quot;,
   num: 1,
 };
 
-// 文字列リテラルによるアクセスだと普通に . アクセス同様に型情報が得られる
+// 文字列リテラルによるアクセスだと . アクセス同様の型情報が得られる
 let str: string = obj[&quot;str&quot;];
 let num: number = obj[&quot;num&quot;];
 // ちなみに、存在しない要素にアクセスすると any になる
-// --noImplicitAny を使うと暗黙的anyとしてちゃんと怒られる 萌え
+// --noImplicitAny を使うと暗黙的anyとしてちゃんと怒られる 偉い！
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let any = obj[&quot;notExists&quot;];
 
-// 即値じゃないとダメ！コンパイラが処理できないのです
+// 即値じゃないとダメなので このパターンはコンパイルエラーになる
 let propertyName1 = &quot;str&quot;;
 // error TS7017: Index signature of object type implicitly has an 'any' type.
 // let str2 = obj[propertyName1];
 
-// なお、string literal typesを使っても怒られます
-let propertyName2: &quot;str&quot; = &quot;str&quot;;
-// error TS7017: Index signature of object type implicitly has an 'any' type.
-// let str3 = obj[propertyName2];
+// constだと型が後述の文字列リテラル型相当なのでイケる！
+const propertyName2 = &quot;str&quot;;
+let str3 = obj[propertyName2];
 
-export { str, num, propertyName1, propertyName2 }
+export { str, num, propertyName1, propertyName2, str3 }
 </pre>
 </div>
-<p>インデックスシグニチャの利用は静的な検証の恩恵からするりと外れる危険性が高いため、安易に使わないようにしましょう。</p>
+<p>インデックスシグニチャの利用は静的な検証の恩恵を受けられない危険性が高いため、安易に使わないようにしましょう。</p>
 
 <h3 id="method-signatures"><a id="h3-1-5"></a>メソッドシグニチャ（Method Signatures）</h3>
-<p>最後の5つ目は、メソッドシグニチャです。あるプロパティがメソッドであることを表現できます（リスト3.9）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.9: メソッドの定義っぽい</p>
+<p>最後の5つ目はメソッドシグニチャです。あるプロパティがメソッドであることを表現できます（<span class="listref">リスト3.9</span>）。</p>
+<div id="id_objectTypeLiteral_2FmethodSignature.ts" class="caption-code">
+<p class="caption">リスト3.9: メソッドの定義を示す</p>
 <pre class="list language-ts">let obj: {
   hello(word: string): string;
 };
@@ -334,12 +336,12 @@ obj = obj2;
 export { }
 </pre>
 </div>
-<p>&quot;プロパティシグニチャ+関数型リテラル（後述）&quot;の組み合わせでも表現できますが、メソッドシグニチャのほうがぱっと見わかりやすいですね。</p>
+<p>&quot;プロパティシグニチャ+関数型リテラル（後述）&quot;の組み合わせでも表現できますが、ぱっと見たときのわかりやすさではメソッドシグニチャのほうがよいですね。</p>
 
 <h3 id="object-literal-and-strict-type-checks"><a id="h3-1-6"></a>オブジェクトリテラルと厳密なチェック</h3>
-<p>オブジェクト型リテラルの話と関わりが深いのでここで説明します。</p>
-<p>オブジェクトリテラルを使って値を作る時に、厳密なチェックが行われる場合があります。それは、値を直接何らかの型に当てはめた場合です。例を見てみましょう（リスト3.10）。</p>
-<div class="caption-code">
+<p>オブジェクト型リテラルの話と関わりが深いのでここでオブジェクトリテラルと厳密なチェックについて説明します。</p>
+<p>オブジェクトリテラルを使って値を作る時に、プロパティの過不足について厳しくチェックされる場合があります。例を見てみましょう（<span class="listref">リスト3.10</span>）。</p>
+<div id="id_objectTypeLiteral_2FstrictCheck-invalid.ts" class="caption-code">
 <p class="caption">リスト3.10: 厳密にチェックされる場合、されない場合</p>
 <pre class="list language-ts">// OK！変数の型に対して、過不足なし
 let obj: { name: string; } = {
@@ -381,12 +383,38 @@ foo({
 export { }
 </pre>
 </div>
-<p>この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからないかもしれません。型定義ファイルを使っていると、型定義ファイルに不足がある場合や時には正規の方法で攻略するのが難しい場合すらあります。そのようなコンパイルエラーは型定義ファイルを修正して対処してほしいところですが、急いでいるのであれば一旦別の変数に代入してから再代入することで回避できます。一旦別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。</p>
+<p>この制約はなかなか強力で、慣れないうちはコンパイルエラーを回避する方法がわからないかもしれません。型定義ファイルを使っていると、型定義ファイルに不足がある場合や時には正規の方法で攻略するのが難しい場合すらあります。</p>
+<p>そのようなコンパイルエラーは型定義ファイルを修正して対処してほしいところですが、急いでいるのであればいったん別の変数に代入してから再代入することで回避できます。別変数作戦は、anyにキャストするやり方よりは型の不整合の検出などの点で有利なため、いくらかマシなやり方といえます。</p>
+<p>もう一例見てみます。TypeScript 2.4系で導入された<b class="kw">弱い型の検出 (Weak type detection)</b><!-- IDX:弱い型の検出 -->です（<span class="listref">リスト3.11</span>）。これは、別変数作戦を使ったときでも、特定の条件を満たす場合にコンパイルエラーとしてミスを検出できるというものです。条件は3つあります。</p>
+<ol>
+<li>1つ以上プロパティを持っている</li>
+<li>すべてのプロパティがoptional</li>
+<li>インデックスシグニチャを持たない</li>
+</ol>
+<div id="id_objectTypeLiteral_2FweakTypeDetection-invalid.ts" class="caption-code">
+<p class="caption">リスト3.11: 期待されるプロパティが1つ以上必要</p>
+<pre class="list language-ts">interface FooOptions {
+  fileName?: string;
+  checkBar?: boolean;
+}
+
+// 一旦別の変数を経由しても…
+let obj = {
+    unknownOption: 1,
+};
+
+// 共通のプロパティが1つも存在しない場合エラーにしてもらえる
+// error TS2559: Type '{ unknownOption: number; }' has
+//   no properties in common with type 'FooOptions'.
+let fooOpts: FooOptions = obj;
+</pre>
+</div>
+<p>これにより、まったく関係のないオブジェクトを間違って渡しているパターンを検出できます。</p>
 
 <h3 id="readonly-modifiers"><a id="h3-1-7"></a>readonly修飾子</h3>
-<p>TypeScript固有の機能であるreadonly修飾子について紹介します。readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（リスト3.11）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.11: readonlyで読み取り専用にする</p>
+<p>TypeScript固有の機能であるreadonly修飾子について紹介します。readonlyと指定したプロパティは、読み取り専用となり変更を禁止できます（<span class="listref">リスト3.12</span>）。</p>
+<div id="id_objectTypeLiteral_2Freadonly.ts" class="caption-code">
+<p class="caption">リスト3.12: readonlyで読み取り専用にする</p>
 <pre class="list language-ts">interface Foo {
   // readonly を使うと直接は書き換えできなくなる
   readonly str: string;
@@ -414,9 +442,9 @@ export { }
 </pre>
 </div>
 <p>readonlyと変更された該当箇所が変更不可になるだけなので迂回路を使うと値は変更できてしまいます。</p>
-<p>クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（リスト3.12）。Javaのfinalに似ていますね。</p>
-<div class="caption-code">
-<p class="caption">リスト3.12: readonlyの変更はconstructorだけ</p>
+<p>クラスのプロパティに対して利用すると、コンストラクタでだけ値が変更可能になります（<span class="listref">リスト3.13</span>）。Javaのfinalに似ていますね。</p>
+<div id="id_objectTypeLiteral_2FreadonlyWithClass.ts" class="caption-code">
+<p class="caption">リスト3.13: readonlyの変更はconstructorだけ</p>
 <pre class="list language-ts">class Foo {
   readonly str: string;
 
@@ -436,33 +464,15 @@ export { }
 export { Foo }
 </pre>
 </div>
-<p>もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは普通に変更可能なコードが出力されてきます。使うとある程度TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。</p>
-<p>また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます（リスト3.13、リスト3.14）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.13: getアクセサのみの実装</p>
-<pre class="list language-ts">class Sample {
-  get name() {
-    return &quot;TypeScript&quot;;
-  }
-}
-
-export { Sample }
-</pre>
-</div>
-<div class="caption-code">
-<p class="caption">リスト3.14: readonly修飾子に変換される</p>
-<pre class="list language-ts">declare class Sample {
-    readonly name: string;
-}
-export { Sample };
-</pre>
-</div>
+<p>もちろん、TypeScript上の制約なのでコンパイル後のJavaScriptでは変更可能なコードです。TypeScriptコンパイラが身を守るのを助けてくれるヒント、ぐらいに捉えておきましょう。</p>
+<p>また、getアクセサのみの実装について型定義ファイルを生成させると、これもreadonly修飾子に変換されます。</p>
 
 <h2 id="function-type-literals"><a id="h3-2"></a><span class="secno">3.2　</span>関数型リテラル（Function Type Literals）</h2>
-<p>関数も型として表現できます（リスト3.15）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.15: 関数も型として表現できる</p>
+<p>関数型リテラルを使うと関数も型として表現できます（<span class="listref">リスト3.14</span>）。</p>
+<div id="id_function-types_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト3.14: 関数も型として表現できる</p>
 <pre class="list language-ts">let func: (value: string) =&gt; string;
+
 // 当てはまる値はこんな感じ
 func = word =&gt; `Hello, ${word}`;
 func = (word: string) =&gt; {
@@ -482,10 +492,10 @@ func = (v1: string, v2 = &quot;JavaScript&quot;) =&gt; `Hello, ${v1} &amp; ${v2}
 <p>アロー関数の実装は<code class="inline-code tt">(word: string): string =&gt; &quot;Hello, &quot; + word;</code>という記法なのに対して、関数型リテラルは<code class="inline-code tt">(word: string) =&gt; string</code>という記法で、返り値の型を置く位置が<code class="inline-code tt">=&gt;</code>の前後という違いがあるので間違えないように気をつけましょう。</p>
 
 <h2 id="inteface"><a id="h3-3"></a><span class="secno">3.3　</span>インタフェース（Interfaces）</h2>
-<p>インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。TypeScriptでの一番基本的な使い方は名前付きオブジェクト型リテラルを作ることです。インタフェースの中で許される記法はオブジェクト型リテラルそのままです。</p>
-<p>TypeScriptでのインタフェースの酷使されっぷりをリスト3.16で紹介します。</p>
-<div class="caption-code">
-<p class="caption">リスト3.16: 酷使されるインタフェースさん</p>
+<p>インタフェースは多くのOOPな言語に存在しているので、ご存知の方も多いでしょう。TypeScriptのインタフェースは通常のインタフェース以上に色々な場面で登場します。TypeScriptでの基本的な使い方は名前付きオブジェクト型リテラルを作ることです。インタフェースの中で許される記法はオブジェクト型リテラルそのままです。</p>
+<p>TypeScriptでのインタフェースの酷使されっぷりを<span class="listref">リスト3.15</span>で紹介します。</p>
+<div id="id_interface_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト3.15: 酷使されるインタフェースさん</p>
 <pre class="list language-ts">// 一般的な用法
 interface A {
   str: string;
@@ -509,7 +519,7 @@ let objB: B2 = {
   num: 42,
 };
 
-// interfaceはクラスすら拡張できる！(実装はなかったことになる
+// interfaceはクラスすら拡張できる！(実装はなかったことになる）
 class FooClass {
   constructor(public num: number) {
   }
@@ -523,11 +533,12 @@ let objC: C = {
 };
 </pre>
 </div>
+<p>TypeScriptでは第4章「アドバンスド型戦略」で紹介する交差型など、より多くのobject-likeな型をextendsできます。</p>
 
 <h2 id="structural-subtyping"><a id="h3-4"></a><span class="secno">3.4　</span>構造的部分型（Structural Subtyping）</h2>
-<p>構造的部分型は、乱暴にいうと静的型付け用のduck typingです。TypeScriptでは、構造が一致するかどうかで型の互換性を判定します（リスト3.17）。そこに実際の継承関係は必要ありません。</p>
-<div class="caption-code">
-<p class="caption">リスト3.17: 大体一緒ならまぁ一緒ってことでいいよね</p>
+<p>構造的部分型は、乱暴にいうと静的型付け用のduck typingです。TypeScriptでは、プロパティやメソッドなどの構造が一致するかどうかで型の互換性を判定します（<span class="listref">リスト3.16</span>）。クラスを継承しているか、インタフェースを実装しているかという厳密さはTypeScriptでは必要ありません。</p>
+<div id="id_structuralSubtypings_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト3.16: 構造が一緒ならまぁ一緒ってことでいいよね</p>
 <pre class="list language-ts">// クラス Foo はstring型のstrという名前のプロパティと
 // number型のnumという名前のプロパティを持つ
 class Foo {
@@ -545,18 +556,20 @@ let obj: Foo = {
 export { Foo, obj }
 </pre>
 </div>
-<p>そのため、リスト3.18のようなコードもTypeScriptとしては正しいです。</p>
-<div class="caption-code">
-<p class="caption">リスト3.18: Pointインタフェースが要求されているが？</p>
+<p>そのため、<span class="listref">リスト3.17</span>のようなコードもTypeScriptとしては正しいです。</p>
+<div id="id_structuralSubtypings_2FclassCompat.ts" class="caption-code">
+<p class="caption">リスト3.17: Pointインタフェースが要求されているが？</p>
 <pre class="list language-ts">interface Point {
   x: number;
   y: number;
 }
+
 // Point の実装を強制する！！！
 class PointImpl1 implements Point {
   constructor(public x: number, public y: number) {
   }
 }
+
 // Point の実装が強制されないけど互換性はある！
 class PointImpl2 {
   constructor(public x: number, public y: number) {
@@ -570,25 +583,20 @@ function double(p: Point): Point {
     y: p.y * 2,
   };
 }
-// 次のすべては正しいコードとなります
+
+// 次の3つの関数呼び出しはすべて正しいコードです
 double(new PointImpl1(1, 2));
 double(new PointImpl2(3, 4));
 double({
   x: 5,
   y: 6,
 });
-let p = {
-  x: 7,
-  y: 8,
-  z: 9,
-};
-double(p); // オブジェクトリテラルを直で渡す場合余計な要素があると怒られる
 </pre>
 </div>
-<p>このコードはコンパイルがちゃんと成功します。Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図的な仕様であることが明示できるためより好ましいです。</p>
-<p>なお、省略可能なプロパティは存在していなくても同じ型であるものとして扱われます（リスト3.19）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.19: 省略可能な（?がある）プロパティは値がなくてもよい</p>
+<p>このコードはコンパイルがちゃんと成功します。Pointインタフェースに適合させることが目的のクラスであれば、きちんとimplements節を使ったほうが意図した実装だと明示できますね。</p>
+<p>なお、省略可能なプロパティは存在していなくても型の互換性として問題ないものとして扱われます（<span class="listref">リスト3.18</span>）。</p>
+<div id="id_structuralSubtypings_2Foptional.ts" class="caption-code">
+<p class="caption">リスト3.18: 省略可能な（?がある）プロパティは値がなくてもよい</p>
 <pre class="list language-ts">interface Point {
   x: number;
   y: number;
@@ -601,62 +609,54 @@ function printPoint(p: Point): void {
   }
   console.log(message);
 }
+
 // optinal なプロパティはなくても大丈夫！
-// x=1, y=2 と表示される
 printPoint({
   x: 1,
   y: 2,
 });
-// red(x=1, y=2) と表示される
+
 printPoint({
   x: 1,
   y: 2,
-  color: &quot;red&quot;,
+  color: &quot;red&quot;, // color があるパターン 型が一致していないともちろん怒られる
 });
-// とはいえ、型が不一致だと怒られる。
-// error TS2345: Argument of type '{ x: number; y: number; color: boolean; }'
-//   is not assignable to parameter of type 'Point'.
-//   Types of property 'color' are incompatible.
-//     Type 'boolean' is not assignable to type 'string'.
-// printPoint({
-//   x: 1,
-//   y: 2,
-//   color: true,
-// });
 </pre>
 </div>
 
 <h2 id="type-assertions"><a id="h3-5"></a><span class="secno">3.5　</span>型アサーション（Type Assertions）</h2>
-<p>型アサーションは他の言語でいうところのキャストです。キャストの書き方は2種類あり、リスト3.20のように<code class="inline-code tt">&lt;変換後型名&gt;値</code>か<code class="inline-code tt">値 as 変換後型名</code>と書くだけです。</p>
-<div class="caption-code">
-<p class="caption">リスト3.20: 型アサーション 基本例</p>
+<p>型アサーションは他の言語でいうところのキャストです。キャストの書き方は2種類あり、<span class="listref">リスト3.19</span>のように<code class="inline-code tt">値 as 変換後型名</code>か<code class="inline-code tt">&lt;変換後型名&gt;値</code>と書くだけです。</p>
+<div id="id_typeAssertions_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト3.19: 型アサーション 基本例</p>
 <pre class="list language-ts">let obj: any = 1;
 
 // お前は今後 number として生きよ…
-let num = &lt;number&gt;obj;
+let num = obj as number;
 
 let str = &quot;string&quot;;
 // 非常に外道なコードを書くことができる… 人としての良識を疑う
 // stringをnumberな型の変数に代入するだなんてなんて卑劣な…！
-num = &lt;any&gt;str;
-// 後置のキャストもあります as 型名という形式
 num = str as any;
+
+// 前置で書くやり方もあるよ
+num = &lt;any&gt;str;
 
 export { }
 </pre>
 </div>
-<p>もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（リスト3.21）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.21: stringはnumberにはなれない</p>
+<p>もちろん、互換性のない型に型アサーションで変換しようとすると怒られます（<span class="listref">リスト3.20</span>）。</p>
+<div id="id_typeAssertions_2FinvalidAssertions-invalid.ts" class="caption-code">
+<p class="caption">リスト3.20: stringはnumberにはなれない</p>
 <pre class="list language-ts">let str = &quot;str&quot;;
 // anyを経由しない場合、整合性の無い型アサーションは成功しない！安全！
 // error TS2352: Type 'string' cannot be converted to type 'number'.
 let num: number = str as number;
 </pre>
 </div>
-<p>ダウンキャストも実行できます（リスト3.22）。TypeScriptコード中で一番よくみる型アサーションは、このinstanceofとの合わせ技のパターンでしょう。</p>
-<div class="caption-code">
-<p class="caption">リスト3.22: 親クラスから子クラスへ変換</p>
+<p>基本的に、型アサーションはなるべく使わずに済ませます。値の型を明示したい場合、値に対して型アサーションを用いるよりは変数のほうに型を明示的に注釈するほうがコンパイラのサポートの面で優れています。型アサーションより型注釈です。</p>
+<p>ダウンキャストも実行できます（<span class="listref">リスト3.21</span>）。</p>
+<div id="id_typeAssertions_2Fclass.ts" class="caption-code">
+<p class="caption">リスト3.21: 親クラスから子クラスへ変換</p>
 <pre class="list language-ts">class Base {
   str: string;
 }
@@ -687,9 +687,10 @@ if (obj instanceof InheritA) {
 export { }
 </pre>
 </div>
-<p>anyに一旦キャストすればなんにでも化けさせられるので、これは一種の切り札です。型定義ファイルを使っているときに、その型定義ファイルに不足や誤りがある場合、型アサーションでとりあえず切り抜けたい場合があります（リスト3.23）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.23: 無理やりなんとかする例</p>
+<p>TypeScriptでは自然なJavaScriptを書くと型が適切に絞り込まれるように仕組まれています。そのため、型アサーションを使った明示的な型の変換は、絶対に必要なときに限り、ひとつまみだけ使うのがよいコードです。</p>
+<p><span class="listref">リスト3.22</span>のように、anyを経由すると型を誤魔化せますが、これは一種の切り札です。型定義ファイルに不足や誤りがある場合、とりあえず誤魔化すためのスパイスとして使うことがあります。</p>
+<div id="id_typeAssertions_2FbuggyDefinitionFile.ts" class="caption-code">
+<p class="caption">リスト3.22: 無理やりなんとかする例</p>
 <pre class="list language-ts">// こういう、型定義があるとする。実装は他のライブラリなどが与える。
 declare class Base {
   str: string;
@@ -707,13 +708,14 @@ export { num }
 </div>
 
 <h2 id="generic-types"><a id="h3-6"></a><span class="secno">3.6　</span>ジェネリクス（Generic Types）</h2>
-<p>いよいよ来ました。最後の大ボスです。Javaなどでは総称型とも呼ばれます。</p>
+<p>いよいよ来ました。最後の大ボスです。ジェネリクスはJavaなどでは総称型とも呼ばれます。</p>
 <p>ジェネリクスなんて知らんわい！という人も、実はすでに色々なところでお世話になっています。</p>
+<p>なお、TypeScript 2.4.1からジェネリクスが絡んだ型の互換性チェックがより正確になりました。これは破壊的変更でもあるので、過去の挙動のままにするための<code class="inline-code tt">--noStrictGenericChecks</code>が用意されています。もちろん、このオプションは使わないでコンパイルが通せるようにがんばるべきです。</p>
 
 <h3 id="generic-basic"><a id="h3-6-1"></a>ジェネリクスの基本</h3>
-<p>TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。例を見てみましょう（リスト3.24）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.24: 配列はジェネリクスに支えられております</p>
+<p>TypeScriptで一番よく使うジェネリクスを使ったクラスは、Arrayです。例を見てみましょう（<span class="listref">リスト3.23</span>）。</p>
+<div id="id_genericTypes_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト3.23: 配列はジェネリクスに支えられております</p>
 <pre class="list language-ts">// string[] は実は Array&lt;string&gt; と同じ意味なのだ！(Arrayだけ特別に！
 let strArray: Array&lt;string&gt; = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
 let numArray: Array&lt;number&gt; = [1, 2, 3];
@@ -738,10 +740,10 @@ numArray.forEach((v: number) =&gt; v.toFixed(2));
 </div>
 <p>実は、<code class="inline-code tt">string[]</code>という型は<code class="inline-code tt">Array&lt;string&gt;</code>と同じ意味なのです！ArrayだけはTypeScriptの中で特別扱いされています。</p>
 <p>ここで出てくる<code class="inline-code tt">&lt;string&gt;</code>という部分がジェネリクスの肝です。<code class="inline-code tt">Array&lt;string&gt;</code>を声に出して読むと、&quot;stringのArray&quot;になります。ただのArrayではないのです。&quot;stringの&quot;という所が重要です。stringを別のものにして&quot;numberのArray&quot;とか&quot;RegExpのArray&quot;とすることもできます。つまり、色々な型に対して、&quot;○○のArray&quot;ということができるのです。これをプログラム上で表現すると<code class="inline-code tt">Array&lt;T&gt;</code>という表現になります。</p>
-<p>ここで新しく出てきた<code class="inline-code tt">T</code>を<b class="kw">型パラメータ (type parameters)</b><!-- IDX:型パラメータ -->と呼びます。実際、ここで出てくるアルファベットは<code class="inline-code tt">T</code>ではなくてもかまいせん。<code class="inline-code tt">Type</code>でもいいですし、なんでもよいです。ただ、慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。代表的な例ではTypeの頭文字であるT、アルファベット的にTの次の文字であるUや、Returnの頭文字であるRなどが使われます。</p>
-<p>さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから一部を抜粋したリスト3.25を見てみます<a id="fnb-array-forEach" href="#fn-array-forEach" class="noteref" epub:type="noteref">*2</a>。</p>
-<div class="caption-code">
-<p class="caption">リスト3.25: Array&lt;T&gt;が登場する</p>
+<p>ここで新しく出てきた<code class="inline-code tt">T</code>を<b class="kw">型パラメータ (type parameters)</b><!-- IDX:型パラメータ -->と呼びます。実際、ここで出てくるアルファベットは<code class="inline-code tt">T</code>でなくてもかまいせん。<code class="inline-code tt">Type</code>でもいいですし、なんでもよいです。慣習として既存の型とかぶらないようにするためにアルファベット大文字1文字を使う場合が多いです。代表的な例ではTypeの頭文字のT、アルファベット的にTの次の文字でのUや、Returnの頭文字のRなどが使われます。</p>
+<p>さて、ではTypeScriptの標準の型定義情報が書かれているlib.d.tsから抜粋した<span class="listref">リスト3.24</span>を見てみます。</p>
+<div id="id_genericTypes_2FarrayDeclaration-invalid.ts" class="caption-code">
+<p class="caption">リスト3.24: Array&lt;T&gt;が登場する</p>
 <pre class="list language-ts">interface ArrayConstructor {
   new &lt;T&gt;(...items: T[]): T[];
 };
@@ -750,15 +752,15 @@ interface Array&lt;T&gt; {
   length: number;
   push(...items: T[]): number;
   pop(): T | undefined;
-  forEach(callbackfn: (value: T) =&gt; void, thisArg?: any): void;
+    indexOf(searchElement: T, fromIndex?: number): number;
   [n: number]: T;
 }
 </pre>
 </div>
-<p>色々な所でTが使われています。pushの定義を見ると、&quot;○○のArrayに対して、○○の値いくつかを追加するメソッドpush&quot;とか、&quot;○○のArrayに対して、末尾の○○の値を1つ取得するメソッドpop&quot;、&quot;○○のArrayに対して、○○の値それぞれに対してcallbackFnを適用するメソッドforEach&quot;などの、汎用化された要素がたくさんあります。</p>
-<p>ここで、型パラメータTを実際にstringで具体化します（リスト3.26）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.26: string専用Arrayに変身</p>
+<p>色々な所でTが使われています。pushの定義を見ると、&quot;○○のArrayに対して、○○の値いくつかを追加するメソッドpush&quot;など汎用化された要素がたくさんあります。</p>
+<p>ここで、型パラメータTを実際にstringで具体化します（<span class="listref">リスト3.25</span>）。</p>
+<div id="id_genericTypes_2FarrayDeclarationString-invalid.ts" class="caption-code">
+<p class="caption">リスト3.25: string専用Arrayに変身</p>
 <pre class="list language-ts">interface ArrayConstructor {
   new (...items: string[]): string[];
 };
@@ -767,19 +769,18 @@ interface Array {
   length: number;
   push(...items: string[]): number;
   pop(): string | undefined;
-  forEach(callbackfn: (value: string) =&gt; void, thisArg?: any): void;
+  indexOf(searchElement: string, fromIndex?: number): number;
   [n: number]: string;
 }
 </pre>
 </div>
-<p>&quot;stringのArrayに対して、stringの値をいくつか追加するメソッドpush&quot;や、&quot;stringのArrayに対して、末尾のstringの値を1つ取得するメソッドpop&quot;、&quot;stringのArrayに対して、stringの値それぞれに対してcallbackFnを適用するメソッドforEach&quot;などになりました。ジェネリクス、使う分にはめっちゃ簡単ですね！</p>
+<p>stringのArrayに対して、stringの値をいくつか追加するメソッドpushや末尾のstringの値を1つ取得するメソッドpop、指定したstringの値と同じ要素が何番目にあるかを調べるメソッドindexOfが読み取れます。ジェネリクス、使う分にはめっちゃ簡単ですね！</p>
 <p>このように、ジェネリクスを使うと柔軟性と堅牢さを両立させることができます。</p>
-<div class="footnote" epub:type="footnote" id="fn-array-forEach"><p class="footnote">[*2] 紙面の都合上横幅が辛かったのでforEachの定義を大胆に切り詰めてあります…。ごめんなさい！</p></div>
 
 <h3 id="generic-patterns"><a id="h3-6-2"></a>ジェネリクスの書き方色々</h3>
-<p>ここでジェネリクスの書き方を確認しておきます（リスト3.27）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.27: Array&lt;T&gt;が登場する</p>
+<p>ここでジェネリクスの書き方を確認しておきます（<span class="listref">リスト3.26</span>）。</p>
+<div id="id_genericTypes_2Fvariation.ts" class="caption-code">
+<p class="caption">リスト3.26: Array&lt;T&gt;が登場する</p>
 <pre class="list language-ts">// それぞれのTは独立していて、関連性はない
 
 // クラスとジェネリクス
@@ -787,7 +788,8 @@ class SampleA&lt;T&gt; {
   constructor(public data: T) {
   }
 }
-// 使い方 &lt;string&gt;は省略しても引数から推論可能
+// 使い方
+// 引数から推論できるので&lt;string&gt;は省略する場合のほうが多い
 let objA = new SampleA&lt;string&gt;(&quot;str&quot;);
 
 // インタフェースとジェネリクス
@@ -828,9 +830,9 @@ export { SampleA, objA, SampleB, objB, obj, SampleC, objC }
 <p>この中でよく使うのは、クラスとインタフェースとメソッドシグニチャの書き方でしょう。まずはこの3パターンの書き方を覚えておくべきです。</p>
 
 <h3 id="generic-and-limitations"><a id="h3-6-3"></a>型パラメータと制約</h3>
-<p>型パラメータには満たすべき制約を設けることができます。例を見てみましょう（リスト3.28）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.28: 型パラメータTはBaseを継承していなければならない</p>
+<p>型パラメータには満たすべき制約を設けることができます。例を見てみましょう（<span class="listref">リスト3.27</span>）。</p>
+<div id="id_genericTypes_2Flimitation.ts" class="caption-code">
+<p class="caption">リスト3.27: 型パラメータTはBaseを継承していなければならない</p>
 <pre class="list language-ts">class Base {
   str: string;
 }
@@ -838,7 +840,7 @@ class InheritA extends Base {
   num: number;
 }
 
-// TはBaseを継承済の型でなければならない制約
+// TはBaseという制約を満たす型でなければならない
 interface Sample&lt;T extends Base&gt; {
   method(): T;
 }
@@ -867,17 +869,71 @@ function f&lt;T extends Service&lt;T&gt;&gt;(x: T) {
 export { Base, InheritA, Sample, objA, objC, Service, f };
 </pre>
 </div>
-<p>型パラメータが満たすべき制約をextendsの形式で指定できます。これにより、Tに何が指定されようとも、Baseに存在するプロパティには安全にアクセスできることがわかります。</p>
+<p>型パラメータが満たすべき制約をextendsの形式で指定できます。これにより、<code class="inline-code tt">T</code>に何が指定されようとも、Baseに存在するプロパティには安全にアクセスできます。</p>
 
-<h3 id="design-generic-signatures"><a id="h3-6-4"></a>自分でジェネリクス有りのコードを書く</h3>
-<p>ジェネリクスを使いこなすにあたり、一番難しいのは使うことではなく、使わせることです。なぜならば、ジェネリクスを提供するコードというのは、何かしらの要素を抽象的なまま扱わねばならないからです。たとえば、&quot;○○のArray&quot;のように、型パラメータ部分が何になっても上手く動くような設計です。</p>
-<p>逆にいうと、実際に使うときには具体化しなければならないわけで、ジェネリクス有りのコードは&quot;必ず何かと組み合わせて具体化する&quot;必要があります。これを上手に使いこなすには一段上の設計力が要求されます。</p>
-<p>通常の範囲では自分でジェネリクスを提供するコードを作る機会はさほど多くはありません。ですが、そこができるようになったらだいぶ型に慣れ親しんできたといえます。</p>
+<h3 id="default-type-parameter"><a id="h3-6-4"></a>型パラメータのデフォルト値</h3>
+<p>あまり使わない機能かもしれませんが、標準のPromiseの型定義にも出てくるので軽く触れておきます。ジェネリクスの型パラメータには、指定を省略し、型推論も上手にできなかった場合のデフォルトとなる型を明示できます（<span class="listref">リスト3.28</span>）。</p>
+<div id="id_genericTypes_2FgenericDefault.ts" class="caption-code">
+<p class="caption">リスト3.28: 型パラメータのデフォルト型をつけられる</p>
+<pre class="list language-ts">class DataContainer&lt;T = string&gt; {
+  data?: T
 
-<h2 id="never-type"><a id="h3-7"></a><span class="secno">3.7　</span>&quot;ありえない&quot;型（The Never Type）</h2>
-<p>ありえないなんてことはありえない！はずだけれど、&quot;ありえない&quot;ことを示す型があります。到達不可能なコードはnever型となります。具体例を見てみましょう（リスト3.29）。</p>
-<div class="caption-code">
-<p class="caption">リスト3.29: &quot;ありえない&quot;ことが型として示される</p>
+  print() {
+    console.log(this.data);
+  }
+}
+
+// 省略したらTはstring
+const obj1 = new DataContainer();
+obj1.data = &quot;&quot;;
+// defaultはstringなのでこれはダメ
+// obj1.data = 1;
+
+// 省略しなかったのでTはnumber
+const obj2 = new DataContainer&lt;number&gt;();
+obj2.data = 1;
+</pre>
+</div>
+<p>型パラメータが2つも3つもある型を自作する場合、デフォルトの型を指定できないか考えてみるとよいでしょう。</p>
+<p>別の活用方法として、すでにあるクラスやインタフェースなどに型パラメータを追加したい場合、関連するすべての箇所を修正する必要がありめんどくさいです。その対策として、新規に追加した型パラメータにデフォルト型を指定すると既存のコードを修正する必要がなく、安全性も損なわずに済みます。</p>
+
+<h3 id="design-generic-signatures"><a id="h3-6-5"></a>ジェネリクスありのコードを書く</h3>
+<p>ジェネリクスを使いこなすにあたり、一番難しいことは使うことではなく、使わせることです。なぜならば、ジェネリクスを提供するコードは、何かしらの要素を抽象的なまま扱わねばならないからです。たとえば、&quot;○○のArray&quot;のように、型パラメータ部分が何であってもうまく動くような設計です。</p>
+<p>逆にいうと、実際に使うときには具体化しなければならないわけで、ジェネリクス有りのコードは&quot;必ず何かと組み合わせて具体化する&quot;必要があります。これを使いこなすには一段上の設計力が要求されます。</p>
+<p>自分でジェネリクスを提供するコードを作る機会は通常の範囲ではさほど多くはありません。まずはジェネリクスを適用できるような、複数の方にまたがる共通の処理を見つけ出す眼力が必要です。</p>
+
+<h2 id="object-type"><a id="h3-7"></a><span class="secno">3.7　</span>オブジェクト限定型（The Object Type）</h2>
+<p>プリミティブ型となるnumber、string、boolean、symbol、null、undefined。そしてそれ以外のオブジェクト。この2種類を区別することにより防げる実行時エラーがあります。そこで導入されたのが<code class="inline-code tt">object</code>型です（<span class="listref">リスト3.29</span>）。</p>
+<div id="id_objectType_2Fbasic-invalid.ts" class="caption-code">
+<p class="caption">リスト3.29: 非プリミティブ（オブジェクト）とプリミティブが区別できる</p>
+<pre class="list language-ts">// object という型があると、解決できる問題がある
+
+function receiveObject(obj: object) {
+  // number, string, boolean, symbol, null, undefined は弾きたい！
+  // Object.create のようにobjectとnull以外を渡すと実行時エラーになるAPIがある
+  Object.create(obj);
+}
+
+
+// OK!
+receiveObject({});
+
+// NG! 値がprimitiveな型なので…
+receiveObject(1);
+receiveObject(&quot;string&quot;);
+receiveObject(true);
+receiveObject(1);
+receiveObject(Symbol.for(&quot;symol&quot;));
+receiveObject(null);
+receiveObject(undefined);
+</pre>
+</div>
+<p>正直、自分でコードを書く上で必要になる場面はほぼないでしょう。しかし<code class="inline-code tt">Object.create</code>や<code class="inline-code tt">Object.setPrototypeOf</code>、<code class="inline-code tt">Object.assign</code>などはプリミティブな値を渡すと実行時エラーになります。これらのエラーを早期検出するために、この工夫が必要となったわけです。単に{}を使うと、これは&quot;プロパティを何も持たない&quot;という意味のオブジェクト型リテラルになるため、プリミティブ型も条件を満たしてしまい、マズいのです。</p>
+
+<h2 id="never-type"><a id="h3-8"></a><span class="secno">3.8　</span>&quot;ありえない&quot;型（The Never Type）</h2>
+<p>ありえないなんてことはありえない！はずだけれど、&quot;ありえない&quot;ことを示す型があります。到達不可能なコードはnever型となります。具体例を見てみましょう（<span class="listref">リスト3.30</span>）。</p>
+<div id="id_neverType_2Fbasic-invalid.ts" class="caption-code">
+<p class="caption">リスト3.30: &quot;ありえない&quot;ことが型として示される</p>
 <pre class="list language-ts">let str = &quot;TypeScript&quot;;
 if (typeof str === &quot;number&quot;) {
   // string型な変数の値がnumberだったら… ありえん！never！
@@ -898,7 +954,7 @@ obj.test();
 export { }
 </pre>
 </div>
-<p>変数の型がstringなのにif文ではnumberでなければ突入できない…。関数を実行すると必ず例外が発生する…。そんな、到達できないコードではnever型が利用されます。コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。基本的にはnever型を見かけることがあったら、何かミスをしているな…と考えたほうがよいでしょう。</p>
+<p>変数の型がstringなのにif文ではnumberでなければ突入できない…。関数を実行すると必ず例外が発生する…。そんな、到達できないコードではnever型が利用されます。コードを書いていてnever型が必要になったり、コード上に現れることは少ないです。基本的にはnever型を見かけることがあれば、何かミスをしているな…と考えたほうがよいでしょう。</p>
       </div>
       <nav class="book-navi book-prev">
                 <a href="typescript-basic.html">

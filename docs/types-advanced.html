@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="style.css" />
   <link rel="stylesheet" type="text/css" href="style-web.css" />
 <link rel="next" title="オプションを知り己のコードを知れば百戦危うからず" href="tsc-options.html"><link rel="prev" title="型は便利だ楽しいな" href="types-basic.html">  <meta name="generator" content="Re:VIEW" />
-  <title>アドバンスド型戦略 | Revised TypeScript in Definitelyland</title>
+  <title>アドバンスド型戦略 | Revised Revised TypeScript in Definitelyland</title>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -34,16 +34,19 @@
 
   <div class="book">
     <nav class="side-content">
-      <h1>Revised TypeScript in Definitelyland</h1>
+      <h1>Revised Revised TypeScript in Definitelyland</h1>
       <ul class="book-toc">
 <li><a href="index.html">TOP</a></li>
-<li><a href="./index.html">Revised 型の国のTypeScript</a></li>
+<li><a href="./index.html">Revised Revised 型の国のTypeScript</a></li>
 <li><a href="./prepared-to-typescript.html">1 戦闘準備だ！TypeScript！</a></li>
 <li><a href="./typescript-basic.html">2 TypeScriptの基本</a></li>
 <li><a href="./types-basic.html">3 型は便利だ楽しいな</a></li>
 <li><a href="./types-advanced.html">4 アドバンスド型戦略</a></li>
 <li><a href="./tsc-options.html">5 オプションを知り己のコードを知れば百戦危うからず</a></li>
-<li><a href="./definition-file.html">6 JS資産と型定義ファイル</a></li>
+<li><a href="./at-types.html">6 JavaScriptの資産と@types</a></li>
+<li><a href="./definition-file.html">7 型定義ファイルを作成する</a></li>
+<li><a href="./typescript-as-a-tool.html">8 ツールとしてのTypeScript</a></li>
+<li><a href="./postdef.html">型の国からの手紙</a></li>
 </ul>
       <p class="review-signature">powered by <a href="http://reviewml.org/">Re:VIEW</a></p>
     </nav>
@@ -52,18 +55,19 @@
       </header>
       <div class="book-page">
         <h1 id="types-advanced"><a id="h4"></a><span class="secno">第4章　</span>アドバンスド型戦略</h1>
-<p>型のうち、難しいけど便利な話や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。タプル型（tuple types）や直和型（union types）についての解説もありますよ！なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています<a id="fnb-bad-code" href="#fn-bad-code" class="noteref" epub:type="noteref">*1</a>。</p>
-<p>TypeScriptでコードを書く中で、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。そういったときに本章の内容が活きてくる場面があるでしょう。しかし、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと考えてよいでしょう。</p>
+<p>型のうち、難しいけど便利な話や、標準の型定義を読むために必要な知識や、あまり関わりたくないけど実用上たまにお世話になる内容を解説していきます。<b class="kw">タプル型 (tuple types)</b><!-- IDX:タプル型 -->や<b class="kw">直和型 (union types)</b><!-- IDX:直和型 -->についての解説もありますよ！</p>
+<p>なお、普段書くコードではこの章で出てくる内容をなるべく使わずに済む設計こそよい設計だと筆者は考えています<a id="fnb-bad-code" href="#fn-bad-code" class="noteref" epub:type="noteref">*1</a>。</p>
+<p>TypeScriptでは、JavaScriptで書かれたコードを型定義ファイルを介して扱う場面があります。そういったときに本章の内容が活きてくる場面があるでしょう。しかし、本章で書かれた内容を活かさないと上手く扱えないJavaScriptコードは、元々の品質が微妙なコードだと考えてよいでしょう。</p>
 <div class="footnote" epub:type="footnote" id="fn-bad-code"><p class="footnote">[*1] 本章で触れる機能を使うほうがよい場合もあります。たとえば構文木の構築・分解時などです。自分の用途に本当にそれが必要かはよくよく考えてみてください</p></div>
 
 <h2 id="union-types"><a id="h4-1"></a><span class="secno">4.1　</span>直和型（Union Types）</h2>
 <p>はい、皆様待望の機能でございます。&quot;名前を言ってはいけないあの界隈&quot;がよく使う用語を使って解説しないといけないのでビクビクですね。</p>
-<p>一番最初に書いておくけど<strong>TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！</strong>という感じなんですが、<code class="inline-code tt">--strictNullChecks</code>オプションを使う場合に避けて通れない要素であるためしっかり覚えましょう。</p>
-<p>では解説していきましょう。union typesはいわゆる直和型です。たとえば<code class="inline-code tt">string | number | boolean</code>という型注釈があった場合、この変数の値はstringか、numberか、booleanかのどれか！ということを表します。</p>
-<p>なんのために直和型がTypeScriptに導入されたかというと、まずは既存JavaScriptによりよい型定義を与えるためでしょう。そしてnullやundefined、string literal typesなどTypeScriptの中でも適用領域が広がっています。JavaScriptという現実と安全な世界を構築するTypeScriptの橋渡しを上手にしてくれる機能といえます。</p>
-<p>ちなみに自分でTypeScriptコード書いてるときにあまり欲しくなる機能ではありません。</p>
-<p>まずは簡単な例から見ていきましょう（リスト4.1）。</p>
-<div class="caption-code">
+<p>一番最初に強く主張しておくと<strong>TypeScriptのコード書くときに積極的に使うものじゃあないぞ！！</strong>という感じなんですが、<code class="inline-code tt">--strictNullChecks</code>オプションを使う場合に避けて通れない要素なのでしっかり覚えましょう。</p>
+<p>では解説していきましょう。union typesはいわゆる直和型です。たとえば<code class="inline-code tt">string | null | undefined</code>という型注釈がある場合、この変数の値はstringか、nullか、undefinedのいずれかを表します。union typesはnullやundefinedとの組み合わせ、各種literal typesなどTypeScriptの中でも出番がたくさんあります。JavaScriptという現実と安全な世界を構築するTypeScriptの橋渡しをしてくれる機能といえます。</p>
+<p>union typesを使うためには型注釈を書く際に複数の型を｜で区切って書きます。自分でコードを書くときによく書くのは<code class="inline-code tt">Subscription | null</code>のような型でしょうか。<code class="inline-code tt">--strictNullChecks</code>オプションを使う場合、stringとnullやundefinedといった値は厳密に区別されます。ゆえに、クラスのプロパティでnullをセットしたいシチュエーションがある場合、union typesのお世話になる必要があります。</p>
+<p>既存のJavaScriptライブラリには返り値の型が複数ある困った関数がかなりあります。これらに対して適切なコードを書くことを誘導したい時、<code class="inline-code tt">any</code>を指定するよりunion typesを使ったほうがよりよい型定義になります。</p>
+<p>まずは簡単な例から見ていきましょう（<span class="listref">リスト4.1</span>）。</p>
+<div id="id_unionTypes_2Fbasic.ts" class="caption-code">
 <p class="caption">リスト4.1: 型A | 型B でAかBのどちらかを表す</p>
 <pre class="list language-ts">let a: string | boolean | undefined;
 // string | boolean なので次はオッケー！
@@ -83,10 +87,9 @@ let c: typeof b1 | typeof b2;
 export { b1, b2, c }
 </pre>
 </div>
-<p>型注釈を書く際に複数の型を｜で区切って書けます。既存のJavaScriptライブラリだとこういった、返り値の型が複数ある困った関数がかなりあります。あとは普通にTypeScriptを書いているときでもSyntaxTreeとかをコードから構築するときにはあったほうが便利かもしれません。</p>
 <p>ご覧のとおり、union types中の型の順番とかは関係ない（交換可能）し、union typesのunion typesなどは合体させてひとつのunion typesにできます。</p>
-<p>TypeScriptを自然に書いていて、union typesを目にする機会は3種類あります。|| 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです（リスト4.2）。</p>
-<div class="caption-code">
+<p>TypeScriptを書いていて、意図せずunion typesを目にしてしまう機会があります。|| 演算子を使ったとき、条件（三項）演算子を使ったとき、配列リテラルを使ったときです（<span class="listref">リスト4.2</span>）。</p>
+<div id="id_unionTypes_2Finferred.ts" class="caption-code">
 <p class="caption">リスト4.2: こういうときは目にしますね</p>
 <pre class="list language-ts">// and の型は string | boolean
 let and = &quot;str&quot; || true;
@@ -99,8 +102,8 @@ export { and, cond, array }
 </pre>
 </div>
 <p>一番よくお目にかかるのは配列リテラルでしょうか。TypeScriptのベストプラクティスとして1つの配列で複数の型の値を扱わないほうが堅牢なコードになるため、きれいなコードを書いている限りはあまり見ないかもしれません。</p>
-<p>型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります（リスト4.3）。</p>
-<div class="caption-code">
+<p>型注釈として関数を与えるときは記法にちょっと気をつけないとコンパイルエラーになります（<span class="listref">リスト4.3</span>）。</p>
+<div id="id_unionTypes_2Fsyntax.ts" class="caption-code">
 <p class="caption">リスト4.3: 型名をカッコで囲うんです？</p>
 <pre class="list language-ts">// 引数無しの返り値stringな関数 な型注釈
 let func: () =&gt; string;
@@ -120,9 +123,9 @@ export { func, b, c, d }
 </pre>
 </div>
 <p>読みづらいコードになってしまいました。型にも適切な名前をつけることの重要さが偲ばれます。</p>
-<p>union typesな値を使うときは、型アサーションを使うこともできますがなるべくなら避けましょう（リスト4.4）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.4: 一応使えるよ こうすれば</p>
+<p>union typesな値を使うときは、型アサーションを使うこともできますがなるべくなら避けましょう（<span class="listref">リスト4.4</span>）。</p>
+<div id="id_unionTypes_2FtypeAssertion.ts" class="caption-code">
+<p class="caption">リスト4.4: 一応使えるよ。こうすれば</p>
 <pre class="list language-ts">// 注意！ここでやってるやり方よりもtype guardsを使うんだ…！！
 // 型アサーションは悪い。常に悪い。なるべく使わないこと。
 
@@ -137,11 +140,11 @@ let obj: string | number | Date = null as any;
 // Date 扱いしてみる
 (obj as Date).getTime();
 
-// 値の集合に含まれない型にしてみると普通に怒られる
+// 値の集合に含まれない型にしてみるとしっかり怒られる
 // error TS2352: Type 'string | number | Date' cannot be converted to type 'RegExp'.
 //   Type 'Date' is not comparable to type 'RegExp'.
 //     Property 'exec' is missing in type 'Date'.
-// (&lt;RegExp&gt;obj).test(&quot;test&quot;);
+// (obj as RegExp).test(&quot;test&quot;);
 
 export { }
 </pre>
@@ -152,9 +155,9 @@ export { }
 <p>type guardsは、union typesが導入されたことで変数の型が一意ではなくなってしまったため、それを自然に解決するために導入された仕組みです。type guardsは&quot;変数Aが○○という条件を満たすとき、変数Aの型は××である&quot;というルールを用いて、ガード（番人となる条件式など）の後の文脈で変数の型を××に狭めることができます。</p>
 
 <h3 id="control-flow-based-type-analysis"><a id="h4-2-1"></a>処理フローに基づく型の解析（Control Flow Based Type Analysis）</h3>
-<p>さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。名前が長いですが、要するに普通にコードを書いていった時に、値の型を判別するコードは分岐にしたがって変数の型が絞り込まれるというものです。</p>
-<p>例を見ていきましょう。TypeScriptを書いていて一番対処を迫られるunion typesのパターンはおそらく<code class="inline-code tt">T | undefined</code>のような、何か＋<code class="inline-code tt">undefined</code>の形式でしょう。if文を用いてundefinedの値について対処してみます（リスト4.5）。</p>
-<div class="caption-code">
+<p>さて、トップバッターがいきなり公式にtype guardsの一員なのか怪しいのですがいってみましょう。名前が長いですが、JavaScriptとして素直にコードを書き、変数の型が確定するような分岐などがあると書いたとおりに変数の型が絞り込まれるというものです。</p>
+<p>例を見ていきましょう。TypeScriptを書いていて一番対処を迫られるunion typesのパターンはおそらく<code class="inline-code tt">T | undefined</code>のような、何か＋<code class="inline-code tt">undefined</code>の形式でしょう。if文を用いてundefinedの値について対処してみます（<span class="listref">リスト4.5</span>）。</p>
+<div id="id_typeGuards_2FcontrolFlowBasedBasic.ts" class="caption-code">
 <p class="caption">リスト4.5: undefinedの可能性を潰す</p>
 <pre class="list language-ts">function upperA(word?: string) {
   // wordは省略可能引数なので string | undefined
@@ -188,8 +191,8 @@ function upperC(word = &quot;TypeScript&quot;) {
 export { upperA, upperB, upperC }
 </pre>
 </div>
-<p>もう一例見てみましょう。引数に<code class="inline-code tt">string</code>と<code class="inline-code tt">string[]</code>を取り、これを<code class="inline-code tt">string[]</code>に統一して利用します（リスト4.6）。</p>
-<div class="caption-code">
+<p>もう一例見てみましょう。引数に<code class="inline-code tt">string</code>と<code class="inline-code tt">string[]</code>を取り、これを<code class="inline-code tt">string[]</code>に統一して利用します（<span class="listref">リスト4.6</span>）。</p>
+<div id="id_typeGuards_2FcontrolFlowBasedArray.ts" class="caption-code">
 <p class="caption">リスト4.6: 変数の型を統一していく</p>
 <pre class="list language-ts">function upperAll(words: string | string[]) {
   if (typeof words === &quot;string&quot;) {
@@ -207,8 +210,8 @@ console.log(upperAll([&quot;TypeScript&quot;, &quot;JavaScript&quot;]));
 export { }
 </pre>
 </div>
-<p>変数のプロパティに対してもtype guardsは利用可能です（リスト4.7）。コンパイラの実装を想像すると、なにげに大変そうなことをやっていて思わず感心してしまいます。</p>
-<div class="caption-code">
+<p>変数のプロパティに対してもtype guardsは利用可能です（<span class="listref">リスト4.7</span>）。書いたコードがどういう型に絞り込まれているか想像できない場合、エディタ上のツールチップの表示でどういう変数になっているか確認します。</p>
+<div id="id_typeGuards_2FcontrolFlowBasedProperty.ts" class="caption-code">
 <p class="caption">リスト4.7: 変数のプロパティも絞り込める</p>
 <pre class="list language-ts">interface Foo {
   value: number | string;
@@ -231,8 +234,8 @@ if (typeof foo.value === &quot;string&quot;) {
 export { }
 </pre>
 </div>
-<p>最後に、関数が絡んだ場合の例を見ておきます（リスト4.8）。関数の内側と外側では、処理フローは別世界です。関数はいつ実行されるかわからないため、変数の再代入が可能な場合、関数の内側で別途絞込みを行う必要があります。一方、constを使うと変数の値を変えることができないため、この問題を回避できる場合があります。</p>
-<div class="caption-code">
+<p>最後に、関数が絡んだ場合の例を見ておきます（<span class="listref">リスト4.8</span>）。関数の内側と外側では、処理フローは別世界です。関数はいつ実行されるかわからないため、変数の再代入が可能な場合、関数の内側で別途絞込みを行う必要があります。一方、constを使うと変数の値を変えることができないため、この問題を回避できる場合があります。</p>
+<div id="id_typeGuards_2FcontrolFlowBasedFunction-invalid.ts" class="caption-code">
 <p class="caption">リスト4.8: 関数の外側でのフローは内側では関係ない</p>
 <pre class="list language-ts">let v1: string | number;
 if (typeof v1 === &quot;string&quot;) {
@@ -247,7 +250,7 @@ if (typeof v1 === &quot;string&quot;) {
   // ここではvはまだstring
   f();
 
-  // ここでvがnumberに！
+  // ここでvがnumberに！fの思惑と食い違う
   v1 = 1;
   f();
 }
@@ -260,11 +263,6 @@ if (typeof v2 === &quot;string&quot;) {
     console.log(v2.toUpperCase());
   };
   f();
-
-  // constなので再代入しようとするとエラーになる
-  // error TS2450: Left-hand side of assignment expression
-  //   cannot be a constant or a read-only property.
-  v2 = 1;
 }
 </pre>
 </div>
@@ -281,8 +279,8 @@ if (typeof v2 === &quot;string&quot;) {
 <li>それ以外の場合（nullを含む！）は&quot;object&quot;を返す</li>
 </ul>
 <p>これを利用して、変数の型を狭めます。</p>
-<p>一番簡単な使い方から見ていきましょう（リスト4.9）。TypeScriptのtype guardsではtypeofの結果がstring、boolean、numberの場合、その型に絞り込むことができます。</p>
-<div class="caption-code">
+<p>一番簡単な使い方から見ていきましょう（<span class="listref">リスト4.9</span>）。typeofの返り値次第で変数の型を絞り込むことができます。</p>
+<div id="id_typeGuards_2FtypeofBasic.ts" class="caption-code">
 <p class="caption">リスト4.9: 実際の型がわからないなら調べるしかないじゃない！</p>
 <pre class="list language-ts">let obj: number | string = null as any;
 if (typeof obj === &quot;string&quot;) {
@@ -297,8 +295,8 @@ export { }
 </pre>
 </div>
 <p>変数objをtypeofで調べたときに値がstringだったので、変数objの型はstringである、という具合に絞りこまれています。</p>
-<p>もう一例見てみましょう。リスト4.10では、anyやnumberと指定された変数をtype guardsでstringに絞り込んでいます。</p>
-<div class="caption-code">
+<p>もう一例見てみましょう。<span class="listref">リスト4.10</span>では、anyやnumberと指定された変数をtype guardsでstringに絞り込んでいます。</p>
+<div id="id_typeGuards_2Ftypeof-invalid.ts" class="caption-code">
 <p class="caption">リスト4.10: 変なコードを書くとコンパイラが教えてくれる</p>
 <pre class="list language-ts">let objA: any;
 if (typeof objA === &quot;string&quot;) {
@@ -320,41 +318,9 @@ if (typeof objB === &quot;string&quot;) {
 <p>うーん、便利ですね。変数に指定した型どおりの値が入ってくるのが健全なので、コンパイル時にミスが発見されるのは嬉しいことです。</p>
 
 <h3 id="instanceof-type-guards"><a id="h4-2-3"></a>instanceofによるType Guards</h3>
-<p>typeofでしかtype guardsが使えないと辛いので、instanceofを使ったtype guardsも、もちろんあります。</p>
-<p>JavaScriptにおけるinstanceofは、ある値が指定した関数のインスタンスであるかを調べる演算子です。プロトタイプチェーンも遡ってみていくので、親子関係にある場合もインスタンスかどうかを調べることができます。</p>
-<p>動作例を確認してみましょう（リスト4.11）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.11: instanceof の挙動</p>
-<pre class="list language-ts">class Base {
-}
-
-class InheritA extends Base {
-}
-class InheritB extends Base {
-}
-
-let obj = new InheritA();
-
-// trueと表示される
-console.log(obj instanceof Base);
-// trueと表示される
-console.log(obj instanceof InheritA);
-// falseと表示される
-console.log(obj instanceof InheritB);
-
-// 無理矢理親を差し替える！
-InheritA.prototype = new InheritB();
-obj = new InheritA();
-// trueと表示される
-console.log(obj instanceof InheritB);
-
-export { }
-</pre>
-</div>
-<p>オブジェクトのprototypeと一致するか順番どおり見ていくだけですね。</p>
-<p>instanceofで型を絞り込みます（リスト4.12）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.12: instanceofの挙動</p>
+<p>typeofでしかtype guardsが使えないと辛いので、instanceofを使ったtype guardsも、もちろんあります（<span class="listref">リスト4.11</span>）。</p>
+<div id="id_typeGuards_2FinstanceofBasic.ts" class="caption-code">
+<p class="caption">リスト4.11: instanceofの挙動</p>
 <pre class="list language-ts">class A {
   str: string;
 }
@@ -392,12 +358,11 @@ if (obj instanceof C) {
 export { }
 </pre>
 </div>
-<p>昔のTypeScriptと違って、instanceofのelse句でも型の絞り込みが行われます。挙動として納得感があり大変よいですね。</p>
 
 <h3 id="user-defined-type-guards"><a id="h4-2-4"></a>ユーザ定義のType Guards（User-defined Type Guards）</h3>
-<p>ユーザが定義した関数によって、ある値がなんの型なのかをTypeScriptコンパイラに教える方法があります（リスト4.13）。型判別用の関数を作成し、そこで返り値に<code class="inline-code tt">仮引数名 is 型名</code>という形式で判別結果を指定します。この書き方をした場合、返り値はbooleanでなければなりません。</p>
-<div class="caption-code">
-<p class="caption">リスト4.13: ユーザ定義のtype guards</p>
+<p>ユーザが定義した関数を使って、値の型をTypeScriptコンパイラに指示する方法があります（<span class="listref">リスト4.12</span>）。型判別用の関数を作成し、そこで返り値に<code class="inline-code tt">仮引数名 is 型名</code>という形式で判別結果を指定します。この書き方をした場合、返り値はbooleanでなければなりません。</p>
+<div id="id_typeGuards_2FuserDefined.ts" class="caption-code">
+<p class="caption">リスト4.12: ユーザ定義のtype guards</p>
 <pre class="list language-ts">class Sample {
   str: string;
 }
@@ -424,9 +389,9 @@ if (isSample(obj)) {
 export { }
 </pre>
 </div>
-<p>面白い記法として、isの左辺にthisを用いることもできます（リスト4.14）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.14: isの左辺にthisを使う</p>
+<p>面白い記法として、isの左辺にthisを用いることもできます（<span class="listref">リスト4.13</span>）。</p>
+<div id="id_typeGuards_2FuserDefinedWithThis.ts" class="caption-code">
+<p class="caption">リスト4.13: isの左辺にthisを使う</p>
 <pre class="list language-ts">abstract class Node {
   isStringNode(): this is StringNode {
     return this instanceof StringNode;
@@ -463,12 +428,12 @@ nodes.forEach(n =&gt; {
 export { }
 </pre>
 </div>
-<p>引数として渡された値の型名を明示する代わりに、thisの型を指定するわけです。これも利用する機会は少なさそうですが、ツリー状の構造を作るときなどに活躍しそうです。</p>
+<p>引数として渡された値の型名を明示する代わりに、thisの型を指定するわけです。ツリー状の構造を作るときに活躍するかもしれませんね。</p>
 
 <h3 id="type-guards-and-logical-operators"><a id="h4-2-5"></a>Type Guardsと論理演算子</h3>
-<p>type guardsは<code class="inline-code tt">&amp;&amp;</code>とか<code class="inline-code tt">||</code>とか<code class="inline-code tt">?</code>とか<code class="inline-code tt">!</code>とかの論理演算子にもちゃんと対応しています（リスト4.15）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.15: ブール代数みたいな演算に対応してる</p>
+<p>type guardsは<code class="inline-code tt">&amp;&amp;</code>とか<code class="inline-code tt">||</code>とか<code class="inline-code tt">?</code>とか<code class="inline-code tt">!</code>とかの論理演算子にもちゃんと対応しています（<span class="listref">リスト4.14</span>）。</p>
+<div id="id_typeGuards_2Foperator.ts" class="caption-code">
+<p class="caption">リスト4.14: ブール代数みたいな演算に対応してる</p>
 <pre class="list language-ts">let obj: number | boolean | string = null as any;
 
 // &amp;&amp;演算子で絞込み
@@ -484,7 +449,7 @@ if (typeof obj === &quot;string&quot; || typeof obj === &quot;boolean&quot;) {
   // 消去法でnumber！
 }
 
-// 三項演算子は普通にif文と一緒の挙動
+// 三項演算子はif文と一緒の挙動
 typeof obj === &quot;string&quot; ? obj.charAt(0) : obj;
 // 次と等価
 if (typeof obj === &quot;string&quot;) {
@@ -495,21 +460,21 @@ if (typeof obj === &quot;string&quot;) {
 
 // 一応、否定演算子にも対応している
 if (!(typeof obj !== &quot;string&quot;)) {
-  // 否定の否定は普通にそのまんまstringだな！ちゃんと絞り込まれます
+  // 否定の否定はそのまんまstringだな！ちゃんと絞り込まれます
   obj.charAt(0);
 }
 
 export { }
 </pre>
 </div>
-<p>あんまり使わないかもしれませんが、他の人がこの書き方を使った時に戸惑わぬよう頭の片隅にはとどめておいたほうがよいかもしれません。</p>
+<p>ややこしいですが、エディタ上で各分岐内での変数の型を確認できるため困ることは少ないでしょう。</p>
 
 <h3 id="type-guards-weakpoint"><a id="h4-2-6"></a>Type Guardsの弱点</h3>
-<p>type guardsは型システム上の仕組みだということを忘れてはいけません。JavaScriptの実行環境とは全く関係がないのです。</p>
+<p>type guardsは型システム上の仕組みだということを忘れてはいけません。JavaScriptの実行環境とはまったく関係がないのです。</p>
 <p>TypeScriptでは構造的部分型の仕組みにより、クラスが要求されている箇所に互換性のある別の値を代入できます。</p>
-<p>その仕組みを使って、リスト4.16のようなコードが書けてしまいます。</p>
-<div class="caption-code">
-<p class="caption">リスト4.16: 構造的部分型とtype guards</p>
+<p>その仕組みを使って、<span class="listref">リスト4.15</span>のようなコードが書けてしまいます。</p>
+<div id="id_typeGuards_2Fweakspot.ts" class="caption-code">
+<p class="caption">リスト4.15: 構造的部分型とtype guards</p>
 <pre class="list language-ts">class Sample {
   str: string;
 }
@@ -528,10 +493,11 @@ if (obj instanceof Sample) {
 export { }
 </pre>
 </div>
-<p>objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。コンパイル後のJavaScriptコード（リスト4.17）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然ですが、TypeScript上で見ると型を元に判別されていると勘違いしやすいことを頭の片隅においておきましょう。</p>
-<div class="caption-code">
-<p class="caption">リスト4.17: コンパイル後のJS</p>
+<p>objはSampleを型として持ち、その値として互換性のあるオブジェクトリテラルを持っています。コンパイル後のJavaScriptコード（<span class="listref">リスト4.16</span>）を見ると、objの値がSampleクラスのインスタンスではないことが一目瞭然です。しかし、TypeScriptコード上で見ると人間の脳としては型を元に判別していると誤解しがちなので注意が必要です。不可解な動作に遭遇した場合、JSのコードを確認したりデバッガを併用して実際の処理フローを確認するようにしましょう。</p>
+<div id="id_typeGuards_2Fweakspot.js" class="caption-code">
+<p class="caption">リスト4.16: コンパイル後のJS</p>
 <pre class="list language-js">&quot;use strict&quot;;
+Object.defineProperty(exports, &quot;__esModule&quot;, { value: true });
 class Sample {
 }
 // 構造的部分型！
@@ -546,9 +512,9 @@ if (obj instanceof Sample) {
 </pre>
 </div>
 <p>これを回避する方法がいくつかあります。</p>
-<p>ひとつ目は、ユーザ定義のtype guardsを使う方法。ふたつ目はprivateな要素をクラスに突っ込んでしまうことです（リスト4.18）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.18: privateな要素があれば構造的部分型で値を偽造できない</p>
+<p>ひとつ目は、ユーザ定義のtype guardsを使う方法。ふたつ目はprivateな要素をクラスに突っ込んでしまうことです（<span class="listref">リスト4.17</span>）。</p>
+<div id="id_typeGuards_2FvsWeakspot2-invalid.ts" class="caption-code">
+<p class="caption">リスト4.17: privateな要素があれば構造的部分型で値を偽造できない</p>
 <pre class="list language-ts">class Sample {
   str: string;
   private _tmp: any;
@@ -564,13 +530,13 @@ let obj: Sample = {
 };
 </pre>
 </div>
-<p>色々書きましたが、一番の解決策はunion typesやanyを多用せず、真っ当なコードを書けるよう設計することです。</p>
+<p>色々書きましたが、一番の解決策はunion typesやanyをなるべく使わない、真っ当な設計をすることです。</p>
 
 <h2 id="intersection-types"><a id="h4-3"></a><span class="secno">4.3　</span>交差型（Intersection Types）</h2>
-<p>union typesに似た記法のintersection types（交差型）です。intersection typesは2つの型を合成し、1つの型にできます。union typesと違って利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。</p>
-<p>まずは例を見てみましょう。ある関数に渡したオブジェクトを拡張し、新しいプロパティやメソッドを生やします（リスト4.19）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.19: 型を合成する</p>
+<p>union typesに似た記法の<b class="kw">交差型 (intersection types)</b><!-- IDX:交差型 -->です。intersection typesは2つの型を合成し、1つの型にできます。union typesと違って利用頻度は低く、TypeScript的に使いたくなるシチュエーションもほとんどありません。</p>
+<p>まずは例を見てみましょう。ある関数に渡したオブジェクトを拡張し、新しいプロパティやメソッドを生やします（<span class="listref">リスト4.18</span>）。</p>
+<div id="id_intersectionTypes_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.18: 型を合成する</p>
 <pre class="list language-ts">interface Storage {
   $save(): void;
 }
@@ -604,9 +570,9 @@ obj.$save();
 export { }
 </pre>
 </div>
-<p>intersection typesを使うと、型定義ファイルが書きやすくなる場合があります。例を見てみます（リスト4.20）。intersection typesを使わない書き方とintersection typesを使った書き方、どちらのほうが理解しやすいでしょうか？</p>
-<div class="caption-code">
-<p class="caption">リスト4.20: 型の合成で素直な定義を作る</p>
+<p>intersection typesを使うと、型定義ファイルが書きやすくなる場合があります。例を見てみます（<span class="listref">リスト4.19</span>）。intersection typesを使わない書き方とintersection typesを使った書き方、どちらのほうが理解しやすいでしょうか？</p>
+<div id="id_intersectionTypes_2FangularResource.ts" class="caption-code">
+<p class="caption">リスト4.19: 型の合成で素直な定義を作る</p>
 <pre class="list language-ts">// intersection typesを使わない書き方
 declare namespace angular.resource1 {
   interface ResourceProvider {
@@ -662,26 +628,94 @@ export { sample1, sample2 }
 </div>
 <p>intersection typesを使いこなした書き方のほうが、圧倒的に謎が少なく素直に書けています。</p>
 
-<h2 id="string-literal-types"><a id="h4-4"></a><span class="secno">4.4　</span>文字列リテラル型（String Literal Types）</h2>
-<p>文字列リテラルを型として使える機能です。パッと読んだだけでは、意味がわからないですね。まずは例を見てみましょう（リスト4.21）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.21: カードのスートを型として表す</p>
+<h2 id="type-alias"><a id="h4-4"></a><span class="secno">4.4　</span>型の別名（Type Alias）</h2>
+<p><b class="kw">型の別名 (type alias)</b><!-- IDX:型の別名 -->もunion typesの扱いを便利にするために導入された機能です。機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。それだけです。例を見てみましょう（<span class="listref">リスト4.20</span>）。</p>
+<div id="id_typeAlias_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.20: 頻出するunion typesに名前をつける</p>
+<pre class="list language-ts">type FooReturns = string | number | boolean;
+
+interface Foo {
+  bar(): FooReturns;
+  buzz(): FooReturns;
+  barbuzz(): FooReturns;
+}
+</pre>
+</div>
+<p>わかりやすいですね。1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。</p>
+<p>tuple typesに名前をつけることもできます（<span class="listref">リスト4.21</span>）。</p>
+<div id="id_typeAlias_2Ftuple.ts" class="caption-code">
+<p class="caption">リスト4.21: tuple typesに名前をつける</p>
+<pre class="list language-ts">// tuple typesに名前をつける
+type Point = [number, number];
+type Circle = [Point, number];
+
+let c: Circle = [[1, 2], 3];
+
+// でも、こっちのほうがTypeScriptとしては適切よね
+{
+  class Point {
+    constructor(public x: number, public y: number) {
+    }
+  }
+  class Circle {
+    constructor(public p: Point, public r: number) {
+    }
+  }
+  let c2: Circle = new Circle(new Point(1, 2), 3);
+  console.log(c2.p, c2.r);
+}
+
+export { Point, Circle, c }
+</pre>
+</div>
+<p>こちらは素直にクラスでやればいいのに、という感じです。</p>
+<p>type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。そのため、<span class="listref">リスト4.22</span>のようなコードは書くことができません。</p>
+<div id="id_typeAlias_2FdoNotHaveInstance-invalid.ts" class="caption-code">
+<p class="caption">リスト4.22: type aliasは値を作らない</p>
+<pre class="list language-ts">// 型の別名を作るだけで何かの値を作るわけではない…！
+type StringArray = Array&lt;string&gt;;
+
+// なのでこういうことはできない
+// error TS2304: Cannot find name 'StringArray'.
+let strArray = new StringArray();
+</pre>
+</div>
+<p>type aliasは仕様上、interfaceと同じように利用できる場面もあります。ですが、基本的にはtype aliasよりもinterfaceを使うべきです。interfaceは定義の統合ができるので後から自由に拡張することができます。柔軟性が高いのです。interfaceが基本、type aliasは応用、と考えておきましょう。</p>
+
+<h2 id="primitive-literal-types"><a id="h4-5"></a><span class="secno">4.5　</span>プリミティブ値のリテラル型（String, Number, Boolean and Enum Literal Types）</h2>
+<p>文字列リテラル、数値リテラル、真偽値のリテラルを型として使える機能です。文字列以外の値をリテラル型として使える機能は2.0.3で入りました。パッと読んだだけでは、意味がわからないですね。まずは例を見てみましょう（<span class="listref">リスト4.23</span>）。</p>
+<div id="id_literalTypes_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.23: トランプのスート（マーク）を型として表す</p>
 <pre class="list language-ts">// &quot;文字列&quot; が 型 です。値ではない！
-let suit: &quot;Heart&quot; | &quot;Diamond&quot; | &quot;Club&quot; | &quot;Spade&quot;;
+type Suit = &quot;Heart&quot; | &quot;Diamond&quot; | &quot;Club&quot; | &quot;Spade&quot;;
 
 // OK
-suit = &quot;Heart&quot;;
+let suit = &quot;Heart&quot;;
 // NG suitの型に含まれていない
 // error TS2322: Type '&quot;Joker&quot;' is not
 //   assignable to type '&quot;Heart&quot; | &quot;Diamond&quot; | &quot;Club&quot; | &quot;Spade&quot;'.
 // suit = &quot;Joker&quot;;
 
-export { }
+// number, boolean, enum
+type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+type Bool = true | false;
+type Falsy = false | 0 | &quot;&quot; | null | undefined;
+
+enum SuitEnum {
+  Heart,
+  Diamond,
+  Club,
+  Spade,
+}
+type RedSuit = SuitEnum.Heart | SuitEnum.Diamond;
+
+export { Suit, suit, Digit, Bool, Falsy, SuitEnum, RedSuit }
 </pre>
 </div>
-<p>文字列が型というのは見慣れないとすごく気持ちが悪いですね。しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。たとえば、DOMのaddEventListenerなどです。指定するイベント名によって、イベントリスナーの型が変わります（リスト4.22）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.22: イベント名によって型が変わる</p>
+<p>文字列が型というのは見慣れないとなかなか気持ちが悪いですね。しかし、この機能はTypeScriptがJavaScriptの現実と折り合いをつける上で重要な役割があります。たとえば、DOMのaddEventListenerなどです。指定するイベント名によって、イベントリスナーの型<a id="fnb-this-definition-was-changed" href="#fn-this-definition-was-changed" class="noteref" epub:type="noteref">*2</a>が変わります（<span class="listref">リスト4.24</span>）。</p>
+<div class="footnote" epub:type="footnote" id="fn-this-definition-was-changed"><p class="footnote">[*2] なお、現在のDOM周りの型定義は後述するkeyofを使って書き直されています</p></div>
+<div id="id_literalTypes_2FeventListener.d.ts" class="caption-code">
+<p class="caption">リスト4.24: イベント名によって型が変わる</p>
 <pre class="list language-ts">// lib.dom.d.ts から抜粋
 // 第一引数で指定するイベントによってリスナーで得られるイベントの型が違う
 interface HTMLBodyElement extends HTMLElement {
@@ -704,10 +738,11 @@ interface HTMLBodyElement extends HTMLElement {
 }
 </pre>
 </div>
-<p>これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます。こんなものが必要になってしまうJavaScriptの複雑さよ…。</p>
-<p>またunion typesと文字列リテラル型を組み合わせ、switchで条件分岐ができます（リスト4.23）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.23: Union Typesはswitchでえこひいきされている</p>
+<p>これにより、自然にTypeScriptでコードを書くだけでリスナーで受け取れるイベントの型が自動的に適切なものに絞りこまれます<a id="fnb-js-dirty-overload" href="#fn-js-dirty-overload" class="noteref" epub:type="noteref">*3</a>。</p>
+<div class="footnote" epub:type="footnote" id="fn-js-dirty-overload"><p class="footnote">[*3] こんなものが必要になってしまうJavaScriptの複雑さよ…</p></div>
+<p>またunion typesとリテラル型を組み合わせ、switchで条件分岐ができます（<span class="listref">リスト4.25</span>）。</p>
+<div id="id_literalTypes_2Fswitch.ts" class="caption-code">
+<p class="caption">リスト4.25: Union Typesはswitchで優遇されている</p>
 <pre class="list language-ts">// 足し算
 interface Add {
   type: &quot;add&quot;;
@@ -756,116 +791,11 @@ function calc(root: Tree): number {
 export { }
 </pre>
 </div>
-<p>switch文によるtype guards（後述）はTypeScript 2.1.0からのサポートが予定されているので、現時点ではえこひいきされていますね。</p>
-<p>なお、執筆時点でアンダース・ヘルスバーグ御大が<i>Number, enum, and boolean literal types</i>というpull requestを作成、作業しています<a id="fnb-primitive-literal-types" href="#fn-primitive-literal-types" class="noteref" epub:type="noteref">*2</a>。</p>
-<div class="footnote" epub:type="footnote" id="fn-primitive-literal-types"><p class="footnote">[*2] <a href="https://github.com/Microsoft/TypeScript/pull/9407" class="link">https://github.com/Microsoft/TypeScript/pull/9407</a></p></div>
-
-<h2 id="type-alias"><a id="h4-5"></a><span class="secno">4.5　</span>型の別名（Type Alias）</h2>
-<p>最初に書いておきます。<strong>可能な限りtype aliasを使うな！interface使え！</strong>筆者はtype aliasの乱用を恐れています！</p>
-<p>type aliasもunion typesの扱いを便利にするために導入された機能です。機能としてはただ単に型をひとまとまりにして、それに名前が付けられるだけです。それだけです。</p>
-<p>type aliasは仕様上、interfaceと同じように利用できる場面もあります。ですが、基本的にtype aliasはinterfaceより機能が貧弱であるため、なるべく避けるべきです。</p>
-<p>代表例を見てみましょう（リスト4.24）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.24: 頻出するunion typesに名前をつける</p>
-<pre class="list language-ts">type FooReturns = string | number | boolean;
-
-interface Foo {
-  bar(): FooReturns;
-  buzz(): FooReturns;
-  barbuzz(): FooReturns;
-}
-</pre>
-</div>
-<p>わかりやすいですね。1ヶ所変更すると、関連箇所がすべて更新されるのも便利です。</p>
-<p>tuple typesに名前をつけることもできます（リスト4.25）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.25: tuple typesに名前をつける</p>
-<pre class="list language-ts">// tuple typesに名前をつける
-type Point = [number, number];
-type Circle = [Point, number];
-
-let c: Circle = [[1, 2], 3];
-
-// でも、こっちのほうがTypeScriptとしては適切よね
-namespace alternative {
-  class Point {
-    constructor(public x: number, public y: number) {
-    }
-  }
-  class Circle {
-    constructor(public p: Point, public r: number) {
-    }
-  }
-  let c2: Circle = new Circle(new Point(1, 2), 3);
-  console.log(c2.p, c2.r);
-}
-
-export { Point, Circle, c, alternative }
-</pre>
-</div>
-<p>こちらは素直にクラスでやればいいのに、という感じです。</p>
-<p>type aliasは型に別名をつけるだけで、コンパイルされると消えてしまう存在です。そのため、リスト4.26のようなコードは書くことができません。</p>
-<div class="caption-code">
-<p class="caption">リスト4.26: type aliasは値を作らない</p>
-<pre class="list language-ts">// 型の別名を作るだけで何かの値を作るわけではない…！
-type StringArray = string[];
-
-// なのでこういうことはできない
-// error TS2304: Cannot find name 'StringArray'.
-let strArray = new StringArray();
-</pre>
-</div>
-<p>TypeScriptの仕様書にのっているtype aliasの利用例についてinterfaceでの書き換えができるものを示します（リスト4.27）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.27: interfaceを使うんだ！</p>
-<pre class="list language-ts">// これらはinterfaceで表現不可 type aliasで正解
-type StringOrNumber = string | number;
-type TextObject = string | { text: string };
-type Coord = [number, number];
-type ObjectStatics = typeof Object;
-type Pair&lt;T&gt; = [T, T];
-type Coordinates = Pair&lt;number&gt;;
-type Tree&lt;T&gt; = T | { left: Tree&lt;T&gt;, right: Tree&lt;T&gt; };
-
-// これらはinterfaceで表現可能
-type HolidayLookup = Map&lt;string, Date&gt;;
-interface AltHolidayLookup extends Map&lt;string, Date&gt; {
-}
-
-type Callback&lt;T&gt; = (data: T) =&gt; void;
-interface AltCallback&lt;T&gt; {
-  (date: T): void;
-}
-
-type RecFunc = () =&gt; RecFunc;
-interface AltRecFunc {
-  (): AltRecFunc;
-}
-
-export {
-  StringOrNumber, TextObject, Coord, ObjectStatics, Pair,
-  Coordinates, HolidayLookup, AltHolidayLookup, Callback, AltCallback,
-}
-</pre>
-</div>
-<p>union typesが絡むもの、tuple typesが絡むもの、型クエリが絡むものだけがinterfaceで置き換えることができません。</p>
-<p>最後にtype aliasではなくインタフェースを使ったほうがいい理由を掲げておきます。</p>
-<ul>
-<li>interfaceのコンパイルエラーにはinterface名が表示されてわかりやすい<ul>
-<li>type aliasは展開して表示されちゃうので無理</li>
-</ul>
-</li>
-<li>interfaceは定義の統合ができるので後から自由に拡張できる<ul>
-<li>type aliasは無理</li>
-</ul>
-</li>
-</ul>
-<p><strong>interfaceでできることをtype aliasでやるな！</strong></p>
 
 <h2 id="polymorphic-this-type"><a id="h4-6"></a><span class="secno">4.6　</span>多態性のあるthis型（Polymorphic 'this' Type）</h2>
-<p><code class="inline-code tt">this</code>を型として用いることができます。たとえばリスト4.28のようなコードです。</p>
-<div class="caption-code">
-<p class="caption">リスト4.28: thisを型として用いる</p>
+<p><code class="inline-code tt">this</code>を型として用いることができます。たとえば<span class="listref">リスト4.26</span>のようなコードです。</p>
+<div id="id_polymorphicThisType_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.26: thisを型として用いる</p>
 <pre class="list language-ts">// 自分自身を型として表す時、this を利用する
 class A {
   _this: this;
@@ -913,14 +843,14 @@ c.a().c();
 export { }
 </pre>
 </div>
-<p>thisを型として記述するという発想がすごいですね。引数や返り値の型としてthisを利用しています。fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。</p>
-<p>この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。とはいえ、便利になる代わりに仮引数に対して使ったりすると無駄に制約がきつくなったりする場合があるため、乱用は控えましょう。<code class="inline-code tt">return this;</code>を使った時に、メソッドの返り値が暗黙的に<code class="inline-code tt">this</code>になるのを利用する、くらいがよい塩梅かもしれません。</p>
+<p>thisを型として記述するという発想がすごいですね。引数や返り値の型としてthisを利用しています。fluentな、メソッドチェーンで使うAPIを組み立てる場合に役立ちそうです。この書き方がないと、ジェネリクスなどを使ってごまかさなければならないところでしょう。</p>
+<p>とはいえ、仮引数の型として使うと実際に受け取れる値に対して制約がきつくなる場合があるため乱用は控えましょう。<code class="inline-code tt">return this;</code>を使った時に、メソッドの返り値が暗黙的に<code class="inline-code tt">this</code>になるのを利用する、くらいがちょうどよいかもしれません。</p>
 
 <h2 id="specifying-this-types-for-functions"><a id="h4-7"></a><span class="secno">4.7　</span>関数のthisの型の指定（Specifying This Types For Functions）</h2>
-<p>JavaScriptでは<code class="inline-code tt">Function.prototype.bind</code>や<code class="inline-code tt">Function.prototype.call</code>、<code class="inline-code tt">Function.prototype.apply</code>などの関数により、関数呼び出し時のthisの値の型を変更できます。この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。TypeScriptではこの変更も頑張ってサポートしようとしています。</p>
-<p>まずは簡単な例を見てみます（リスト4.29）。関数の1つ目の仮引数の名前を<code class="inline-code tt">this</code>にするだけです。</p>
-<div class="caption-code">
-<p class="caption">リスト4.29: thisの型を指定する</p>
+<p>JavaScriptでは<code class="inline-code tt">Function.prototype.bind</code>や<code class="inline-code tt">Function.prototype.call</code>、<code class="inline-code tt">Function.prototype.apply</code>などの関数により、関数呼び出し時のthisの値の型を変更できます。この仕様は悪しき仕様だと筆者は思いますが、jQueryやDOMなど、古めのAPIではこの仕様をAPIとして組み込んだものが存在しています。TypeScriptでもこの仕様に対して自然なサポートを与えようと頑張っています。</p>
+<p>まずは簡単な例を見てみます（<span class="listref">リスト4.27</span>）。関数の1つ目の仮引数の名前を<code class="inline-code tt">this</code>にするだけです。</p>
+<div id="id_thisTypeForFunctions_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.27: thisの型を指定する</p>
 <pre class="list language-ts">// 関数内部でのthisの型を偽の第一引数で指定
 function testA(this: string) {
   console.log(this.toUpperCase());
@@ -956,10 +886,10 @@ testC.bind(&quot;TypeScript&quot;)(&quot;!&quot;);
 export { testB }
 </pre>
 </div>
-<p>thisの値がすり替えられるときの挙動に対応できています。<code class="inline-code tt">--noImplicitThis</code>オプションを利用すると、thisの型指定がない関数内でthisへアクセスするとエラーになります。thisを使わない限りはエラーにならないため、常用してしまってよいでしょう。</p>
-<p>この仕様が現実世界でどう役に立つかを紹介します（リスト4.30）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.30: thisの値が差し替えられるAPIに対応</p>
+<p>thisの値がすり替えられるときの挙動に対応できています。<code class="inline-code tt">--noImplicitThis</code>オプションを利用すると、thisの型指定がない（曖昧な）関数内でthisへアクセスするとエラーになります。thisを使わない限りはエラーにならないため、常用していきましょう。</p>
+<p>この仕様が現実世界でどう役に立つかを紹介します（<span class="listref">リスト4.28</span>）。</p>
+<div id="id_thisTypeForFunctions_2FeventListener.ts" class="caption-code">
+<p class="caption">リスト4.28: thisの値が差し替えられるAPIに対応</p>
 <pre class="list language-ts">// lib.dom.d.ts から抜粋
 // listenerの仮引数の先頭が偽の仮引数で、thisの型の指定が行われている
 interface HTMLBodyElement extends HTMLElement {
@@ -994,12 +924,56 @@ el2.addEventListener(&quot;click&quot;, function() {
 export { }
 </pre>
 </div>
-<p>イベント発生時のコールバック関数でthisが差し替えられる場合に対応できています。自分でTypeScriptコードを書く時に必要になる場合は少なくありたいものです。しかし、型定義ファイルを作成する時にはお世話にならざるをえないときがあるでしょう。</p>
+<p>イベント発生時のコールバック関数でthisが差し替えられる場合に対応できています。</p>
+<p>自分でTypeScriptコードを書く時にこの記法が必要になる機会は少なくありたいものです。しかし、型定義ファイルを作成する時にはお世話にならざるをえないときがあるでしょう。</p>
 
-<h2 id="local-types"><a id="h4-8"></a><span class="secno">4.8　</span>ローカル型（Local Types）</h2>
-<p>ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義できます（リスト4.31）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.31: ローカル型を試す</p>
+<h2 id="thistype"><a id="h4-8"></a><span class="secno">4.8　</span>ThisTypeでthisの型を制御する</h2>
+<p><code class="inline-code tt">--noImplicitThis</code>オプションを利用した場合、オブジェクトリテラル中のthisがオブジェクトリテラル自体を指すよう正しく認識されます。さらに、オブジェクトリテラル中でのthisの型を強力にコントロールしたい場合、<code class="inline-code tt">ThisType&lt;T&gt;</code>を利用できます（<span class="listref">リスト4.29</span>）。</p>
+<div id="id_types-advanced_2FthisType_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.29: ThisType&lt;T&gt;の利用例など</p>
+<pre class="list language-ts">const obj1 = {
+  name: &quot;maya&quot;,
+  greeting() {
+    console.log(`Hello, ${this.name}`);
+
+    // 存在しないプロパティにアクセスするとちゃんとエラーにしてくれる
+    // error TS2339: Property 'notExists' does not exist on
+    //   type '{ name: string; greeting(): void; }'.
+    // console.log(`Hello, ${this.notExists}`);
+  },
+};
+console.log(obj1.greeting());
+
+// ThisType を使ってthisの値を無理やり制御する
+interface A {
+  name: string;
+}
+interface B {
+  hello(): void;
+}
+
+// objの型はBであり、obj内でのthisの型はAと明示的に指定する
+const obj: B &amp; ThisType&lt;A&gt; = {
+  hello() {
+    // this.name は A的には存在する！
+    console.log(`Hello, ${this.name}`);
+    // Aに存在しないものは存在しない扱い ちなみに this.hello も存在しない扱い
+    // error TS2339: Property 'notExists' does not exist on type 'A'.
+    // console.log(`Hello, ${this.notExists}`);
+  },
+};
+// objは B なので問題なくhelloにアクセスできる
+obj.hello();
+
+export { }
+</pre>
+</div>
+<p>オブジェクトリテラルの中でthisの値が期待どおりの値になっています。ThisTypeはいわゆるマーカーで、その型がついていること自体に意味があります。あまり出番が必要ないほうが嬉しい機能ではありますが、これを使うことでthisの型付けをより安全にできる場合もあります。</p>
+
+<h2 id="local-types"><a id="h4-9"></a><span class="secno">4.9　</span>ローカル型（Local Types）</h2>
+<p>ローカル型は通常より小さい範囲で、クラスやインタフェースやenumやtype aliasを定義できます（<span class="listref">リスト4.30</span>）。</p>
+<div id="id_localType_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.30: ローカル型を試す</p>
 <pre class="list language-ts">{
   type Data = string | number;
   let obj: Data = 1;
@@ -1033,9 +1007,9 @@ export { }
 export { }
 </pre>
 </div>
-<p>使う機会は少ないかもしれませんが、リスト4.32のようにメソッドの中で簡易に別名を用意したい場合などに利用できるでしょう。</p>
-<div class="caption-code">
-<p class="caption">リスト4.32: メソッド内でだけ通用する別名</p>
+<p>使う機会は少ないかもしれませんが、<span class="listref">リスト4.31</span>のようにメソッドの中で簡易に別名を用意したい場合などに利用できるでしょう。</p>
+<div id="id_localType_2FinMethod.ts" class="caption-code">
+<p class="caption">リスト4.31: メソッド内でだけ通用する別名</p>
 <pre class="list language-ts">// 現実的な活用例
 class Foo {
   method() {
@@ -1051,10 +1025,10 @@ export { Foo }
 </pre>
 </div>
 
-<h2 id="type-queries"><a id="h4-9"></a><span class="secno">4.9　</span>型クエリ（Type Queries）</h2>
-<p>型クエリは指定した変数（やメソッドなど）の型をコピーします。たとえば、リスト4.33のようなクラスそのものを型として指定したい場合、それ専用の書き方は用意されていません。そういうときに型クエリを使います。</p>
-<div class="caption-code">
-<p class="caption">リスト4.33: クラスそのものの型だよ！</p>
+<h2 id="type-queries"><a id="h4-10"></a><span class="secno">4.10　</span>型クエリ（Type Queries）</h2>
+<p><b class="kw">型クエリ (Type Queries)</b><!-- IDX:型クエリ -->は指定したクラスや変数などの型をコピーします。たとえば、クラスそのものを型として指定したい場合、<span class="listref">リスト4.32</span>のように型クエリを使います。</p>
+<div id="id_typeQueries_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.32: クラスそのものの型を指定する</p>
 <pre class="list language-ts">class Sample {
   str: string;
 }
@@ -1072,7 +1046,7 @@ obj = new clazz();
 
 // clazz を頑張って手で書くと次に等しい
 let alterClazz: {
-  new (): { str: string; };
+  new(): { str: string; };
 };
 alterClazz = clazz;
 clazz = alterClazz;
@@ -1080,9 +1054,9 @@ clazz = alterClazz;
 export { }
 </pre>
 </div>
-<p>メソッドなどの値も取れますが、thisを使うことはできないため、少しトリッキーなコードになる場合もあります。リスト4.34の例は、prototypeプロパティを使っているためJavaScript力が多少ないと思いつかないかもしれません。</p>
-<div class="caption-code">
-<p class="caption">リスト4.34: prototypeを参照するとメソッドの型が取れる</p>
+<p>メソッドなどの値も取れますが、thisを使うことはできないため、少しトリッキーなコードになる場合もあります。<span class="listref">リスト4.33</span>の例は、prototypeプロパティを使っているためJavaScriptの知識が試されます。</p>
+<div id="id_typeQueries_2FcheapTrick.ts" class="caption-code">
+<p class="caption">リスト4.33: prototypeを参照するとメソッドの型が取れる</p>
 <pre class="list language-ts">class Sample {
   hello = (word = &quot;TypeScript&quot;) =&gt; `Hello, ${word}`;
   bye: typeof Sample.prototype.hello;
@@ -1094,11 +1068,12 @@ obj.bye = obj.hello;
 export { }
 </pre>
 </div>
-<p>型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合があります。リスト4.35では、ひとつ目の引数の型をふたつ目の引数や返り値の型にもコピーして使っています。</p>
-<div class="caption-code">
-<p class="caption">リスト4.35: ここまで複雑にするならインタフェース使って</p>
+<p>型クエリはわざわざインタフェースを定義するのもめんどくさいけど…というときに使える場合があります。<span class="listref">リスト4.34</span>では、ひとつ目の引数の型をふたつ目の引数や返り値の型にコピーして使っています。</p>
+<div id="id_typeQueries_2Fcopy.ts" class="caption-code">
+<p class="caption">リスト4.34: ここまで複雑にするならインタフェース使って</p>
 <pre class="list language-ts">// このコードは（死ぬほど読みにくいけど）正しい
-function move(p1: { x1: number; y1: number; x2: number; y2: number; },
+function move(
+  p1: { x1: number; y1: number; x2: number; y2: number; },
   p2: typeof p1,
 ): typeof p1 {
   return {
@@ -1122,14 +1097,14 @@ rect.x2;
 export { }
 </pre>
 </div>
-<p>ここまで来るとさすがに読みにくくなるのでインタフェースをひとつ定義したほうが断然いいですね。</p>
+<p>この例のレベルまでやってしまうとさすがに読みにくくなるのでインタフェースをひとつ定義したほうがよいですね。</p>
 
-<h2 id="tuple-types"><a id="h4-10"></a><span class="secno">4.10　</span>タプル型（Tuple Types）</h2>
-<p>tuple（タプル）は、任意の数の要素の組です。JavaScriptではtupleはサポートされていないため、TypeScriptでのtupleはただのArrayで表現されます。</p>
-<p>既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。タプル型はそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではないでしょう。というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないためです。</p>
-<p>タプル型は型（TypeScript）の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。記述方法は配列の型指定へ <code class="inline-code tt">[typeA, typeB]</code> のように配列の要素の代わりに型名を記述していくだけです。例を見てみましょう（リスト4.36）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.36: 基本的な例</p>
+<h2 id="tuple-types"><a id="h4-11"></a><span class="secno">4.11　</span>タプル型（Tuple Types）</h2>
+<p><b class="kw">タプル (tuple)</b><!-- IDX:タプル -->は、任意の数の要素の組です。JavaScriptではタプルはサポートされていないため、TypeScriptでのタプルはただのArrayで表現されます。</p>
+<p>既存のJavaScript資産を使おうとしたときに、配列の形で多値を返してくるライブラリが稀にあります。タプル型はそういったときに使うためのもので、TypeScriptでコードを書く際に多用するものではありません。というのも、普通にコードを書いている限りでは型推論の結果としてタプル型が出てこないのです。</p>
+<p>タプル型は型（TypeScript）の世界にしか登場せず、コンパイル後のJavaScriptコードでは消えてしまいます。記述方法は配列の型指定へ<code class="inline-code tt">[typeA, typeB]</code>のように配列の要素の代わりに型名を記述していくだけです。例を見てみましょう（<span class="listref">リスト4.35</span>）。</p>
+<div id="id_tuple_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.35: 基本的なtupleの例</p>
 <pre class="list language-ts">// まずは今までどおりの配列から
 // これは別の箇所で解説している union typesで表現され (number | string | boolean)[]
 let array = [1, &quot;str&quot;, true];
@@ -1143,34 +1118,16 @@ let tuple: [number, string, boolean] = [1, &quot;str&quot;, true];
 // string は charAt を持つ！
 tuple[1].charAt(0);
 
-// TypeScriptのtuple typesは普通にArrayでもあるのだ
-tuple.forEach(v =&gt; {
-  console.log(v);
-});
+// TypeScriptのtuple typesはArrayでもあるのだ
+tuple.forEach(v =&gt; console.log(v));
 
 export { array }
 </pre>
 </div>
-<p>各要素の型を指定すると、その要素のindexでアクセスしたときに適切な型で扱われます。</p>
-<p>もちろん、タプル型はGenericsと組み合わせて利用できます（リスト4.37）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.37: Genericsでの利用も可</p>
-<pre class="list language-ts">// Genericsを使ってtupleを生成して返す
-function zip&lt;T1, T2&gt;(v1: T1, v2: T2): [T1, T2] {
-  return [v1, v2];
-}
-
-let tuple = zip(&quot;str&quot;, { hello(): string { return &quot;Hello!&quot;; } });
-tuple[0].charAt(0); // おー、静的に検証される！
-tuple[1].hello();   // おー、静的に検証される！
-
-export { }
-</pre>
-</div>
-<p>Good！いいですね。</p>
-<p>さて、タプル型について重箱の隅をつついていきましょう。要素数が多すぎる場合、指定されていない値の型はunion typesになります。その例を見てみましょう（リスト4.38）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.38: 値の要素数が多すぎる場合</p>
+<p>各要素の型を指定すると、要素のindexでアクセスしたときに適切な型で扱われます。</p>
+<p>さて、タプル型について重箱の隅をつついていきましょう。要素数が多すぎる場合、指定されていない値の型はunion typesになります。その例を見てみましょう（<span class="listref">リスト4.36</span>）。</p>
+<div id="id_tuple_2FmanyValues.ts" class="caption-code">
+<p class="caption">リスト4.36: 値の要素数が多すぎる場合</p>
 <pre class="list language-ts">// 要素が多い分にはOKだ！
 let tuple: [string, number] = [&quot;str&quot;, 1, &quot;test&quot;];
 
@@ -1181,9 +1138,9 @@ let value = tuple[2];
 // tuple = [&quot;str&quot;, 1, true];
 </pre>
 </div>
-<p>お次は要素の順序がズレた場合、どうなるかを見てみましょう（リスト4.39）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.39: 絶望に身をよじれ…！</p>
+<p>次は要素の順序がずれた場合、どうなるかを見てみましょう（<span class="listref">リスト4.37</span>）。</p>
+<div id="id_tuple_2Funshift.ts" class="caption-code">
+<p class="caption">リスト4.37: 順序の変化には弱い</p>
 <pre class="list language-ts">let tuple: [string, number] = [&quot;str&quot;, 1];
 
 // 先頭をnumberに…
@@ -1196,16 +1153,16 @@ tuple[0].charAt(0);
 export { }
 </pre>
 </div>
-<p>…悲しい結果になりました。<code class="inline-code tt">[1, true]</code>のような配列のリテラルをタプル型に推論しないのはおそらくこのためでしょう。</p>
-<p>unshiftやpopなど、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。</p>
+<p>悲しい結果になりました。<code class="inline-code tt">[1, true]</code>のような配列のリテラルをタプル型に推論しないのはおそらくこのためです。</p>
+<p><code class="inline-code tt">unshift</code>や<code class="inline-code tt">pop</code>など、配列の要素を操作する方法は色々ありますが、後からprototypeを拡張することすら可能なJavaScriptではTypeScriptコンパイラ側ですべてをキャッチアップすることは不可能です。タプル型を扱う場合は要素数を変更するような操作をしないほうがよいでしょう。</p>
 <p>なるべくなら、タプルは使いたくないですね。</p>
 
-<h2 id="non-null-assertion-operator"><a id="h4-11"></a><span class="secno">4.11　</span>非null指定演算子（Non-null Assertion Operator）</h2>
-<p>非null指定演算子（<code class="inline-code tt">!</code>）は、指定した値が<code class="inline-code tt">null</code>や<code class="inline-code tt">undefined</code>ではないことを人力でコンパイラに教えてやるための記法です。基本的に、この演算子は使わないにこしたことはありません。新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。</p>
-<p>しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合も多いです。<code class="inline-code tt">--strictNullChecks</code>オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。もちろん、将来的には徐々にリファクタリングしこの演算子の利用箇所を消滅させていくべきです。</p>
-<p>例を見てみましょう（リスト4.40）。</p>
-<div class="caption-code">
-<p class="caption">リスト4.40: !演算子を使う</p>
+<h2 id="non-null-assertion-operator"><a id="h4-12"></a><span class="secno">4.12　</span>非null指定演算子（Non-null Assertion Operator）</h2>
+<p>非null指定演算子（<code class="inline-code tt">!</code>）は、変数やプロパティの末尾に指定して利用します。値が<code class="inline-code tt">null</code>や<code class="inline-code tt">undefined</code>ではないことを人力でコンパイラに教えてやるための記法です。新規にコードを書き起こすのであれば非null指定演算子は使わないほうがよいでしょう。基本的に使わずに済ませたいものです。</p>
+<p>しかしながら、昔からメンテしているTypeScriptコードについてはこの演算子に頼らざるをえない場合もあります。<code class="inline-code tt">--strictNullChecks</code>オプションを有効にしたい場合、省略可能なプロパティではundefinedのチェックが必須になります。警告を低コストに抑制したい場合、非null指定演算子は有効な対処法となります。もちろん、将来的には徐々にリファクタリングして、この演算子の利用箇所を消滅させていくべきです。</p>
+<p>例を見てみましょう（<span class="listref">リスト4.38</span>）。</p>
+<div id="id_nonNullAssertionOperator_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.38: !演算子を使う</p>
 <pre class="list language-ts">import * as fs from &quot;fs&quot;;
 
 interface Config {
@@ -1262,9 +1219,10 @@ function processC(config: Config = {}) {
 export { Config, processB, processC }
 </pre>
 </div>
-<p>人間がundefinedやnullではないと確信できる場合、エラーとなる箇所の末尾に<code class="inline-code tt">!</code>をつけていきます。非null指定演算子をなるべく使わない手段として使う前に初期値を代入する、undefinedやnullを含まない型の値に詰め直すなどが考えられます。他の方法も見てみます（リスト4.41）。先に見たリスト4.40も併せ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょうか。</p>
-<div class="caption-code">
-<p class="caption">リスト4.41: デフォルト値と付き合う</p>
+<p>人間がundefinedやnullではないと確信できる場合、エラーとなる箇所の末尾に<code class="inline-code tt">!</code>をつけていきます。非null指定演算子をなるべく使わない手段として使う前に初期値を代入する、undefinedやnullを含まない型の値に詰め直すなどが考えられます。</p>
+<p>他の方法も見てみます（<span class="listref">リスト4.39</span>）。先に見た<span class="listref">リスト4.38</span>もあわせ、undefined、nullフリーな型を用意して処理の途中からそちらに乗り換えるのが王道でしょう。</p>
+<div id="id_nonNullAssertionOperator_2FintersectionTypes.ts" class="caption-code">
+<p class="caption">リスト4.39: デフォルト値と付き合う</p>
 <pre class="list language-ts">interface Config {
   filePath?: string | null;
   verbose?: boolean;
@@ -1279,18 +1237,11 @@ interface ConfigFixed {
 let config: Config = {
   verbose: true,
 };
-// filledの型は {} &amp; ConfigFixed &amp; Config
+// filledの型は ConfigFixed &amp; Config
 // assignの定義が引数4つまではintersection typesで定義されているため
 // assign&lt;T, U, V&gt;(target: T, source1: U, source2: V): T &amp; U &amp; V; が実際の定義
 let defaultConfig: ConfigFixed = { filePath: &quot;settings.json&quot;, verbose: false };
 let filled = Object.assign({}, defaultConfig, config);
-
-// ConfigとConfigFixedには直接の互換性はない！
-// error TS2322: Type 'Config' is not assignable to type 'ConfigFixed'.
-//   Types of property 'filePath' are incompatible.
-//     Type 'string | undefined' is not assignable to type 'string'.
-//       Type 'undefined' is not assignable to type 'string'.
-// let fixed: ConfigFixed = config;
 
 // filledはfilePathとverboseが存在することが確定しているのでConfigFixedと互換性がある！
 let fixed: ConfigFixed = filled;
@@ -1300,8 +1251,250 @@ export { ConfigFixed, fixed }
 </pre>
 </div>
 <p>Control flow based type analysisが賢く処理してくれることに賭けるか、<code class="inline-code tt">Object.assign</code>などを使い、intersection typesを上手く活用します。</p>
-<p>他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに<a href="https://github.com/Microsoft/TypeScript/issues/10065" class="link">Issue</a><a id="fnb-issue10065" href="#fn-issue10065" class="noteref" epub:type="noteref">*3</a>を立てています。もし興味があれば覗いてみて、何か意見を書いていってください。</p>
-<div class="footnote" epub:type="footnote" id="fn-issue10065"><p class="footnote">[*3] <a href="https://github.com/Microsoft/TypeScript/issues/10065" class="link">https://github.com/Microsoft/TypeScript/issues/10065</a></p></div>
+<p>他によい方法が思いついたら、ぜひ筆者にその方法を教えてください。筆者としてはもう少しControl flow based type analysisと構造的部分型の相性がよいと楽だなと考え、TypeScriptリポジトリに提案もしてみました<a id="fnb-issue10065" href="#fn-issue10065" class="noteref" epub:type="noteref">*4</a>。しかし、設計上の制約（ようするに実装が難しい）ので現時点では対応策無し、とのことでした。残念。</p>
+<div class="footnote" epub:type="footnote" id="fn-issue10065"><p class="footnote">[*4] <a href="https://github.com/Microsoft/TypeScript/issues/10065" class="link">https://github.com/Microsoft/TypeScript/issues/10065</a></p></div>
+
+<h2 id="mixin-classes"><a id="h4-13"></a><span class="secno">4.13　</span>クラスのMixin</h2>
+<p>クラスにMixinで要素や機能を追加できます。拡張用の関数に対してコンストラクタを渡すと機能拡張する形で継承したものを返す、というだけの関数です（<span class="listref">リスト4.40</span>）。</p>
+<div id="id_mixin_2Fbasic.ts" class="caption-code">
+<p class="caption">リスト4.40: 任意のクラスにMixinで機能を追加する</p>
+<pre class="list language-ts">type Constructor&lt;T&gt; = new (...args: any[]) =&gt; T;
+
+function Tagged&lt;T extends Constructor&lt;object&gt;&gt;(Base: T) {
+  return class extends Base {
+    tag = &quot;&quot;;
+    constructor(...args: any[]) {
+      super(...args);
+    }
+  };
+}
+
+class Score {
+  constructor(public point: number) { }
+}
+
+// Mixinできる
+const TaggedScore = Tagged(Score);
+
+const ts = new TaggedScore(1);
+ts.tag = &quot;vv&quot;;
+console.log(ts.tag, ts.point);
+
+// これはちゃんと怒られる
+// error TS2345: Argument of type '&quot;s&quot;' is not assignable to
+//   parameter of type 'number'.
+// new TaggedScore(&quot;s&quot;);
+
+// Mixinしたクラスも分け隔てなく継承できる
+class RankingScore extends TaggedScore {
+  constructor(public rank: number, tag: string, point: number) {
+    super(point);
+    this.tag = tag;
+  }
+}
+
+const rs = new RankingScore(1, &quot;vv&quot;, 100);
+console.log(rs.rank, rs.tag, rs.point);
+</pre>
+</div>
+<p>過去に存在した問題として、このやり方をしてもTypeScriptがreturnしている新しいクラスに対して上手に型付けができませんでした。これを、TypeScriptでは<span class="listref">リスト4.41</span>のようなルールを設けることで回避しました。</p>
+<div id="id_mixin_2Fcompat.ts" class="caption-code">
+<p class="caption">リスト4.41: Mixinのためのルール</p>
+<pre class="list language-ts">// 2つのコンストラクタとそれぞれの返り値の型
+// コンストラクタの片方は ...args: any[] を引数に取る
+type ConstructorA&lt;T, U&gt; = { new(s: string): T } &amp; { new(...args: any[]): U };
+
+// 1つのコンストラクタと返り値は2つの型の交差型
+type ConstructorB&lt;T, U&gt; = { new(s: string): T &amp; U };
+
+// 2つの定義には互換性がある！
+const A: ConstructorA&lt;Date, RegExp&gt; = null as any;
+const B: ConstructorB&lt;Date, RegExp&gt; = A;
+const A2: ConstructorA&lt;Date, RegExp&gt; = B;
+</pre>
+</div>
+<p>Mixinクラスのコンストラクタ引数が<code class="inline-code tt">...args: any[]</code>なのがポイントですね。<span class="listref">リスト4.40</span>で出てくるTagged関数は<code class="inline-code tt">ConstructorA</code>に似た型定義になりますが、他の箇所では<code class="inline-code tt">ConstructorB</code>のように扱われるため、意図どおりの活用ができるようになります。</p>
+<p>Mixin用の関数について命名規則は言及されている媒体によってCamelCaseやcamelCaseのようにバラバラで、まだコンセンサスがないようです。ここではTypeScriptのWhat's newの規則に則っています。</p>
+
+<h2 id="keyof-and-mapped-types"><a id="h4-14"></a><span class="secno">4.14　</span>keyofと型の写像（keyof and Mapped Types）</h2>
+<p>keyofと型の写像の組み合わせは、複雑な機能です。Mapped Typesにどういう訳語を当てるべきか大変悩んだ<a id="fnb-equivalent-word" href="#fn-equivalent-word" class="noteref" epub:type="noteref">*5</a>のですが、型の写像という訳にしました。</p>
+<div class="footnote" epub:type="footnote" id="fn-equivalent-word"><p class="footnote">[*5] 訳語について悩むことが多いのですが、口頭で人と喋る時は原語のままの場合が多いので本でもそうしたほうがいいのかもしれない…</p></div>
+<p>この節ではざっくりと次の事柄について順に説明していきます。</p>
+<ol>
+<li>型のルックアップ（Lookup Types）</li>
+<li>keyof演算子</li>
+<li>型に対してMap処理をかける（型の写像の作成）</li>
+<li>組み込みの型に対するMap処理の紹介</li>
+<li>合せ技の紹介</li>
+</ol>
+<p>まずは型のルックアップ（Lookup Types）です。任意のプロパティの型を参照できる機能です。コード例を見てみます（<span class="listref">リスト4.42</span>）。</p>
+<div id="id_keyofAndMappedTypes_2FlookupTypes.ts" class="caption-code">
+<p class="caption">リスト4.42: ある型のプロパティの型を参照できる</p>
+<pre class="list language-ts">interface Cat {
+  kind: string;
+  name: string;
+  age: number;
+}
+
+// Catのkindプロパティの型を指す！
+// つまり string である
+type KindType = Cat[&quot;kind&quot;];
+
+// kindとageのどちらかの型なので string | number になる
+type NameOrAge = Cat[&quot;kind&quot; | &quot;age&quot;];
+</pre>
+</div>
+<p>型注釈でインデックスアクセスのような記法で指定したプロパティの型が参照できます。ドットアクセスだとコンパイルエラーになるので注意しましょう。</p>
+<p>全プロパティのキー名を列挙するにはkeyof演算子を使います（<span class="listref">リスト4.43</span>）。</p>
+<div id="id_keyofAndMappedTypes_2Fkeyof.ts" class="caption-code">
+<p class="caption">リスト4.43: keyof演算子である型のプロパティ名を列挙できる</p>
+<pre class="list language-ts">interface Cat {
+  kind: string;
+  name: string;
+  age: number;
+}
+
+// 全プロパティのキー名
+// つまり &quot;kind&quot; | &quot;name&quot; | &quot;age&quot; になる
+type CatPropertyNames = keyof Cat;
+</pre>
+</div>
+<p>型に対してプロパティが増減した時も自動的に対応できる点がいいですね。</p>
+<p>型のルックアップやkeyof演算子は単体ではあまり使いみちが思いつきませんが、これから説明する型の写像処理やジェネリクスと組み合わせると力を発揮します。</p>
+<p>型の写像処理には書き方の基本が4パターンあります。</p>
+<div class="emlist-code">
+<pre class="emlist">{ [ P in K ] : T }
+{ [ P in K ] ? : T }
+{ readonly [ P in K ] : T }
+{ readonly [ P in K ] ? : T }
+</pre>
+</div>
+<p>みただけでは全然わからないですね。全体としてはインデックスシグニチャと同じ書式として読み解くことができます。</p>
+<p><code class="inline-code tt">K</code>に含まれる<code class="inline-code tt">P</code>という値の型にあたる<code class="inline-code tt">T</code>と読めばいいのでしょうか。前半部分にあたる<code class="inline-code tt">[ P in K ]</code>相当の部分で操作対象となるプロパティの一覧を定義します。それと対になるように変換したプロパティの値を定義します。</p>
+<p>この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（<span class="listref">リスト4.44</span>）。</p>
+<div id="id_keyofAndMappedTypes_2FbuildinTypes.ts" class="caption-code">
+<p class="caption">リスト4.44: 型の写像を作るビルトインのパーツたち</p>
+<pre class="list language-ts">// 指定した型の全ブロパティを省略可能にする
+type Partial&lt;T&gt; = {
+  [P in keyof T]?: T[P];
+};
+
+// 指定した型の全プロパティをreadonly扱いにする
+type Readonly&lt;T&gt; = {
+  readonly [P in keyof T]: T[P];
+};
+
+// 指定した型の、指定したプロパティだけを集めたサブセット型を作る
+type Pick&lt;T, K extends keyof T&gt; = {
+  [P in K]: T[P];
+};
+
+// 指定した型のプロパティの値の型を変換した型を作る
+type Record&lt;K extends string, T&gt; = {
+  [P in K]: T;
+};
+
+export { Partial, Readonly, Pick, Record }
+</pre>
+</div>
+<p>写像処理と型のルックアップを組み合わせ、実用的な変換処理を作り出しています。これだけだとピンとこないでしょうから、利用例を見てみます（<span class="listref">リスト4.45</span>）。</p>
+<div id="id_keyofAndMappedTypes_2FbuildinTypesUsage.ts" class="caption-code">
+<p class="caption">リスト4.45: ビルトインの型の利用例</p>
+<pre class="list language-ts">interface Cat {
+  kind: string;
+  name: string;
+  age?: number;
+}
+
+let c1: Cat = {
+  kind: &quot;NorwegianForestCat&quot;,
+  name: &quot;アルファ&quot;,
+};
+
+let c2: Partial&lt;Cat&gt; = {
+  kind: &quot;NorwegianForestCat&quot;,
+  // name, age が欠けていてもエラーにならない
+};
+
+let c3: Readonly&lt;Cat&gt; = {
+  kind: &quot;NorwegianForestCat&quot;,
+  name: &quot;アルファ&quot;,
+  age: 3,
+};
+// readonly なので代入しようとするとエラーになる
+// error TS2540: Cannot assign to 'name'
+//   because it is a constant or a read-only property.
+// c3.kind = &quot;TypeScript&quot;;
+
+let c4: Pick&lt;Cat, &quot;name&quot; | &quot;age&quot;&gt; = {
+  // kind は K に含まれていないので不要
+  name: &quot;アルファ&quot;,
+  // age はもともとOptional
+};
+
+let c5: Record&lt;keyof Cat, boolean&gt; = {
+  // 全てのプロパティの型はbooleanを要求される
+  kind: true,
+  name: true,
+  age: true, // 必須になる
+};
+
+export { c1, c2, c3, c4, c5 }
+</pre>
+</div>
+<p>雰囲気が掴めてきませんか。とりあえずビルトイン型の存在を認識して、便利に使えるようになるところから始めるのがよさそうです。</p>
+<p>これらの武器をうまく使うと、JavaScriptの自然なコードに対して複雑な型チェックを実施できます（<span class="listref">リスト4.46</span>）。</p>
+<div id="id_keyofAndMappedTypes_2Fusage-invalid.ts" class="caption-code">
+<p class="caption">リスト4.46: この節のパーツを組み合わせてより強い安全さを作り出す</p>
+<pre class="list language-ts">interface PropertyDescriptor&lt;T&gt; {
+  configurable?: boolean;
+  enumerable?: boolean;
+  value?: T;
+  writable?: boolean;
+  get?(): T;
+  set?(v: T): void;
+}
+function defineProperty&lt;T, K extends keyof T&gt;(
+  o: T, p: K,
+  attributes: PropertyDescriptor&lt;T[K]&gt;,
+): any {
+  return Object.defineProperty(o, p, attributes);
+}
+
+interface Foo {
+  a?: string;
+}
+
+let foo: Foo = {};
+
+// 正しい組み合わせ a に string
+defineProperty(foo, &quot;a&quot;, {
+  enumerable: false,
+  value: &quot;a&quot;,
+});
+
+// ダメ a に number
+// error TS2345: Argument of type '{ enumerable: false; value: number; }'
+//   is not assignable to parameter of type 'PropertyDescriptor&lt;string&gt;'.
+//  Types of property 'value' are incompatible.
+//    Type 'number' is not assignable to type 'string'.
+defineProperty(foo, &quot;a&quot;, {
+  enumerable: false,
+  value: 1,
+});
+
+// ダメ b は存在しない
+// error TS2345: Argument of type '&quot;b&quot;' is not assignable to
+//   parameter of type '&quot;a&quot;'.
+defineProperty(foo, &quot;b&quot;, {
+  enumerable: false,
+  value: &quot;a&quot;,
+});
+
+export { }
+</pre>
+</div>
+<p>このような工夫をこらしたコードを自力で1からひねり出せるかというとかなりの難易度です。功夫が必要です。やっていきましょう。</p>
       </div>
       <nav class="book-navi book-prev">
                 <a href="types-basic.html">
