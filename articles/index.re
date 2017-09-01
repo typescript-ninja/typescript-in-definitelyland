@@ -52,7 +52,7 @@ Version 2.4.2
 
 #@# prh:disable
 本書はC87、C90で頒布した『型の国のTypeScript』の改訂（C92）版です。
-あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c92/#typescript,C92で頒布されたRevised TypeScript in Definitelyland}の全文です。
+あなたが読んでいるこの文章は@<href>{http://techbooster.github.io/c92/#typescript,C92で頒布されたRevised Revised TypeScript in Definitelyland}の全文です。
 
 前回頒布した時のTypeScriptは2.0.0でした。
 TypeScriptは進歩を続け、ますます堅牢で安全で、そして最新のECMAScript仕様が使えるようになっています。
@@ -85,8 +85,9 @@ C92冊子版の表紙はイラスト：Jecyさん（@<href>{http://jecy.main.jp/
 可愛いけも耳をありがとうございます！
 
 #@# prh:disable
-なお、booth.pmやCOMIC ZINにて通販を行っております。
-@<href>{http://shop.comiczin.jp/products/detail.php?product_id=29874,紙版の通販}、@<href>{https://techbooster.booth.pm/items/299594?utm_source=webbook&utm_medium=webbook&utm_campaign=ebook,電子版販売}があります。
+#@# TODO 入庫したら復活させる
+#@# なお、booth.pmやCOMIC ZINにて通販を行っております。
+#@# @<href>{http://shop.comiczin.jp/products/detail.php?product_id=29874,紙版の通販}、@<href>{https://techbooster.booth.pm/items/586716?utm_source=webbook&utm_medium=webbook&utm_campaign=ebook,電子版販売}があります。
 
 =={tour-of-this-book} 本書の内容
 
