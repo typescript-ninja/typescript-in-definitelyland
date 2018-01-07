@@ -1374,7 +1374,7 @@ type CatPropertyNames = keyof Cat;
 <p>この書き方を理解するために、TypeScriptの標準ライブラリに入っているビルトインのパーツを確認していきます（<span class="listref">リスト4.44</span>）。</p>
 <div id="id_keyofAndMappedTypes_2FbuildinTypes.ts" class="caption-code">
 <p class="caption">リスト4.44: 型の写像を作るビルトインのパーツたち</p>
-<pre class="list language-ts">// 指定した型の全ブロパティを省略可能にする
+<pre class="list language-ts">// 指定した型の全プロパティを省略可能にする
 type Partial&lt;T&gt; = {
   [P in keyof T]?: T[P];
 };
