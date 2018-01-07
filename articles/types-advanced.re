@@ -1645,7 +1645,7 @@ type CatPropertyNames = keyof Cat;
 
 //list[keyofAndMappedTypes/buildinTypes.ts][型の写像を作るビルトインのパーツたち]{
 #@mapfile(../code/types-advanced/keyofAndMappedTypes/buildinTypes.ts)
-// 指定した型の全ブロパティを省略可能にする
+// 指定した型の全プロパティを省略可能にする
 type Partial<T> = {
   [P in keyof T]?: T[P];
 };
