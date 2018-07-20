@@ -107,7 +107,7 @@ class Base {
   // 初期値を与えない場合は型の指定が必要
   str: string;
 
-  // プロパティ名に?をつけると省略可能（undefinedである可能性がある）ことを表せる
+  // プロパティ名に?をつけると省略可能である（undefinedである可能性がある）ことを表せる
   regExpOptional?: RegExp;
 
   constructor(str: string) {
