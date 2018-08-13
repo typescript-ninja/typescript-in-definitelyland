@@ -172,9 +172,9 @@ TypeScriptコンパイラがこれらの型定義ファイルを認識できれ�
   "author": "vvakame",
   "license": "MIT",
   "devDependencies": {
-    "@types/mocha": "^2.2.28",
+    "@types/mocha": "^5.2.5",
     "@types/power-assert": "^1.4.29",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
     "power-assert": "^1.4.1"
   }
 }
