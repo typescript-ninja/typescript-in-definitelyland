@@ -11,6 +11,7 @@ jobs:
       # TODO cache npm modules
       - run: npm run global
       - run: npm install
+      - run: npm run postinstall
 
       - run: npm run pdf
       - store_artifacts:
