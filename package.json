@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": "8.0.0",
-    "npm": "5.0.0"
+    "node": ">=8.0.0",
+    "npm": ">=5.0.0"
   },
   "scripts": {
     "global": "gem install bundler",

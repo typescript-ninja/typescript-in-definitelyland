@@ -8,15 +8,9 @@ jobs:
       - checkout
       - run: git submodule init && git submodule update
 
-      - restore_cache:
-          keys:
-            - yarn-cache-{{ checksum "yarn.lock" }}
+      # TODO cache npm modules
       - run: npm run global
-      - run: yarn install
-      - save_cache:
-          key: yarn-cache-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
+      - run: npm install
 
       - run: npm run pdf
       - store_artifacts:
