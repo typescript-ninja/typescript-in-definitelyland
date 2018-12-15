@@ -1595,7 +1595,7 @@ interface Cat {
 type KindType = Cat["kind"];
 
 // kindとageのどちらかの型なので string | number になる
-type NameOrAge = Cat["kind" | "age"];
+type KindOrAge = Cat["kind" | "age"];
 #@end
 //}
 
